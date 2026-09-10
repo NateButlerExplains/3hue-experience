@@ -6,7 +6,7 @@
 // the plate always covers the whole stage. Composed viewports (phones, portrait, short) fit the
 // plate into the band the layout reserves for it, showing plate x 344.5..2514.8 so all three
 // doors are on screen.
-import { getGeometry, reducedMotion } from './content.js?v=2026-09-10';
+import { getGeometry, reducedMotion } from './content.js?v=2026-09-10b';
 
 const stageEl = document.getElementById('stage');
 const plateEl = document.getElementById('plate');
@@ -217,10 +217,17 @@ function fitRoom(Wr, Hr, cover, R, focus) {
   oy = Math.min(cover.y, Math.max(cover.y + cover.h - Hr * s, oy));
   return { s, ox, oy };
 }
+// The rectangle a room render must fill. The panel is opaque, so the render only has to cover
+// the visible frame plus a bleed under the header and the panel's inner edge; covering the whole
+// viewport would push the image under the panel and crop the quiet third that was rendered for
+// it. Composed: the band plus a bleed under the sheet's rounded top.
 function roomCover() {
   const { vw, vh } = viewport();
-  if (!state.composed) return { x: 0, y: 0, w: vw, h: vh };
-  const b = bandRect(); return { x: 0, y: 0, w: vw, h: b.h + 18 };
+  const bleed = 18;
+  if (state.composed) { const b = bandRect(); return { x: 0, y: 0, w: vw, h: b.h + bleed }; }
+  const R = frameRect();
+  if (state.layerOpen && state.dock === 'left') return { x: Math.max(0, R.x - bleed), y: 0, w: vw - Math.max(0, R.x - bleed), h: vh };
+  return { x: 0, y: 0, w: Math.min(vw, R.x + R.w + bleed), h: vh };
 }
 let roomToken = 0;
 export async function showRoom(src, focus, { animate = true, delay = 0 } = {}) {

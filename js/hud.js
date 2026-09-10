@@ -1,5 +1,5 @@
 // Header actions and the composed layout's rows and footer.
-import { getManifest, str, esc, resolveHref } from './content.js?v=2026-09-10';
+import { getManifest, str, esc, resolveHref } from './content.js?v=2026-09-10b';
 
 const rows = document.getElementById('floor-rows');
 const foot = document.getElementById('floor-foot');

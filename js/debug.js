@@ -1,6 +1,6 @@
 // ?debug=1: draw every geometry item on the plate and expose window.__lobby for the checks.
-import { getManifest, getGeometry, getParams } from './content.js?v=2026-09-10';
-import { getState, project, projectRect, onLayout, frameRect } from './stage.js?v=2026-09-10';
+import { getManifest, getGeometry, getParams } from './content.js?v=2026-09-10b';
+import { getState, project, projectRect, onLayout, frameRect } from './stage.js?v=2026-09-10b';
 
 const svg = document.getElementById('debug');
 const NS = 'http://www.w3.org/2000/svg';

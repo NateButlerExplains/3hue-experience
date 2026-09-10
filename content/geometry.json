@@ -209,7 +209,12 @@
       1128.0
     ]
   },
-  "logoMark": null,
+  "logoMark": [
+    0,
+    0,
+    141,
+    200
+  ],
   "rooms": {
     "win-trust": {
       "width": 2560,
@@ -218,7 +223,32 @@
         "x": 0.44,
         "y": 0.55
       },
-      "stations": null
+      "stations": {
+        "urgency": [
+          0.3,
+          0.3
+        ],
+        "gap": [
+          0.17,
+          0.45
+        ],
+        "services": [
+          0.2,
+          0.72
+        ],
+        "proof": [
+          0.36,
+          0.65
+        ],
+        "program": [
+          0.55,
+          0.56
+        ],
+        "decision": [
+          0.45,
+          0.82
+        ]
+      }
     },
     "gain-control": {
       "width": 2560,
@@ -227,7 +257,32 @@
         "x": 0.42,
         "y": 0.55
       },
-      "stations": null
+      "stations": {
+        "urgency": [
+          0.42,
+          0.28
+        ],
+        "gap": [
+          0.14,
+          0.4
+        ],
+        "services": [
+          0.34,
+          0.56
+        ],
+        "proof": [
+          0.66,
+          0.5
+        ],
+        "program": [
+          0.55,
+          0.42
+        ],
+        "decision": [
+          0.4,
+          0.82
+        ]
+      }
     },
     "stay-ready": {
       "width": 2560,
@@ -236,7 +291,32 @@
         "x": 0.6,
         "y": 0.55
       },
-      "stations": null
+      "stations": {
+        "urgency": [
+          0.75,
+          0.25
+        ],
+        "gap": [
+          0.55,
+          0.45
+        ],
+        "services": [
+          0.77,
+          0.52
+        ],
+        "proof": [
+          0.36,
+          0.46
+        ],
+        "program": [
+          0.41,
+          0.52
+        ],
+        "decision": [
+          0.92,
+          0.36
+        ]
+      }
     }
   },
   "measured": {

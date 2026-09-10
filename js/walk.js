@@ -1,14 +1,14 @@
 // The captioned walk: visitor-paced, no timers, no audio. Steps are built from the manifest —
 // lobby, each door, each stage, the kiosk (skipped when hidden or composed), Talk, end. The bar
 // keeps focus on Next; Left/Right step; Escape or End walk returns to the resting lobby.
-import { getManifest, getGeometry, str, esc, kioskLines, stageName } from './content.js?v=2026-09-10';
-import { getState, place, rest } from './stage.js?v=2026-09-10';
-import { kioskElement, kioskCentroid, kioskVisibleAt } from './kiosk.js?v=2026-09-10';
-import { hideDoors, showDoors, setCurrent } from './hotspots.js?v=2026-09-10';
-import { lightStage, clearArcs } from './path.js?v=2026-09-10';
-import { pushLayer, resetLayers } from './focus.js?v=2026-09-10';
-import { walkButton } from './hud.js?v=2026-09-10';
-import { setLayer } from './stage.js?v=2026-09-10';
+import { getManifest, getGeometry, str, esc, kioskLines, stageName } from './content.js?v=2026-09-10b';
+import { getState, place, rest } from './stage.js?v=2026-09-10b';
+import { kioskElement, kioskCentroid, kioskVisibleAt } from './kiosk.js?v=2026-09-10b';
+import { hideDoors, showDoors, setCurrent } from './hotspots.js?v=2026-09-10b';
+import { lightStage, clearArcs } from './path.js?v=2026-09-10b';
+import { pushLayer, resetLayers } from './focus.js?v=2026-09-10b';
+import { walkButton } from './hud.js?v=2026-09-10b';
+import { setLayer } from './stage.js?v=2026-09-10b';
 
 const bar = document.getElementById('walk');
 const live = document.getElementById('walk-live');

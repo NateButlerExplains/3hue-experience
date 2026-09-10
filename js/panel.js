@@ -1,7 +1,7 @@
 // The docked panel (bottom sheet when composed): one template for a door, one for the path.
 // Every string comes from the manifest; this file only arranges them.
-import { getManifest, str, esc, resolveHref, stageName } from './content.js?v=2026-09-10';
-import { getState } from './stage.js?v=2026-09-10';
+import { getManifest, str, esc, resolveHref, stageName } from './content.js?v=2026-09-10b';
+import { getState } from './stage.js?v=2026-09-10b';
 
 const panel = document.getElementById('panel');
 let mode = null; // 'door' | 'path'

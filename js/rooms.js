@@ -1,8 +1,8 @@
 // Rendered rooms (O5). A door whose manifest entry carries room.render opens onto its render;
 // station pins inside the room go to the same panel sections the chips do. `?rooms=0` turns the
 // layer off (spec-as-written behaviour); `?room-preview=<path>` mounts a candidate for the gate.
-import { getManifest, getGeometry, getParams, str, esc } from './content.js?v=2026-09-10';
-import { onLayout, roomToScreen, getState } from './stage.js?v=2026-09-10';
+import { getManifest, getGeometry, getParams, str, esc } from './content.js?v=2026-09-10b';
+import { onLayout, roomToScreen, getState } from './stage.js?v=2026-09-10b';
 
 const pinsEl = document.getElementById('room-pins');
 let pins = [];
@@ -59,10 +59,12 @@ export function showRoomPins(d, room, onStation) {
   });
   placePins();
 }
+// Pins are children of the transformed room layer, so they sit in room-image pixels and are
+// counter-scaled by the room's own scale, not the plate's.
 function placePins() {
   const f = getState().roomFit; if (!f) return;
-  for (const p of pins) { p.el.style.left = (p.x * f.s) + 'px'; p.el.style.top = (p.y * f.s) + 'px'; }
-  pinsEl.style.setProperty('--counter', '1');
+  for (const p of pins) { p.el.style.left = (p.x * f.Wr) + 'px'; p.el.style.top = (p.y * f.Hr) + 'px'; }
+  pinsEl.style.setProperty('--counter', String(1 / f.s));
 }
 onLayout(placePins);
 export function clearRoomPins() { pins = []; pinsEl.innerHTML = ''; }
