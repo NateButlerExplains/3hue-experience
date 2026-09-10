@@ -6,7 +6,7 @@
 // the plate always covers the whole stage. Composed viewports (phones, portrait, short) fit the
 // plate into the band the layout reserves for it, showing plate x 344.5..2514.8 so all three
 // doors are on screen.
-import { getGeometry, reducedMotion } from './content.js';
+import { getGeometry, reducedMotion } from './content.js?v=2026-09-10';
 
 const stageEl = document.getElementById('stage');
 const plateEl = document.getElementById('plate');

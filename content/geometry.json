@@ -36,7 +36,7 @@
     },
     "pinFadeMs": 150,
     "pulseEverySec": 8,
-    "kioskBaseFontPx": 18,
+    "kioskBaseFontPx": 19,
     "roomFadeInMs": 700,
     "roomFadeOutMs": 600,
     "roomSettle": 1.06
@@ -108,7 +108,7 @@
         1669.1,
         575.3
       ],
-      "arc": null
+      "arc": "M 1544 532 Q 1671 490 1799 532"
     },
     {
       "stage": "strengthen",
@@ -116,7 +116,7 @@
         1669.1,
         458.2
       ],
-      "arc": null
+      "arc": "M 1544 415 Q 1671 363 1797 415"
     },
     {
       "stage": "operate",
@@ -124,7 +124,7 @@
         1669.1,
         332.4
       ],
-      "arc": null
+      "arc": "M 1546 299 Q 1671 223 1796 299"
     },
     {
       "stage": "advance",
@@ -132,7 +132,7 @@
         1669.1,
         199.8
       ],
-      "arc": null
+      "arc": "M 1574 161 Q 1671 108 1768 161"
     }
   ],
   "stairPill": [
@@ -148,20 +148,103 @@
   },
   "kiosk": {
     "measurements": {
-      "a": null,
-      "b": null
+      "a": [
+        [
+          2594.0,
+          1032.1
+        ],
+        [
+          2879.0,
+          1059.6
+        ],
+        [
+          2879.0,
+          1240.6
+        ],
+        [
+          2594.0,
+          1179.0
+        ]
+      ],
+      "b": [
+        [
+          2595.0,
+          1031.7
+        ],
+        [
+          2879.0,
+          1060.9
+        ],
+        [
+          2879.0,
+          1240.0
+        ],
+        [
+          2595.0,
+          1180.0
+        ]
+      ],
+      "note": "a = cyan edge (left/top) and dark-screen boundary (bottom) fitted on the 2880 plate; b = visual read on a 3x zoom with a 20 px grid. Right edge is the plate edge: the kiosk runs off frame."
     },
-    "quad": null,
-    "focus": null
+    "quad": [
+      [
+        2594.5,
+        1031.9
+      ],
+      [
+        2879.0,
+        1060.2
+      ],
+      [
+        2879.0,
+        1240.3
+      ],
+      [
+        2594.5,
+        1179.5
+      ]
+    ],
+    "focus": [
+      2736.8,
+      1128.0
+    ]
   },
   "logoMark": null,
-  "rooms": {},
+  "rooms": {
+    "win-trust": {
+      "width": 2560,
+      "height": 1440,
+      "focus": {
+        "x": 0.44,
+        "y": 0.55
+      },
+      "stations": null
+    },
+    "gain-control": {
+      "width": 2560,
+      "height": 1440,
+      "focus": {
+        "x": 0.42,
+        "y": 0.55
+      },
+      "stations": null
+    },
+    "stay-ready": {
+      "width": 2560,
+      "height": 1440,
+      "focus": {
+        "x": 0.6,
+        "y": 0.55
+      },
+      "stations": null
+    }
+  },
   "measured": {
     "doorways": false,
     "tower": false,
     "rings": false,
-    "arcs": false,
+    "arcs": true,
     "stairPill": false,
-    "kiosk": false
+    "kiosk": true
   }
 }

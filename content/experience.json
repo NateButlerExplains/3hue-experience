@@ -3,7 +3,7 @@
   "note": "Every visitor-readable string lives here. JS only templates. Fields carrying research copy have `source` and `status`; tools/check-manifest.js refuses to build without them. Sources are cited in docs/CONTENT-SOURCES.md by fork path and commit.",
   "site": {
     "name": "3HUE",
-    "title": "3HUE · Three doors. One path to maturity.",
+    "title": "3HUE \u00b7 Three doors. One path to maturity.",
     "description": "Advisory. Oversight. Operational confidence. Built for what's next.",
     "url": "https://natebutlerexplains.github.io/3hue-experience/",
     "bookingUrl": "https://3hue.net/contact.html",
@@ -94,7 +94,9 @@
     "stagesGroup": "Maturity stages",
     "emphasisedBy": "Emphasised by",
     "stations": "In this room",
-    "legend": "Three doors, one path"
+    "legend": "Three doors, one path",
+    "nextStep": "Next step",
+    "prevStep": "Previous step"
   },
   "stages": [
     {
@@ -153,7 +155,7 @@
       ],
       "opening": {
         "text": "Your buyer isn't asking whether you're secure. They're asking whether you can prove it by Friday.",
-        "source": "The Forcing Function §06, approved opening line",
+        "source": "The Forcing Function \u00a706, approved opening line",
         "status": "approved-copy"
       },
       "stat": {
@@ -211,7 +213,7 @@
         "snapshot": "A Snapshot scoped to the actual obligation, so you know what the contract requires and what it does not.",
         "build": "A readiness program with continuous evidence on AiVRIC.",
         "operate": "A managed program with questionnaire ownership and auditor management, so the engineering team goes back to shipping.",
-        "source": "The Forcing Function §02, What 3HUE sells them",
+        "source": "The Forcing Function \u00a702, What 3HUE sells them",
         "status": "approved-copy"
       },
       "stations": [
@@ -223,12 +225,12 @@
         "decision"
       ],
       "room": {
-        "render": null,
+        "render": "media/rooms/win-trust",
         "focus": null,
         "stations": null
       },
       "share": {
-        "title": "Win Trust: Prove you are ready. · 3HUE",
+        "title": "Win Trust: Prove you are ready. \u00b7 3HUE",
         "description": "For teams that need customer assurance, readiness evidence, or a faster path through diligence.",
         "card": "media/share/win-trust.jpg"
       }
@@ -257,7 +259,7 @@
       ],
       "opening": {
         "text": "Your bigger competitors run cyber diligence on 81% of deals. You run it on 29%.",
-        "source": "The Forcing Function §06, approved opening line",
+        "source": "The Forcing Function \u00a706, approved opening line",
         "status": "approved-copy"
       },
       "stat": {
@@ -307,7 +309,7 @@
         "snapshot": "A diligence-grade assessment per acquisition.",
         "build": "One control set applied across every operating company, isolated per entity.",
         "operate": "Quarterly board- and investment-committee-ready reporting, with the fund seeing one view.",
-        "source": "The Forcing Function §02, What 3HUE sells them",
+        "source": "The Forcing Function \u00a702, What 3HUE sells them",
         "status": "approved-copy"
       },
       "stations": [
@@ -319,12 +321,12 @@
         "decision"
       ],
       "room": {
-        "render": null,
+        "render": "media/rooms/gain-control",
         "focus": null,
         "stations": null
       },
       "share": {
-        "title": "Gain Control: See and govern what matters. · 3HUE",
+        "title": "Gain Control: See and govern what matters. \u00b7 3HUE",
         "description": "For ownership and operating teams that need shared visibility, leverage, and governance across multiple companies.",
         "card": "media/share/gain-control.jpg"
       }
@@ -353,7 +355,7 @@
       ],
       "opening": {
         "text": "Your controls passed in December. The question is what they were doing in March.",
-        "source": "The Forcing Function §06, approved opening line",
+        "source": "The Forcing Function \u00a706, approved opening line",
         "status": "approved-copy"
       },
       "stat": {
@@ -386,7 +388,7 @@
         {
           "name": "Managed detection and response",
           "examples": [
-            "Managed Detection & Response — Complete",
+            "Managed Detection & Response \u2014 Complete",
             "MXDR Starter"
           ]
         },
@@ -410,7 +412,7 @@
         "snapshot": "Named framework crosswalks in the examiner's language: NIST CSF and 800-53/171 as the spine, mapped to ISO 27001, COBIT, FFIEC, and SOC 2.",
         "build": "Continuous controls monitoring that replaces point-in-time testing.",
         "operate": "Remediation that closes findings and keeps them closed, with board-ready risk translation.",
-        "source": "The Forcing Function §02, What 3HUE sells them",
+        "source": "The Forcing Function \u00a702, What 3HUE sells them",
         "status": "approved-copy"
       },
       "stations": [
@@ -422,12 +424,12 @@
         "decision"
       ],
       "room": {
-        "render": null,
+        "render": "media/rooms/stay-ready",
         "focus": null,
         "stations": null
       },
       "share": {
-        "title": "Stay Ready: Operate defensibly. · 3HUE",
+        "title": "Stay Ready: Operate defensibly. \u00b7 3HUE",
         "description": "For regulated and risk-heavy operators that need clear ownership, resilience, response, and evidence that survives scrutiny.",
         "card": "media/share/stay-ready.jpg"
       }
@@ -438,11 +440,11 @@
     "intro": "Four stages, one route. Each door emphasises the stages its buyers need first.",
     "whereToStart": {
       "lead": "Every path starts with a Snapshot: a 10-business-day diagnostic scoped to the obligation in front of you.",
-      "source": "3hue.net published offer (AI Risk & Readiness Snapshot in 10 business days); The Forcing Function §02",
+      "source": "3hue.net published offer (AI Risk & Readiness Snapshot in 10 business days); The Forcing Function \u00a702",
       "status": "substantiated"
     },
     "share": {
-      "title": "The maturity path · 3HUE",
+      "title": "The maturity path \u00b7 3HUE",
       "description": "Assess, Strengthen, Operate, Advance. One route through three doors.",
       "card": "media/share/path.jpg"
     }
@@ -462,7 +464,7 @@
         "provenance": "count of stages in this manifest"
       },
       {
-        "label": "Service families on the paths",
+        "label": "Service families",
         "derive": "families",
         "provenance": "unique service family names in this manifest"
       }
@@ -481,7 +483,7 @@
   "share": {
     "lobby": {
       "route": "#/experience",
-      "title": "3HUE · Three doors. One path to maturity.",
+      "title": "3HUE \u00b7 Three doors. One path to maturity.",
       "description": "Advisory. Oversight. Operational confidence. Built for what's next.",
       "card": "media/share/lobby.jpg"
     }
@@ -510,7 +512,7 @@
       "Hue 03"
     ],
     "avoid": [
-      "compliance ≠ security",
+      "compliance \u2260 security",
       "cutting-edge",
       "best-in-class",
       "trusted partner",

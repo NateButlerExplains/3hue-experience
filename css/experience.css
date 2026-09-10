@@ -35,6 +35,7 @@
 @media (max-height: 700px) { :root { --hud-h: 60px; } }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { margin: 0; height: 100%; }
 html { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body); -webkit-text-size-adjust: 100%; }
 body { min-height: 100vh; min-height: 100dvh; overflow: hidden; }
@@ -143,6 +144,23 @@ body.layer-open .intro, body.zoomed .intro, html[data-lobby-boot] .intro { visib
 .room.on { pointer-events: auto; }
 .room-pins { position: absolute; left: 0; top: 0; }
 
+/* Kiosk: perspective-mounted, display-only, aggregates from the manifest (O9). Base font is in
+   plate px (kioskBaseFontPx); js/kiosk.js hides it when a line would fall under 12 screen px. */
+.kiosk { position: absolute; left: 0; top: 0; pointer-events: none; overflow: hidden; background: rgba(6, 18, 31, .5); }
+.kiosk-in { position: absolute; inset: 0; padding: 4% 6%; display: flex; flex-direction: column; justify-content: center; gap: 0; color: #dff5fb; font-family: var(--body); text-shadow: 0 0 .4em rgba(37, 181, 214, .5); }
+.kiosk-head { margin: 0 0 3px; font-size: 19px; line-height: 1.12; font-weight: 600; letter-spacing: .06em; color: #52cce3; }
+.kiosk-line { margin: 0; font-size: 20px; line-height: 1.15; color: #eaf7fb; white-space: nowrap; }
+.kiosk-line b { font-size: 22px; font-weight: 700; color: #fff; margin-right: .3em; }
+.kiosk-tag { margin: 3px 0 0; font-size: 19px; line-height: 1.12; color: #9fd9e8; letter-spacing: .03em; white-space: nowrap; }
+
+/* Room station pins: same marker as the doors, inside the room layer. */
+.room-pins .room-pin { position: absolute; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; width: 1px; height: 1px; overflow: visible; }
+.room-pins .room-pin .marker { --mx: 0px; --my: 0px; --i: 0; }
+.room-pins .room-pin .ring { animation: none; width: 22px; height: 22px; }
+.room-pins .room-pin:focus { outline: none; }
+.room-pins .room-pin:focus-visible .ring { outline: 2px solid #fff; outline-offset: 2px; }
+.room-pins .room-pin .plate { display: none; }
+
 /* Panel: docked aside on desktop, bottom sheet when composed. */
 .panel { position: fixed; z-index: 30; top: var(--hud-h); bottom: 0; width: var(--panel-w); background: #0d1a2c; color: var(--ink); overflow: auto; overscroll-behavior: contain; box-shadow: 0 0 40px rgba(0, 0, 0, .5); padding: 14px 22px 32px; padding-bottom: max(32px, env(safe-area-inset-bottom)); }
 .panel[data-dock="right"] { right: 0; border-left: 1px solid rgba(255, 255, 255, .08); }
@@ -190,6 +208,8 @@ body:not(.layer-open) .walk { right: 0; }
   body { overflow: auto; }
   body.composed #hud { background: var(--navy-deep); }
   body.composed #hud .actions { display: none; }
+  body.composed #hud .brand img { height: 34px; }
+  @media (max-width: 340px) { body.composed #hud .brand img { height: 30px; } }
   body.composed #floor { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; padding: calc(var(--hud-h) + 12px) 0 24px; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
   body.composed #floor-head { display: block; padding: 0 16px 10px; }
   body.composed .intro { position: static; max-width: none; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 0; }

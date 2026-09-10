@@ -1,7 +1,7 @@
 // The maturity path: the four ring arcs on the tower, lit one at a time during the climb.
 // Arc geometry is an SVG path in plate px measured in the geometry tool; until measured, a flat
 // arc is synthesised across the label position so the climb still reads.
-import { getGeometry } from './content.js';
+import { getGeometry } from './content.js?v=2026-09-10';
 
 const svg = document.getElementById('arcs');
 const paths = new Map();

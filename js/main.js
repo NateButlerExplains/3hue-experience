@@ -1,17 +1,17 @@
 // Boot: manifests → plate → stage → doors/labels/hud → panel/path/walk → router.
-import { loadContent, getManifest, getGeometry, getParams, str } from './content.js';
-import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden } from './stage.js';
-import { buildDoors, setCurrent, hideDoors, showDoors, doorElement, pathElement, firstDoorElement } from './hotspots.js';
-import { buildLabels, headingElement } from './labels.js';
-import { buildHud, rowElement, walkButton } from './hud.js';
-import { parse, go, back, onRoute, currentRoute } from './router.js';
-import { initDebug } from './debug.js';
-import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStation, showStationChips } from './panel.js';
-import { pushLayer, popLayer, resetLayers } from './focus.js';
-import { lightStage, clearArcs, buildArcs } from './path.js';
-import { initKiosk, placeKiosk } from './kiosk.js';
-import { initWalk, startWalk, endWalk, isWalking, walkStep } from './walk.js';
-import { initRooms, roomFor, showRoomPins, clearRoomPins } from './rooms.js';
+import { loadContent, getManifest, getGeometry, getParams, str } from './content.js?v=2026-09-10';
+import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden } from './stage.js?v=2026-09-10';
+import { buildDoors, setCurrent, hideDoors, showDoors, doorElement, pathElement, firstDoorElement } from './hotspots.js?v=2026-09-10';
+import { buildLabels, headingElement } from './labels.js?v=2026-09-10';
+import { buildHud, rowElement, walkButton } from './hud.js?v=2026-09-10';
+import { parse, go, back, onRoute, currentRoute } from './router.js?v=2026-09-10';
+import { initDebug } from './debug.js?v=2026-09-10';
+import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStation, showStationChips } from './panel.js?v=2026-09-10';
+import { pushLayer, popLayer, resetLayers } from './focus.js?v=2026-09-10';
+import { lightStage, clearArcs, buildArcs } from './path.js?v=2026-09-10';
+import { initKiosk, placeKiosk } from './kiosk.js?v=2026-09-10';
+import { initWalk, startWalk, endWalk, isWalking, walkStep } from './walk.js?v=2026-09-10';
+import { initRooms, roomFor, showRoomPins, clearRoomPins, probeFormats } from './rooms.js?v=2026-09-10';
 
 const plateEl = document.getElementById('plate');
 const params = getParams();
@@ -49,6 +49,7 @@ async function main() {
   initDebug();
   initKiosk();
   initRooms();
+  const formats = probeFormats();
   initWalk({ go, onEnd: () => go({ view: 'experience' }, { replace: true }) });
   rest(false);
 
@@ -56,6 +57,7 @@ async function main() {
 
   // The first paint: rest transform is already applied; fade the plate up once decoded.
   await decoded;
+  await formats;
   document.documentElement.classList.add('is-ready');
   document.documentElement.dataset.plateReady = '1';
   document.getElementById('boot').setAttribute('aria-hidden', 'true');

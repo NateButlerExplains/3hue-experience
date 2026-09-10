@@ -1,9 +1,9 @@
 // The kiosk: a display-only surface perspective-mapped onto the painted screen. Mounts only once
 // geometry.kiosk.quad exists (two independent measurements agreeing within 2 px). Hidden, never
 // squashed, when a line would render under 12 px or a corner leaves the frame by more than 2 px.
-import { getManifest, getGeometry, kioskLines, esc } from './content.js';
-import { onLayout, getState, project, viewport } from './stage.js';
-import { quadToMatrix3d, quadSize } from './screens.js';
+import { getManifest, getGeometry, kioskLines, esc } from './content.js?v=2026-09-10';
+import { onLayout, getState, project, viewport } from './stage.js?v=2026-09-10';
+import { quadToMatrix3d, quadSize } from './screens.js?v=2026-09-10';
 
 const mount = document.getElementById('kiosk-mount');
 let el = null, size = null;
@@ -23,17 +23,23 @@ export function initKiosk() {
   placeKiosk();
 }
 
+// The smallest line's effective screen size: base font (plate px) times the stage scale, scaled
+// again by how much the shortest vertical edge of the quad compresses the unwarped surface.
+function effectiveFont(S) {
+  const g = getGeometry(); const q = g.kiosk.quad;
+  const leftH = Math.hypot(q[3][0] - q[0][0], q[3][1] - q[0][1]), rightH = Math.hypot(q[2][0] - q[1][0], q[2][1] - q[1][1]);
+  return g.layout.kioskBaseFontPx * S * (Math.min(leftH, rightH) / size.height);
+}
+export function kioskVisibleAt(z = 1) { if (!el) return false; const st = getState(); return effectiveFont(st.sRest * z) >= getGeometry().layout.textFloor; }
+
 export function placeKiosk() {
   if (!el) return;
   const g = getGeometry(); const st = getState(); const { vw, vh } = viewport();
-  const base = g.layout.kioskBaseFontPx;
-  // Shortest vertical edge of the projected quad relative to the unwarped height decides the
-  // effective text size.
   const q = g.kiosk.quad.map(([x, y]) => project(x, y));
-  const leftH = Math.hypot(q[3].x - q[0].x, q[3].y - q[0].y), rightH = Math.hypot(q[2].x - q[1].x, q[2].y - q[1].y);
-  const eff = base * st.s * (Math.min(leftH, rightH) / (size.height * st.s));
-  const outside = q.some((p) => p.x < -2 || p.y < -2 || p.x > vw + 2 || p.y > vh + 2);
-  el.hidden = eff < g.layout.textFloor || outside || st.composed;
+  // The right edge of the quad is the plate's own edge (the kiosk runs off frame), so only the
+  // left corners have to be on screen; the right ones may sit at or past the viewport edge.
+  const outside = q[0].x < -2 || q[3].x < -2 || q.some((p) => p.y < -2 || p.y > vh + 2);
+  el.hidden = effectiveFont(st.s) < g.layout.textFloor || outside || st.composed;
 }
 onLayout(placeKiosk);
 export function kioskElement() { return el; }

@@ -1,5 +1,5 @@
 // Header actions and the composed layout's rows and footer.
-import { getManifest, str, esc, resolveHref } from './content.js';
+import { getManifest, str, esc, resolveHref } from './content.js?v=2026-09-10';
 
 const rows = document.getElementById('floor-rows');
 const foot = document.getElementById('floor-foot');
@@ -30,6 +30,7 @@ export function buildHud({ onDoor, onPath, onWalk }) {
   }
   const p = document.createElement('button');
   p.type = 'button'; p.className = 'row-btn'; p.dataset.door = 'path'; p.style.setProperty('--accent', 'var(--orange)');
+  p.setAttribute('aria-label', `${str('pathChip')}: ${m.stages.map((s) => s.name).join(', ')}`);
   p.innerHTML = `<span class="n" aria-hidden="true">↑</span><span><b>${esc(str('pathChip'))}</b><span>${esc(m.stages.map((s) => s.name).join(' · '))}</span></span>`;
   p.addEventListener('click', onPath);
   rows.appendChild(p);
