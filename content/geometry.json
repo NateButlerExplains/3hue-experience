@@ -1,0 +1,167 @@
+{
+  "note": "Plate pixels on the 2880x1621 lobby plate. Values marked seeded are the Phase 2a 1672-reference numbers x2880/1672 and must be re-measured in tools/geometry-tool.html before Gate A. `measured` flips to true per item once re-measured.",
+  "plate": {
+    "width": 2880,
+    "height": 1621,
+    "reference": 1672
+  },
+  "layout": {
+    "headerH": 66,
+    "headerHSmall": 60,
+    "panelW": "clamp(360px, 39vw, 640px)",
+    "sheetTop": 0.39,
+    "composedMaxWidth": 900,
+    "shortHeight": 500,
+    "textFloor": 12,
+    "chipGap": 24,
+    "ringSize": 30,
+    "rest": {
+      "topOffset": 78,
+      "topSlope": 118
+    },
+    "heading": {
+      "left": 120,
+      "top": 118,
+      "h1": 56,
+      "h1Min": 30,
+      "sub": 17,
+      "subMin": 15,
+      "eyebrow": 12,
+      "clearance": 8
+    },
+    "dolly": {
+      "zoom": 1.3,
+      "ms": 1100,
+      "ease": "cubic-bezier(.2,.7,.2,1)"
+    },
+    "pinFadeMs": 150,
+    "pulseEverySec": 8,
+    "kioskBaseFontPx": 18,
+    "roomFadeInMs": 700,
+    "roomFadeOutMs": 600,
+    "roomSettle": 1.06
+  },
+  "doorways": {
+    "win-trust": {
+      "center": [
+        573.6,
+        925
+      ],
+      "frame": [
+        378.9,
+        568.4,
+        775.1,
+        1145.5
+      ],
+      "sign": {
+        "x": 582.2,
+        "y": 671.8,
+        "angle": 0,
+        "capPx": 29.3
+      }
+    },
+    "gain-control": {
+      "center": [
+        1288.4,
+        921.5
+      ],
+      "frame": [
+        1145.5,
+        611.5,
+        1446.9,
+        1119.6
+      ],
+      "sign": {
+        "x": 1288.4,
+        "y": 690.7,
+        "angle": 0,
+        "capPx": 29.3
+      }
+    },
+    "stay-ready": {
+      "center": [
+        2337.4,
+        930.1
+      ],
+      "frame": [
+        2170.3,
+        594.3,
+        2489,
+        1136.8
+      ],
+      "sign": {
+        "x": 2330.5,
+        "y": 685.6,
+        "angle": 0,
+        "capPx": 29.3
+      }
+    }
+  },
+  "tower": [
+    1669.1,
+    387.6
+  ],
+  "rings": [
+    {
+      "stage": "assess",
+      "label": [
+        1669.1,
+        575.3
+      ],
+      "arc": null
+    },
+    {
+      "stage": "strengthen",
+      "label": [
+        1669.1,
+        458.2
+      ],
+      "arc": null
+    },
+    {
+      "stage": "operate",
+      "label": [
+        1669.1,
+        332.4
+      ],
+      "arc": null
+    },
+    {
+      "stage": "advance",
+      "label": [
+        1669.1,
+        199.8
+      ],
+      "arc": null
+    }
+  ],
+  "stairPill": [
+    1519.2,
+    826.8,
+    1844.8,
+    888.8
+  ],
+  "phoneBand": {
+    "left": 344.5,
+    "right": 2514.8,
+    "ratio": 0.7468253968253968
+  },
+  "kiosk": {
+    "measurements": {
+      "a": null,
+      "b": null
+    },
+    "quad": null,
+    "focus": null
+  },
+  "logoMark": null,
+  "rooms": {},
+  "measured": {
+    "doorways": false,
+    "tower": false,
+    "rings": false,
+    "arcs": false,
+    "stairPill": false,
+    "kiosk": false
+  }
+}

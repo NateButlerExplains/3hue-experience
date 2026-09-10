@@ -1,0 +1,23 @@
+{
+  "name": "3hue-experience",
+  "version": "0.1.0",
+  "private": true,
+  "description": "3HUE Experience: three doors, one path to maturity. Static, dependency-free explorable lobby.",
+  "type": "module",
+  "scripts": {
+    "lint": "node tools/check-manifest.js",
+    "serve": "node tools/serve.mjs",
+    "check": "npx playwright test --project=chromium",
+    "check:webkit": "npx playwright test --project=webkit",
+    "check:reduced": "npx playwright test --project=chromium-reduced",
+    "check:live": "CHECK_BASE=https://natebutlerexplains.github.io/3hue-experience/ npx playwright test",
+    "shares": "node tools/build-shares.js https://natebutlerexplains.github.io/3hue-experience/",
+    "prompts": "node tools/write-room-prompts.js",
+    "stamp": "python3 tools/stamp-version.py"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.55.0",
+    "lighthouse": "^12.8.0"
+  }
+}

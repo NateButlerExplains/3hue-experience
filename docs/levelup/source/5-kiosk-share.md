@@ -1,0 +1,21 @@
+Step 5: a live kiosk screen and share links.
+
+1. **Kiosk screen.** Measure the blank kiosk screen's four corners in plate pixels, twice, independently, into `LOBBY_GEOMETRY` (its right corners sit on the plate's right edge). Mount a live `div.experience-kiosk` in `div.experience-stage` with the solved `matrix3d(…)` transform (origin 0 0), so the camera carries it. It shows aggregates read from the dashboard's data, never retyped: "signals tracked" (the count of all findings in the unfiltered list, currently 4; never labelled "today"), source coverage (86%) and buyer segments tracked (3), plus a "Representative data" tag. Its small secondary header is the live text "AiVRIC intelligence layer". Nothing else: no finding titles, competitor names, account signals, HubSpot, funnel, pipeline, deal, targeting or price data, and nothing invented. Dim it to the night scene, keeping 4.5:1. It is a display: no pin, click handler, Tab stop or animation. Hide the content, never squash it, whenever a line would render under 12 px or a corner falls over 2 px outside the visible frame (viewport or phone band).
+
+2. **Share tags.** Root `<head>`: og:title "3HUE · Three doors. One path to maturity.", og:description "Advisory. Oversight. Operational confidence. Built for what's next.", og:type website, og:url and canonical at the root URL, twitter:card summary_large_image, og:image and twitter:image (all URLs absolute https) (a 1200×630 JPEG under 300 KB of the lobby at rest), and `<meta name="robots" content="noindex">`. Add a `/robots.txt` that allows every bot (no `Disallow: /`).
+
+3. **Cards.** After the plate has decoded and faded in, capture each card as a screenshot of the published page in a headless browser (1200×630, or 2400×1260 downscaled). Never lay text onto the plate yourself and never make a card with an image model. If a screenshot can't reproduce a page's open panel, that page gets the lobby-at-rest card, never an approximation; if you can't make even that, tell me.
+
+4. **Icons.** Crop the existing logo PNG's "3" mark onto a navy #071426 square: a 32×32 favicon and a 180×180 apple-touch-icon, linked in `<head>` (nothing is linked today; leave `/favicon.svg` unused). Crop and scale only; if it's illegible at 32 px, ask me for a square mark.
+
+5. **Share pages, only if the host allows.** First publish `/s/test.html` and fetch it; if you can't fetch it, ask me to open it before going on. If it serves your content, add `/s/lobby.html`, `/s/win-trust.html`, `/s/gain-control.html`, `/s/stay-ready.html` and `/s/path.html`, each with a title, description and noindex from `LOBBY_CONTENT`, its own card (the lobby at rest, or that door or the path with its panel open), and og:url and canonical at its own /s/ URL. Each redirects to its route (`#/experience`, `#/door/<id>` or `#/path`) with `location.replace()` only, never meta refresh, all og:image, twitter:image, og:url and canonical values written as absolute https URLs in static text, with a plain "Open the 3HUE lobby" fallback link. Delete the test file. If the host can't serve them, skip this and tell me LinkedIn and Facebook shares will open the dashboard.
+
+**Done when**
+- The kiosk and share pages contain 0 "Drata", "watched", "$", "pipeline" or "opportunit".
+- At 1280×720, 1366×657, 1440×900, 1920×1080 and 2560×1440 the kiosk content is hidden or fully on its screen, every line 12 px or more at 4.5:1.
+- Every word on each card matches the live page character for character, and each card shows the heading, the three sign names and the door chips.
+- Zoomed 8× at 2560×1440, kiosk corners sit within 2 px of the screen's edges with no seam and stay there through the Stay Ready dolly; WebKit places it as Chromium does.
+- curl of the root as Slackbot-LinkExpanding, LinkedInBot, Twitterbot and facebookexternalhit shows the og and twitter tags; og:image returns 200, 1200×630, under 300 KB; each share page, if the host serves them, returns 200 to those bots with its own og:title, og:image and og:url, no refresh, and opens its state in a browser.
+- `/robots.txt` returns 200 and blocks none of those bots; both icons return 200 and show the 3HUE mark on navy.
+
+Do not change anything not listed here. When done, list what you changed and anything you could not do. Report any check you could not actually run as "not run"; never infer a pass.

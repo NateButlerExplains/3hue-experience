@@ -1,0 +1,8 @@
+# Gain Control room render prompt (door 2, panel docks right; keep the right third quiet)
+# Attach media/plate/lobby-plate-1920.jpg as the reference image. Ask for the largest landscape output. Do not accept text or people.
+
+Photorealistic architectural visualization, cinematic, eye-level camera, 35 mm lens, physically based lighting. An interior room opening off a modern two-storey executive lobby at night: dark charcoal walls, walnut door frames and panelling edged with warm-white LED coves, backlit frosted panels, polished pale stone floor with soft reflections, floor-to-ceiling glass to a night city skyline, dark foliage in planters, cool blue ambient with warm 3000 K practical light. Materials, palette and lighting match the attached reference image exactly, as if this room is directly behind one of its lit doorways. No people. Every display is flat, rectangular, seen straight on, dark and blank, with nothing standing in front of it. No curved, holographic or projected surfaces. Keep the right third of the frame quiet and low in detail, so a text panel can sit over it. Landscape 16:9, the largest size available. Highly detailed.
+
+SCENE: The oversight room. A dark boardroom table with eight chairs under a low warm pendant. On a side plinth, a tidy architectural model of small building blocks lit from below. One wide flat matte wall display, dark and blank, seen straight on. Tall amber backlit frosted panels between walnut fins. Glass on the left looking onto a mezzanine. A side console. A thin orange light line runs along the floor edge; nothing else in the room is orange.
+
+No text, no lettering, no numerals, no signage, no logos, no user interface elements anywhere in the image.

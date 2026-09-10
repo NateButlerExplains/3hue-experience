@@ -1,0 +1,2 @@
+# Keep supplied originals byte-identical, including their existing blank/trailing lines.
+source/*.md -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

@@ -1,0 +1,50 @@
+[
+  {
+    "file": "source/LEVELUP.md",
+    "sha256": "78d5a36ef48b4402e309304da42086f319fb0a1b8393fdb4a0dc3d55ddda0886",
+    "bytes": 50152,
+    "phase": "G"
+  },
+  {
+    "file": "source/1-clean-plate.md",
+    "sha256": "721f51481d09c54e94b546c25f5a7e3934a09ed2dff2db5d31f30457b61b03f4",
+    "bytes": 3927,
+    "phase": "1"
+  },
+  {
+    "file": "source/2a-baseline-stage-labels.md",
+    "sha256": "aec8de0378594c0285ab555339d408f4795fc4e13eee39fe22f065eb98b5bce9",
+    "bytes": 5013,
+    "phase": "2a"
+  },
+  {
+    "file": "source/2b-baseline-dialog-panel.md",
+    "sha256": "80e45c7d9f1b0962262a826b9b9824012ed88e85c9d66ddaddc0c40b54bac846",
+    "bytes": 4456,
+    "phase": "2b"
+  },
+  {
+    "file": "source/3-phones-tablets.md",
+    "sha256": "67e8362fa10ce008c89add2e85e2f2d843a3a8d78e2f494766988eaaf3ca7dbc",
+    "bytes": 4582,
+    "phase": "3"
+  },
+  {
+    "file": "source/4-motion-routes.md",
+    "sha256": "2d33cc8f1817ed518d9483246e28465b4ed350312ded63c2b50bc9f00588a35f",
+    "bytes": 4399,
+    "phase": "4"
+  },
+  {
+    "file": "source/5-kiosk-share.md",
+    "sha256": "f442368433af121fe56428f2840bdb37daf6a5d72d58ca7f61b3a55b0c5f9e74",
+    "bytes": 4364,
+    "phase": "5"
+  },
+  {
+    "file": "source/6-walk-dashboard.md",
+    "sha256": "f45c91c4d5b20aa79a7a485e02776e61456f76439b798fb8f651e4c2fcdbfd0d",
+    "bytes": 4611,
+    "phase": "6"
+  }
+]

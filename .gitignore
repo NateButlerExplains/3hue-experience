@@ -1,0 +1,8 @@
+node_modules/
+art/
+tools/reference/
+tests/results/
+test-results/
+playwright-report/
+.DS_Store
+*.log
