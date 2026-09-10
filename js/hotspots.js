@@ -2,8 +2,8 @@
 // plate px; the ring sits on the doorway centre and the chip hangs below it, both counter-scaled
 // so they keep their screen size. Composed viewports show numbered rings only (rows carry the
 // names). Plates (hover/focus, fine pointers) list what is behind the door.
-import { getManifest, getGeometry, str, esc, stageName } from './content.js?v=2026-09-10b';
-import { onLayout, getState, project, viewport } from './stage.js?v=2026-09-10b';
+import { getManifest, getGeometry, str, esc, stageName } from './content.js?v=2026-09-10c';
+import { onLayout, getState, project, viewport } from './stage.js?v=2026-09-10c';
 
 const host = document.getElementById('doors');
 let doors = [];

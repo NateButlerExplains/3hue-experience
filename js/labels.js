@@ -1,7 +1,7 @@
 // Live labels painted into plate space (door signs, tower stage names) and the heading block,
 // which sits outside the stage and is placed from the plate transform by the 2a rule.
-import { getManifest, getGeometry, esc } from './content.js?v=2026-09-10b';
-import { onLayout, getState, viewport, headerH } from './stage.js?v=2026-09-10b';
+import { getManifest, getGeometry, esc } from './content.js?v=2026-09-10c';
+import { onLayout, getState, viewport, headerH } from './stage.js?v=2026-09-10c';
 
 const labelsEl = document.getElementById('labels');
 const introEl = document.getElementById('intro');

@@ -1,17 +1,17 @@
 // Boot: manifests → plate → stage → doors/labels/hud → panel/path/walk → router.
-import { loadContent, getManifest, getGeometry, getParams, str } from './content.js?v=2026-09-10b';
-import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden } from './stage.js?v=2026-09-10b';
-import { buildDoors, setCurrent, hideDoors, showDoors, doorElement, pathElement, firstDoorElement } from './hotspots.js?v=2026-09-10b';
-import { buildLabels, headingElement } from './labels.js?v=2026-09-10b';
-import { buildHud, rowElement, walkButton } from './hud.js?v=2026-09-10b';
-import { parse, go, back, onRoute, currentRoute } from './router.js?v=2026-09-10b';
-import { initDebug } from './debug.js?v=2026-09-10b';
-import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStation, showStationChips } from './panel.js?v=2026-09-10b';
-import { pushLayer, popLayer, resetLayers } from './focus.js?v=2026-09-10b';
-import { lightStage, clearArcs, buildArcs } from './path.js?v=2026-09-10b';
-import { initKiosk, placeKiosk } from './kiosk.js?v=2026-09-10b';
-import { initWalk, startWalk, endWalk, isWalking, walkStep } from './walk.js?v=2026-09-10b';
-import { initRooms, roomFor, showRoomPins, clearRoomPins, probeFormats } from './rooms.js?v=2026-09-10b';
+import { loadContent, getManifest, getGeometry, getParams, str } from './content.js?v=2026-09-10c';
+import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden } from './stage.js?v=2026-09-10c';
+import { buildDoors, setCurrent, hideDoors, showDoors, doorElement, pathElement, firstDoorElement } from './hotspots.js?v=2026-09-10c';
+import { buildLabels, headingElement } from './labels.js?v=2026-09-10c';
+import { buildHud, rowElement, walkButton } from './hud.js?v=2026-09-10c';
+import { parse, go, back, onRoute, currentRoute } from './router.js?v=2026-09-10c';
+import { initDebug } from './debug.js?v=2026-09-10c';
+import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStation, showStationChips } from './panel.js?v=2026-09-10c';
+import { pushLayer, popLayer, resetLayers } from './focus.js?v=2026-09-10c';
+import { lightStage, clearArcs, buildArcs } from './path.js?v=2026-09-10c';
+import { initKiosk, placeKiosk } from './kiosk.js?v=2026-09-10c';
+import { initWalk, startWalk, endWalk, isWalking, walkStep } from './walk.js?v=2026-09-10c';
+import { initRooms, roomFor, showRoomPins, clearRoomPins, probeFormats } from './rooms.js?v=2026-09-10c';
 
 const plateEl = document.getElementById('plate');
 const params = getParams();
