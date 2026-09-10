@@ -1,0 +1,57 @@
+// Manifest loading and the few helpers every module shares. Content is data: nothing here knows
+// what a door says, only where to find it.
+
+let manifest = null;
+let geometry = null;
+
+const params = new URLSearchParams(location.search);
+
+// `?manifest=tests/fixtures/renamed.json` swaps the content manifest for a fixture so the rename
+// check (P2a-D03) can prove every label follows the file. Relative paths only: a fixture is
+// something in this repo, never a URL.
+function manifestPath() {
+  const p = params.get('manifest');
+  if (!p || /^[a-z]+:|^\/\//i.test(p) || p.includes('..')) return 'content/experience.json';
+  return p;
+}
+
+export async function loadContent() {
+  const [m, g] = await Promise.all([
+    fetch(manifestPath(), { cache: 'no-cache' }).then((r) => r.json()),
+    fetch('content/geometry.json', { cache: 'no-cache' }).then((r) => r.json()),
+  ]);
+  manifest = m; geometry = g;
+  return { manifest, geometry };
+}
+export function getManifest() { return manifest; }
+export function getGeometry() { return geometry; }
+export function getParams() { return params; }
+
+export const esc = (s = '') => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// "{door}: {promise}" → text. Missing keys stay visible so a typo in the manifest shows up.
+export function fmt(template, vars) {
+  return String(template || '').replace(/\{(\w+)\}/g, (_, k) => (k in vars ? vars[k] : `{${k}}`));
+}
+
+export function str(key, vars) { return fmt(manifest?.strings?.[key] ?? key, vars || {}); }
+
+export function door(id) { return (manifest?.doors || []).find((d) => d.id === id) || null; }
+export function stage(id) { return (manifest?.stages || []).find((s) => s.id === id) || null; }
+export function stageName(id) { return stage(id)?.name || id; }
+
+// Every "Talk to our team" resolves through here (O2). No other module knows the URL.
+export function resolveHref(key) {
+  if (key === 'booking') return manifest.site.bookingUrl;
+  if (key === 'logo') return manifest.site.logoHref;
+  throw new Error(`unknown href key ${key}`);
+}
+
+// Kiosk lines are counts derived from this manifest, never retyped (O9).
+export function kioskLines() {
+  const m = manifest;
+  const derive = { doors: () => m.doors.length, stages: () => m.stages.length, families: () => new Set(m.doors.flatMap((d) => d.serviceFamilies.map((f) => f.name))).size };
+  return (m.kiosk?.lines || []).map((l) => ({ label: l.label, value: derive[l.derive] ? derive[l.derive]() : '' }));
+}
+
+export function reducedMotion() { return matchMedia('(prefers-reduced-motion: reduce)').matches; }

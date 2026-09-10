@@ -1,0 +1,41 @@
+// Layers, focus and Escape. A layer records who opened it and what should receive focus; closing
+// returns focus to the opener. Escape is handled in the capture phase and closes only the
+// innermost layer; at rest it is a no-op. There is no page-level focus trap: this is a page, not
+// a modal, but everything under an open panel is inert so Tab never lands on a hidden control.
+const stack = [];
+const INERT = ['#doors', '#intro', '#hud-actions', '#floor-rows', '#floor-foot'];
+
+function setInert(on) {
+  for (const sel of INERT) { const el = document.querySelector(sel); if (el) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } }
+}
+
+export function pushLayer({ id, opener, first, onEscape }) {
+  stack.push({ id, opener: opener || document.activeElement, onEscape });
+  setInert(true);
+  requestAnimationFrame(() => { const el = typeof first === 'function' ? first() : first; if (el && document.contains(el)) el.focus({ preventScroll: true }); });
+}
+
+export function popLayer() {
+  const top = stack.pop();
+  if (!stack.length) setInert(false);
+  if (top?.opener && document.contains(top.opener)) requestAnimationFrame(() => top.opener.focus({ preventScroll: true }));
+  return top;
+}
+
+export function resetLayers() {
+  const top = stack[0];
+  stack.length = 0;
+  setInert(false);
+  if (top?.opener && document.contains(top.opener)) requestAnimationFrame(() => { if (!document.activeElement || document.activeElement === document.body) top.opener.focus({ preventScroll: true }); });
+}
+
+export function topLayer() { return stack[stack.length - 1] || null; }
+export function depth() { return stack.length; }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  const top = stack[stack.length - 1];
+  if (!top) return;
+  e.preventDefault(); e.stopPropagation();
+  if (top.onEscape) top.onEscape();
+}, true);
