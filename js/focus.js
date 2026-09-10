@@ -12,13 +12,13 @@ function setInert(on) {
 export function pushLayer({ id, opener, first, onEscape }) {
   stack.push({ id, opener: opener || document.activeElement, onEscape });
   setInert(true);
-  requestAnimationFrame(() => { const el = typeof first === 'function' ? first() : first; if (el && document.contains(el)) el.focus({ preventScroll: true }); });
+  setTimeout(() => { const el = typeof first === 'function' ? first() : first; if (el && document.contains(el)) el.focus({ preventScroll: true }); }, 0);
 }
 
 export function popLayer() {
   const top = stack.pop();
   if (!stack.length) setInert(false);
-  if (top?.opener && document.contains(top.opener)) requestAnimationFrame(() => top.opener.focus({ preventScroll: true }));
+  if (top?.opener && document.contains(top.opener)) setTimeout(() => top.opener.focus({ preventScroll: true }), 0);
   return top;
 }
 
@@ -26,7 +26,7 @@ export function resetLayers() {
   const top = stack[0];
   stack.length = 0;
   setInert(false);
-  if (top?.opener && document.contains(top.opener)) requestAnimationFrame(() => { if (!document.activeElement || document.activeElement === document.body) top.opener.focus({ preventScroll: true }); });
+  if (top?.opener && document.contains(top.opener)) setTimeout(() => { if (!document.activeElement || document.activeElement === document.body) top.opener.focus({ preventScroll: true }); }, 0);
 }
 
 export function topLayer() { return stack[stack.length - 1] || null; }

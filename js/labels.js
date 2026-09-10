@@ -60,12 +60,20 @@ function place() {
   const first = g.doorways['win-trust'].frame;
   const firstDoorTop = first[1] * s + ty;
   const subFont = Math.max(L.heading.subMin, L.heading.sub * k);
-  const h1Font = Math.max(L.heading.h1Min, Math.min(L.heading.h1 * k, (firstDoorTop - introTop - (12 + 16 + subFont * 2 * 1.4) - 9 - L.heading.clearance) / 2));
+  let h1Font = Math.max(L.heading.h1Min, Math.min(L.heading.h1 * k, (firstDoorTop - introTop - (12 + 16 + subFont * 2 * 1.4) - 9 - L.heading.clearance) / 2));
+  const { vw } = viewport();
   introEl.style.left = left + 'px';
   introEl.style.top = Math.max(headerH() + 8, introTop) + 'px';
-  h1.style.fontSize = h1Font + 'px';
+  introEl.style.maxWidth = Math.min(640, vw - left - 24) + 'px';
   sub.style.fontSize = subFont + 'px';
-  introEl.style.maxWidth = Math.min(640, Math.max(300, first[0] * s + tx - left - 8 + 0)) + 'px';
+  // Apply, then measure: the block must end at least `clearance` px above the first door frame.
+  // Shrink the h1 toward its floor until it does (the constants above are only the estimate).
+  for (let i = 0; i < 6; i++) {
+    h1.style.fontSize = h1Font + 'px';
+    const over = introEl.getBoundingClientRect().bottom - (firstDoorTop - L.heading.clearance);
+    if (over <= 0 || h1Font <= L.heading.h1Min) break;
+    h1Font = Math.max(L.heading.h1Min, h1Font - Math.max(1, over / 2.2));
+  }
 }
 onLayout(place);
 export function headingElement() { return h1; }

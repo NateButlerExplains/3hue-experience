@@ -67,7 +67,7 @@ let token = 0;
 export function hideDoors() { token++; host.classList.add('hidden'); for (const { el } of doors) el.setAttribute('tabindex', '-1'); if (pathChip) pathChip.setAttribute('tabindex', '-1'); }
 export function showDoors() {
   const t = ++token;
-  requestAnimationFrame(() => { if (t !== token) return; host.classList.remove('hidden'); for (const { el } of doors) el.removeAttribute('tabindex'); if (pathChip) pathChip.removeAttribute('tabindex'); });
+  setTimeout(() => { if (t !== token) return; host.classList.remove('hidden'); for (const { el } of doors) el.removeAttribute('tabindex'); if (pathChip) pathChip.removeAttribute('tabindex'); }, 0);
 }
 export function doorElement(id) { return doors.find((d) => d.door.id === id)?.el || null; }
 export function pathElement() { return pathChip; }

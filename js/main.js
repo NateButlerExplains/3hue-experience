@@ -6,7 +6,7 @@ import { buildLabels, headingElement } from './labels.js';
 import { buildHud, rowElement, walkButton } from './hud.js';
 import { parse, go, back, onRoute, currentRoute } from './router.js';
 import { initDebug } from './debug.js';
-import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStage, setPanelStation } from './panel.js';
+import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStation, showStationChips } from './panel.js';
 import { pushLayer, popLayer, resetLayers } from './focus.js';
 import { lightStage, clearArcs, buildArcs } from './path.js';
 import { initKiosk, placeKiosk } from './kiosk.js';

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geometry tool</title>
+<style>
+  html { background: #0b1118; color: #e2e8f0; font: 13px/1.4 system-ui, sans-serif; }
+  body { margin: 0; display: grid; grid-template-columns: 1fr 340px; height: 100vh; }
+  #wrap { position: relative; overflow: auto; }
+  #canvas { position: relative; transform-origin: 0 0; }
+  #canvas img { display: block; width: 2880px; height: 1621px; user-select: none; -webkit-user-drag: none; }
+  #canvas img.ref { position: absolute; left: 0; top: 0; opacity: .5; pointer-events: none; display: none; }
+  #canvas svg { position: absolute; left: 0; top: 0; width: 2880px; height: 1621px; pointer-events: none; }
+  #canvas svg * { vector-effect: non-scaling-stroke; }
+  #side { padding: 12px; border-left: 1px solid #223; overflow: auto; }
+  label { display: block; margin: 6px 0; }
+  button { margin: 2px 4px 2px 0; }
+  textarea { width: 100%; height: 200px; font: 11px/1.3 monospace; }
+  #status { color: #52cce3; margin: 8px 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+</style>
+</head>
+<body>
+<div id="wrap"><div id="canvas">
+  <img id="plate" src="../media/plate/lobby-plate-2880.jpg" alt="">
+  <img id="ref" class="ref" src="reference/00-original-1672x941.png" alt="" style="width:2880px;height:1621px">
+  <svg id="ov" viewBox="0 0 2880 1621"></svg>
+</div></div>
+<div id="side">
+  <h3 style="margin:0 0 6px">Geometry tool</h3>
+  <p style="margin:0 0 8px;color:#94a3b8">Click on the plate to read plate px. Pick a mode, then click the points it asks for. Loads content/geometry.json and draws it; Copy JSON writes the edited geometry back for you to paste.</p>
+  <label>Zoom <input id="zoom" type="range" min="0.2" max="4" step="0.05" value="0.5"> <span id="zv">0.5</span></label>
+  <label><input id="showref" type="checkbox"> 50% overlay of the 1672 original (P1-D02)</label>
+  <div class="grid">
+    <button data-mode="point">Point</button>
+    <button data-mode="rect">Rect (2 clicks)</button>
+    <button data-mode="quad">Quad (TL TR BR BL)</button>
+    <button data-mode="arc">Arc (left, apex, right)</button>
+  </div>
+  <label>Assign to <select id="target">
+    <option value="">— just measure —</option>
+    <optgroup label="Doorways (rect = frame, point = center / sign)">
+      <option value="doorways.win-trust.frame">win-trust.frame</option><option value="doorways.win-trust.center">win-trust.center</option><option value="doorways.win-trust.sign">win-trust.sign</option>
+      <option value="doorways.gain-control.frame">gain-control.frame</option><option value="doorways.gain-control.center">gain-control.center</option><option value="doorways.gain-control.sign">gain-control.sign</option>
+      <option value="doorways.stay-ready.frame">stay-ready.frame</option><option value="doorways.stay-ready.center">stay-ready.center</option><option value="doorways.stay-ready.sign">stay-ready.sign</option>
+    </optgroup>
+    <optgroup label="Tower">
+      <option value="tower">tower (point)</option>
+      <option value="rings.0.label">assess label</option><option value="rings.1.label">strengthen label</option><option value="rings.2.label">operate label</option><option value="rings.3.label">advance label</option>
+      <option value="rings.0.arc">assess arc</option><option value="rings.1.arc">strengthen arc</option><option value="rings.2.arc">operate arc</option><option value="rings.3.arc">advance arc</option>
+    </optgroup>
+    <optgroup label="Other">
+      <option value="stairPill">stairPill (rect)</option>
+      <option value="kiosk.measurements.a">kiosk quad, pass A</option>
+      <option value="kiosk.measurements.b">kiosk quad, pass B</option>
+      <option value="logoMark">logoMark (rect, on the logo file)</option>
+    </optgroup>
+  </select></label>
+  <div id="status">mode: point</div>
+  <div id="last"></div>
+  <button id="copy">Copy JSON</button> <button id="reload">Reload from file</button> <button id="clearpts">Clear points</button>
+  <textarea id="out"></textarea>
+</div>
+<script type="module">
+import { quadToMatrix3d, quadSize } from '../js/screens.js';
+const canvas = document.getElementById('canvas'), ov = document.getElementById('ov'), status = document.getElementById('status'), last = document.getElementById('last'), out = document.getElementById('out');
+const NS = 'http://www.w3.org/2000/svg';
+let g = null, mode = 'point', pts = [];
+const zoom = document.getElementById('zoom'), zv = document.getElementById('zv');
+const setZoom = () => { canvas.style.transform = `scale(${zoom.value})`; canvas.style.width = 2880 * zoom.value + 'px'; canvas.style.height = 1621 * zoom.value + 'px'; zv.textContent = zoom.value; };
+zoom.addEventListener('input', setZoom); setZoom();
+document.getElementById('showref').addEventListener('change', (e) => { document.getElementById('ref').style.display = e.target.checked ? 'block' : 'none'; });
+for (const b of document.querySelectorAll('[data-mode]')) b.addEventListener('click', () => { mode = b.dataset.mode; pts = []; status.textContent = `mode: ${mode}`; });
+document.getElementById('clearpts').addEventListener('click', () => { pts = []; draw(); });
+async function load() { g = await (await fetch('../content/geometry.json', { cache: 'no-cache' })).json(); draw(); out.value = JSON.stringify(g, null, 2); }
+document.getElementById('reload').addEventListener('click', load);
+document.getElementById('copy').addEventListener('click', () => { out.value = JSON.stringify(g, null, 2); out.select(); navigator.clipboard?.writeText(out.value); });
+function setPath(path, value) {
+  const keys = path.split('.'); let o = g;
+  for (let i = 0; i < keys.length - 1; i++) { const k = keys[i]; o = o[k] ?? (o[k] = {}); }
+  o[keys[keys.length - 1]] = value;
+}
+function el(n, a) { const e = document.createElementNS(NS, n); for (const [k, v] of Object.entries(a)) e.setAttribute(k, v); ov.appendChild(e); return e; }
+function draw() {
+  ov.innerHTML = '';
+  if (!g) return;
+  for (const [id, d] of Object.entries(g.doorways)) {
+    const [l, t, r, b] = d.frame;
+    el('rect', { x: l, y: t, width: r - l, height: b - t, fill: 'none', stroke: '#52cce3', 'stroke-width': 2 });
+    el('circle', { cx: d.center[0], cy: d.center[1], r: 8, fill: '#52cce3' });
+    el('circle', { cx: d.sign.x, cy: d.sign.y, r: 6, fill: 'none', stroke: '#e98445', 'stroke-width': 2 });
+    el('text', { x: l + 6, y: t + 26, fill: '#52cce3', 'font-size': 22 }).textContent = id;
+  }
+  el('circle', { cx: g.tower[0], cy: g.tower[1], r: 10, fill: 'none', stroke: '#fff', 'stroke-width': 2 });
+  for (const r of g.rings) { el('line', { x1: r.label[0] - 100, y1: r.label[1], x2: r.label[0] + 100, y2: r.label[1], stroke: '#ffd9a3', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' }); if (r.arc) el('path', { d: r.arc, fill: 'none', stroke: '#ffd9a3', 'stroke-width': 3 }); }
+  const [pl, pt, pr, pb] = g.stairPill; el('rect', { x: pl, y: pt, width: pr - pl, height: pb - pt, fill: 'none', stroke: '#e98445', 'stroke-width': 2 });
+  for (const k of ['a', 'b']) { const q = g.kiosk?.measurements?.[k]; if (q) el('polygon', { points: q.map((p) => p.join(',')).join(' '), fill: 'none', stroke: k === 'a' ? '#25b5d6' : '#e98445', 'stroke-width': 2 }); }
+  if (g.kiosk?.quad) { const q = g.kiosk.quad; el('polygon', { points: q.map((p) => p.join(',')).join(' '), fill: 'rgba(37,181,214,.15)', stroke: '#fff', 'stroke-width': 2 }); const s = quadSize(q); const fo = el('foreignObject', { x: 0, y: 0, width: s.width, height: s.height, style: `transform-origin:0 0; transform:${quadToMatrix3d(q, s.width, s.height)}` }); fo.innerHTML = `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${s.width}px;height:${s.height}px;background:repeating-linear-gradient(0deg,rgba(255,255,255,.35) 0 1px,transparent 1px 20px),repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 1px,transparent 1px 20px);outline:2px solid #fff"></div>`; }
+  pts.forEach((p, i) => { el('circle', { cx: p[0], cy: p[1], r: 5, fill: '#fff' }); el('text', { x: p[0] + 8, y: p[1] - 8, fill: '#fff', 'font-size': 18 }).textContent = i + 1; });
+}
+canvas.addEventListener('click', (e) => {
+  const r = canvas.getBoundingClientRect(); const z = +zoom.value;
+  const x = Math.round((e.clientX - r.left) / z * 10) / 10, y = Math.round((e.clientY - r.top) / z * 10) / 10;
+  pts.push([x, y]);
+  const need = { point: 1, rect: 2, quad: 4, arc: 3 }[mode];
+  last.textContent = `last click: ${x}, ${y}  (${pts.length}/${need})`;
+  if (pts.length >= need) {
+    const target = document.getElementById('target').value;
+    let value;
+    if (mode === 'point') value = pts[0];
+    if (mode === 'rect') value = [Math.min(pts[0][0], pts[1][0]), Math.min(pts[0][1], pts[1][1]), Math.max(pts[0][0], pts[1][0]), Math.max(pts[0][1], pts[1][1])];
+    if (mode === 'quad') value = pts.slice(0, 4);
+    if (mode === 'arc') { const [a, m, b] = pts; const cx = 2 * m[0] - (a[0] + b[0]) / 2, cy = 2 * m[1] - (a[1] + b[1]) / 2; value = `M ${a[0]} ${a[1]} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${b[0]} ${b[1]}`; }
+    status.textContent = `${mode}: ${JSON.stringify(value)}`;
+    if (target && g) {
+      if (target.endsWith('.sign')) { const cur = g.doorways[target.split('.')[1]].sign; setPath(target, { ...cur, x: value[0], y: value[1] }); }
+      else if (target === 'tower' || target.endsWith('.center') || /rings\.\d\.label/.test(target)) setPath(target, value);
+      else setPath(target, value);
+      // Kiosk: when both passes agree within 2 px, the mean becomes the quad.
+      const km = g.kiosk.measurements;
+      if (km.a && km.b) { const ok = km.a.every((p, i) => Math.abs(p[0] - km.b[i][0]) <= 2 && Math.abs(p[1] - km.b[i][1]) <= 2); g.kiosk.quad = ok ? km.a.map((p, i) => [(p[0] + km.b[i][0]) / 2, (p[1] + km.b[i][1]) / 2]) : null; status.textContent += ok ? ' · kiosk passes agree, quad set' : ' · kiosk passes DISAGREE (>2 px), quad cleared'; }
+      out.value = JSON.stringify(g, null, 2);
+    }
+    pts = [];
+  }
+  draw();
+});
+load();
+</script>
+</body>
+</html>

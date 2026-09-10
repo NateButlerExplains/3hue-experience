@@ -167,9 +167,19 @@ export function buildPicture(plate) {
   img.width = plate.width; img.height = plate.height;
   img.src = plate.fallback;
   document.getElementById('placeholder').style.backgroundImage = `url("${plate.placeholder}")`;
+  // decode() is the signal the spec asks for, but Chromium defers it while a tab is hidden and a
+  // few browsers lack it, so it is raced against the load event plus a short timeout: the plate
+  // must never stay at opacity 0 behind a resolved network request.
   return new Promise((res) => {
-    const done = () => { const d = img.decode ? img.decode().catch(() => {}) : Promise.resolve(); d.then(res); };
-    if (img.complete && img.naturalWidth) done(); else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', () => res(), { once: true }); }
+    let done = false;
+    const finish = () => { if (!done) { done = true; res(); } };
+    const onLoad = () => {
+      const d = img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+      d.then(finish);
+      setTimeout(finish, document.visibilityState === 'hidden' ? 0 : 1200);
+    };
+    if (img.complete && img.naturalWidth) onLoad();
+    else { img.addEventListener('load', onLoad, { once: true }); img.addEventListener('error', finish, { once: true }); }
   });
 }
 
@@ -193,9 +203,9 @@ export function isRoomVisible() { return parseFloat(getComputedStyle(roomEl).opa
 let hideToken = 0;
 export function whenRoomHidden(fn) {
   const token = ++hideToken; let raf = 0;
-  const step = () => { if (token !== hideToken) return; if (!isRoomVisible()) { fn(); return; } raf = requestAnimationFrame(step); };
+  const step = () => { if (token !== hideToken) return; if (!isRoomVisible()) { fn(); return; } raf = setTimeout(step, 40); };
   step();
-  return () => { if (token === hideToken) hideToken++; cancelAnimationFrame(raf); };
+  return () => { if (token === hideToken) hideToken++; clearTimeout(raf); };
 }
 function fitRoom(Wr, Hr, cover, R, focus) {
   const fx = Math.min(0.98, Math.max(0.02, focus?.x ?? 0.5)), fy = Math.min(0.98, Math.max(0.02, focus?.y ?? 0.5));
