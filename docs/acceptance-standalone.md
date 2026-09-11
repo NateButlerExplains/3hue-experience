@@ -1,6 +1,6 @@
 # Standalone acceptance register
 
-The 43 Done-when checks from the level-up documents, re-scoped for this site by the rule in [DECISIONS.md O7](DECISIONS.md): a clause that names dashboard chrome (header.topbar, the Experience button, Return to intelligence, catalog-shell, the admin modal, the drawer, `.icp-carousel`, Guide, the NB chip, dashboard data) is replaced by its standalone equivalent or removed; viewports, tolerances, timings and counts are kept verbatim. Six room checks (R-01 … R-06) are added for the rendered rooms (O5) and are never counted against the 43. Twenty-four tour checks (T-01 … T-24) are added for the guided tour (O10, O11); they are never counted against the 43 either, and have their own summary lines.
+The 43 Done-when checks from the level-up documents, re-scoped for this site by the rule in [DECISIONS.md O7](DECISIONS.md): a clause that names dashboard chrome (header.topbar, the Experience button, Return to intelligence, catalog-shell, the admin modal, the drawer, `.icp-carousel`, Guide, the NB chip, dashboard data) is replaced by its standalone equivalent or removed; viewports, tolerances, timings and counts are kept verbatim. Six room checks (R-01 … R-06) are added for the rendered rooms (O5) and are never counted against the 43. Twenty-four tour checks (T-01 … T-24) are added for the guided tour (O10, O11), and T-27 and S-01 … S-07 for the rooms that talk back under it (O14); they are never counted against the 43 either, and have their own summary lines.
 
 Every check keeps its ID and its original bullet, quoted verbatim from [levelup/acceptance.md](levelup/acceptance.md), then a disposition row. **Candidate (local)** is the working tree served by `node tools/serve.mjs`; **Published** is https://natebutlerexplains.github.io/3hue-experience/ (`CHECK_BASE=…`). Both columns are **Not run** until the named spec has produced a measured value and evidence under `docs/evidence/`. A check is Pass, Fail or Not run; nothing is accepted by inference, and a re-scoped clause is tested exactly as rewritten here.
 
@@ -13,14 +13,15 @@ Every check keeps its ID and its original bullet, quoted verbatim from [levelup/
 | dropped | 1 | P6-D04 |
 | **total** | **43** | |
 | rooms (new, outside the 43) | 6 | R-01, R-02, R-03, R-04, R-05, R-06 |
-| tour (new, O10/O11, outside the 43) | 24 (23 new, 1 dropped) | T-01 … T-19, T-21 … T-24 new; T-20 dropped |
+| tour (new, O10/O11, outside the 43) | 25 (24 new, 1 dropped) | T-01 … T-19, T-21 … T-24, T-27 new; T-20 dropped |
+| surfaces (new, O14, outside the 43, tallied with the tour) | 7 | S-01 … S-07 |
 
 | Column | Pass | Fail | Not run |
 |---|---|---|---|
 | Candidate (local) | 48 | 0 | 0 |
 | Published | 0 | 0 | 48 |
-| Tour, candidate (local) | 22 | 0 | 1 |
-| Tour, published | 0 | 0 | 23 |
+| Tour, candidate (local) | 30 | 0 | 1 |
+| Tour, published | 0 | 0 | 31 |
 
 Dropped checks carry no result. Every earlier phase's rows are re-run at P4-D08 and P6-D06 (rooms and tour rows are outside those roll-ups). The first two count rows cover the 43 and the rooms; the tour rows are counted on their own.
 
@@ -963,6 +964,80 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 - Needs the rendered voice (`media/voice/`), so it runs after the voice render and before go-live. The pronunciation check (3HUE, AiVRIC, SOC 2, NIST CSF, vCISO) is the listening report in `docs/VOICE.md`.
 
+#### T-27 — new
+
+> The rooms talk back under the tour (O14): what each surface shows is the fold of its node's base write and every shown line's write up to the line on screen, for every trigger version, in `window.__tour` and in the room itself, and nothing carries into the next node; with the voice on, an entry with `at` waits for its word (captions only, it shows as its line starts); Previous, a deep link and a resize come back to the same state; a click on a lit surface goes back to the line that wrote or cued it; the card's screen-reader list says what every lit surface shows; the lint refuses writes and surface cues that break the contract.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O14) | Pass (27 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-surfaces.spec.mjs` (the fixture's room node: base write, two `when` versions, a surface cue, a ref card, a glow, a clear, an `at` word; `?voice=sim` word events; `foldWrites` and the lint without a browser) |
+
+- The fixture's room node is reached only as a chapter of its own (`room`, optional), so the engine specs' other paths are unchanged.
+
+### Rooms that talk back — S-01 … S-07 (new, O14, outside the 43)
+
+Not part of the 43, and tallied with the tour: both sit behind the tour gate. Each room's surfaces are measured twice on its 2560×1440 master (`content/surfaces.json`, merged into `geometry.rooms.<door>.surfaces` once the tour is on, imported by `tools/import-surfaces.mjs` from the measurement files, re-checked by `tools/check-manifest.js`: passes within 2 px on visible corners, quad their mean within 0.5 px, a valid matrix, stations of the door, occluders on the image, and the render's SHA-256). The door view carries the surfaces only while the tour is on (`tour.gate` approved or `?tour=1`); with the tour off the pins of R-04 stand.
+
+#### S-01 — new
+
+> Every surface's corners land within 2 px of its measured quad at 1280×720, 1440×900 and 2560×1440 (the 1280, 2048 and 2560 renders), and again after the camera pans and zooms to a cued surface.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O14) | Pass (12 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` (four DOM markers at each surface box's corners against the quad through `window.__lobby.roomFit`) |
+
+#### S-02 — new
+
+> In the door view each station's first surface that takes type carries the station's label from the manifest, and a pointer click on a surface routes to `#/door/<id>/<station>` with focus on the station's heading, as a pin did.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O14) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` |
+
+- Gain Control has no surface for services or decision (tools/import-surfaces.mjs); the panel's station chips reach them.
+
+#### S-03 — new
+
+> Surfaces are aria-hidden and pointer-only: no focus stop and nothing in the accessibility tree; with the tour off, and for a `?room-preview=` candidate, the pins stay.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O14) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` (`ariaSnapshot` of `#room`, Tab walk, pins with `?tour` unset and with `?room-preview=`) |
+
+#### S-04 — new
+
+> Type on a surface is at least 12 CSS px on screen, or hidden, at 1280×720, 1440×900 and 2560×1440 (door labels and every write of the fixture's room).
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O14) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` (computed font size times the surface's smallest edge ratio, measured on the DOM) |
+
+#### S-05 — new
+
+> A surface takes the pointer only when it projects to 44×44 CSS px or more with its centre in the frame, and there the pointer reaches it.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O14) | Pass (6 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` (`elementFromPoint` at each target's centre) |
+
+#### S-06 — new
+
+> The occluder redraw sits above the back surfaces: a lit panel brightens its glass, not the monitor standing in front of it. On a phone a cued surface fills the room strip, past fitRoom's 1.6× cap, with its type legible at 390×844 (hidden, never squashed, where the strip is too short).
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O14) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` (screenshot pixels with and without the surfaces; the room fit against the strip's cover scale) |
+
+#### S-07 — new
+
+> Type on the surfaces keeps 4.5:1, or 3:1 for large type, against the render beneath it.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O14, WCAG 1.4.3) | Pass (6 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces-contrast.spec.mjs` (the master's pixels under every text box on show, the type blended as the stylesheet blends it; the 5th-percentile sample must pass) |
+
+- Frosted glass is mid-tone (about 2.5:1 under dark ink alone), so glass lights a feathered backlight behind its type (color-dodge) and prints at full ink.
+
 ## Observations logged while re-scoping
 
 Code-reading notes for the spec authors, recorded so the rows above are not read as results. None is a measured outcome; each is proven or refuted by the spec named on its row. Files under `js/`, `css/`, `index.html` and `content/` are not edited from this register.
@@ -984,6 +1059,6 @@ Code-reading notes for the spec authors, recorded so the rows above are not read
 - P6-D06 (tour): the share-card recapture rule fires at go-live, when `strings.walk` changes the resting lobby's header.
 - T-07: at 1280×720 the Win Trust and Gain Control decision stations cannot fit above the tour card (the room is at its zoom cap with its bottom edge on the screen's); the pin is marked but hidden by the out-of-frame rule. A higher zoom cap (`js/stage.js`) or a smaller pin margin (`js/rooms.js`) would fix it.
 - T-13 / T-15: the visitor's mute choice is the only thing the tour writes to localStorage (`3hue-experience:voice`), which the voice plan chose over sessionStorage so the choice survives a later visit.
-- T-22 (default load, gate pending): the eight tour modules (`js/tour.js`, `tourtext`, `dialogue`, `guide`, `tourmap`, `ask`, `ask-match`, `voice`, about 119 KB, 44 KB gzipped) are requested on every visit, through the static import in `js/main.js` and `js/debug.js` and their low-priority modulepreloads; the script, the tour stylesheet and the voice folder are not. Imports stay static so `tools/stamp-version.py` stamps every module; loading the tour lazily would need `import('./tour.js?v=…')` in `js/main.js`, a hook instead of the import in `js/debug.js`, and the stamp tool's pattern extended to dynamic imports. Recorded as an accepted deviation from "zero new requests" until that is decided.
+- T-22 (default load, gate pending): the eight tour modules (`js/tour.js`, `tourtext`, `dialogue`, `guide`, `tourmap`, `ask`, `ask-match`, `voice`, about 119 KB, 44 KB gzipped) are requested on every visit, through the static import in `js/main.js` and `js/debug.js` and their low-priority modulepreloads; the script, the tour stylesheet and the voice folder are not. Imports stay static so `tools/stamp-version.py` stamps every module; loading the tour lazily would need `import('./tour.js?v=…')` in `js/main.js`, a hook instead of the import in `js/debug.js`, and the stamp tool's pattern extended to dynamic imports. Recorded as an accepted deviation from "zero new requests" until that is decided. `js/surfaces.js` (O14, about 25 KB, 9 KB gzipped) joins them the same way; its data (`content/surfaces.json`) and stylesheet (`css/surfaces.css`) are fetched only once the tour is on.
 
-<!-- Candidate (local) column filled 2026-09-11T09:14:02.911Z from tests/results/candidate-all.json + docs/evidence/manual.json -->
+<!-- Candidate (local) column filled 2026-09-11T09:14:02.911Z from tests/results/candidate-all.json + docs/evidence/manual.json; S-01 … S-07 and T-27 filled 2026-09-11T21:55:53.437Z from the step 6 full run (chromium, webkit, chromium-reduced) -->

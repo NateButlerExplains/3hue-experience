@@ -32,7 +32,9 @@
 //
 // js/tour.js owns pacing, pause reasons and announcements; this module only reports what happened:
 // speak() → {ready: Promise<{voiced, reason}>, done: Promise<'done'|'cancelled'|'error'|'blocked'>}.
-// The guide's sphere hears the voice through lobby:voice events {type: play | word (strength) | stop}.
+// The guide's sphere hears the voice through lobby:voice events {type: play | word (strength) | stop};
+// a word also carries {line, index, word}: the line's id, the caption token it lights (-1 for none) and
+// the word as timed, which js/tour.js uses to write on the room at a line's `at` word (O14).
 import { getManifest, getParams, safeRelative } from './content.js?v=2026-09-10f';
 import { hashLine, tokens } from './tourtext.js?v=2026-09-10f';
 
@@ -256,7 +258,7 @@ function wordsOf(line, json) {
     if (!Array.isArray(w) || !Number.isFinite(+w[0])) continue;
     const cs = w[3], ce = w[4];
     const spans = Number.isInteger(cs) && Number.isInteger(ce) ? toks.map((t, i) => (t.start < ce && t.end > cs ? i : -1)).filter((i) => i >= 0) : [];
-    out.push({ s: +w[0], d: Math.max(0, +w[1] || 0), n: String(w[2] ?? '').length, spans });
+    out.push({ s: +w[0], d: Math.max(0, +w[1] || 0), n: String(w[2] ?? '').length, t: String(w[2] ?? ''), spans });
   }
   return out.sort((a, b) => a.s - b.s);
 }
@@ -325,7 +327,7 @@ function tick(pb) {
   pb.word = at;
   const w = pb.words[at];
   if (pb.channel === 'tour' && w.spans.length) highlight(pb, w.spans);
-  signal('word', Math.min(1, 0.45 + Math.min(0.35, w.d * 0.9) + Math.min(0.2, w.n / 40)));
+  signal('word', Math.min(1, 0.45 + Math.min(0.35, w.d * 0.9) + Math.min(0.2, w.n / 40)), { line: pb.line.id ?? null, index: w.spans.length ? w.spans[0] : -1, word: w.t });
 }
 
 // Light the tokens of the word being said, in the caption this line is on; nothing else changes.
@@ -339,8 +341,8 @@ function highlight(pb, spans) {
   pb.token = spans[0];
 }
 
-function signal(type, strength) {
-  document.dispatchEvent(new CustomEvent('lobby:voice', { detail: strength == null ? { type } : { type, strength } }));
+function signal(type, strength, more = null) {
+  document.dispatchEvent(new CustomEvent('lobby:voice', { detail: strength == null ? { type } : { type, strength, ...more } }));
 }
 
 // ---- Ask: its own element, so an answer never loses the tour's place ----

@@ -178,9 +178,12 @@ test('T-10 See the details at a station replaces the tour with #/door/<id>/<stat
   expect(s.title).toBe(`${m.doors[0].title} · ${m.site.name}`);
   expect(Math.min(...op), 'the room stayed up through the handover').toBe(1);
   expect(await page.evaluate(() => [...document.querySelectorAll('#panel .tabs .tab[aria-pressed="true"]')].map((b) => b.dataset.door))).toEqual(['win-trust']);
-  // The room's pins now belong to the door route.
-  const pins = await page.evaluate(() => document.querySelectorAll('.room-pin').length);
-  expect(pins).toBeGreaterThan(0);
+  // The room now belongs to the door route: with the tour on (?tour=1) its surfaces take the pins'
+  // place (O14), carrying the station labels.
+  const room = await page.evaluate(() => ({ pins: document.querySelectorAll('.room-pin').length, mode: window.__lobby.surfaces?.mode, labels: window.__lobby.surfaces?.surfaces.filter((x) => x.label).length }));
+  expect(room.pins).toBe(0);
+  expect(room.mode).toBe('door');
+  expect(room.labels).toBeGreaterThan(0);
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => location.hash === '#/experience' && document.getElementById('panel').hidden, null, { polling: 50 });
   await settled(page);

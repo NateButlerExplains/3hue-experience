@@ -3,8 +3,9 @@
 // tiles with their printed sources, the choice group and the Previous / Next bar. The card is built
 // once and updated in place, so #tour-next, which keeps focus through the tour, is never replaced.
 //
-// The caption, tiles and choice sit in #tour-body inside a column (.tour-text) that js/tour.js also
-// puts the synthetic-voice disclosure in, after the body, so the disclosure never scrolls away.
+// The caption, the room's screen-reader list (what its surfaces show, O14), tiles and choice sit in
+// #tour-body inside a column (.tour-text) that js/tour.js also puts the synthetic-voice disclosure
+// in, after the body, so the disclosure never scrolls away.
 // Whenever the body's content is taller than the body, the body becomes a named, focusable region
 // (tabindex 0, labelled by the chapter) so a keyboard can scroll it (WCAG 2.1.1); otherwise it is a
 // plain container again.
@@ -56,13 +57,18 @@ export function buildCard(handlers) {
   const body = el('div', 'tour-body'); body.id = 'tour-body';
   const caption = el('p', 'tour-caption'); caption.id = 'tour-caption';
   const src = el('p', 'tour-src'); src.id = 'tour-src'; src.hidden = true;
+  // What the room's surfaces show (O14), for a screen reader: the surfaces themselves are aria-hidden.
+  const room = el('div', 'sr'); room.id = 'tour-room'; room.hidden = true;
+  const roomHead = el('p', null, str('tourRoomShows')); roomHead.id = 'tour-room-h';
+  const roomList = el('ul'); roomList.setAttribute('aria-labelledby', 'tour-room-h');
+  room.append(roomHead, roomList);
   const callouts = el('div', 'tour-callouts'); callouts.id = 'tour-callouts'; callouts.hidden = true;
   const choice = el('div', 'tour-choice'); choice.id = 'tour-choice'; choice.hidden = true;
   choice.setAttribute('role', 'group'); choice.setAttribute('aria-labelledby', 'tour-prompt');
   const prompt = el('p', 'tour-prompt'); prompt.id = 'tour-prompt';
   const options = el('div', 'tour-options'); options.id = 'tour-options';
   choice.append(prompt, options);
-  body.append(caption, src, callouts, choice);
+  body.append(caption, room, src, callouts, choice);
 
   const bar = el('div', 'tour-bar'); bar.id = 'tour-bar';
   const prev = el('button', 'btn outline tour-prev', str('tourPrev')); prev.type = 'button'; prev.id = 'tour-prev';
@@ -75,7 +81,7 @@ export function buildCard(handlers) {
   main.append(text, bar);
 
   card.append(face, head, progress, main);
-  els = { name, state, chapter, fill, text, body, caption, src, callouts, choice, prompt, options, bar, prev, next, end, orb };
+  els = { name, state, chapter, fill, text, body, caption, room, roomList, src, callouts, choice, prompt, options, bar, prev, next, end, orb };
   next.addEventListener('click', () => on.next());
   prev.addEventListener('click', () => on.prev());
   end.addEventListener('click', () => on.end());
@@ -187,6 +193,17 @@ export function setLine(line, { callouts = [] } = {}) {
   els.callouts.hidden = !tiles.length;
   els.body.scrollTop = 0;
   syncBody();
+}
+
+// The rooms that talk back (O14): a visually hidden list after the caption, "The room shows:" and
+// the words on every lit surface (a sourced figure with its source), so nothing the room writes is
+// visual only. items: [string]; none hides the list.
+export function setRoomShows(items) {
+  if (!els) return;
+  const list = (items || []).filter((t) => typeof t === 'string' && t.trim());
+  const same = list.length === els.roomList.children.length && list.every((t, i) => els.roomList.children[i].textContent === t);
+  if (!same) els.roomList.replaceChildren(...list.map((t) => el('li', null, t)));
+  els.room.hidden = !list.length;
 }
 
 // The choice group, labelled by its prompt: buttons (or links, for Talk and the summary's mail

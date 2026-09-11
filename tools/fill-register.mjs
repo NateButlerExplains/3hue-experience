@@ -1,9 +1,10 @@
 // Fill the Candidate (local) or Published column of docs/acceptance-standalone.md from Playwright
 // JSON reports plus optional manual evidence. Each spec title (or the title of a describe block
-// around it) starts with the check IDs it proves ("P2a-D01/P3-D04 …", "R-05 …", "T-14 …"); a check
-// passes when every test naming it passed in every run. R rows (rooms, O5) and T rows (the guided
-// tour, O10/O11) sit outside the 43: the P4-D08 and P6-D06 roll-ups leave them out, and T rows are
-// tallied on their own summary lines ("Tour, candidate (local)", "Tour, published").
+// around it) starts with the check IDs it proves ("P2a-D01/P3-D04 …", "R-05 …", "S-03 …", "T-14 …");
+// a check passes when every test naming it passed in every run. R rows (rooms, O5), S rows (the
+// rooms' surfaces, O14) and T rows (the guided tour, O10/O11) sit outside the 43: the P4-D08 and
+// P6-D06 roll-ups leave them out, and S and T rows (both behind the tour gate) are tallied on their
+// own summary lines ("Tour, candidate (local)", "Tour, published").
 //
 //   node tools/fill-register.mjs candidate tests/results/report.json [more.json ...]
 //   node tools/fill-register.mjs published tests/results/live.json
@@ -22,8 +23,8 @@ for (const f of files) {
       const titled = `${chain} ${sp.title}`;
       // "P2b-D01/D06", "P3-D01/02/03/06/07" and "P4-D02/D06/D07" name several checks of one phase.
       const ids = [];
-      const pre = (phase) => (phase === 'R' || phase === 'T' ? '' : 'D');
-      for (const m of titled.matchAll(/\b(P\d[ab]?|R|T)-D?(\d\d)((?:\/D?\d\d)+)?/g)) {
+      const pre = (phase) => (phase === 'R' || phase === 'S' || phase === 'T' ? '' : 'D');
+      for (const m of titled.matchAll(/\b(P\d[ab]?|R|S|T)-D?(\d\d)((?:\/D?\d\d)+)?/g)) {
         const phase = m[1]; ids.push(`${phase}-${pre(phase)}${m[2]}`);
         for (const extra of (m[3] || '').match(/\d\d/g) || []) ids.push(`${phase}-${pre(phase)}${extra}`);
       }
@@ -45,7 +46,7 @@ const col = column === 'candidate' ? 1 : 2;
 let current = null, changed = 0;
 const tally = { candidate: { pass: 0, fail: 0, notrun: 0 }, published: { pass: 0, fail: 0, notrun: 0 } };
 for (let i = 0; i < lines.length; i++) {
-  const h = lines[i].match(/^#### (P\d[ab]?-D\d\d|R-\d\d|T-\d\d)\b/);
+  const h = lines[i].match(/^#### (P\d[ab]?-D\d\d|R-\d\d|S-\d\d|T-\d\d)\b/);
   if (h) { current = h[1]; continue; }
   if (current && /^\| (applies|re-scoped|dropped|new)/.test(lines[i])) {
     const cells = lines[i].split('|').map((c) => c.trim());   // ['', disposition, candidate, published, proof, '']
@@ -59,18 +60,18 @@ for (let i = 0; i < lines.length; i++) {
 // P4-D08 and P6-D06 re-run every earlier row: they pass when every other filled row in this column passes.
 for (const meta of ['P4-D08', 'P6-D06']) {
   const others = []; let cur = null;
-  for (const l of lines) { const h = l.match(/^#### (P\d[ab]?-D\d\d|R-\d\d|T-\d\d)\b/); if (h) { cur = h[1]; continue; } if (cur && /^\| (applies|re-scoped|new)/.test(l)) { const c = l.split('|').map((x) => x.trim()); if (cur !== meta && !['P4-D08', 'P6-D06'].includes(cur) && !cur.startsWith('R-') && !cur.startsWith('T-')) others.push([cur, c[col + 1]]); cur = null; } }
+  for (const l of lines) { const h = l.match(/^#### (P\d[ab]?-D\d\d|R-\d\d|S-\d\d|T-\d\d)\b/); if (h) { cur = h[1]; continue; } if (cur && /^\| (applies|re-scoped|new)/.test(l)) { const c = l.split('|').map((x) => x.trim()); if (cur !== meta && !['P4-D08', 'P6-D06'].includes(cur) && !/^[RST]-/.test(cur)) others.push([cur, c[col + 1]]); cur = null; } }
   const failed = others.filter(([, v]) => v.startsWith('Fail')).map(([id]) => id), notrun = others.filter(([, v]) => !v.startsWith('Pass') && !v.startsWith('Fail')).map(([id]) => id);
   const verdict = failed.length ? `Fail (${failed.join(', ')} fail)` : notrun.length ? `Not run (${notrun.length} rows not run: ${notrun.join(', ')})` : `Pass (every other row passes)`;
   let c2 = null;
   for (let i = 0; i < lines.length; i++) { const h = lines[i].match(/^#### (P\d[ab]?-D\d\d)\b/); if (h) { c2 = h[1]; continue; } if (c2 === meta && /^\| (applies|re-scoped)/.test(lines[i])) { const c = lines[i].split('|').map((x) => x.trim()); c[col + 1] = verdict; lines[i] = `| ${c.slice(1, -1).join(' | ')} |`; c2 = null; } }
 }
 // Recount after the meta rows so the summary reflects the final columns.
-// T rows (the tour) are tallied apart from the 43 and the rooms.
+// S and T rows (the tour and its surfaces) are tallied apart from the 43 and the rooms.
 const blank = () => ({ pass: 0, fail: 0, notrun: 0 });
 for (const k of Object.keys(tally)) tally[k] = blank();
 const tourTally = { candidate: blank(), published: blank() };
-{ let cur = null; for (const l of lines) { const h = l.match(/^#### (P\d[ab]?-D\d\d|R-\d\d|T-\d\d)\b/); if (h) { cur = h[1]; continue; } if (cur && /^\| (applies|re-scoped|new)/.test(l)) { const c = l.split('|').map((x) => x.trim()); const into = cur.startsWith('T-') ? tourTally : tally; for (const [k, idx] of [['candidate', 2], ['published', 3]]) { const v = c[idx]; into[k][v.startsWith('Pass') ? 'pass' : v.startsWith('Fail') ? 'fail' : 'notrun']++; } cur = null; } } }
+{ let cur = null; for (const l of lines) { const h = l.match(/^#### (P\d[ab]?-D\d\d|R-\d\d|S-\d\d|T-\d\d)\b/); if (h) { cur = h[1]; continue; } if (cur && /^\| (applies|re-scoped|new)/.test(l)) { const c = l.split('|').map((x) => x.trim()); const into = /^[ST]-/.test(cur) ? tourTally : tally; for (const [k, idx] of [['candidate', 2], ['published', 3]]) { const v = c[idx]; into[k][v.startsWith('Pass') ? 'pass' : v.startsWith('Fail') ? 'fail' : 'notrun']++; } cur = null; } } }
 // Summary rows: "| Candidate (local) | 0 | 0 | 48 |", "| Tour, candidate (local) | 0 | 0 | 23 |"
 for (let i = 0; i < lines.length; i++) {
   for (const [t, k, label] of [[tally, 'candidate', 'Candidate (local)'], [tally, 'published', 'Published'], [tourTally, 'candidate', 'Tour, candidate (local)'], [tourTally, 'published', 'Tour, published']]) {

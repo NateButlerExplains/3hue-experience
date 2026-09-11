@@ -261,6 +261,15 @@ function roomCover() {
   if (state.dock === 'left') return { x: Math.max(0, R.x - bleed), y: 0, w: vw - Math.max(0, R.x - bleed), h: vh };
   return { x: 0, y: 0, w: Math.min(vw, R.x + R.w + bleed), h: vh };
 }
+// Layers drawn in the render's own pixels (js/surfaces.js) follow it: onRoomSettle hears the render's
+// settle (its scale about the focus, and the transition that takes it to 1) so they stay locked to it
+// while it settles; onRoomFit hears every refit or pan, with the fit it lands on.
+const roomHooks = { settle: new Set(), fit: new Set() };
+export function onRoomSettle(fn) { roomHooks.settle.add(fn); }
+export function onRoomFit(fn) { roomHooks.fit.add(fn); }
+const settleHooks = (s) => { for (const fn of roomHooks.settle) fn(s); };
+const fitHooks = () => { for (const fn of roomHooks.fit) fn(state.roomFit); };
+
 let roomToken = 0;
 export async function showRoom(src, focus, { animate = true, delay = 0 } = {}) {
   const token = ++roomToken; hideToken++;
@@ -281,6 +290,8 @@ export async function showRoom(src, focus, { animate = true, delay = 0 } = {}) {
   roomImg.style.transition = 'none';
   roomImg.style.transformOrigin = `${(focus?.x ?? 0.5) * 100}% ${(focus?.y ?? 0.5) * 100}%`;
   roomImg.style.transform = `scale(${getGeometry().layout.roomSettle})`;
+  const origin = [(focus?.x ?? 0.5) * Wr, (focus?.y ?? 0.5) * Hr];
+  settleHooks({ scale: getGeometry().layout.roomSettle, origin, Wr, Hr, ms: 0 });
   void roomEl.offsetWidth;
   const anim = animate && !reducedMotion();
   const L = getGeometry().layout;
@@ -289,6 +300,7 @@ export async function showRoom(src, focus, { animate = true, delay = 0 } = {}) {
     roomEl.style.transition = anim ? `opacity ${L.roomFadeInMs}ms var(--ease)` : 'none';
     roomImg.style.transition = anim ? 'transform 1600ms var(--ease)' : 'none';
     roomImg.style.transform = 'scale(1)';
+    settleHooks({ scale: 1, origin, Wr, Hr, ms: anim ? 1600 : 0 });
     roomEl.style.opacity = '1';
     roomEl.classList.add('on');
     roomEl.setAttribute('aria-hidden', 'false');
@@ -296,6 +308,7 @@ export async function showRoom(src, focus, { animate = true, delay = 0 } = {}) {
   };
   if (anim && delay) setTimeout(go, delay); else go();
   state.roomFit = { ...fit, Wr, Hr };
+  fitHooks();
   return true;
 }
 export function hideRoom(animate = true) {
@@ -314,6 +327,35 @@ export function panRoom(focus, ms = 1200) {
   roomEl.style.transition = reducedMotion() ? 'none' : `transform ${ms}ms var(--ease), opacity 600ms var(--ease)`;
   roomEl.style.transform = `translate3d(${fit.ox}px, ${fit.oy}px, 0) scale(${fit.s})`;
   state.roomFit = { ...fit, Wr, Hr };
+  fitHooks();
+  return true;
+}
+
+// Frame a box of the room inside the visible frame, as panRoom frames a focus (O14: a cued surface).
+// box: [x0, y0, x1, y1] in the pixels of the render's master, W wide (js/surfaces.js surfaceBBox).
+// The box is centred in frameRect() with a margin and the room still covers its rectangle. On the
+// desktop the scale stays the door's own (its fit about `focus`) unless the box needs less to fit;
+// composed (a phone's room strip) the room zooms until the box fills the strip, up to `cap` times the
+// cover scale (4 by default, where fitRoom stops at 1.6), so a surface's type is legible there (D9).
+export function frameRoom(box, { W = 2560, focus = null, cap = null, ms = 1200, margin = null } = {}) {
+  if (!state.inRoom || !state.roomFit || !Array.isArray(box) || box.length !== 4) return false;
+  const { Wr, Hr } = state.roomFit;
+  const k = Wr / W;
+  const [x0, y0, x1, y1] = box.map((v) => v * k);
+  const cover = roomCover(), R = frameRect();
+  const base = Math.max(cover.w / Wr, cover.h / Hr);
+  const lim = base * (cap ?? (state.composed ? 4 : 1.6));
+  margin ??= state.composed ? 6 : 16;
+  const fits = Math.min((R.w - 2 * margin) / Math.max(1, x1 - x0), (R.h - 2 * margin) / Math.max(1, y1 - y0));
+  const own = focus ? fitRoom(Wr, Hr, cover, R, focus).s : state.roomFit.s;
+  const s = state.composed ? Math.min(lim, Math.max(base, fits)) : Math.max(base, Math.min(own, fits, lim));
+  let ox = R.cx - ((x0 + x1) / 2) * s, oy = R.cy - ((y0 + y1) / 2) * s;
+  ox = Math.min(cover.x, Math.max(cover.x + cover.w - Wr * s, ox));
+  oy = Math.min(cover.y, Math.max(cover.y + cover.h - Hr * s, oy));
+  roomEl.style.transition = reducedMotion() || !ms ? 'none' : `transform ${ms}ms var(--ease), opacity 600ms var(--ease)`;
+  roomEl.style.transform = `translate3d(${ox}px, ${oy}px, 0) scale(${s})`;
+  state.roomFit = { s, ox, oy, Wr, Hr };
+  fitHooks();
   return true;
 }
 export function roomToScreen(x, y) { const f = state.roomFit; if (!f) return null; const o = bandOffset(); return { x: o.x + f.ox + x * f.s, y: o.y + f.oy + y * f.s }; }

@@ -1,12 +1,13 @@
 {
   "version": 1,
-  "note": "Test fixture for the tour engine specs, loaded against the live content/experience.json. It stays put while content/tour.json changes. It covers every scene kind (rest, door, station, path with and without a stage, kiosk, keep), every cue kind, a line filtered by when, suggest, hideWhen, routes used from options and from next (one route chaining into another), `@` (the door whose scene is up), callouts, an Ask block, a summary, a terminal node (end: true), an option back to the chapter on screen (hidden) and one to a chapter already seen (Visited), and every action (talk, ask, summary, replay, end, explore). Every visible word is a token or a ref into the manifest, so the fixture adds no copy.",
+  "note": "Test fixture for the tour engine specs, loaded against the live content/experience.json. It stays put while content/tour.json changes. It covers every scene kind (rest, door, station, path with and without a stage, kiosk, keep), every cue kind (a surface cue included), a door node that writes on its room (O14: a base write, line writes in two when versions, a ref card, a glow, a clear and an at word), a line filtered by when, suggest, hideWhen, routes used from options and from next (one route chaining into another), `@` (the door whose scene is up), callouts, an Ask block, a summary, a terminal node (end: true), an option back to the chapter on screen (hidden) and one to a chapter already seen (Visited), and every action (talk, ask, summary, replay, end, explore). Every visible word is a token or a ref into the manifest, so the fixture adds no copy.",
   "start": "arrive",
   "chapters": [
     { "id": "arrival", "entry": "arrive", "title": "{str:legend}", "landmark": "lobby" },
     { "id": "door-win-trust", "entry": "wt", "title": "{door:win-trust.title}", "eyebrow": "{door:win-trust.number}", "landmark": "door:win-trust" },
     { "id": "door-gain-control", "entry": "gc", "title": "{door:gain-control.title}", "eyebrow": "{door:gain-control.number}", "landmark": "door:gain-control" },
     { "id": "door-stay-ready", "entry": "sr", "title": "{door:stay-ready.title}", "eyebrow": "{door:stay-ready.number}", "landmark": "door:stay-ready" },
+    { "id": "room", "entry": "room", "title": "{door:win-trust.promise}", "eyebrow": "{door:win-trust.number}", "landmark": "door:win-trust", "optional": true },
     { "id": "decision", "entry": "lens", "title": "{str:decision}", "optional": true },
     { "id": "path", "entry": "path", "title": "{ref:path.title}", "landmark": "tower" },
     { "id": "kiosk", "entry": "kiosk", "title": "{ref:kiosk.header}", "landmark": "kiosk", "optional": true },
@@ -109,6 +110,18 @@
           { "id": "explore", "label": "{str:tourDetails}", "action": "explore" }
         ]
       }
+    },
+    "room": {
+      "chapter": "room",
+      "scene": { "kind": "door", "door": "win-trust" },
+      "write": { "wt-panel-1": { "kind": "sign", "lines": ["{door:win-trust.title}", "{door:win-trust.promise}"] } },
+      "lines": [
+        { "id": "room-1", "ref": "doors.win-trust.tension", "when": { "answers": { "segment": ["win-trust"] } }, "write": { "wt-panel-3": { "kind": "sign", "lines": ["{str:urgency}"] } } },
+        { "id": "room-2", "ref": "doors.win-trust.gap", "when": { "answers": { "segment": ["gain-control", "stay-ready", "all"] } }, "write": { "wt-panel-3": { "kind": "list", "lines": ["{ref:arc.0}", "{ref:arc.1}", "{ref:arc.2}"] } } },
+        { "id": "room-3", "ref": "doors.win-trust.stat", "callout": ["doors.win-trust.stat"], "cue": { "surface": "wt-panel-5" }, "write": { "wt-panel-5": { "kind": "card", "lines": [{ "ref": "doors.win-trust.stat" }] }, "wt-binders": { "kind": "glow" } } },
+        { "id": "room-4", "ref": "doors.win-trust.decision", "write": { "wt-monitor": { "kind": "status", "lines": ["{str:nextStep} ✓"], "at": "readiness" }, "wt-panel-3": null } }
+      ],
+      "next": "wt-proof"
     },
     "lens": {
       "chapter": "decision",

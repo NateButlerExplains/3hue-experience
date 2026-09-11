@@ -6,12 +6,12 @@
 <title>Geometry tool</title>
 <style>
   html { background: #0b1118; color: #e2e8f0; font: 13px/1.4 system-ui, sans-serif; }
-  body { margin: 0; display: grid; grid-template-columns: 1fr 340px; height: 100vh; }
+  body { margin: 0; display: grid; grid-template-columns: 1fr 360px; height: 100vh; }
   #wrap { position: relative; overflow: auto; }
   #canvas { position: relative; transform-origin: 0 0; }
-  #canvas img { display: block; width: 2880px; height: 1621px; user-select: none; -webkit-user-drag: none; }
+  #canvas img { display: block; user-select: none; -webkit-user-drag: none; }
   #canvas img.ref { position: absolute; left: 0; top: 0; opacity: .5; pointer-events: none; display: none; }
-  #canvas svg { position: absolute; left: 0; top: 0; width: 2880px; height: 1621px; pointer-events: none; }
+  #canvas svg { position: absolute; left: 0; top: 0; pointer-events: none; }
   #canvas svg * { vector-effect: non-scaling-stroke; }
   #side { padding: 12px; border-left: 1px solid #223; overflow: auto; }
   label { display: block; margin: 6px 0; }
@@ -19,26 +19,38 @@
   textarea { width: 100%; height: 200px; font: 11px/1.3 monospace; }
   #status { color: #52cce3; margin: 8px 0; }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  fieldset { border: 1px solid #223; border-radius: 6px; margin: 8px 0; padding: 6px 8px; }
+  legend { color: #94a3b8; }
+  .room-only { display: none; } body.room .room-only { display: block; } body.room .lobby-only { display: none; }
+  .corners label { display: inline-block; margin-right: 8px; }
+  .muted { color: #94a3b8; }
 </style>
 </head>
 <body>
 <div id="wrap"><div id="canvas">
   <img id="plate" src="../media/plate/lobby-plate-2880.jpg" alt="">
-  <img id="ref" class="ref" src="reference/00-original-1672x941.png" alt="" style="width:2880px;height:1621px">
-  <svg id="ov" viewBox="0 0 2880 1621"></svg>
+  <img id="ref" class="ref" src="reference/00-original-1672x941.png" alt="">
+  <svg id="ov"></svg>
 </div></div>
 <div id="side">
   <h3 style="margin:0 0 6px">Geometry tool</h3>
-  <p style="margin:0 0 8px;color:#94a3b8">Click on the plate to read plate px. Pick a mode, then click the points it asks for. Loads content/geometry.json and draws it; Copy JSON writes the edited geometry back for you to paste.</p>
-  <label>Zoom <input id="zoom" type="range" min="0.2" max="4" step="0.05" value="0.5"> <span id="zv">0.5</span></label>
-  <label><input id="showref" type="checkbox"> 50% overlay of the 1672 original (P1-D02)</label>
+  <p class="muted" style="margin:0 0 8px">Click the picture to read its pixels. Pick a mode, then click the points it asks for. Loads content/geometry.json and content/surfaces.json and draws them; Copy JSON gives the edited geometry, Copy surfaces JSON the rooms' surfaces, for you to paste back into those files. This page never writes a file.</p>
+  <label>Picture <select id="picture">
+    <option value="lobby">Lobby plate (2880x1621)</option>
+    <option value="win-trust">Win Trust room (2560 master)</option>
+    <option value="gain-control">Gain Control room (2560 master)</option>
+    <option value="stay-ready">Stay Ready room (2560 master)</option>
+  </select></label>
+  <label>Zoom <input id="zoom" type="range" min="0.2" max="8" step="0.05" value="0.5"> <span id="zv">0.5</span></label>
+  <label class="lobby-only"><input id="showref" type="checkbox"> 50% overlay of the 1672 original (P1-D02)</label>
   <div class="grid">
     <button data-mode="point">Point</button>
     <button data-mode="rect">Rect (2 clicks)</button>
     <button data-mode="quad">Quad (TL TR BR BL)</button>
-    <button data-mode="arc">Arc (left, apex, right)</button>
+    <button data-mode="arc" class="lobby-only">Arc (left, apex, right)</button>
+    <button data-mode="poly" class="room-only">Polygon (occluder)</button>
   </div>
-  <label>Assign to <select id="target">
+  <label class="lobby-only">Assign to <select id="target">
     <option value="">— just measure —</option>
     <optgroup label="Doorways (rect = frame, point = center / sign)">
       <option value="doorways.win-trust.frame">win-trust.frame</option><option value="doorways.win-trust.center">win-trust.center</option><option value="doorways.win-trust.sign">win-trust.sign</option>
@@ -57,70 +69,215 @@
       <option value="logoMark">logoMark (rect, on the logo file)</option>
     </optgroup>
   </select></label>
+  <!-- Rooms (O14, content/surfaces.json): each surface is read twice on the 2560 master (a quad per pass, TL TR BR BL); when
+       the visible corners agree within 2 px the quad becomes their mean. A corner that cannot be seen is
+       marked hidden (the lint skips it; rebuild it by hand from the edges). Occluders are polygons of
+       whatever stands in front of the surface. tools/check-manifest.js re-checks all of it. -->
+  <fieldset class="room-only"><legend>Room surface</legend>
+    <label>Surface <select id="surface"></select></label>
+    <label>New surface id <input id="newid" placeholder="wt-panel-7" size="14"> <button id="add">Add</button></label>
+    <label>Role <select id="role"><option>glass</option><option>screen</option><option>scrim</option><option>region</option><option>dial</option></select>
+      Station <select id="station"><option value="">—</option></select></label>
+    <label><input id="targetable" type="checkbox" checked> a pointer target</label>
+    <label>A quad click goes to pass <select id="pass"><option value="a">a</option><option value="b">b</option></select></label>
+    <div class="corners">Hidden corners: <label><input type="checkbox" data-c="0"> TL</label><label><input type="checkbox" data-c="1"> TR</label><label><input type="checkbox" data-c="2"> BR</label><label><input type="checkbox" data-c="3"> BL</label></div>
+    <button id="closepoly">Close polygon → occluder</button> <button id="clearocc">Clear occluders</button>
+    <p id="agree" class="muted"></p>
+  </fieldset>
   <div id="status">mode: point</div>
   <div id="last"></div>
-  <button id="copy">Copy JSON</button> <button id="reload">Reload from file</button> <button id="clearpts">Clear points</button>
+  <button id="copy">Copy JSON</button> <button id="copysurf">Copy surfaces JSON</button> <button id="reload">Reload from file</button> <button id="clearpts">Clear points</button>
   <textarea id="out"></textarea>
 </div>
 <script type="module">
 import { quadToMatrix3d, quadSize } from '../js/screens.js';
 const canvas = document.getElementById('canvas'), ov = document.getElementById('ov'), status = document.getElementById('status'), last = document.getElementById('last'), out = document.getElementById('out');
+const img = document.getElementById('plate'), ref = document.getElementById('ref');
+const $ = (id) => document.getElementById(id);
 const NS = 'http://www.w3.org/2000/svg';
-let g = null, mode = 'point', pts = [];
-const zoom = document.getElementById('zoom'), zv = document.getElementById('zv');
-const setZoom = () => { canvas.style.transform = `scale(${zoom.value})`; canvas.style.width = 2880 * zoom.value + 'px'; canvas.style.height = 1621 * zoom.value + 'px'; zv.textContent = zoom.value; };
-zoom.addEventListener('input', setZoom); setZoom();
-document.getElementById('showref').addEventListener('change', (e) => { document.getElementById('ref').style.display = e.target.checked ? 'block' : 'none'; });
-for (const b of document.querySelectorAll('[data-mode]')) b.addEventListener('click', () => { mode = b.dataset.mode; pts = []; status.textContent = `mode: ${mode}`; });
-document.getElementById('clearpts').addEventListener('click', () => { pts = []; draw(); });
-async function load() { g = await (await fetch('../content/geometry.json', { cache: 'no-cache' })).json(); draw(); out.value = JSON.stringify(g, null, 2); }
-document.getElementById('reload').addEventListener('click', load);
-document.getElementById('copy').addEventListener('click', () => { out.value = JSON.stringify(g, null, 2); out.select(); navigator.clipboard?.writeText(out.value); });
+let g = null, m = null, mode = 'point', pts = [], pic = 'lobby', W = 2880, H = 1621;
+const PICTURES = { lobby: { src: '../media/plate/lobby-plate-2880.jpg', w: 2880, h: 1621 } };
+for (const d of ['win-trust', 'gain-control', 'stay-ready']) PICTURES[d] = { src: `../media/rooms/${d}-2560.jpg`, w: 2560, h: 1440, file: `media/rooms/${d}-2560.jpg` };
+const zoom = $('zoom'), zv = $('zv');
+const setZoom = () => { canvas.style.transform = `scale(${zoom.value})`; canvas.style.width = W * zoom.value + 'px'; canvas.style.height = H * zoom.value + 'px'; zv.textContent = zoom.value; };
+zoom.addEventListener('input', setZoom);
+$('showref').addEventListener('change', (e) => { ref.style.display = e.target.checked ? 'block' : 'none'; });
+for (const b of document.querySelectorAll('[data-mode]')) b.addEventListener('click', () => { mode = b.dataset.mode; pts = []; status.textContent = `mode: ${mode}`; draw(); });
+$('clearpts').addEventListener('click', () => { pts = []; draw(); });
+// The rooms' surfaces live in content/surfaces.json ({note, rooms: {<door>: {measuredOn, surfaces}}});
+// they are merged into g.rooms here, as the page and the lint merge them, and split out again on copy.
+let sfNote = '';
+async function load() {
+  let sf;
+  [g, m, sf] = await Promise.all(['../content/geometry.json', '../content/experience.json', '../content/surfaces.json'].map((u) => fetch(u, { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null))));
+  sfNote = sf?.note || '';
+  for (const [d, r] of Object.entries(sf?.rooms || {})) g.rooms[d] = { ...(g.rooms[d] || {}), ...r };
+  setPicture(pic);
+  dump();
+}
+$('reload').addEventListener('click', load);
+const SURF_KEYS = ['surfaces', 'measuredOn'];
+const geometryOut = () => { const c = structuredClone(g); for (const r of Object.values(c.rooms || {})) for (const k of SURF_KEYS) delete r[k]; return c; };
+const surfacesOut = () => ({ note: sfNote, rooms: Object.fromEntries(Object.entries(g.rooms || {}).filter(([, r]) => r.surfaces).map(([d, r]) => [d, { measuredOn: r.measuredOn, surfaces: r.surfaces }])) });
+const dump = (which = pic === 'lobby' ? 'geometry' : 'surfaces') => { out.value = JSON.stringify(which === 'geometry' ? geometryOut() : surfacesOut(), null, 2); };
+$('copy').addEventListener('click', () => { dump('geometry'); out.select(); navigator.clipboard?.writeText(out.value); });
+$('copysurf').addEventListener('click', () => { dump('surfaces'); out.select(); navigator.clipboard?.writeText(out.value); });
 function setPath(path, value) {
   const keys = path.split('.'); let o = g;
   for (let i = 0; i < keys.length - 1; i++) { const k = keys[i]; o = o[k] ?? (o[k] = {}); }
   o[keys[keys.length - 1]] = value;
 }
-function el(n, a) { const e = document.createElementNS(NS, n); for (const [k, v] of Object.entries(a)) e.setAttribute(k, v); ov.appendChild(e); return e; }
+function el(n, a, parent = ov) { const e = document.createElementNS(NS, n); for (const [k, v] of Object.entries(a)) e.setAttribute(k, v); parent.appendChild(e); return e; }
+const poly = (q) => q.map((p) => p.join(',')).join(' ');
+
+// ---- The picture: the lobby plate, or a room's 2560 master ----
+function setPicture(p) {
+  pic = p; const P = PICTURES[p]; W = P.w; H = P.h;
+  img.src = P.src; img.style.width = `${W}px`; img.style.height = `${H}px`;
+  ref.style.width = `${W}px`; ref.style.height = `${H}px`;
+  ov.setAttribute('viewBox', `0 0 ${W} ${H}`); ov.style.width = `${W}px`; ov.style.height = `${H}px`;
+  document.body.classList.toggle('room', p !== 'lobby');
+  if (p === 'lobby' && mode === 'poly') mode = 'point';
+  if (p !== 'lobby' && mode === 'arc') mode = 'quad';
+  pts = []; setZoom(); fillSurfaces(); draw();
+}
+$('picture').addEventListener('change', (e) => setPicture(e.target.value));
+
+// ---- Room surfaces ----
+const room = () => (pic === 'lobby' ? null : (g.rooms[pic] ??= { width: 2560, height: 1440 }));
+const surfaces = () => (room() ? (room().surfaces ??= {}) : {});
+const current = () => surfaces()[$('surface').value] || null;
+function fillSurfaces(keep) {
+  const sel = $('surface'); sel.replaceChildren();
+  if (!room()) return;
+  for (const id of Object.keys(surfaces())) { const o = document.createElement('option'); o.value = o.textContent = id; sel.append(o); }
+  if (keep) sel.value = keep;
+  const st = $('station'); st.replaceChildren(new Option('—', ''));
+  for (const s of m.doors.find((d) => d.id === pic)?.stations || []) st.append(new Option(s, s));
+  syncForm();
+}
+function syncForm() {
+  const s = current();
+  $('role').value = s?.role || 'glass'; $('station').value = s?.station || ''; $('targetable').checked = s ? s.target !== false : true;
+  for (const c of document.querySelectorAll('[data-c]')) c.checked = !!s?.hidden?.includes(+c.dataset.c);
+  agree(); draw();
+}
+$('surface').addEventListener('change', syncForm);
+$('add').addEventListener('click', () => {
+  const id = $('newid').value.trim();
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id) || !room()) { status.textContent = 'a surface id is lowercase words joined by hyphens'; return; }
+  surfaces()[id] ??= { role: 'glass', target: true, quad: null, measurements: {}, text: { top: 0.05, bottom: 0.05, left: 0.07, right: 0.07 }, occluders: [] };
+  fillSurfaces(id); dump();
+});
+$('role').addEventListener('change', (e) => { const s = current(); if (s) { s.role = e.target.value; dump(); } });
+$('station').addEventListener('change', (e) => { const s = current(); if (!s) return; if (e.target.value) s.station = e.target.value; else delete s.station; dump(); });
+$('targetable').addEventListener('change', (e) => { const s = current(); if (s) { s.target = e.target.checked; dump(); } });
+for (const c of document.querySelectorAll('[data-c]')) c.addEventListener('change', () => {
+  const s = current(); if (!s) return;
+  const h = [...document.querySelectorAll('[data-c]')].filter((x) => x.checked).map((x) => +x.dataset.c);
+  if (h.length) s.hidden = h; else delete s.hidden;
+  agree(); dump(); draw();
+});
+$('closepoly').addEventListener('click', () => {
+  const s = current(); if (!s || pts.length < 3) { status.textContent = 'a polygon needs three points or more, and a surface'; return; }
+  (s.occluders ??= []).push(pts.map((p) => [...p])); pts = []; status.textContent = `occluder ${s.occluders.length} added to ${$('surface').value}`; dump(); draw();
+});
+$('clearocc').addEventListener('click', () => { const s = current(); if (s) { s.occluders = []; dump(); draw(); } });
+// Passes a and b agree within 2 px on every visible corner: the quad becomes their mean (to 0.1 px).
+function agree() {
+  const s = current(), p = $('agree');
+  if (!s) { p.textContent = ''; return; }
+  const a = s.measurements?.a, b = s.measurements?.b;
+  if (!a || !b) { p.textContent = `passes: ${a ? 'a' : '–'} ${b ? 'b' : '–'} (read both)`; return; }
+  const hid = s.hidden || [];
+  const worst = Math.max(0, ...a.map((q, i) => (hid.includes(i) ? 0 : Math.hypot(q[0] - b[i][0], q[1] - b[i][1]))));
+  const ok = worst <= 2;
+  s.quad = a.map((q, i) => [Math.round((q[0] + b[i][0]) * 5) / 10, Math.round((q[1] + b[i][1]) * 5) / 10]);
+  p.textContent = ok ? `passes agree (worst visible corner ${worst.toFixed(2)} px): quad = their mean` : `passes DISAGREE by ${worst.toFixed(2)} px on a visible corner: re-read it, or mark it hidden`;
+  if (!ok) p.style.color = '#e98445'; else p.style.color = '';
+}
+// The render the room was measured on: its SHA-256, so the lint can tell a new render from this one.
+async function stamp() {
+  const P = PICTURES[pic]; if (!P.file || !room()) return;
+  const buf = await (await fetch(`../${P.file}`, { cache: 'no-cache' })).arrayBuffer();
+  const hex = [...new Uint8Array(await crypto.subtle.digest('SHA-256', buf))].map((x) => x.toString(16).padStart(2, '0')).join('');
+  room().measuredOn = { file: P.file, sha256: hex }; dump();
+}
+
 function draw() {
   ov.innerHTML = '';
   if (!g) return;
-  for (const [id, d] of Object.entries(g.doorways)) {
-    const [l, t, r, b] = d.frame;
-    el('rect', { x: l, y: t, width: r - l, height: b - t, fill: 'none', stroke: '#52cce3', 'stroke-width': 2 });
-    el('circle', { cx: d.center[0], cy: d.center[1], r: 8, fill: '#52cce3' });
-    el('circle', { cx: d.sign.x, cy: d.sign.y, r: 6, fill: 'none', stroke: '#e98445', 'stroke-width': 2 });
-    el('text', { x: l + 6, y: t + 26, fill: '#52cce3', 'font-size': 22 }).textContent = id;
+  if (pic === 'lobby') {
+    for (const [id, d] of Object.entries(g.doorways)) {
+      const [l, t, r, b] = d.frame;
+      el('rect', { x: l, y: t, width: r - l, height: b - t, fill: 'none', stroke: '#52cce3', 'stroke-width': 2 });
+      el('circle', { cx: d.center[0], cy: d.center[1], r: 8, fill: '#52cce3' });
+      el('circle', { cx: d.sign.x, cy: d.sign.y, r: 6, fill: 'none', stroke: '#e98445', 'stroke-width': 2 });
+      el('text', { x: l + 6, y: t + 26, fill: '#52cce3', 'font-size': 22 }).textContent = id;
+    }
+    el('circle', { cx: g.tower[0], cy: g.tower[1], r: 10, fill: 'none', stroke: '#fff', 'stroke-width': 2 });
+    for (const r of g.rings) { el('line', { x1: r.label[0] - 100, y1: r.label[1], x2: r.label[0] + 100, y2: r.label[1], stroke: '#ffd9a3', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' }); if (r.arc) el('path', { d: r.arc, fill: 'none', stroke: '#ffd9a3', 'stroke-width': 3 }); }
+    const [pl, pt, pr, pb] = g.stairPill; el('rect', { x: pl, y: pt, width: pr - pl, height: pb - pt, fill: 'none', stroke: '#e98445', 'stroke-width': 2 });
+    for (const k of ['a', 'b']) { const q = g.kiosk?.measurements?.[k]; if (q) el('polygon', { points: poly(q), fill: 'none', stroke: k === 'a' ? '#25b5d6' : '#e98445', 'stroke-width': 2 }); }
+    if (g.kiosk?.quad) grid(g.kiosk.quad);
+  } else {
+    // Every surface of the room: its occluders shaded, its passes (a cyan, b orange), its quad with a
+    // grid through the same matrix3d js/surfaces.js uses, hidden corners ringed. The one being edited is bright.
+    const sel = $('surface').value;
+    for (const [id, s] of Object.entries(surfaces())) {
+      const on = id === sel, op = on ? 1 : 0.45;
+      for (const o of s.occluders || []) el('polygon', { points: poly(o), fill: 'rgba(233,132,69,.25)', stroke: '#e98445', 'stroke-width': 1, opacity: op });
+      for (const k of ['a', 'b']) { const q = s.measurements?.[k]; if (q) el('polygon', { points: poly(q), fill: 'none', stroke: k === 'a' ? '#25b5d6' : '#e98445', 'stroke-width': 1.5, opacity: op }); }
+      if (s.quad) {
+        if (on) grid(s.quad); else el('polygon', { points: poly(s.quad), fill: 'none', stroke: '#fff', 'stroke-width': 1, opacity: op });
+        for (const i of s.hidden || []) el('circle', { cx: s.quad[i][0], cy: s.quad[i][1], r: 9, fill: 'none', stroke: '#ff5a5a', 'stroke-width': 2 });
+        el('text', { x: s.quad[0][0] + 4, y: s.quad[0][1] - 6, fill: on ? '#fff' : '#94a3b8', 'font-size': 16 }).textContent = id;
+      }
+    }
   }
-  el('circle', { cx: g.tower[0], cy: g.tower[1], r: 10, fill: 'none', stroke: '#fff', 'stroke-width': 2 });
-  for (const r of g.rings) { el('line', { x1: r.label[0] - 100, y1: r.label[1], x2: r.label[0] + 100, y2: r.label[1], stroke: '#ffd9a3', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' }); if (r.arc) el('path', { d: r.arc, fill: 'none', stroke: '#ffd9a3', 'stroke-width': 3 }); }
-  const [pl, pt, pr, pb] = g.stairPill; el('rect', { x: pl, y: pt, width: pr - pl, height: pb - pt, fill: 'none', stroke: '#e98445', 'stroke-width': 2 });
-  for (const k of ['a', 'b']) { const q = g.kiosk?.measurements?.[k]; if (q) el('polygon', { points: q.map((p) => p.join(',')).join(' '), fill: 'none', stroke: k === 'a' ? '#25b5d6' : '#e98445', 'stroke-width': 2 }); }
-  if (g.kiosk?.quad) { const q = g.kiosk.quad; el('polygon', { points: q.map((p) => p.join(',')).join(' '), fill: 'rgba(37,181,214,.15)', stroke: '#fff', 'stroke-width': 2 }); const s = quadSize(q); const fo = el('foreignObject', { x: 0, y: 0, width: s.width, height: s.height, style: `transform-origin:0 0; transform:${quadToMatrix3d(q, s.width, s.height)}` }); fo.innerHTML = `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${s.width}px;height:${s.height}px;background:repeating-linear-gradient(0deg,rgba(255,255,255,.35) 0 1px,transparent 1px 20px),repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 1px,transparent 1px 20px);outline:2px solid #fff"></div>`; }
-  pts.forEach((p, i) => { el('circle', { cx: p[0], cy: p[1], r: 5, fill: '#fff' }); el('text', { x: p[0] + 8, y: p[1] - 8, fill: '#fff', 'font-size': 18 }).textContent = i + 1; });
+  if (mode === 'poly' && pts.length > 1) el('polyline', { points: poly(pts), fill: 'none', stroke: '#fff', 'stroke-width': 1.5 });
+  pts.forEach((p, i) => { el('circle', { cx: p[0], cy: p[1], r: 4, fill: '#fff' }); el('text', { x: p[0] + 8, y: p[1] - 8, fill: '#fff', 'font-size': 16 }).textContent = i + 1; });
 }
+// A quad drawn through its matrix3d with a 20 px grid: the perspective check.
+function grid(q) {
+  el('polygon', { points: poly(q), fill: 'rgba(37,181,214,.12)', stroke: '#fff', 'stroke-width': 2 });
+  const s = quadSize(q), mtx = quadToMatrix3d(q, s.width, s.height);
+  if (!mtx) return;
+  const fo = el('foreignObject', { x: 0, y: 0, width: s.width, height: s.height, style: `transform-origin:0 0; transform:${mtx}` });
+  fo.innerHTML = `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${s.width}px;height:${s.height}px;background:repeating-linear-gradient(0deg,rgba(255,255,255,.35) 0 1px,transparent 1px 20px),repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 1px,transparent 1px 20px);outline:2px solid #fff"></div>`;
+}
+
 canvas.addEventListener('click', (e) => {
   const r = canvas.getBoundingClientRect(); const z = +zoom.value;
   const x = Math.round((e.clientX - r.left) / z * 10) / 10, y = Math.round((e.clientY - r.top) / z * 10) / 10;
   pts.push([x, y]);
-  const need = { point: 1, rect: 2, quad: 4, arc: 3 }[mode];
-  last.textContent = `last click: ${x}, ${y}  (${pts.length}/${need})`;
+  const need = { point: 1, rect: 2, quad: 4, arc: 3, poly: Infinity }[mode];
+  last.textContent = `last click: ${x}, ${y}  (${pts.length}${need === Infinity ? '' : `/${need}`})`;
   if (pts.length >= need) {
-    const target = document.getElementById('target').value;
     let value;
     if (mode === 'point') value = pts[0];
     if (mode === 'rect') value = [Math.min(pts[0][0], pts[1][0]), Math.min(pts[0][1], pts[1][1]), Math.max(pts[0][0], pts[1][0]), Math.max(pts[0][1], pts[1][1])];
     if (mode === 'quad') value = pts.slice(0, 4);
-    if (mode === 'arc') { const [a, m, b] = pts; const cx = 2 * m[0] - (a[0] + b[0]) / 2, cy = 2 * m[1] - (a[1] + b[1]) / 2; value = `M ${a[0]} ${a[1]} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${b[0]} ${b[1]}`; }
+    if (mode === 'arc') { const [a, mid, b] = pts; const cx = 2 * mid[0] - (a[0] + b[0]) / 2, cy = 2 * mid[1] - (a[1] + b[1]) / 2; value = `M ${a[0]} ${a[1]} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${b[0]} ${b[1]}`; }
     status.textContent = `${mode}: ${JSON.stringify(value)}`;
-    if (target && g) {
-      if (target.endsWith('.sign')) { const cur = g.doorways[target.split('.')[1]].sign; setPath(target, { ...cur, x: value[0], y: value[1] }); }
-      else if (target === 'tower' || target.endsWith('.center') || /rings\.\d\.label/.test(target)) setPath(target, value);
-      else setPath(target, value);
-      // Kiosk: when both passes agree within 2 px, the mean becomes the quad.
-      const km = g.kiosk.measurements;
-      if (km.a && km.b) { const ok = km.a.every((p, i) => Math.abs(p[0] - km.b[i][0]) <= 2 && Math.abs(p[1] - km.b[i][1]) <= 2); g.kiosk.quad = ok ? km.a.map((p, i) => [(p[0] + km.b[i][0]) / 2, (p[1] + km.b[i][1]) / 2]) : null; status.textContent += ok ? ' · kiosk passes agree, quad set' : ' · kiosk passes DISAGREE (>2 px), quad cleared'; }
-      out.value = JSON.stringify(g, null, 2);
+    if (pic !== 'lobby') {
+      // A room: a quad is a pass of the surface being edited.
+      const s = current();
+      if (mode === 'quad' && s) {
+        (s.measurements ??= {})[$('pass').value] = value; agree(); stamp();
+        status.textContent += ` → ${$('surface').value} pass ${$('pass').value}`;
+        dump();
+      }
+    } else {
+      const target = $('target').value;
+      if (target && g) {
+        if (target.endsWith('.sign')) { const cur = g.doorways[target.split('.')[1]].sign; setPath(target, { ...cur, x: value[0], y: value[1] }); }
+        else setPath(target, value);
+        // Kiosk: when both passes agree within 2 px, the mean becomes the quad.
+        const km = g.kiosk.measurements;
+        if (km.a && km.b) { const ok = km.a.every((p, i) => Math.abs(p[0] - km.b[i][0]) <= 2 && Math.abs(p[1] - km.b[i][1]) <= 2); g.kiosk.quad = ok ? km.a.map((p, i) => [(p[0] + km.b[i][0]) / 2, (p[1] + km.b[i][1]) / 2]) : null; status.textContent += ok ? ' · kiosk passes agree, quad set' : ' · kiosk passes DISAGREE (>2 px), quad cleared'; }
+        dump();
+      }
     }
     pts = [];
   }

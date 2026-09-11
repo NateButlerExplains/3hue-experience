@@ -1,17 +1,24 @@
 // T-07, T-08: what each tour node does to the lobby, driven through the scene API in js/main.js.
-//   T-07 rest (z 1, the doors on screen but inert, a door pointed at), door (z 1.3, the room up, no
-//        panel, focus still in the card), station (its pin marked and inside the frame, the source
-//        under the caption), path (the tower, its stage lit, the chip current), kiosk (framed when
+//   T-07 rest (z 1, the doors on screen but inert, a door pointed at), door (z 1.3, the room up with
+//        its own surfaces in place of the pins (O14), no panel, focus still in the card), station (the
+//        surfaces standing for it marked and inside the frame, the source under the caption; a station
+//        no surface stands for marks nothing), path (the tower, its stage lit, the chip current), kiosk (framed when
 //        legible, otherwise the lobby plus a tile of its derived counts under its tag), keep, and
 //        the same with ?rooms=0; and on the real script at 1280x720 and 320x568, every line that
 //        carries a figure keeps a printed source inside the card's body without scrolling.
 //   T-08 while the card speaks at 1280x720, 1440x900 and 1920x1080 it covers no door frame (at
-//        rest), no lit ring, no kiosk, no active pin and no panel; the frame the camera aims into
+//        rest), no lit ring, no kiosk, no marked surface and no panel; the frame the camera aims into
 //        ends above the card's reserve (--tour-h), and a card taller than that shows its whole body.
 import { test, expect } from '@playwright/test';
 import { open, settled, roomVisible, manifest as m, geometry as g, S, vp, annotate, intersects, r1, kioskLines, readJson } from './helpers.mjs';
 import { FX, TQ, tour, card, atNode, toLast, pick, sceneSettled } from './tour-helpers.mjs';
 import { figures } from '../tools/check-manifest.js';
+import { G } from './surface-helpers.mjs';
+
+// The surfaces of a door's room standing for a station (O14, content/surfaces.json merged into the
+// geometry); the station a fixture line points at (its cue, else its node's station scene).
+const stationSurfaces = (door, st) => Object.entries(G.rooms[door]?.surfaces || {}).filter(([, s]) => s.station === st).map(([id]) => id).sort();
+const stationAt = (node, line) => FX.nodes[node].lines[line]?.cue?.station || FX.nodes[node].scene.station || null;
 
 const deep = async (page, node, { viewport = vp(1440, 900), query = TQ } = {}) => {
   await open(page, { viewport, hash: `#/tour/${node}`, query });
@@ -23,6 +30,8 @@ const SCENE = () => {
   const L = window.__lobby;
   const pins = [...document.querySelectorAll('.room-pin')];
   const kiosk = document.querySelector('.kiosk');
+  const sf = L.surfaces;
+  const bbox = (c) => ({ left: Math.min(...c.map((p) => p[0])), top: Math.min(...c.map((p) => p[1])), right: Math.max(...c.map((p) => p[0])), bottom: Math.max(...c.map((p) => p[1])) });
   return {
     z: L.stage.z, dock: L.stage.dock, inRoom: L.stage.inRoom, frame: L.frame(),
     room: parseFloat(getComputedStyle(document.getElementById('room')).opacity),
@@ -32,7 +41,8 @@ const SCENE = () => {
     lit: [...document.querySelectorAll('#arcs path.lit')].map((p) => p.dataset.stage),
     litBox: rr(document.querySelector('#arcs path.lit')),
     kioskBox: kiosk && !kiosk.hidden ? rr(kiosk) : null,
-    pins: pins.length, active: pins.filter((p) => p.classList.contains('is-active')).map((p) => ({ station: p.dataset.station, hidden: p.hidden, box: rr(p) })),
+    pins: pins.length, surfaces: sf ? { mode: sf.mode, count: sf.surfaces.length, hidden: document.getElementById('room-surfaces').getAttribute('aria-hidden') } : null,
+    active: sf ? sf.surfaces.filter((s) => s.active).map((s) => ({ id: s.id, station: s.station, hidden: !s.inside, box: bbox(s.corners) })) : [],
     frames: Object.fromEntries(Object.entries(L.rects.doors).map(([id, d]) => [id, d.frame])),
     card: rr(document.getElementById('tour')), vw: innerWidth, vh: innerHeight,
     focusInCard: document.getElementById('tour').contains(document.activeElement),
@@ -66,14 +76,15 @@ test.describe('T-07 scenes', () => {
     expect(s.current).toEqual([FX.nodes.arrive.lines[1].cue.door]);
   });
 
-  test('T-07 door: the dolly (z 1.3), the room up with its pins, no panel, focus in the card, the callout prints its source', async ({ page }) => {
+  test('T-07 door: the dolly (z 1.3), the room up with its own surfaces in place of the pins, no panel, focus in the card, the callout prints its source', async ({ page }) => {
     await deep(page, 'wt');
     await roomVisible(page);
     let s = await scene(page);
     expect(s.z).toBeCloseTo(g.layout.dolly.zoom, 5);
     expect(s.room).toBe(1);
     expect(s.inRoom).toBe(true);
-    expect(s.pins).toBe(Object.keys(g.rooms['win-trust'].stations).length);
+    expect(s.pins).toBe(0);
+    expect(s.surfaces).toEqual({ mode: 'tour', count: Object.keys(G.rooms['win-trust'].surfaces).length, hidden: 'true' });
     expect(s.panelHidden).toBe(true);
     expect(s.dock).toBe('none');
     expect(s.current).toEqual(['win-trust']);
@@ -86,13 +97,15 @@ test.describe('T-07 scenes', () => {
     expect(c.src, 'the stat prints its source under the caption').toBe(stat.source);
   });
 
-  test('T-07 station: the scene\'s station pin is marked and inside the frame; a station cue moves the mark; pins stay pointer-only', async ({ page }, testInfo) => {
+  // O14: the station is the room's surfaces standing for it, marked and framed whole. A click on a lit
+  // surface bringing its line back is T-27 (tour-surfaces.spec).
+  test('T-07 station: the scene\'s station surfaces are marked and inside the frame; a station cue moves the mark; the surfaces stay aria-hidden', async ({ page }, testInfo) => {
     await deep(page, 'wt-proof');
     await roomVisible(page);
     let s = await scene(page);
     const proof = m.doors.find((d) => d.id === 'win-trust').proof[0];
-    expect(s.active.map((a) => a.station)).toEqual(['proof']);
-    expect(s.active[0].hidden, 'the narrated pin is inside the frame').toBe(false);
+    expect(s.active.map((a) => a.id).sort()).toEqual(stationSurfaces('win-trust', 'proof'));
+    expect(s.active.every((a) => !a.hidden), 'the narrated surfaces are inside the frame').toBe(true);
     let c = await card(page);
     expect(c.caption).toBe(proof.text);
     expect(c.src).toBe(proof.basis);
@@ -100,21 +113,17 @@ test.describe('T-07 scenes', () => {
     await atNode(page, 'wt-proof', 1);
     await page.waitForTimeout(1200);
     s = await scene(page);
-    expect(s.active.map((a) => a.station)).toEqual([FX.nodes['wt-proof'].lines[1].cue.station]);
-    expect(s.active[0].hidden).toBe(false);
-    const pinAttrs = await page.evaluate(() => [...document.querySelectorAll('.room-pin')].map((p) => [p.getAttribute('aria-hidden'), p.tabIndex]));
-    expect(pinAttrs.every(([a, ti]) => a === 'true' && ti === -1)).toBe(true);
-    // A pin the tour points at elsewhere in the node brings that line back.
-    await page.evaluate(() => document.querySelector('.room-pin[data-station="proof"]').click());
-    await atNode(page, 'wt-proof', 0);
+    expect(s.active.map((a) => a.id).sort()).toEqual(stationSurfaces('win-trust', FX.nodes['wt-proof'].lines[1].cue.station));
+    expect(s.active.every((a) => !a.hidden)).toBe(true);
+    expect(s.surfaces.hidden).toBe('true');
+    expect(s.pins).toBe(0);
     annotate(testInfo, { active: s.active });
   });
 
-  // The pan grows until the narrated pin clears the frame's edges. One case cannot: at 720 px tall a
-  // station 82% of the way down its room (the decision stations) stays under the card's reserve even
-  // with the room at the largest zoom the fit allows and its bottom edge on the viewport's; the pin
-  // is marked but hidden, as rooms.js hides any pin outside the frame. From 1440x900 it fits.
-  for (const [w, h, cases] of [[1280, 720, [['wt-proof', 0], ['wt-proof', 1], ['sr', 1]]], [1440, 900, [['wt-proof', 0], ['wt-proof', 1], ['gc', 1], ['sr', 1]]]]) test(`T-07 at ${w}x${h} the narrated station pin sits inside the frame: ${cases.map((c) => c.join('/')).join(', ')}`, async ({ page }, testInfo) => {
+  // The camera frames the surfaces standing for the narrated station whole, inside the frame (above
+  // the card's reserve). A station no surface of that room stands for (Gain Control's decision) marks
+  // nothing: the camera pans toward it as it did for a pin.
+  for (const [w, h, cases] of [[1280, 720, [['wt-proof', 0], ['wt-proof', 1], ['gc', 1], ['sr', 1]]], [1440, 900, [['wt-proof', 0], ['wt-proof', 1], ['gc', 1], ['sr', 1]]]]) test(`T-07 at ${w}x${h} the narrated station's surfaces sit inside the frame: ${cases.map((c) => c.join('/')).join(', ')}`, async ({ page }, testInfo) => {
     const log = [];
     for (const [node, line] of cases) {
       await deep(page, node, { viewport: vp(w, h) });
@@ -123,9 +132,10 @@ test.describe('T-07 scenes', () => {
       await atNode(page, node, line);
       await page.waitForTimeout(1200);
       const s = await scene(page);
-      log.push({ node, line, active: s.active, frameBottom: r1(s.frame.y + s.frame.h) });
-      expect(s.active).toHaveLength(1);
-      expect(s.active[0].hidden, `${node}/${line}: ${s.active[0].station} pin inside the frame`).toBe(false);
+      const want = stationSurfaces(FX.nodes[node].scene.door, stationAt(node, line));
+      log.push({ node, line, station: stationAt(node, line), active: s.active, frameBottom: r1(s.frame.y + s.frame.h) });
+      expect(s.active.map((a) => a.id).sort(), `${node}/${line}: the surfaces of ${stationAt(node, line)}`).toEqual(want);
+      for (const a of s.active) expect(a.hidden, `${node}/${line}: ${a.id} inside the frame`).toBe(false);
     }
     annotate(testInfo, log);
   });
@@ -188,7 +198,7 @@ test.describe('T-07 scenes', () => {
     expect((await card(page)).caption).toBe(m.doors.find((d) => d.id === 'gain-control').decision);
   });
 
-  test('T-07 with ?rooms=0: a door and a station node dolly to the door with no room and no pins', async ({ page }) => {
+  test('T-07 with ?rooms=0: a door and a station node dolly to the door with no room, no pins and no surfaces', async ({ page }) => {
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await deep(page, 'wt-proof', { query: `${TQ}&rooms=0` });
@@ -196,11 +206,13 @@ test.describe('T-07 scenes', () => {
     expect(s.z).toBeCloseTo(g.layout.dolly.zoom, 5);
     expect(s.room).toBe(0);
     expect(s.pins).toBe(0);
+    expect(s.surfaces).toBeNull();
     expect(s.current).toEqual(['win-trust']);
     await page.keyboard.press('ArrowRight');
     await atNode(page, 'wt-proof', 1);
     s = await scene(page);
     expect(s.pins).toBe(0);
+    expect(s.surfaces).toBeNull();
     expect(errors).toEqual([]);
   });
 });
@@ -222,7 +234,7 @@ const T08 = [
 // 440 px)), so its sources are never cut; it still covers nothing the scene is showing.
 const reserveOf = (vh) => Math.min(240, Math.max(176, vh * 0.24)) + 16;
 for (const [w, h] of [[1280, 720], [1440, 900], [1920, 1080]]) {
-  test(`T-08 at ${w}x${h} the speaking card covers no door frame at rest, lit ring, kiosk, active pin or panel; the frame ends above the card's reserve and the card grows only to fit its content`, async ({ page }, testInfo) => {
+  test(`T-08 at ${w}x${h} the speaking card covers no door frame at rest, lit ring, kiosk, marked surface or panel; the frame ends above the card's reserve and the card grows only to fit its content`, async ({ page }, testInfo) => {
     const log = [];
     for (const st of T08) {
       await deep(page, st.node, { viewport: vp(w, h) });
@@ -246,9 +258,9 @@ for (const [w, h] of [[1280, 720], [1440, 900], [1920, 1080]]) {
       if (st.rest && s.z === 1) for (const [id, f] of Object.entries(s.frames)) expect(intersects(s.card, f), `${label}: the card covers the ${id} door frame`).toBe(false);
       if (s.litBox) expect(intersects(s.card, s.litBox), `${label}: the card covers the lit ring`).toBe(false);
       if (s.kioskBox) expect(intersects(s.card, s.kioskBox), `${label}: the card covers the kiosk`).toBe(false);
-      for (const a of s.active.filter((x) => !x.hidden)) expect(intersects(s.card, a.box), `${label}: the card covers the ${a.station} pin`).toBe(false);
+      for (const a of s.active.filter((x) => !x.hidden)) expect(intersects(s.card, a.box), `${label}: the card covers the ${a.id} surface`).toBe(false);
       if (st.lit) expect(s.lit.length).toBe(1);
-      if (st.pin) expect(s.active, `${label}: the narrated pin is marked`).toHaveLength(1);
+      if (st.pin) expect(s.active.map((a) => a.id).sort(), `${label}: the narrated station's surfaces are marked`).toEqual(stationSurfaces(FX.nodes[st.node].scene.door, stationAt(st.node, st.line)));
     }
     annotate(testInfo, log);
     expect(log.filter((l) => l.phase !== 'choice').length, 'speaking states measured').toBeGreaterThanOrEqual(5);
