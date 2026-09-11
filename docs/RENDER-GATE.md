@@ -16,3 +16,9 @@ Pass only if all of these hold:
 9. At z 1.3 in the crossfade no seam or edge of the room image shows inside the viewport at 1440×900 or 1920×1080.
 
 Nate's written OK on the sheet is the gate. Then: `bash tools/build-derivatives.sh <door>` → `media/rooms/<door>-{2560,2048,1280}.{avif|webp,jpg}` (each ≤ 600 KB), measure the focus point and station pins on the 2560 master in `tools/geometry-tool.html` → `geometry.rooms.<door>`, set `doors[].room.render`, recapture the door's share card.
+
+## Sign-off record
+
+| Date | Rooms | Decision |
+|---|---|---|
+| 2026-09-10 | win-trust, gain-control, stay-ready (candidate-01 of each, as published at commit 7fa92e4) | Approved. Nate relayed that the 3HUE owner reviewed the live site and was very happy with the results. Recorded as the written OK this gate requires. |

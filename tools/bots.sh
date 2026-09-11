@@ -20,6 +20,13 @@ for id in lobby win-trust gain-control stay-ready path; do
   f=$(mktemp); code=$(curl -s -o "$f" -w '%{http_code}' "${base}media/share/$id.jpg"); dim=$(ffprobe -v error -show_entries stream=width,height -of csv=p=0 "$f" 2>/dev/null); sz=$(stat -f %z "$f"); rm -f "$f"
   printf '%-14s %s %s %s bytes\n' "$id.jpg" "$code" "$dim" "$sz"; [ "$code" = 200 ] && [ "$dim" = "1200,630" ] && [ "$sz" -lt 307200 ] || fail=1
 done
+echo "--- plate files (P1-D05)"
+for w in 828 1280 1920 2880; do for ext in avif webp jpg; do
+  f=$(mktemp); read -r code ctype < <(curl -s -o "$f" -w '%{http_code} %{content_type}\n' "${base}media/plate/lobby-plate-$w.$ext"); sz=$(stat -f %z "$f"); rm -f "$f"
+  printf '%-26s %s %-12s %s bytes\n' "lobby-plate-$w.$ext" "$code" "$ctype" "$sz"
+  [ "$code" = 200 ] || fail=1
+  case "$ext" in avif|webp) [ "$sz" -le 512000 ] || fail=1;; esac
+done; done
 echo "--- robots and icons"
 r=$(curl -s "${base}robots.txt"); printf 'robots.txt: %s | Disallow lines: %s\n' "$(curl -s -o /dev/null -w '%{http_code}' "${base}robots.txt")" "$(printf '%s' "$r" | grep -ci '^disallow: */')"
 for i in media/brand/favicon-32.png media/brand/apple-touch-icon-180.png; do printf '%s -> %s\n' "$i" "$(curl -s -o /dev/null -w '%{http_code}' "$base$i")"; done

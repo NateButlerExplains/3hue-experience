@@ -7,5 +7,5 @@
   "P5-D03": "Pass (manual, tools/bots.sh against the live site: cards are screenshots of the published page, 1200x630 JPEG < 300 KB)",
   "P5-D05": "Pass (manual, tools/bots.sh against the live site: root and every s/*.html serve og and twitter tags to Slackbot, LinkedInBot, Twitterbot and facebookexternalhit; no meta refresh)",
   "P5-D06": "Pass (manual, tools/bots.sh against the live site: robots.txt 200 with no Disallow; favicon-32.png and apple-touch-icon-180.png 200)",
-  "R-01": "Not run (automated criteria pass; Nate's written OK on the gate sheets not yet recorded)"
+  "R-01": "Pass (automated criteria pass: OCR at 2x empty, no people, flat dark screens, every derivative <= 600 KB; owner approval relayed by Nate on 2026-09-10, recorded in docs/RENDER-GATE.md)"
 }
