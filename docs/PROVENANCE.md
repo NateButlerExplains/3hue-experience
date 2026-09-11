@@ -41,6 +41,7 @@ Every file carried into this repo, where it came from, and its SHA-256 at copy t
 | `docs/levelup/source/6-walk-dashboard.md` | fork `docs/discovery/experience-level-up/source/6-walk-dashboard.md` | `f45c91c4d5b20aa7…` |
 | `docs/levelup/source/LEVELUP.md` | fork `docs/discovery/experience-level-up/source/LEVELUP.md` | `78d5a36ef48b4402…` |
 | `tools/stamp-version.py` | AiVRIC `experience/tools/stamp-version.py` | `62b2d1779bbaceef…` |
+| `content/builder-names.json` | derived, not copied: `tools/builder-names.mjs` reads fork `docs/discovery/solution-builder-catalog-2026-09-09/catalog.json` (`6d40342025c51cc6…`) and `packages.md` (`99214e053964a5a6…`), the Builder capture of 2026-09-09, and keeps names only (categories, non-draft services with their category, the [Confirm price] items marked held, draft names listed apart, the seven package names). No codes, prices, billing units, descriptions or hours. Both source hashes are recorded in the file; `node tools/builder-names.mjs --check` re-derives it (O15) | `57808f777494a40a…` |
 | `media/fonts/*.woff2` | Google Fonts latin variable subsets, Sora and IBM Plex Sans (OFL) | `3902474d3ece89c8…` / `056e4e2459f57a00…` |
 
 ## Written for this repo (guided tour, O10)
@@ -67,4 +68,5 @@ Every file carried into this repo, where it came from, and its SHA-256 at copy t
 | Lobby content and geometry | `app/experience-data.ts` | `f51ea3a8e8378a8a…` | transcribed into `content/*.json` |
 | Register tooling | `docs/discovery/experience-level-up/{requirements.json,build-register.py}` | — | ChatGPT-Sites register; must never be re-run (it resets P1-D04 to Fail) |
 | Research and source library | `docs/research/2026-09-09/`, `assets/strategy/2026-09-08-09-source-library/` | — | internal material (objection scripts, do-not-use lists, competitor notes, Builder prices) stays private; see `docs/CONTENT-SOURCES.md` |
-| Catalog | `docs/discovery/solution-builder-catalog-2026-09-09/catalog.json` | `6d40342025c51cc6…` | carries prices; only non-draft service names are quoted in the manifest |
+| Catalog | `docs/discovery/solution-builder-catalog-2026-09-09/catalog.json` | `6d40342025c51cc6…` | carries prices and codes; only names reach this repo, through `content/builder-names.json` |
+| Curated packages | `docs/discovery/solution-builder-catalog-2026-09-09/packages.md` | `99214e053964a5a6…` | carries observed totals; only the seven package names reach `content/builder-names.json`, and the manifest's package summaries are re-written with every figure taken out |

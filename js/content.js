@@ -62,6 +62,19 @@ export function resolveHref(key) {
   throw new Error(`unknown href key ${key}`);
 }
 
+// Learn more on 3hue.net (O15): a key of site.learnMore.pages → {url, label, host}, or null. The lint
+// holds the page allowlist; this checks again at runtime (https, a host on site.learnMore.hosts, no
+// port, query or fragment, never the pricing page), so a bad edit shows no link rather than a wrong one.
+export function learnMorePage(key) {
+  const lm = manifest?.site?.learnMore, pg = key && lm?.pages ? lm.pages[key] : null;
+  if (!pg || typeof pg.url !== 'string' || typeof pg.label !== 'string' || /[?#\s]/.test(pg.url)) return null;
+  try {
+    const u = new URL(pg.url);
+    if (u.protocol !== 'https:' || !(lm.hosts || []).includes(u.hostname) || u.port || u.username || u.pathname === '/isg/pricing.html') return null;
+    return { url: u.href, label: pg.label, host: u.host };
+  } catch { return null; }
+}
+
 // Kiosk lines are counts derived from this manifest, never retyped (O9).
 export function kioskLines() {
   const m = manifest;

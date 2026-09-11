@@ -23,6 +23,9 @@ const safeRelative = (p) => typeof p === 'string' && /^[\w./-]+$/.test(p) && !/(
 // Strings no visitor reads: provenance, paths, URLs, plate data, and the tour and voice settings.
 const NON_VISIBLE = /\.(source|basis|provenance|ref|placeholder|src|srcset2x|card|url|bookingUrl|logoHref|route|derive)$/;
 const SETTINGS = /^(plate|tour|guide\.voice|guide\.lead|guide\.guides\.[a-z]+\.voice)(\.|\[|$)/;
+// Quote builder (O15): the id lists that point at offers, programs, pages and stages, never shown.
+// A path here is either walked (doors[0].packages[1]) or a resolved ref (doors.win-trust.packages.1).
+const O15_IDS = /^(offers\.[a-z0-9-]+\.(kind|contains|learnMore)|programs\.[a-z0-9-]+\.(build|run|learnMore)|doors(\[\d+\]|\.[a-z0-9-]+)\.(packages|programs|starts\.[a-z0-9-]+\.(lead|with|alt|live|then|ring))|site\.learnMore\.hosts)(\.|\[|$)/;
 export function visibleStrings(m) {
   const strings = [];
   (function walk(v, p) {
@@ -33,9 +36,9 @@ export function visibleStrings(m) {
       walk(v[k], p ? `${p}.${k}` : k);
     }
   })(m, '');
-  return strings.filter(([p]) => !NON_VISIBLE.test(p) && !SETTINGS.test(p));
+  return strings.filter(([p]) => !NON_VISIBLE.test(p) && !SETTINGS.test(p) && !O15_IDS.test(p));
 }
-const isVisiblePath = (p) => !NON_VISIBLE.test(p) && !SETTINGS.test(p) && !/^(vocabulary|sources|note|version)(\.|$)/.test(p);
+const isVisiblePath = (p) => !NON_VISIBLE.test(p) && !SETTINGS.test(p) && !O15_IDS.test(p) && !/^(vocabulary|sources|note|version)(\.|$)/.test(p);
 
 // ---- Figures. A figure reaches a public surface only from a manifest field that prints its source,
 // so the tour script may carry one only through a ref. Spelled-out numbers count: "sixty-one
@@ -68,7 +71,7 @@ export function figures(s) {
 }
 
 // ---- content/experience.json ----
-export function lintManifest(m, g) {
+export function lintManifest(m, g, b = builderNames()) {
   const errors = [], warnings = [];
   const err = (s) => errors.push(s);
   const warn = (s) => warnings.push(s);
@@ -170,7 +173,255 @@ export function lintManifest(m, g) {
       }
     }
   }
+  // The quote builder's names (O15): the section below.
+  const qb = lintBuilder(m, b);
+  errors.push(...qb.errors); warnings.push(...qb.warnings);
   return { errors, warnings, visible: visible.length };
+}
+
+// ---- Quote builder (O15): offer, package and program names exactly as builder.3hue.net has them ----
+// content/builder-names.json (tools/builder-names.mjs, names only, pinned to the 2026-09-09 capture)
+// is the list. Every family, example, offer and program name the manifest uses is on it and not a
+// draft; a held name ([Confirm price]) stands only as a program name; each door's starts cover its
+// triggers plus "early" and obey the overlaps the Builder's packages imply; every start is already in
+// its door's panel lists; Learn more opens only the allowlisted 3hue.net pages; and no offer or
+// program string carries a price, a rate, hours or a figure. The tour lint (below) refuses a Builder
+// name typed into the script instead of an {offer:<id>} or {program:<id>} token.
+export const BUILDER_NAMES = 'content/builder-names.json';
+const builderCache = new Map();
+export function builderNames(root = ROOT) {
+  if (!builderCache.has(root)) { const p = path.resolve(root, BUILDER_NAMES); builderCache.set(root, fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : null); }
+  return builderCache.get(root);
+}
+// The 3hue.net pages a Learn more link may open: https, the bare host (never www.), no query or
+// fragment, never the pricing page, and none of the landing pages.
+export const LEARN_MORE_HOST = '3hue.net';
+export const LEARN_MORE_PATHS = ['/about.html', '/contact.html', '/services/security-compliance-services.html', '/services/isg-managed-programs.html', '/services/continuous-risk-management.html', '/services/cyber-incident-response-program.html', '/services/risk-posture-assessment.html', '/services/cloudsignals-riskops.html', '/frameworks/framework-library.html', '/industries/saas.html', '/industries/private-equity-family-offices.html', '/industries/financial-services.html', '/customer-stories/transit-technologies.html', '/customer-stories/large-north-american-bank.html', '/ai-advisory/ai-governance.html'];
+export function learnMoreProblem(url) {
+  if (typeof url !== 'string' || /[?#\s]/.test(url)) return 'must be a plain https URL with no query or fragment';
+  let u; try { u = new URL(url); } catch { return 'is not a URL'; }
+  if (u.protocol !== 'https:') return 'must be https';
+  if (u.hostname !== LEARN_MORE_HOST || u.port || u.username || u.password) return `must be on ${LEARN_MORE_HOST} exactly (no www., no port)`;
+  if (u.pathname === '/isg/pricing.html') return 'must never open the pricing page';
+  if (!LEARN_MORE_PATHS.includes(u.pathname)) return `opens ${u.pathname}, which is not on the Learn more allowlist`;
+  return null;
+}
+// Price-, rate- and hour-shaped words; figures() catches the numbers.
+export const PRICEY = /[$€£]|\b(?:prices?|priced|pricing|costs?|fees?|rates?|hourly|hours?|hrs?|TCV|discount(?:s|ed)?|quoted?|quotes|per\s+(?:hour|month|year|node|seat|user|endpoint))\b|\bfirst[\s-]year\b/i;
+// The offers the overlap rules name, by their Builder names (ids are the manifest's own).
+export const OVERLAP_NAMES = { soc2: 'SOC 2 Readiness', iso: 'ISO 27001 Certification Readiness', ira: 'Initial Risk Assessment', vcp: 'Managed Vendor Compliance Program (VCP)', vcpBlock: 'VCP — Additional Vendor Monitoring (5-Vendor Block)', irfs: 'Incident Response Fast Start', live: 'Incident Command & Emergency Response Leadership' };
+const START_KEYS = ['trigger', 'lead', 'with', 'alt', 'live', 'then', 'ring', 'source', 'status'];
+
+export function lintBuilder(m, b = builderNames()) {
+  const errors = [], warnings = [];
+  const err = (s) => errors.push(`quote builder: ${s}`);
+  const warn = (s) => warnings.push(`quote builder: ${s}`);
+  if (!isObj(b) || !Array.isArray(b.services) || !Array.isArray(b.packages) || !Array.isArray(b.categories)) { err(`${BUILDER_NAMES} is missing or malformed; run node tools/builder-names.mjs`); return { errors, warnings }; }
+  const services = new Map(b.services.map((s) => [s.name, s]));
+  const packages = new Set(b.packages.map((p) => p.name));
+  const categories = new Set(b.categories);
+  const draft = new Set([...(b.draft?.services || []), ...(b.draft?.categories || [])]);
+  const held = new Set(b.services.filter((s) => s.held).map((s) => s.name));
+  const nameProblem = (name, { asProgram = false } = {}) => {
+    if (!isStr(name)) return 'must be a Builder name';
+    if (draft.has(name)) return `"${name}" is on the Builder's draft catalog`;
+    if (!services.has(name) && !packages.has(name) && !categories.has(name)) return `"${name}" is not a Builder name (${BUILDER_NAMES}, capture ${b.capture})`;
+    if (held.has(name) && !asProgram) return `"${name}" is held ([Confirm price]); a held name stands only as a program name`;
+    return null;
+  };
+  if (!isObj(m.offers)) err('offers must map an offer id to {name, kind}');
+  if (!isObj(m.programs)) err('programs must map a program id to {name, category, build, run, learnMore}');
+  const offers = isObj(m.offers) ? m.offers : {}, programs = isObj(m.programs) ? m.programs : {};
+  const offerByName = new Map(Object.entries(offers).filter(([, o]) => isObj(o)).map(([id, o]) => [o.name, id]));
+  const oname = (id) => offers[id]?.name || id;
+  const OV = Object.fromEntries(Object.entries(OVERLAP_NAMES).map(([k, n]) => [k, offerByName.get(n) ?? `(no offer named ${n})`]));
+  const pages = isObj(m.site?.learnMore?.pages) ? m.site.learnMore.pages : {};
+  const learnKey = (p, key) => { if (key !== undefined && !(isStr(key) && own(pages, key))) err(`${p}.learnMore: no site.learnMore.pages.${key}`); };
+  const priceFree = (p, s) => {
+    if (typeof s !== 'string') return;
+    const f = figures(s); if (f.length) err(`${p}: figure "${f[0]}"; offers and programs carry names and plain descriptions only`);
+    const x = s.match(PRICEY); if (x) err(`${p}: "${x[0]}" is price- or hour-shaped; no prices, rates or hours on the site`);
+  };
+  // The 5-vendor block never comes before, or without, the VCP base in one list.
+  const vcpOrder = (p, ids) => { const i = ids.indexOf(OV.vcpBlock), j = ids.indexOf(OV.vcp); if (i >= 0 && !(j >= 0 && j < i)) err(`${p}: ${oname(OV.vcpBlock)} needs ${oname(OV.vcp)} before it`); };
+  for (const k of ['packages', 'starts', 'programs', 'learnMore']) if (!isStr(m.strings?.[k])) err(`strings.${k} must be a non-empty string`);
+
+  // Offers: a Builder service or package, named and filed exactly as the Builder has it, once.
+  const namedBy = new Map();
+  for (const [id, o] of Object.entries(offers)) {
+    const p = `offers.${id}`;
+    if (!isObj(o)) { err(`${p} must be {name, kind}`); continue; }
+    if (!ID.test(id)) err(`${p}: an offer id must match ^[a-z0-9-]+$`);
+    if (isStr(o.name)) { if (namedBy.has(o.name)) err(`${p}: "${o.name}" is already offers.${namedBy.get(o.name)}; one offer per Builder name`); else namedBy.set(o.name, id); }
+    if (!['service', 'package'].includes(o.kind)) err(`${p}.kind must be "service" or "package"`);
+    const np = nameProblem(o.name);
+    if (np) err(`${p}.name: ${np}`);
+    else if (o.kind === 'package' && !packages.has(o.name)) err(`${p}: "${o.name}" is not a Builder package`);
+    else if (o.kind === 'service' && !services.has(o.name)) err(`${p}: "${o.name}" is not a Builder service`);
+    else if (o.kind === 'service' && o.category !== services.get(o.name).category) err(`${p}.category must be "${services.get(o.name).category}", as in the Builder`);
+    if (o.kind === 'package' && o.category !== undefined) err(`${p}: a package has no category`);
+    priceFree(`${p}.name`, o.name);
+    if (o.summary !== undefined) {
+      if (!isObj(o.summary) || !isStr(o.summary.text) || !isStr(o.summary.source) || !isStr(o.summary.status)) err(`${p}.summary must be {text, source, status}`);
+      else { priceFree(`${p}.summary.text`, o.summary.text); if (!STATUSES.includes(o.summary.status)) err(`${p}.summary.status "${o.summary.status}" is not one of ${STATUSES.join(', ')}`); }
+    }
+    if (o.contains !== undefined) {
+      if (o.kind !== 'package') err(`${p}.contains: only a package contains other offers`);
+      if (!Array.isArray(o.contains) || !o.contains.length) err(`${p}.contains must be a list of offer ids`);
+      else {
+        for (const c of o.contains) if (offers[c]?.kind !== 'service') err(`${p}.contains: ${c} is not a service offer`);
+        if (new Set(o.contains).size !== o.contains.length) err(`${p}.contains lists an offer twice`);
+        vcpOrder(`${p}.contains`, o.contains);
+      }
+      // The capture shows each package's description and count, not its items: say so beside them.
+      if (!isStr(o.provenance)) err(`${p}: its contents are inferred, so a provenance note must say from what`);
+    }
+    learnKey(p, o.learnMore);
+    if (o.held !== undefined && o.held !== true) err(`${p}.held is true or absent`);
+  }
+  if (offers[OV.irfs]?.contains?.includes(OV.live)) err(`offers.${OV.irfs}: ${oname(OV.irfs)} carries standing incident command, not ${oname(OV.live)}`);
+
+  // Programs: a Builder name (a held one allowed only here), its category, and what builds and runs it.
+  for (const [id, pr] of Object.entries(programs)) {
+    const p = `programs.${id}`;
+    if (!isObj(pr)) { err(`${p} must be {name, category, build, run, learnMore}`); continue; }
+    if (!ID.test(id)) err(`${p}: a program id must match ^[a-z0-9-]+$`);
+    if (own(offers, id)) err(`${p}: ${id} is also an offer id`);
+    if (pr.held !== undefined && pr.held !== true) err(`${p}.held is true or absent`);
+    if (!Array.isArray(pr.build) || !Array.isArray(pr.run)) { err(`${p}: build and run are lists of offer ids`); continue; }
+    const items = [...pr.build, ...pr.run];
+    if (pr.name === null) {
+      // A program the Builder has no item for yet (held): no name, so nothing can show or voice it.
+      if (pr.held !== true) err(`${p}.name: only a held program may go without a Builder name`);
+      if (items.length || pr.category !== null) err(`${p}: a program with no Builder name has no category, build or run`);
+    } else {
+      const np = nameProblem(pr.name, { asProgram: true });
+      if (np) err(`${p}.name: ${np}`);
+      else if (held.has(pr.name) && pr.held !== true) err(`${p}: "${pr.name}" is held ([Confirm price]), so the program is held`);
+      priceFree(`${p}.name`, pr.name);
+      if (!categories.has(pr.category)) err(`${p}.category: "${pr.category}" is ${draft.has(pr.category) ? 'a draft category' : 'not a Builder category'}`);
+      else if (![services.get(pr.name)?.category, pr.name, ...items.map((i) => offers[i]?.category)].includes(pr.category)) err(`${p}.category "${pr.category}" is the category of neither its name nor anything that builds or runs it`);
+      if (!items.length && !offerByName.has(pr.name)) err(`${p}: nothing builds or runs it`);
+      if (!isStr(pr.source) || !STATUSES.includes(pr.status)) err(`${p} needs a source and a known status`);
+    }
+    for (const i of items) if (!isObj(offers[i])) err(`${p}: ${i} is not an offer`);
+    if (new Set(items).size !== items.length) err(`${p}: an offer is listed twice across build and run`);
+    vcpOrder(p, items);
+    if (!isStr(pr.learnMore)) err(`${p}.learnMore must name a site.learnMore page`); else learnKey(p, pr.learnMore);
+  }
+
+  // Doors: families, packages (may be empty), programs, and a start for every trigger plus "early".
+  const stageIds = new Set((m.stages || []).map((s) => s.id));
+  for (const d of m.doors || []) {
+    const p = d.id;
+    if (isObj(d.program) && (d.program.snapshot !== undefined || !isStr(d.program.start))) err(`${p}.program: the first step is program.start (O15), not a Snapshot`);
+    const fams = Array.isArray(d.serviceFamilies) ? d.serviceFamilies : [];
+    if (new Set(fams.map((f) => f?.name)).size !== fams.length) err(`${p}.serviceFamilies names a family twice`);
+    fams.forEach((f, i) => {
+      const q = `${p}.serviceFamilies[${i}]`;
+      if (!isObj(f)) return;
+      if (!categories.has(f.name)) err(`${q}.name: "${f.name}" is ${draft.has(f.name) ? 'a draft category' : 'not a Builder category'}; family names are exact Builder categories`);
+      if (!Array.isArray(f.examples) || !f.examples.length) { err(`${q}.examples: name at least one Builder item`); return; }
+      f.examples.forEach((e, j) => {
+        const np = nameProblem(e);
+        if (np) { err(`${q}.examples[${j}]: ${np}`); return; }
+        if (!services.has(e)) err(`${q}.examples[${j}]: "${e}" is not a Builder service`);
+        else if (services.get(e).category !== f.name) err(`${q}.examples[${j}]: "${e}" is in ${services.get(e).category}, not ${f.name}`);
+        if (!offerByName.has(e)) err(`${q}.examples[${j}]: "${e}" has no offers entry, so the tour cannot name it with a token`);
+      });
+      vcpOrder(`${q}.examples`, f.examples.map((e) => offerByName.get(e)));
+    });
+    const pk = Array.isArray(d.packages) ? d.packages : null, pg = Array.isArray(d.programs) ? d.programs : null;
+    if (!pk) err(`${p}.packages must be a list of package offer ids (it may be empty)`);
+    else { for (const x of pk) if (offers[x]?.kind !== 'package') err(`${p}.packages: ${x} is not a package offer`); if (new Set(pk).size !== pk.length) err(`${p}.packages lists one twice`); }
+    if (!pg) err(`${p}.programs must be a list of program ids`);
+    else { for (const x of pg) if (!isObj(programs[x])) err(`${p}.programs: ${x} is not a program`); if (new Set(pg).size !== pg.length) err(`${p}.programs lists one twice`); }
+    // What the door's panel lists (family items, packages, what builds or runs its programs), and what
+    // "then runs as" may name (its packages and what its programs run).
+    const listed = new Set([...fams.flatMap((f) => (f?.examples || []).map((e) => offerByName.get(e))), ...(pk || []), ...(pg || []).flatMap((x) => [...(programs[x]?.build || []), ...(programs[x]?.run || [])])]);
+    const runs = new Set([...(pk || []), ...(pg || []).flatMap((x) => programs[x]?.run || [])]);
+    if (!isObj(d.starts)) { err(`${p}.starts must map a key to {trigger, lead, ring, source, status}`); continue; }
+    const byTrigger = new Map();
+    for (const [key, s] of Object.entries(d.starts)) {
+      const q = `${p}.starts.${key}`;
+      if (!isObj(s)) { err(`${q} must be {trigger, lead, ring, source, status}`); continue; }
+      if (!ID.test(key)) err(`${q}: a start key must match ^[a-z0-9-]+$`);
+      for (const k of Object.keys(s)) if (!START_KEYS.includes(k)) warn(`${q}: unknown key ${k}`);
+      if (key === 'early') { if (s.trigger !== null) err(`${q}.trigger: the early start answers no trigger, so it is null`); }
+      else if (!Number.isInteger(s.trigger) || s.trigger < 0 || s.trigger >= (d.triggers || []).length) err(`${q}.trigger must index ${p}.triggers (0 to ${(d.triggers || []).length - 1})`);
+      else if (byTrigger.has(s.trigger)) err(`${q}: trigger ${s.trigger} already starts at ${byTrigger.get(s.trigger)}`);
+      else byTrigger.set(s.trigger, key);
+      // lead, alt and live are offers; with and then may also name one of the door's programs.
+      const ref = (k, v, program) => {
+        if (isObj(offers[v])) { if (offers[v].held) err(`${q}.${k}: ${v} is held`); return; }
+        if (program && isObj(programs[v])) { if (!(pg || []).includes(v)) err(`${q}.${k}: program ${v} is not in ${p}.programs`); return; }
+        err(`${q}.${k}: ${v} is not an offer${program ? ' or a program' : ''}`);
+      };
+      if (!isStr(s.lead)) err(`${q}.lead must name an offer`); else ref('lead', s.lead, false);
+      if (s.alt !== undefined) { ref('alt', s.alt, false); if (s.alt === s.lead) err(`${q}.alt repeats the lead`); }
+      if (s.live !== undefined) ref('live', s.live, false);
+      for (const k of ['with', 'then']) if (s[k] !== undefined) { if (!Array.isArray(s[k]) || !s[k].length) err(`${q}.${k} must be a non-empty list`); else s[k].forEach((v) => ref(k, v, true)); }
+      // Every start is already in the door's panel lists; what it runs as is the door's own.
+      for (const [k, v] of [['lead', s.lead], ['alt', s.alt], ...(s.with || []).map((v) => ['with', v])]) if (isObj(offers[v]) && !listed.has(v)) err(`${q}.${k}: ${oname(v)} is in none of ${p}'s service families, packages or programs, so its panel does not list it`);
+      for (const v of s.then || []) if (isObj(offers[v]) && !runs.has(v)) err(`${q}.then: ${oname(v)} is neither a package of ${p} nor run by one of its programs`);
+      // Overlaps, over what is recommended together: the lead (or its alternative) with `with` and `then`.
+      const sets = [[s.lead, ...(s.with || []), ...(s.then || [])]];
+      if (s.alt !== undefined) sets.push([s.alt, ...(s.with || []), ...(s.then || [])]);
+      for (const set of sets) {
+        if (set.includes(OV.soc2) && set.includes(OV.iso)) err(`${q}: never ${oname(OV.soc2)} with ${oname(OV.iso)}; make one the alternative`);
+        if ((set.includes(OV.soc2) || set.includes(OV.iso)) && set.includes(OV.ira)) err(`${q}: no standalone ${oname(OV.ira)} beside ${oname(OV.soc2)} or ${oname(OV.iso)}, which carry one`);
+        const flat = set.flatMap((v) => [v, ...(offers[v]?.contains || [])]);
+        const twice = [...new Set(flat.filter((v, i) => flat.indexOf(v) !== i))];
+        if (twice.length) err(`${q}: ${twice.map(oname).join(', ')} would be bought twice (a package already carries it)`);
+        vcpOrder(q, set);
+      }
+      // Incident Response Fast Start carries standing command; a live incident is a different offer.
+      if (s.live !== undefined && (s.live === OV.irfs || offers[s.live]?.kind === 'package' || (offers[OV.irfs]?.contains || []).includes(s.live))) err(`${q}.live: live incident command is ${oname(OV.live)}, never a package or anything ${oname(OV.irfs)} carries`);
+      if ((s.lead === OV.irfs || s.alt === OV.irfs) && s.live !== OV.live) err(`${q}: ${oname(OV.irfs)} is not live incident command, so live must name ${oname(OV.live)}`);
+      // The tower ring: stage ids, none for the early start.
+      if (!Array.isArray(s.ring)) err(`${q}.ring must be a list of stage ids`);
+      else {
+        for (const r of s.ring) if (!stageIds.has(r)) err(`${q}.ring: unknown stage ${r}`); else if (!(d.maturityEmphasis || []).includes(r)) warn(`${q}.ring: ${r} is not in ${p}.maturityEmphasis`);
+        if (!s.ring.length && key !== 'early') err(`${q}.ring: name the stage the tower lights`);
+      }
+      if (!isStr(s.source) || !isStr(s.status)) err(`${q} needs a source and a status`);
+      else if (!STATUSES.includes(s.status)) err(`${q}.status "${s.status}" is not one of ${STATUSES.join(', ')}`);
+    }
+    (d.triggers || []).forEach((t, i) => { if (!byTrigger.has(i)) err(`${p}.starts: no start for trigger ${i} ("${t}")`); });
+    if (!own(d.starts, 'early')) err(`${p}.starts: no early start, for a visitor nobody is asking yet`);
+  }
+
+  // Learn more: the allowlisted 3hue.net pages only.
+  const lm = m.site?.learnMore;
+  if (!isObj(lm)) err('site.learnMore must be {hosts, pages}');
+  else {
+    if (!Array.isArray(lm.hosts) || lm.hosts.length !== 1 || lm.hosts[0] !== LEARN_MORE_HOST) err(`site.learnMore.hosts must be ["${LEARN_MORE_HOST}"]`);
+    if (!Object.keys(pages).length) err('site.learnMore.pages must map a key to {url, label}');
+    for (const [k, pg] of Object.entries(pages)) {
+      const q = `site.learnMore.pages.${k}`;
+      if (!ID.test(k)) err(`${q}: a page key must match ^[a-z0-9-]+$`);
+      if (!isObj(pg)) { err(`${q} must be {url, label}`); continue; }
+      const why = learnMoreProblem(pg.url);
+      if (why) err(`${q}.url ${why}: ${pg.url}`);
+      if (!isStr(pg.label)) err(`${q}.label must be a non-empty string`); else priceFree(`${q}.label`, pg.label);
+    }
+  }
+  // The Snapshot is not a Builder item, so no visible manifest string offers it.
+  if (![...services.keys(), ...packages].some((n) => /\bSnapshot\b/.test(n))) for (const [p, s] of visibleStrings(m)) if (/\bSnapshot\b/.test(s)) err(`${p}: the Snapshot is not a Builder item (O15): ${s}`);
+  return { errors, warnings };
+}
+
+// Every Builder name the tour could type, for the tour lint's typed-name check: the manifest's offer
+// and program names, then everything else on the list (drafts included).
+export function builderTypedNames(m, b = builderNames()) {
+  const out = new Map();
+  for (const o of Object.values(isObj(m?.offers) ? m.offers : {})) if (isObj(o) && isStr(o.name)) out.set(o.name, 'Builder name');
+  for (const pr of Object.values(isObj(m?.programs) ? m.programs : {})) if (isObj(pr) && isStr(pr.name) && !out.has(pr.name)) out.set(pr.name, 'program name');
+  if (isObj(b)) {
+    for (const x of [...(b.services || []), ...(b.packages || [])]) if (isStr(x?.name) && !out.has(x.name)) out.set(x.name, 'Builder name');
+    for (const n of b.draft?.services || []) if (isStr(n) && !out.has(n)) out.set(n, 'draft Builder name');
+  }
+  return [...out];
 }
 
 // ---- content/tour.json: the guided-tour script, linted against the manifest it quotes ----
@@ -239,6 +490,7 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
     ...doors.map((d) => [d.icp, 'buyer label', 'i']),
     ...(m.stages || []).map((s) => [s.name, 'stage name', '']),
     ...gIds.map((id) => [m.guide.guides[id]?.name, 'guide name', '']),
+    ...builderTypedNames(m).map(([s, what]) => [s, what, '']),   // O15: {offer:<id>} and {program:<id>}
   ].filter(([s]) => isStr(s)).map(([s, what, flags]) => [s, what, nameRe(s, flags)]);
 
   // A visitor-readable template: tokens resolve (for every door when `@` is used) and bring in no

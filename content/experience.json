@@ -16,6 +16,26 @@
       "width": 240,
       "height": 94,
       "alt": "3HUE Executive Consulting"
+    },
+    "learnMore": {
+      "hosts": ["3hue.net"],
+      "pages": {
+        "about": { "url": "https://3hue.net/about.html", "label": "About 3HUE" },
+        "contact": { "url": "https://3hue.net/contact.html", "label": "Contact" },
+        "security-compliance": { "url": "https://3hue.net/services/security-compliance-services.html", "label": "SOC 2 Type II Readiness" },
+        "isg-programs": { "url": "https://3hue.net/services/isg-managed-programs.html", "label": "Audit-Ready Security Program" },
+        "operations": { "url": "https://3hue.net/services/continuous-risk-management.html", "label": "Managed Security Operations (OPS)" },
+        "cirp": { "url": "https://3hue.net/services/cyber-incident-response-program.html", "label": "Cyber-Incident Response Program" },
+        "risk-posture": { "url": "https://3hue.net/services/risk-posture-assessment.html", "label": "Risk Posture Assessment" },
+        "cloudsignals": { "url": "https://3hue.net/services/cloudsignals-riskops.html", "label": "CloudSignals+ RiskOps" },
+        "frameworks": { "url": "https://3hue.net/frameworks/framework-library.html", "label": "Framework Library" },
+        "saas": { "url": "https://3hue.net/industries/saas.html", "label": "SaaS & Digital Products" },
+        "private-equity": { "url": "https://3hue.net/industries/private-equity-family-offices.html", "label": "Private Equity & Family Offices" },
+        "financial-services": { "url": "https://3hue.net/industries/financial-services.html", "label": "Financial Services" },
+        "transit-story": { "url": "https://3hue.net/customer-stories/transit-technologies.html", "label": "Customer story: Transit Technologies" },
+        "bank-story": { "url": "https://3hue.net/customer-stories/large-north-american-bank.html", "label": "Customer story: a large North American bank" },
+        "ai-governance": { "url": "https://3hue.net/ai-advisory/ai-governance.html", "label": "AI Governance" }
+      }
     }
   },
   "plate": {
@@ -89,6 +109,10 @@
     "next": "Next stage",
     "prev": "Previous stage",
     "whereToStart": "Where to start",
+    "packages": "Ready-made bundles",
+    "starts": "Where you'd start",
+    "programs": "Programs that run it",
+    "learnMore": "Learn more on 3hue.net",
     "endWalk": "End walk",
     "openLobby": "Open the 3HUE lobby",
     "stagesGroup": "Maturity stages",
@@ -190,7 +214,7 @@
     "Founder-delivered"
   ],
   "arc": [
-    "Snapshot",
+    "Scope",
     "Build",
     "Operate"
   ],
@@ -234,7 +258,7 @@
       },
       "serviceFamilies": [
         {
-          "name": "Risk assessment and risk management",
+          "name": "Risk Assessment & Risk Management",
           "examples": [
             "Initial Risk Assessment",
             "Periodic Controls Gap Assessment",
@@ -242,30 +266,38 @@
           ]
         },
         {
-          "name": "Information security program and governance",
+          "name": "Information Security Program & Governance",
           "examples": [
             "Written IS Policies & Standards",
-            "CISO Support",
             "RFP Response Services",
-            "Security Terms & Conditions Contract Reviews"
+            "Security Terms & Conditions Contract Reviews",
+            "Management Review Facilitation"
           ]
         },
         {
-          "name": "Privacy management and data protection",
-          "examples": [
-            "Privacy Program Maturity & Risk Assessment",
-            "ISO 27701 PIMS Readiness & Implementation",
-            "AI Governance & Privacy Advisory"
-          ]
-        },
-        {
-          "name": "ISMS, SSPP, and statement of applicability",
+          "name": "ISMS, SSPP & Statement of Applicability",
           "examples": [
             "ISMS Scope & SoA Development",
             "System Security & Privacy Plan (SSPP) Development"
           ]
+        },
+        {
+          "name": "Privacy Management & Data Protection",
+          "examples": [
+            "AI Governance & Privacy Advisory",
+            "Privacy Program Maturity & Risk Assessment",
+            "ISO 27701 PIMS Readiness & Implementation"
+          ]
         }
       ],
+      "packages": ["soc-2-readiness", "iso-27001-readiness", "iso-27701-readiness"],
+      "programs": ["isp", "rmp"],
+      "starts": {
+        "deal": { "trigger": 0, "lead": "soc-2-readiness", "alt": "iso-27001-readiness", "then": ["managed-isp"], "ring": ["assess", "strengthen"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
+        "evidence": { "trigger": 1, "lead": "initial-risk-assessment", "with": ["rfp-response"], "then": ["managed-isp"], "ring": ["assess"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
+        "ai": { "trigger": 2, "lead": "ai-governance-advisory", "with": ["initial-risk-assessment"], "then": ["managed-isp"], "ring": ["strengthen"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
+        "early": { "trigger": null, "lead": "initial-risk-assessment", "ring": [], "source": "3HUE service catalog, September 2026; The Forcing Function §05, who to decline", "status": "proposed" }
+      },
       "proof": [
         {
           "text": "No formal security program, then SOC 2 Type I with zero findings and multi-entity SOC 2 Type II across a software portfolio.",
@@ -274,11 +306,11 @@
         }
       ],
       "program": {
-        "snapshot": "A Snapshot scoped to the actual obligation, so you know what the contract requires and what it does not.",
+        "start": "A first step scoped to the actual obligation, so you know what the contract requires and what it does not.",
         "build": "A readiness program with continuous evidence on AiVRIC.",
         "operate": "A managed program with questionnaire ownership and auditor management, so the engineering team goes back to shipping.",
         "source": "The Forcing Function \u00a702, What 3HUE sells them",
-        "status": "approved-copy"
+        "status": "adapted"
       },
       "stations": [
         "urgency",
@@ -338,15 +370,23 @@
       },
       "serviceFamilies": [
         {
-          "name": "Digital maturity paradigm assessments",
-          "examples": []
+          "name": "Risk Assessment & Risk Management",
+          "examples": [
+            "Initial Risk Assessment",
+            "Annual Risk Assessment Update",
+            "Risk Committee Posture Update",
+            "Manage Risk Register & POA&M"
+          ]
         },
         {
-          "name": "Managed enterprise architecture programs",
-          "examples": []
+          "name": "Managed GRC Programs",
+          "examples": [
+            "Managed Risk Management Program",
+            "Managed Information Security & Privacy Management"
+          ]
         },
         {
-          "name": "Vendor and third-party risk management",
+          "name": "Vendor & Third-Party Risk Management",
           "examples": [
             "Managed Vendor Compliance Program (VCP)",
             "Asset Governance Program Development",
@@ -354,14 +394,21 @@
           ]
         },
         {
-          "name": "Board and investor performance reporting",
+          "name": "Information Security Program & Governance",
           "examples": [
             "BOD / Investor Performance Reporting",
-            "Risk Committee Posture Update",
             "Security Data Analytics & Reporting Development"
           ]
         }
       ],
+      "packages": [],
+      "programs": ["rmp", "vcp", "vciso"],
+      "starts": {
+        "acquisition": { "trigger": 0, "lead": "initial-risk-assessment", "then": ["managed-rmp"], "ring": ["assess"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
+        "reporting": { "trigger": 1, "lead": "bod-reporting", "with": ["risk-committee-update"], "then": ["managed-rmp"], "ring": ["advance"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
+        "control": { "trigger": 2, "lead": "managed-rmp", "with": ["managed-vcp", "vciso"], "ring": ["operate"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
+        "early": { "trigger": null, "lead": "initial-risk-assessment", "ring": [], "source": "3HUE service catalog, September 2026; The Forcing Function §05, who to decline", "status": "proposed" }
+      },
       "proof": [
         {
           "text": "1,000+ systems certified under one scalable assessment framework.",
@@ -370,7 +417,7 @@
         }
       ],
       "program": {
-        "snapshot": "A diligence-grade assessment per acquisition.",
+        "start": "A diligence-grade assessment per acquisition.",
         "build": "One control set applied across every operating company, isolated per entity.",
         "operate": "Quarterly board- and investment-committee-ready reporting, with the fund seeing one view.",
         "source": "The Forcing Function \u00a702, What 3HUE sells them",
@@ -434,7 +481,16 @@
       },
       "serviceFamilies": [
         {
-          "name": "Cyber incident response programs",
+          "name": "Risk Assessment & Risk Management",
+          "examples": [
+            "Periodic Controls Gap Assessment",
+            "Manage Risk Register & POA&M",
+            "Operational Risk Analysis & Update",
+            "Business Impact Assessment & Analysis"
+          ]
+        },
+        {
+          "name": "Cyber Incident Response Program",
           "examples": [
             "Cyber-Incident Response Plan Development",
             "IR Playbook Development",
@@ -443,28 +499,31 @@
           ]
         },
         {
-          "name": "Business continuity and operational resilience",
+          "name": "Business Continuity & Operational Resilience",
           "examples": [
             "Business Continuity Plan Development",
+            "BCP Review & Updates",
             "Operational Resilience Program Development"
           ]
         },
         {
-          "name": "Managed detection and response",
-          "examples": [
-            "Managed Detection & Response \u2014 Complete",
-            "MXDR Starter"
-          ]
-        },
-        {
-          "name": "Privacy management and data protection",
+          "name": "Privacy Management & Data Protection",
           "examples": [
             "Managed Privacy Program",
+            "Data Protection Impact Assessment (DPIA)",
             "Regulator Liaison & DSAR Escalation Support",
-            "Data Protection Impact Assessment (DPIA)"
+            "AI Governance & Privacy Advisory"
           ]
         }
       ],
+      "packages": ["ir-fast-start", "privacy-leadership-launch", "mxdr-complete", "pci-dss-readiness"],
+      "programs": ["rmp", "cirp", "soc"],
+      "starts": {
+        "exam": { "trigger": 0, "lead": "controls-gap-assessment", "with": ["risk-register-poam"], "then": ["managed-rmp"], "ring": ["operate"], "source": "3HUE service catalog, September 2026; The Forcing Function \u00a704, trigger events", "status": "proposed" },
+        "incident": { "trigger": 1, "lead": "ir-fast-start", "with": ["bcp-development"], "live": "incident-command", "then": ["managed-cirp", "mxdr-complete"], "ring": ["strengthen"], "source": "3HUE service catalog, September 2026; The Forcing Function \u00a704, trigger events", "status": "proposed" },
+        "crossing": { "trigger": 2, "lead": "privacy-leadership-launch", "with": ["ai-governance-advisory"], "ring": ["strengthen"], "source": "3HUE service catalog, September 2026; The Forcing Function \u00a704, trigger events", "status": "proposed" },
+        "early": { "trigger": null, "lead": "controls-gap-assessment", "ring": [], "source": "3HUE service catalog, September 2026; The Forcing Function \u00a705, who to decline", "status": "proposed" }
+      },
       "proof": [
         {
           "text": "Engagements are scoped and delivered by the same practitioner, whose background includes closing FDA 483 observations and remediating bank Matters Requiring Attention under sustained examination.",
@@ -473,7 +532,7 @@
         }
       ],
       "program": {
-        "snapshot": "Named framework crosswalks in the examiner's language: NIST CSF and 800-53/171 as the spine, mapped to ISO 27001, COBIT, FFIEC, and SOC 2.",
+        "start": "Named framework crosswalks in the examiner's language: NIST CSF and 800-53/171 as the spine, mapped to ISO 27001, COBIT, FFIEC, and SOC 2.",
         "build": "Continuous controls monitoring that replaces point-in-time testing.",
         "operate": "Remediation that closes findings and keeps them closed, with board-ready risk translation.",
         "source": "The Forcing Function \u00a702, What 3HUE sells them",
@@ -503,15 +562,94 @@
     "title": "The maturity path",
     "intro": "Four stages, one route. Each door emphasises the stages its buyers need first.",
     "whereToStart": {
-      "lead": "Every path starts with a Snapshot: a 10-business-day diagnostic scoped to the obligation in front of you.",
-      "source": "3hue.net published offer (AI Risk & Readiness Snapshot in 10 business days); The Forcing Function \u00a702",
-      "status": "substantiated"
+      "lead": "Each door has its own first step, scoped to the obligation in front of you.",
+      "source": "3HUE service catalog, September 2026; The Forcing Function \u00a702",
+      "status": "proposed"
     },
     "share": {
       "title": "The maturity path \u00b7 3HUE",
       "description": "Assess, Strengthen, Operate, Advance. One route through three doors.",
       "card": "media/share/path.jpg"
     }
+  },
+  "offers": {
+    "soc-2-readiness": { "name": "SOC 2 Readiness", "kind": "package", "summary": { "text": "What a first-time SOC 2 Type II candidate needs: policies, a risk assessment, an incident response plan and audit support.", "source": "3HUE service catalog, September 2026", "status": "adapted" }, "contains": ["written-policies", "initial-risk-assessment", "ir-plan", "audit-support"], "provenance": "Contents inferred from the Builder's package description and service count; the capture lists no item names. The observed first-year total reconciles only with a policy tier and hour count the capture does not record.", "learnMore": "security-compliance" },
+    "iso-27001-readiness": { "name": "ISO 27001 Certification Readiness", "kind": "package", "summary": { "text": "ISMS scope and Statement of Applicability, a policy library, a risk assessment and management review facilitation, on the path to certification.", "source": "3HUE service catalog, September 2026", "status": "adapted" }, "contains": ["isms-scope-soa-development", "written-policies", "initial-risk-assessment", "management-review-facilitation"], "provenance": "Contents inferred from the Builder's package description and service count; the capture lists no item names. The observed first-year total reconciles only with a policy tier the capture does not record." },
+    "iso-27701-readiness": { "name": "ISO 27701 Privacy Readiness", "kind": "package", "summary": { "text": "A PIMS gap analysis, a privacy program CONOPS, data mapping and a DPIA: the certification-track privacy bundle.", "source": "3HUE service catalog, September 2026", "status": "adapted" }, "contains": ["iso-27701-pims-readiness-implementation", "privacy-program-conops-development", "data-mapping-data-inventory", "data-protection-impact-assessment-dpia"], "provenance": "Contents inferred from the Builder's package description and service count; the capture lists no item names. These items' observed prices add up to the observed first-year total." },
+    "pci-dss-readiness": { "name": "PCI-DSS Readiness", "kind": "package", "summary": { "text": "A controls gap assessment, a policy library, a vulnerability management program and scanner tuning, for PCI scope.", "source": "3HUE service catalog, September 2026", "status": "adapted" }, "contains": ["controls-gap-assessment", "written-policies", "vulnerability-management-program-development", "vulnerability-scanning-config-tuning"], "provenance": "Contents inferred from the Builder's package description and service count; the capture lists no item names. The observed first-year total reconciles only with a policy tier and hour counts the capture does not record." },
+    "ir-fast-start": { "name": "Incident Response Fast Start", "kind": "package", "summary": { "text": "Incident response capability in one engagement: a plan, playbooks, a tabletop exercise and standing incident command.", "source": "3HUE service catalog, September 2026", "status": "adapted" }, "contains": ["ir-plan", "ir-playbook", "ir-ttx", "ir-ops-command"], "provenance": "Contents inferred from the Builder's package description and service count; the capture lists no item names. These items' observed prices add up to the observed first-year total. Its standing command is Cyber-IR Operations Command, not live incident command.", "learnMore": "cirp" },
+    "privacy-leadership-launch": { "name": "Privacy Leadership Launch", "kind": "package", "summary": { "text": "A maturity assessment to set the baseline, then CPO-as-a-Service and a managed program to run it.", "source": "3HUE service catalog, September 2026", "status": "adapted" }, "contains": ["privacy-maturity", "cpo-service", "managed-privacy"], "provenance": "Contents inferred from the Builder's package description and service count; the capture lists no item names. These items' observed prices add up to the observed first-year and contract totals." },
+    "mxdr-complete": { "name": "MXDR Complete Protection", "kind": "package", "summary": { "text": "Full-platform XDR with SIEM retention and annual endpoint controls validation.", "source": "3HUE service catalog, September 2026", "status": "adapted" }, "contains": ["mxdr-starter", "mxdr-siem-add-on", "managed-security-controls-validation-for-endpoints"], "provenance": "Contents inferred from the Builder's package description and service count; the capture lists no item names. These items' observed per-node prices add up to the observed first-year total at a whole number of nodes.", "learnMore": "operations" },
+    "initial-risk-assessment": { "name": "Initial Risk Assessment", "kind": "service", "category": "Risk Assessment & Risk Management", "learnMore": "risk-posture" },
+    "annual-risk-update": { "name": "Annual Risk Assessment Update", "kind": "service", "category": "Risk Assessment & Risk Management" },
+    "controls-gap-assessment": { "name": "Periodic Controls Gap Assessment", "kind": "service", "category": "Risk Assessment & Risk Management" },
+    "risk-committee-update": { "name": "Risk Committee Posture Update", "kind": "service", "category": "Risk Assessment & Risk Management" },
+    "risk-management-program-conops-development": { "name": "Risk Management Program (CONOPS) Development", "kind": "service", "category": "Risk Assessment & Risk Management" },
+    "rmp-review": { "name": "RMP CONOPS Review & Update", "kind": "service", "category": "Risk Assessment & Risk Management" },
+    "risk-register-poam": { "name": "Manage Risk Register & POA&M", "kind": "service", "category": "Risk Assessment & Risk Management" },
+    "cyber-risk-advisory": { "name": "Cyber-Risk Advisory", "kind": "service", "category": "Risk Assessment & Risk Management" },
+    "operational-risk-analysis-update": { "name": "Operational Risk Analysis & Update", "kind": "service", "category": "Risk Assessment & Risk Management" },
+    "business-impact-assessment-analysis": { "name": "Business Impact Assessment & Analysis", "kind": "service", "category": "Risk Assessment & Risk Management" },
+    "cyber-ir-program-conops-development": { "name": "Cyber-IR Program (CONOPS) Development", "kind": "service", "category": "Cyber Incident Response Program" },
+    "ir-plan": { "name": "Cyber-Incident Response Plan Development", "kind": "service", "category": "Cyber Incident Response Program" },
+    "cirp-review": { "name": "CIRP Review & Update", "kind": "service", "category": "Cyber Incident Response Program" },
+    "ir-playbook": { "name": "IR Playbook Development", "kind": "service", "category": "Cyber Incident Response Program" },
+    "ir-ttx": { "name": "Cyber-IR Tabletop Exercise (TTX)", "kind": "service", "category": "Cyber Incident Response Program" },
+    "ir-ops-command": { "name": "Cyber-IR Operations Command", "kind": "service", "category": "Cyber Incident Response Program" },
+    "written-policies": { "name": "Written IS Policies & Standards", "kind": "service", "category": "Information Security Program & Governance" },
+    "is-program-conops-development": { "name": "IS Program (CONOPS) Development", "kind": "service", "category": "Information Security Program & Governance" },
+    "is-program-review": { "name": "IS Program CONOPS Review & Update", "kind": "service", "category": "Information Security Program & Governance" },
+    "ciso-support": { "name": "CISO Support", "kind": "service", "category": "Information Security Program & Governance" },
+    "bod-reporting": { "name": "BOD / Investor Performance Reporting", "kind": "service", "category": "Information Security Program & Governance" },
+    "management-review-facilitation": { "name": "Management Review Facilitation", "kind": "service", "category": "Information Security Program & Governance" },
+    "security-analytics": { "name": "Security Data Analytics & Reporting Development", "kind": "service", "category": "Information Security Program & Governance" },
+    "contract-reviews": { "name": "Security Terms & Conditions Contract Reviews", "kind": "service", "category": "Information Security Program & Governance" },
+    "rfp-response": { "name": "RFP Response Services", "kind": "service", "category": "Information Security Program & Governance" },
+    "cpo-service": { "name": "CPO-as-a-Service", "kind": "service", "category": "Privacy Management & Data Protection" },
+    "privacy-program-conops-development": { "name": "Privacy Program (CONOPS) Development", "kind": "service", "category": "Privacy Management & Data Protection" },
+    "privacy-maturity": { "name": "Privacy Program Maturity & Risk Assessment", "kind": "service", "category": "Privacy Management & Data Protection" },
+    "iso-27701-pims-readiness-implementation": { "name": "ISO 27701 PIMS Readiness & Implementation", "kind": "service", "category": "Privacy Management & Data Protection" },
+    "data-mapping-data-inventory": { "name": "Data Mapping & Data Inventory", "kind": "service", "category": "Privacy Management & Data Protection" },
+    "data-protection-impact-assessment-dpia": { "name": "Data Protection Impact Assessment (DPIA)", "kind": "service", "category": "Privacy Management & Data Protection" },
+    "managed-privacy": { "name": "Managed Privacy Program", "kind": "service", "category": "Privacy Management & Data Protection" },
+    "regulator-liaison-dsar-escalation-support": { "name": "Regulator Liaison & DSAR Escalation Support", "kind": "service", "category": "Privacy Management & Data Protection" },
+    "ai-governance-advisory": { "name": "AI Governance & Privacy Advisory", "kind": "service", "category": "Privacy Management & Data Protection", "learnMore": "ai-governance" },
+    "isms-scope-soa-development": { "name": "ISMS Scope & SoA Development", "kind": "service", "category": "ISMS, SSPP & Statement of Applicability" },
+    "soa-review": { "name": "SoA Review & Update", "kind": "service", "category": "ISMS, SSPP & Statement of Applicability" },
+    "system-security-privacy-plan-sspp-development": { "name": "System Security & Privacy Plan (SSPP) Development", "kind": "service", "category": "ISMS, SSPP & Statement of Applicability" },
+    "bcp-development": { "name": "Business Continuity Plan Development", "kind": "service", "category": "Business Continuity & Operational Resilience" },
+    "bcp-review": { "name": "BCP Review & Updates", "kind": "service", "category": "Business Continuity & Operational Resilience" },
+    "operational-resilience-program-development": { "name": "Operational Resilience Program Development", "kind": "service", "category": "Business Continuity & Operational Resilience" },
+    "asset-governance-program-development": { "name": "Asset Governance Program Development", "kind": "service", "category": "Vendor & Third-Party Risk Management" },
+    "audit-support": { "name": "Audit Support & Liaison Services", "kind": "service", "category": "Vendor & Third-Party Risk Management" },
+    "managed-vcp": { "name": "Managed Vendor Compliance Program (VCP)", "kind": "service", "category": "Vendor & Third-Party Risk Management" },
+    "vcp-additional-vendor-monitoring-5-vendor-block": { "name": "VCP \u2014 Additional Vendor Monitoring (5-Vendor Block)", "kind": "service", "category": "Vendor & Third-Party Risk Management" },
+    "security-engineering": { "name": "Security Engineering Services", "kind": "service", "category": "Security Engineering & Architecture" },
+    "security-architecture-reviews": { "name": "Security Architecture Reviews", "kind": "service", "category": "Security Engineering & Architecture" },
+    "secure-sdlc-program-development": { "name": "Secure SDLC Program Development", "kind": "service", "category": "Security Engineering & Architecture" },
+    "vulnerability-scanning-config-tuning": { "name": "Vulnerability Scanning Config & Tuning", "kind": "service", "category": "Security Engineering & Architecture" },
+    "vulnerability-management-program-development": { "name": "Vulnerability Management Program Development", "kind": "service", "category": "Security Engineering & Architecture" },
+    "managed-isp": { "name": "Managed Information Security & Privacy Management", "kind": "service", "category": "Managed GRC Programs" },
+    "managed-rmp": { "name": "Managed Risk Management Program", "kind": "service", "category": "Managed GRC Programs" },
+    "managed-cirp": { "name": "Managed Cyber-Incident Response Program", "kind": "service", "category": "Managed GRC Programs" },
+    "managed-detection-response-complete": { "name": "Managed Detection & Response \u2014 Complete", "kind": "service", "category": "Managed Detection & Response (MDR / MXDR)" },
+    "mxdr-starter": { "name": "MXDR Starter", "kind": "service", "category": "Managed Detection & Response (MDR / MXDR)" },
+    "mxdr-siem-add-on": { "name": "MXDR \u2014 SIEM Add-on", "kind": "service", "category": "Managed Detection & Response (MDR / MXDR)" },
+    "managed-security-controls-validation-for-endpoints": { "name": "Managed Security Controls Validation for Endpoints", "kind": "service", "category": "Managed Detection & Response (MDR / MXDR)" },
+    "aivric-cloudsignals-grcops-cspm-onboarding": { "name": "AiVRIC CloudSignals GRCOps & CSPM Onboarding", "kind": "service", "category": "Technology Platform Deployment & Integration" },
+    "m365-modern-grc-system-deployment-maintenance": { "name": "M365 Modern GRC System Deployment & Maintenance", "kind": "service", "category": "Technology Platform Deployment & Integration" },
+    "incident-command": { "name": "Incident Command & Emergency Response Leadership", "kind": "service", "category": "Fractional Executive & Retainer Services" }
+  },
+  "programs": {
+    "isp": { "name": "Managed Information Security & Privacy Management", "category": "Information Security Program & Governance", "build": ["is-program-conops-development", "written-policies"], "run": ["managed-isp", "is-program-review"], "learnMore": "isg-programs", "source": "3HUE service catalog, September 2026; 3hue.net ISG managed programs", "status": "proposed" },
+    "rmp": { "name": "Managed Risk Management Program", "category": "Risk Assessment & Risk Management", "build": ["initial-risk-assessment", "risk-management-program-conops-development"], "run": ["managed-rmp", "risk-register-poam", "annual-risk-update", "rmp-review"], "learnMore": "isg-programs", "source": "3HUE service catalog, September 2026; 3hue.net ISG managed programs", "status": "proposed" },
+    "cirp": { "name": "Managed Cyber-Incident Response Program", "category": "Cyber Incident Response Program", "build": ["cyber-ir-program-conops-development", "ir-plan", "ir-playbook", "ir-ttx"], "run": ["managed-cirp", "ir-ops-command", "cirp-review"], "learnMore": "cirp", "source": "3HUE service catalog, September 2026; 3hue.net Cyber-Incident Response Program", "status": "proposed" },
+    "vcp": { "name": "Managed Vendor Compliance Program (VCP)", "category": "Vendor & Third-Party Risk Management", "build": [], "run": ["managed-vcp", "vcp-additional-vendor-monitoring-5-vendor-block"], "learnMore": "isg-programs", "source": "3HUE service catalog, September 2026; 3hue.net ISG managed programs", "status": "proposed" },
+    "vciso": { "name": "Virtual CISO \u2014 Support", "category": "Fractional Executive & Retainer Services", "build": [], "run": ["ciso-support"], "learnMore": "isg-programs", "held": true, "provenance": "Held: the Builder shows Virtual CISO \u2014 Support and Virtual CISO \u2014 Fractional as [Confirm price]; CISO Support is available. Which one the site names is the owner's call.", "source": "3HUE service catalog, September 2026; 3hue.net ISG managed programs", "status": "proposed" },
+    "sea": { "name": "Security Engineering Services", "category": "Security Engineering & Architecture", "build": ["security-architecture-reviews", "secure-sdlc-program-development", "vulnerability-management-program-development"], "run": ["security-engineering", "vulnerability-scanning-config-tuning"], "learnMore": "isg-programs", "provenance": "No 3hue.net page on the allowlist covers Security Engineering & Architecture; the ISG managed programs page stands in.", "source": "3HUE service catalog, September 2026", "status": "proposed" },
+    "soc": { "name": "Managed Detection & Response \u2014 Complete", "category": "Managed Detection & Response (MDR / MXDR)", "build": [], "run": ["managed-detection-response-complete", "mxdr-starter", "mxdr-siem-add-on", "managed-security-controls-validation-for-endpoints"], "learnMore": "operations", "source": "3HUE service catalog, September 2026; 3hue.net Managed Security Operations (OPS)", "status": "proposed" },
+    "grc": { "name": "AiVRIC CloudSignals GRCOps & CSPM Onboarding", "category": "Technology Platform Deployment & Integration", "build": ["aivric-cloudsignals-grcops-cspm-onboarding", "m365-modern-grc-system-deployment-maintenance"], "run": [], "learnMore": "cloudsignals", "source": "3HUE service catalog, September 2026; 3hue.net CloudSignals+ RiskOps", "status": "proposed" },
+    "scs": { "name": null, "category": null, "build": [], "run": [], "learnMore": "security-compliance", "held": true, "provenance": "The owner's Security Compliance Services program (3hue.net SOC 2 Type II Readiness page). The 2026-09-09 Builder capture has no such item, so it has no name here and cannot be shown or voiced." }
   },
   "kiosk": {
     "header": "AiVRIC intelligence layer",
@@ -658,6 +796,14 @@
     {
       "id": "catalog",
       "ref": "3Hue-Market-Intel@f04c0b4:docs/discovery/solution-builder-catalog-2026-09-09/catalog.json"
+    },
+    {
+      "id": "builder-packages",
+      "ref": "3Hue-Market-Intel@f04c0b4:docs/discovery/solution-builder-catalog-2026-09-09/packages.md"
+    },
+    {
+      "id": "builder-names",
+      "ref": "content/builder-names.json (names only, generated by tools/builder-names.mjs from the two files above, capture 2026-09-09)"
     },
     {
       "id": "lobby-content",

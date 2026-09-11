@@ -222,7 +222,7 @@ test.describe('tour manifest (no browser)', () => {
       ['a percentage typed in', say('Most teams cut prep by 60% or more.'), /figure "60%" typed/],
       ['a spelled-out percentage', say('Sixty-one percent were required to certify.'), /figure .* typed/],
       ['a spelled-out duration', say('The Snapshot answers them in ten business days.'), /figure "ten business days" typed/],
-      ['a figure brought in by a token', say('{ref:path.whereToStart}'), /figure .* enters through \{ref:path\.whereToStart\}/],
+      ['a figure brought in by a token', say('{ref:doors.win-trust.stat}'), /figure .* enters through \{ref:doors\.win-trust\.stat\}/],
       ['an unknown token', say('{price:snapshot}'), /unknown token \{price:snapshot\}/],
       ['a token that does not resolve', say('{door:win-trust.nope}'), /\{door:win-trust\.nope\} does not resolve/],
       ['a text line with no source', (t) => t.nodes.arrive.lines.push({ id: 'probe', text: '{str:legend}' }), /needs a source and a status/],
@@ -324,7 +324,7 @@ test.describe('tour manifest (no browser)', () => {
   test('T-03 refs resolve with the source and status printed beside them; tokens fill from the manifest; @ follows the door', () => {
     const [wt, gc, sr] = m.doors;
     expect(resolveRef(m, 'doors.win-trust.stat')).toEqual({ text: wt.stat.text, source: wt.stat.source, status: wt.stat.status, path: 'doors.win-trust.stat' });
-    expect(resolveRef(m, 'doors.win-trust.program.snapshot')).toMatchObject({ text: wt.program.snapshot, source: wt.program.source, status: wt.program.status });
+    expect(resolveRef(m, 'doors.win-trust.program.start')).toMatchObject({ text: wt.program.start, source: wt.program.source, status: wt.program.status });
     expect(resolveRef(m, 'doors.gain-control.proof[0]')).toMatchObject({ text: gc.proof[0].text, source: gc.proof[0].basis, status: gc.proof[0].status, path: 'doors.gain-control.proof.0' });
     expect(resolveRef(m, 'doors.win-trust.triggers.0')).toMatchObject({ text: wt.triggers[0], source: null, status: null });
     expect(resolveRef(m, 'path.whereToStart')).toMatchObject({ text: m.path.whereToStart.lead, source: m.path.whereToStart.source });
