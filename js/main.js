@@ -1,17 +1,17 @@
 // Boot: manifests → plate → stage → doors/labels/hud → panel/path/walk → router.
-import { loadContent, getManifest, getGeometry, getParams, str } from './content.js?v=2026-09-10c';
-import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden } from './stage.js?v=2026-09-10c';
-import { buildDoors, setCurrent, hideDoors, showDoors, doorElement, pathElement, firstDoorElement } from './hotspots.js?v=2026-09-10c';
-import { buildLabels, headingElement } from './labels.js?v=2026-09-10c';
-import { buildHud, rowElement, walkButton } from './hud.js?v=2026-09-10c';
-import { parse, go, back, onRoute, currentRoute } from './router.js?v=2026-09-10c';
-import { initDebug } from './debug.js?v=2026-09-10c';
-import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStation, showStationChips } from './panel.js?v=2026-09-10c';
-import { pushLayer, popLayer, resetLayers } from './focus.js?v=2026-09-10c';
-import { lightStage, clearArcs, buildArcs } from './path.js?v=2026-09-10c';
-import { initKiosk, placeKiosk } from './kiosk.js?v=2026-09-10c';
-import { initWalk, startWalk, endWalk, isWalking, walkStep } from './walk.js?v=2026-09-10c';
-import { initRooms, roomFor, showRoomPins, clearRoomPins, probeFormats } from './rooms.js?v=2026-09-10c';
+import { loadContent, getManifest, getGeometry, getParams, str, reducedMotion } from './content.js?v=2026-09-10d';
+import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden, panRoom } from './stage.js?v=2026-09-10d';
+import { buildDoors, setCurrent, hideDoors, showDoors, doorElement, pathElement, firstDoorElement } from './hotspots.js?v=2026-09-10d';
+import { buildLabels, headingElement } from './labels.js?v=2026-09-10d';
+import { buildHud, rowElement, walkButton } from './hud.js?v=2026-09-10d';
+import { parse, go, back, onRoute, currentRoute } from './router.js?v=2026-09-10d';
+import { initDebug } from './debug.js?v=2026-09-10d';
+import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStation, showStationChips } from './panel.js?v=2026-09-10d';
+import { pushLayer, popLayer, resetLayers, setOpener } from './focus.js?v=2026-09-10d';
+import { lightStage, clearArcs, buildArcs } from './path.js?v=2026-09-10d';
+import { initKiosk, placeKiosk } from './kiosk.js?v=2026-09-10d';
+import { initWalk, startWalk, endWalk, isWalking, walkStep } from './walk.js?v=2026-09-10d';
+import { initRooms, roomFor, showRoomPins, clearRoomPins, probeFormats } from './rooms.js?v=2026-09-10d';
 
 const plateEl = document.getElementById('plate');
 const params = getParams();
@@ -50,7 +50,7 @@ async function main() {
   initKiosk();
   initRooms();
   const formats = probeFormats();
-  initWalk({ go, onEnd: () => go({ view: 'experience' }, { replace: true }) });
+  initWalk({ go, onEnd: () => back() });   // the walk pushed one entry; popping it lands on the lobby
   rest(false);
 
   const roomsOn = params.get('rooms') !== '0';
@@ -85,8 +85,10 @@ async function main() {
     setCurrent(null);
     rest(animate);
     placeKiosk();
-    if (!revealed) { revealed = true; scheduleDoorReveal({ settle: false }); }
-    else if (leaving) { hideDoors(); scheduleDoorReveal(); }
+    // Wait for the plate to settle only when it actually travels: a boot at rest or a reduced-motion
+    // close has nothing to wait for and would leave the doors hidden for the fallback timer.
+    if (!revealed) { revealed = true; scheduleDoorReveal({ settle: !!leaving && animate && !reducedMotion() }); }
+    else if (leaving) { hideDoors(); scheduleDoorReveal({ settle: animate && !reducedMotion() }); }
     else showDoors();
     document.title = m.site.title;
   }
@@ -105,21 +107,31 @@ async function main() {
     if (st.view === 'door') {
       const d = m.doors.find((x) => x.id === st.id);
       if (!d) { go({ view: 'experience' }, { replace: true }); return; }
-      const sameDoor = openDoor && openDoor.id === d.id;
-      openDoor = d;
+      const sameDoor = !!(openDoor && openDoor !== 'path' && openDoor.id === d.id);
+      const switching = !!(openDoor && openDoor !== 'path' && openDoor.id !== d.id);   // door-to-door tab switch: same layer
+      const fromPath = openDoor === 'path';
+      openDoor = d; revealed = true;
       clearArcs();
       hideDoors();
       setCurrent(d.id);
       setLayer(true, d.dock);
       const tgt = doorTarget(d);
       place({ ...tgt, z: g.layout.dolly.zoom, animate });
-      openDoorPanel(d, { station: st.station, sameDoor, onBack: () => back(), onTab: (id) => go({ view: 'door', id }), onStation: (s) => go({ view: 'door', id: d.id, station: s }) });
       const room = roomsOn ? roomFor(d) : null;
-      if (room && room.render) {
-        showRoom(room.render, room.focus, { animate, delay: animate ? 400 : 0 }).then((ok) => { if (ok && openDoor === d) showRoomPins(d, room, (s) => go({ view: 'door', id: d.id, station: s })); });
-      } else { hideRoom(animate); clearRoomPins(); }
-      if (st.station) setPanelStation(st.station, { room, animate });
-      if (!sameDoor) pushLayer({ id: 'door', opener: getState().composed ? rowElement(d.id) : doorElement(d.id), first: () => panelHeading(), onEscape: () => back() });
+      const onStation = (s) => go({ view: 'door', id: d.id, station: s });
+      // A resize on the open door only re-aims the camera and refits the room; the panel keeps its
+      // scroll position and focus. A station change on the open door keeps the room where it is.
+      const sameRender = sameDoor && getState().inRoom && room && document.getElementById('room-img').getAttribute('src') === room.render;
+      if (!(resize && sameDoor)) openDoorPanel(d, { station: st.station, sameDoor: sameDoor || switching, onBack: () => back(), onTab: (id) => go({ view: 'door', id }), onStation });
+      if (room && room.render && !(sameRender && !resize)) {
+        showRoom(room.render, room.focus, { animate: animate && !sameRender, delay: animate && !sameRender ? 400 : 0 }).then((ok) => { if (ok && openDoor === d) { showRoomPins(d, room, onStation); showStationChips(d, room.stations ? Object.keys(room.stations) : null, onStation); } });
+      } else if (!room || !room.render) { hideRoom(animate); clearRoomPins(); }
+      else if (sameRender) { panRoom(room.focus, 900); }
+      const stationEl = () => (st.station && document.getElementById(`st-${st.station}`)) || panelHeading();
+      if (!sameDoor && !switching) pushLayer({ id: 'door', opener: getState().composed ? rowElement(d.id) : doorElement(d.id), first: stationEl, onEscape: () => back() });
+      else if (switching || fromPath) setOpener(getState().composed ? rowElement(d.id) : doorElement(d.id));
+      // Scroll the station into the panel after the layer's own focus call (both run at timeout 0, in order).
+      if (st.station) setTimeout(() => setPanelStation(st.station, { room, animate: animate && (sameDoor || switching) }), 0);
       document.title = `${d.title} · ${m.site.name}`;
       document.documentElement.removeAttribute('data-lobby-boot');
       return;
@@ -127,22 +139,24 @@ async function main() {
 
     if (st.view === 'path') {
       const wasPath = openDoor === 'path';
-      openDoor = 'path';
+      const fromDoor = !!(openDoor && openDoor !== 'path');
+      openDoor = 'path'; revealed = true;
       clearRoomPins();
       hideRoom(animate);
       hideDoors();
       setCurrent('path');
       setLayer(true, 'left');
       place({ fx: g.tower[0], fy: g.tower[1] + 120, z: g.layout.dolly.zoom, animate });
-      openPathPanel({ stage: st.stage, samePanel: wasPath, onBack: () => back(), onDoor: (id) => go({ view: 'door', id }), onStage: (s) => go({ view: 'path', stage: s }) });
+      if (!(resize && wasPath)) openPathPanel({ stage: st.stage, samePanel: wasPath, onBack: () => back(), onDoor: (id) => go({ view: 'door', id }), onStage: (s) => go({ view: 'path', stage: s }) });
       lightStage(st.stage);
-      if (!wasPath) pushLayer({ id: 'path', opener: getState().composed ? rowElement('path') : pathElement(), first: () => panelHeading(), onEscape: () => back() });
+      if (!wasPath && !fromDoor) pushLayer({ id: 'path', opener: getState().composed ? rowElement('path') : pathElement(), first: () => panelHeading(), onEscape: () => back() });
+      else if (fromDoor) setOpener(getState().composed ? rowElement('path') : pathElement());
       document.title = `${m.path.title} · ${m.site.name}`;
       document.documentElement.removeAttribute('data-lobby-boot');
       return;
     }
 
-    if (st.view === 'walk') { walkStep(st.step, { animate, resize }); return; }
+    if (st.view === 'walk') { revealed = true; walkStep(st.step, { animate, resize }); return; }
   }
 
   onRoute((st, opts) => route(st, opts));

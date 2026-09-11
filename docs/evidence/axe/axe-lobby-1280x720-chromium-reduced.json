@@ -1,0 +1,13 @@
+{
+  "url": "http://127.0.0.1:8770/3hue-experience/?debug=1#/experience",
+  "viewport": "1280x720",
+  "project": "chromium-reduced",
+  "violations": [],
+  "incomplete": [
+    {
+      "id": "color-contrast",
+      "nodes": 12
+    }
+  ],
+  "passes": 21
+}

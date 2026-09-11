@@ -6,7 +6,7 @@
 // the plate always covers the whole stage. Composed viewports (phones, portrait, short) fit the
 // plate into the band the layout reserves for it, showing plate x 344.5..2514.8 so all three
 // doors are on screen.
-import { getGeometry, reducedMotion } from './content.js?v=2026-09-10c';
+import { getGeometry, reducedMotion } from './content.js?v=2026-09-10d';
 
 const stageEl = document.getElementById('stage');
 const plateEl = document.getElementById('plate');
@@ -57,8 +57,10 @@ export function frameRect() {
   const { vw, vh } = viewport();
   const hud = headerH();
   if (state.composed) {
+    // Band-local: the stage is positioned inside #floor-band when composed, so placement maths
+    // runs in the band's own coordinates. bandOffset() converts to viewport px.
     const b = bandRect();
-    const r = { x: 0, y: b.top, w: vw, h: b.h };
+    const r = { x: 0, y: 0, w: vw, h: b.h };
     r.cx = r.x + r.w / 2; r.cy = r.y + r.h / 2; return r;
   }
   const pw = state.layerOpen ? panelWidth() : 0;
@@ -72,6 +74,8 @@ export function bandRect() {
   const r = bandEl.getBoundingClientRect();
   return { top: r.top, left: r.left, w: r.width, h: r.height };
 }
+// Stage origin in viewport px: the band's corner when composed, 0,0 on the desktop.
+export function bandOffset() { if (!state.composed) return { x: 0, y: 0 }; const b = bandRect(); return { x: b.left, y: b.top }; }
 
 const g = () => getGeometry();
 
@@ -88,14 +92,16 @@ function computeRest() {
     let bandH = bw * pb.ratio;
     bandH = Math.min(bandH, vh * 0.6);
     const s = Math.min(bw / spanW, bandH / H);
-    bandEl.style.height = Math.round(H * s) + 'px';
+    // A custom property, not an inline height: the stylesheet shortens the band to the sheet when
+    // a layer is open, and an inline height would beat that rule.
+    bandEl.style.setProperty('--band-h', Math.round(H * s) + 'px');
     const cx = bw / 2;
     state.sRest = s;
     state.txRest = cx - (pb.left + spanW / 2) * s;
     state.tyRest = 0;
     return;
   }
-  bandEl.style.height = '';
+  bandEl.style.removeProperty('--band-h');
   const s = Math.max(vw / W, vh / H);
   const k = s * W / ref;
   state.sRest = s;
@@ -146,8 +152,8 @@ export function place({ fx, fy, z = 1, animate = true }) {
   apply(S, tx, ty, animate);
 }
 
-// Plate → screen.
-export function project(x, y) { return { x: state.tx + x * state.s, y: state.ty + y * state.s }; }
+// Plate → screen (viewport px, band offset included when composed).
+export function project(x, y) { const o = bandOffset(); return { x: o.x + state.tx + x * state.s, y: o.y + state.ty + y * state.s }; }
 export function projectRect([l, t, r, b]) { const a = project(l, t), c = project(r, b); return { left: a.x, top: a.y, right: c.x, bottom: c.y, width: c.x - a.x, height: c.y - a.y }; }
 
 export function setLayer(open, dock = 'right') { state.layerOpen = open; state.dock = dock; document.body.classList.toggle('layer-open', open); }
@@ -284,7 +290,7 @@ export function panRoom(focus, ms = 1200) {
   state.roomFit = { ...fit, Wr, Hr };
   return true;
 }
-export function roomToScreen(x, y) { const f = state.roomFit; return f ? { x: f.ox + x * f.s, y: f.oy + y * f.s } : null; }
+export function roomToScreen(x, y) { const f = state.roomFit; if (!f) return null; const o = bandOffset(); return { x: o.x + f.ox + x * f.s, y: o.y + f.oy + y * f.s }; }
 
 // ---- Resize ----
 let resizeT = 0; let onResize = null;

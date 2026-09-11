@@ -1,6 +1,6 @@
 // ?debug=1: draw every geometry item on the plate and expose window.__lobby for the checks.
-import { getManifest, getGeometry, getParams } from './content.js?v=2026-09-10c';
-import { getState, project, projectRect, onLayout, frameRect } from './stage.js?v=2026-09-10c';
+import { getManifest, getGeometry, getParams } from './content.js?v=2026-09-10d';
+import { getState, project, projectRect, onLayout, frameRect, bandOffset } from './stage.js?v=2026-09-10d';
 
 const svg = document.getElementById('debug');
 const NS = 'http://www.w3.org/2000/svg';
@@ -11,7 +11,7 @@ export function initDebug() {
     get manifest() { return getManifest(); },
     get geometry() { return getGeometry(); },
     get stage() { const s = getState(); return { s: s.s, tx: s.tx, ty: s.ty, z: s.z, sRest: s.sRest, composed: s.composed, layerOpen: s.layerOpen, dock: s.dock, inRoom: s.inRoom }; },
-    project, projectRect, frame: frameRect,
+    project, projectRect, frame: () => { const r = frameRect(), o = bandOffset(); return { ...r, x: r.x + o.x, y: r.y + o.y, cx: r.cx + o.x, cy: r.cy + o.y }; },
     get rects() {
       const g = getGeometry();
       const out = { doors: {}, rings: {}, stairPill: projectRect(g.stairPill), tower: project(g.tower[0], g.tower[1]) };

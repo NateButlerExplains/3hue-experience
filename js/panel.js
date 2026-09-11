@@ -1,13 +1,14 @@
 // The docked panel (bottom sheet when composed): one template for a door, one for the path.
 // Every string comes from the manifest; this file only arranges them.
-import { getManifest, str, esc, resolveHref, stageName } from './content.js?v=2026-09-10c';
-import { getState } from './stage.js?v=2026-09-10c';
+import { getManifest, str, esc, resolveHref, stageName } from './content.js?v=2026-09-10d';
+import { getState } from './stage.js?v=2026-09-10d';
+import { reducedMotion } from './content.js?v=2026-09-10d';
 
 const panel = document.getElementById('panel');
 let mode = null; // 'door' | 'path'
 let currentId = null;
 
-const talk = (filled) => `<a class="btn ${filled ? 'primary' : 'outline'} small" href="${esc(resolveHref('booking'))}" target="_blank" rel="noopener noreferrer">${esc(str('talk'))}</a>`;
+const talk = (filled) => `<a class="btn ${filled ? 'primary' : 'outline'} small" href="${esc(resolveHref('booking'))}" target="_blank" rel="noopener noreferrer" aria-label="${esc(str('talk'))}, ${esc(str('newTab', { host: new URL(resolveHref('booking')).host }))}">${esc(str('talk'))}</a>`;
 const src = (o) => (o?.source ? `<span class="src">${esc(o.source)}</span>` : '');
 
 function doorTabs(active, onTab) {
@@ -52,25 +53,25 @@ export function openDoorPanel(d, { station, sameDoor, onBack, onTab, onStation }
     <p class="audience">${esc(d.audience)}</p>
     <div class="row"><button class="btn outline small" type="button" id="panel-services">${esc(str('services'))}</button>${talk(true)}</div>
     <div class="stations" id="panel-stations" hidden></div>
-    <h3 id="st-urgency">${esc(str('urgency'))}</h3>
+    <h3 id="st-urgency" tabindex="-1">${esc(str('urgency'))}</h3>
     ${research && d.opening ? `<p><strong>${esc(d.opening.text)}</strong></p>` : ''}
     <ul>${d.triggers.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
     ${research && d.stat ? `<p>${esc(d.stat.text)}${src(d.stat)}</p>` : ''}
-    <h3 id="st-gap">${esc(str('gap'))}</h3>
+    <h3 id="st-gap" tabindex="-1">${esc(str('gap'))}</h3>
     <p>${esc(d.gap)}</p>
     ${research && d.statSecondary ? `<p>${esc(d.statSecondary.text)}${src(d.statSecondary)}</p>` : ''}
     <h3 id="st-services" tabindex="-1">${esc(str('services'))}</h3>
     <ul class="families">${fams}</ul>
-    ${research && d.proof?.length ? `<h3 id="st-proof">${esc(str('proof'))}</h3>${d.proof.map((p) => `<p>${esc(p.text)}<span class="src">${esc(p.basis)}</span></p>`).join('')}` : ''}
-    ${research && d.program ? `<h3 id="st-program">${esc(str('program'))}</h3><ol class="arc">${m.arc.map((a, i) => `<li><b>${esc(a)}</b>${esc([d.program.snapshot, d.program.build, d.program.operate][i] || '')}</li>`).join('')}</ol><p class="pillars">${m.pillars.map(esc).join(' · ')}</p>` : ''}
-    <h3 id="st-route">${esc(str('route'))}</h3>
+    ${research && d.proof?.length ? `<h3 id="st-proof" tabindex="-1">${esc(str('proof'))}</h3>${d.proof.map((p) => `<p>${esc(p.text)}<span class="src">${esc(p.basis)}</span></p>`).join('')}` : ''}
+    ${research && d.program ? `<h3 id="st-program" tabindex="-1">${esc(str('program'))}</h3><ol class="arc">${m.arc.map((a, i) => `<li><b>${esc(a)}</b>${esc([d.program.snapshot, d.program.build, d.program.operate][i] || '')}</li>`).join('')}</ol><p class="pillars">${m.pillars.map(esc).join(' · ')}</p>` : ''}
+    <h3 id="st-route" tabindex="-1">${esc(str('route'))}</h3>
     <ol class="stagelist">${stages}</ol>
-    <h3 id="st-decision">${esc(str('decision'))}</h3>
+    <h3 id="st-decision" tabindex="-1">${esc(str('decision'))}</h3>
     <p>${esc(d.decision)}</p>
     <div class="row">${talk(false)}</div>`;
   panel.querySelector('#panel-tabs').replaceWith(doorTabs(d.id, onTab));
   panel.querySelector('#panel-back').addEventListener('click', onBack);
-  panel.querySelector('#panel-services').addEventListener('click', () => { const h = panel.querySelector('#st-services'); h.scrollIntoView({ block: 'start', behavior: 'smooth' }); h.focus({ preventScroll: true }); });
+  panel.querySelector('#panel-services').addEventListener('click', () => { const h = panel.querySelector('#st-services'); h.scrollIntoView({ block: 'start', behavior: reducedMotion() ? 'auto' : 'smooth' }); h.focus({ preventScroll: true }); });
   if (!sameDoor) panel.scrollTop = 0;
   if (keepFocus) { const t = panel.querySelector(`.tab[data-door="${d.id}"]`) || panel.querySelector(focused ? `.tab[data-door="${focused}"]` : '.tab'); if (t) t.focus(); }
 }
@@ -80,7 +81,7 @@ export function setPanelStation(id, { room, animate } = {}) {
   const h = panel.querySelector(`#st-${CSS.escape(id)}`);
   if (!h) return false;
   h.setAttribute('tabindex', '-1');
-  h.scrollIntoView({ block: 'start', behavior: animate ? 'smooth' : 'auto' });
+  h.scrollIntoView({ block: 'start', behavior: animate && !reducedMotion() ? 'smooth' : 'auto' });
   h.focus({ preventScroll: true });
   return true;
 }
@@ -120,7 +121,7 @@ export function openPathPanel({ stage, samePanel, onBack, onDoor, onStage }) {
     <p class="kicker">${esc(str('stagesGroup'))}</p>
     <h2 id="panel-h2" tabindex="-1">${esc(m.path.title)}</h2>
     <p class="audience">${esc(m.path.intro || '')}</p>
-    <div class="climb"><button class="btn outline small" type="button" id="stage-prev"${idx <= 0 ? ' disabled' : ''}>${esc(str('prev'))}</button><button class="btn primary small" type="button" id="stage-next"${showStart ? ' disabled' : ''}>${esc(nextLabel)}</button></div>
+    <div class="climb"><button class="btn outline small" type="button" id="stage-prev"${idx <= 0 ? ' disabled' : ''}>${esc(str('prev'))}</button><button class="btn outline small" type="button" id="stage-next"${showStart ? ' disabled' : ''}>${esc(nextLabel)}</button></div>
     <ol class="stagelist" id="stage-list">${li}</ol>
     ${showStart ? `<h3 id="where-to-start" tabindex="-1">${esc(str('whereToStart'))}</h3><p>${esc(m.path.whereToStart.lead)}${src(m.path.whereToStart)}</p><ul>${m.doors.map((d) => `<li><button type="button" class="tab" data-door="${d.id}">${esc(d.title)}</button> ${esc(d.maturityEmphasis.map(stageName).join(', '))}</li>`).join('')}</ul>` : ''}
     <div class="row">${talk(true)}</div>`;

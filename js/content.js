@@ -9,11 +9,17 @@ const params = new URLSearchParams(location.search);
 // `?manifest=tests/fixtures/renamed.json` swaps the content manifest for a fixture so the rename
 // check (P2a-D03) can prove every label follows the file. Relative paths only: a fixture is
 // something in this repo, never a URL.
-function manifestPath() {
-  const p = params.get('manifest');
-  if (!p || /^[a-z]+:|^\/\//i.test(p) || p.includes('..')) return 'content/experience.json';
+// A repo-relative path only: same origin, under this page's directory, plain characters. Anything
+// else (scheme, protocol-relative, backslash, whitespace, dot segments) falls back to the default.
+export function safeRelative(p) {
+  if (!p || !/^[\w./-]+$/.test(p) || /(^|\/)\.\.(\/|$)/.test(p) || p.startsWith('/')) return null;
+  try {
+    const u = new URL(p, location.href), base = new URL('.', location.href);
+    if (u.origin !== location.origin || !u.pathname.startsWith(base.pathname)) return null;
+  } catch { return null; }
   return p;
 }
+function manifestPath() { return safeRelative(params.get('manifest')) || 'content/experience.json'; }
 
 export async function loadContent() {
   const [m, g] = await Promise.all([

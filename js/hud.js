@@ -1,5 +1,5 @@
 // Header actions and the composed layout's rows and footer.
-import { getManifest, str, esc, resolveHref } from './content.js?v=2026-09-10c';
+import { getManifest, str, esc, resolveHref } from './content.js?v=2026-09-10d';
 
 const rows = document.getElementById('floor-rows');
 const foot = document.getElementById('floor-foot');
@@ -16,7 +16,13 @@ export function buildHud({ onDoor, onPath, onWalk }) {
   talkBtn.textContent = str('talk');
   walkBtn.textContent = str('walk');
   walkBtn.addEventListener('click', onWalk);
-  document.getElementById('skip').textContent = str('skip');
+  const skip = document.getElementById('skip');
+  skip.textContent = str('skip');
+  // Not a fragment jump: that would rewrite the route hash and push a state-less entry.
+  skip.addEventListener('click', (e) => { e.preventDefault(); (document.body.classList.contains('composed') ? rows.querySelector('.row-btn') : document.querySelector('#doors .door'))?.focus(); });
+  brand.setAttribute('aria-label', str('logoLink', { name: m.site.name, host: new URL(m.site.logoHref).host }));
+  document.getElementById('boot').textContent = str('loading');
+  talkBtn.setAttribute('aria-label', `${str('talk')}, ${str('newTab', { host: new URL(m.site.bookingUrl).host })}`);
   document.getElementById('doors').setAttribute('aria-label', str('doorsGroup'));
 
   rows.innerHTML = '';
@@ -24,20 +30,18 @@ export function buildHud({ onDoor, onPath, onWalk }) {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'row-btn'; b.dataset.door = d.id; b.dataset.color = d.color;
     b.innerHTML = `<span class="n" aria-hidden="true">${d.number}</span><span><b>${esc(str('explore', { door: d.title }))}</b><span>${esc(d.promise)}</span></span>`;
-    b.setAttribute('aria-label', str('accessibleName', { door: d.title, promise: d.promise }));
     b.addEventListener('click', () => onDoor(d));
     rows.appendChild(b);
   }
   const p = document.createElement('button');
   p.type = 'button'; p.className = 'row-btn'; p.dataset.door = 'path'; p.style.setProperty('--accent', 'var(--orange)');
-  p.setAttribute('aria-label', `${str('pathChip')}: ${m.stages.map((s) => s.name).join(', ')}`);
   p.innerHTML = `<span class="n" aria-hidden="true">↑</span><span><b>${esc(str('pathChip'))}</b><span>${esc(m.stages.map((s) => s.name).join(' · '))}</span></span>`;
   p.addEventListener('click', onPath);
   rows.appendChild(p);
 
   foot.innerHTML = '';
   const w = document.createElement('button'); w.type = 'button'; w.className = 'btn outline'; w.textContent = str('walk'); w.addEventListener('click', onWalk);
-  const t = document.createElement('a'); t.className = 'btn outline'; t.href = resolveHref('booking'); t.target = '_blank'; t.rel = 'noopener noreferrer'; t.textContent = str('talk');
+  const t = document.createElement('a'); t.className = 'btn outline'; t.href = resolveHref('booking'); t.target = '_blank'; t.rel = 'noopener noreferrer'; t.textContent = str('talk'); t.setAttribute('aria-label', `${str('talk')}, ${str('newTab', { host: new URL(m.site.bookingUrl).host })}`);
   const legend = document.createElement('p'); legend.className = 'legend'; legend.textContent = str('legend');
   foot.append(w, t, legend);
 }

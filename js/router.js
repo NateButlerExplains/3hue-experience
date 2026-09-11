@@ -50,8 +50,11 @@ export function back() {
 
 export function onRoute(fn) {
   handler = fn;
-  window.addEventListener('popstate', () => fire(parse(), { pop: true }));
-  window.addEventListener('hashchange', (e) => { const st = parse(); if (hashFor(st) !== hashFor(current)) fire(st, { pop: true }); });
+  // An entry created outside go() (the hash edited by hand, a fragment link) has no state; stamp
+  // it so back() can still pop it.
+  const stamp = (st) => { if (!history.state || !history.state.lobby) history.replaceState({ lobby: st }, '', hashFor(st)); };
+  window.addEventListener('popstate', () => { const st = parse(); stamp(st); fire(st, { pop: true }); });
+  window.addEventListener('hashchange', () => { const st = parse(); if (hashFor(st) !== hashFor(current)) { stamp(st); fire(st, { pop: true }); } });
   // Boot: a deep link gets the lobby placed beneath it.
   const first = parse();
   if (first.view !== 'experience') {

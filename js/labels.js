@@ -1,7 +1,7 @@
 // Live labels painted into plate space (door signs, tower stage names) and the heading block,
 // which sits outside the stage and is placed from the plate transform by the 2a rule.
-import { getManifest, getGeometry, esc } from './content.js?v=2026-09-10c';
-import { onLayout, getState, viewport, headerH } from './stage.js?v=2026-09-10c';
+import { getManifest, getGeometry, esc } from './content.js?v=2026-09-10d';
+import { onLayout, getState, viewport, headerH } from './stage.js?v=2026-09-10d';
 
 const labelsEl = document.getElementById('labels');
 const introEl = document.getElementById('intro');
@@ -60,11 +60,11 @@ function place() {
   const first = g.doorways['win-trust'].frame;
   const firstDoorTop = first[1] * s + ty;
   const subFont = Math.max(L.heading.subMin, L.heading.sub * k);
-  let h1Font = Math.max(L.heading.h1Min, Math.min(L.heading.h1 * k, (firstDoorTop - introTop - (12 + 16 + subFont * 2 * 1.4) - 9 - L.heading.clearance) / 2));
+  let h1Font = Math.max(L.heading.h1Min, Math.min(L.heading.h1 * k, (firstDoorTop - introTop - (12 + 12 + subFont * 2 * 1.4) - 18 - L.heading.clearance) / 2));
   const { vw } = viewport();
   introEl.style.left = left + 'px';
   introEl.style.top = Math.max(headerH() + 8, introTop) + 'px';
-  introEl.style.maxWidth = Math.min(640, vw - left - 24) + 'px';
+  introEl.style.maxWidth = (vw - left - 24) + 'px';
   sub.style.fontSize = subFont + 'px';
   // Apply, then measure: the block must end at least `clearance` px above the first door frame.
   // Shrink the h1 toward its floor until it does (the constants above are only the estimate).

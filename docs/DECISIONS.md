@@ -21,3 +21,12 @@ GitHub Pages project URLs are fixed by the repo name, so `natebutlerexplains.git
 - No sound, no intro film, no invented customers or metrics, no prices, no raw findings or competitor names on any surface.
 - `3HUE` is a standard of execution, never an acronym; never "the three hues of security"; ISG/OPS/ITG are never "the three".
 - `noindex` stays on until Nate lifts it; `robots.txt` allows every bot so link previews still work.
+
+## Rules added after the 2026-09-10 review passes
+- **Door plates are hoverable.** WCAG 2.1 1.4.13: the hover/focus plate accepts the pointer while its door is hovered (clicks bubble to the door), and Escape at rest dismisses it without moving focus (the second-Escape no-op rule still holds).
+- **Room station pins are pointer affordances only.** They are `aria-hidden` with `tabindex=-1`; keyboard and screen-reader users reach the same sections through the panel's station chips, which keeps the Tab order panel-first with no duplicate stops. Pins whose anchor falls outside the visible frame are hidden rather than left off-screen.
+- **Composed viewports keep the band's rings out of the Tab order.** The rows are the keyboard controls; the numbered rings are decoration (`tabindex=-1`, `aria-hidden`).
+- **Every accessible name comes from the manifest**, including the logo link and the new-tab suffix on Talk links (`strings.logoLink`, `strings.newTab`).
+- **`?manifest=` and `?room-preview=` accept only same-origin paths under the page's own directory** with plain characters; anything else falls back to the default.
+- **Nothing but transform and opacity animates during a dolly.** Chip and ring state changes are instant; the rest pulse animates ring opacity only and pauses while a layer is open.
+- **Station deep links** (`#/door/<id>/<station>`) focus and scroll to that station's heading; a plain door link focuses the panel heading.

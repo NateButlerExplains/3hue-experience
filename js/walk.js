@@ -1,18 +1,18 @@
 // The captioned walk: visitor-paced, no timers, no audio. Steps are built from the manifest —
 // lobby, each door, each stage, the kiosk (skipped when hidden or composed), Talk, end. The bar
 // keeps focus on Next; Left/Right step; Escape or End walk returns to the resting lobby.
-import { getManifest, getGeometry, str, esc, kioskLines, stageName } from './content.js?v=2026-09-10c';
-import { getState, place, rest } from './stage.js?v=2026-09-10c';
-import { kioskElement, kioskCentroid, kioskVisibleAt } from './kiosk.js?v=2026-09-10c';
-import { hideDoors, showDoors, setCurrent } from './hotspots.js?v=2026-09-10c';
-import { lightStage, clearArcs } from './path.js?v=2026-09-10c';
-import { pushLayer, resetLayers } from './focus.js?v=2026-09-10c';
-import { walkButton } from './hud.js?v=2026-09-10c';
-import { setLayer } from './stage.js?v=2026-09-10c';
+import { getManifest, getGeometry, str, esc, kioskLines, stageName } from './content.js?v=2026-09-10d';
+import { getState, place, rest } from './stage.js?v=2026-09-10d';
+import { kioskElement, kioskCentroid, kioskVisibleAt } from './kiosk.js?v=2026-09-10d';
+import { hideDoors, showDoors, setCurrent } from './hotspots.js?v=2026-09-10d';
+import { lightStage, clearArcs } from './path.js?v=2026-09-10d';
+import { pushLayer, resetLayers } from './focus.js?v=2026-09-10d';
+import { walkButton } from './hud.js?v=2026-09-10d';
+import { setLayer } from './stage.js?v=2026-09-10d';
 
 const bar = document.getElementById('walk');
 const live = document.getElementById('walk-live');
-let steps = [], i = 0, walking = false, api = null;
+let steps = [], i = 0, count = 0, walking = false, api = null;
 
 function say(text) { live.textContent = ''; setTimeout(() => { live.textContent = text; }, 0); }
 function fill(t, vars) { return String(t).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? ''); }
@@ -42,8 +42,9 @@ export function startWalk() {
   api.go({ view: 'walk', step: 0 });
 }
 
-export function walkStep(n, { animate = true } = {}) {
-  const list = visibleSteps();
+export function walkStep(n, { animate = true, resize = false } = {}) {
+  const list = visibleSteps(); count = list.length;
+  bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', str('walk'));
   if (!walking) { walking = true; document.body.classList.add('walking'); setLayer(true, 'right'); pushLayer({ id: 'walk', opener: walkButton(), first: () => bar.querySelector('#walk-next'), onEscape: () => endWalk() }); }
   i = Math.max(0, Math.min(list.length - 1, n));
   const s = list[i];
@@ -52,6 +53,7 @@ export function walkStep(n, { animate = true } = {}) {
   if (s.stage) lightStage(s.stage);
   if (cam === 'rest') { rest(animate); showDoors(); } else { hideDoors(); place({ ...cam, animate }); }
   const caption = typeof s.caption === 'function' ? s.caption() : s.caption;
+  if (resize && !bar.hidden) return;   // a resize only re-aims the camera; the bar and the live region stay put
   bar.hidden = false;
   bar.innerHTML = `<button class="btn outline small" type="button" id="walk-prev"${i === 0 ? ' disabled' : ''}>${esc(str('prevStep'))}</button><button class="btn primary small" type="button" id="walk-next"${i === list.length - 1 ? ' disabled' : ''}>${esc(str('nextStep'))}</button><span class="count">${i + 1} / ${list.length}</span><span class="caption">${esc(caption)}</span><button class="btn outline small" type="button" id="walk-end">${esc(str('endWalk'))}</button>`;
   bar.querySelector('#walk-prev').addEventListener('click', () => api.go({ view: 'walk', step: i - 1 }, { replace: true }));
@@ -64,8 +66,8 @@ export function walkStep(n, { animate = true } = {}) {
 
 bar.addEventListener('keydown', (e) => {
   if (!walking) return;
-  if (e.key === 'ArrowRight') { e.preventDefault(); api.go({ view: 'walk', step: i + 1 }, { replace: true }); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); api.go({ view: 'walk', step: i - 1 }, { replace: true }); }
+  if (e.key === 'ArrowRight') { e.preventDefault(); if (i < count - 1) api.go({ view: 'walk', step: i + 1 }, { replace: true }); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); if (i > 0) api.go({ view: 'walk', step: i - 1 }, { replace: true }); }
 });
 
 export function endWalk({ silent = false } = {}) {

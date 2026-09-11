@@ -1,0 +1,8 @@
+{
+  "url": "http://127.0.0.1:8770/3hue-experience/?debug=1#/door/win-trust",
+  "viewport": "390x844",
+  "project": "chromium",
+  "violations": [],
+  "incomplete": [],
+  "passes": 25
+}

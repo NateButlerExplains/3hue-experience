@@ -1,0 +1,7 @@
+{
+  "P1-D01": "Pass (manual, docs/evidence/phase1.md: OCR at 2x empty; O4 band accepted)",
+  "P1-D02": "Pass (manual, docs/evidence/phase1.md: max landmark displacement 1 px)",
+  "P1-D03": "Pass (manual, docs/evidence/phase1.md)",
+  "P1-D04": "Pass (manual, docs/evidence/phase1.md: 2880x1621)",
+  "P1-D05": "Pass (manual, docs/evidence/phase1.md: live 200s, AVIF 125 KB, WebP 258 KB)"
+}

@@ -44,7 +44,7 @@ button, a.btn { font: inherit; }
 .sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* Skip link: first in Tab order, visible only on focus. */
-.skip { position: fixed; left: 12px; top: 12px; z-index: 90; padding: 10px 14px; border-radius: var(--radius); background: var(--navy); color: #fff; text-decoration: none; transform: translateY(-160%); transition: transform 150ms; }
+.skip { position: fixed; left: 12px; top: 12px; z-index: 90; min-height: 44px; display: inline-flex; align-items: center; padding: 10px 14px; border-radius: var(--radius); background: var(--navy); color: #fff; text-decoration: none; transform: translateY(-160%); transition: transform 150ms; }
 .skip:focus-visible { transform: none; outline: none; box-shadow: var(--focus); }
 body.layer-open .skip { visibility: hidden; }
 
@@ -73,7 +73,7 @@ body.walking #hud .actions { visibility: hidden; }
 /* Stage (desktop: fixed full-bleed behind everything) */
 #floor { display: contents; }
 #floor-band { display: contents; }
-#stage { position: fixed; inset: 0; z-index: 1; overflow: hidden; background: var(--bg); }
+#stage { position: fixed; inset: 0; z-index: 1; overflow: clip; background: var(--bg); }
 .placeholder { position: absolute; inset: 0; background-size: cover; background-position: center; filter: blur(18px) saturate(1.05); transform: scale(1.08); opacity: 1; transition: opacity 600ms var(--ease); }
 html.is-ready .placeholder { opacity: 0; }
 .experience-stage { position: absolute; left: 0; top: 0; width: 2880px; height: 1621px; transform-origin: 0 0; will-change: auto; opacity: 0; transition: opacity 600ms var(--ease); }
@@ -89,7 +89,7 @@ html.is-ready .experience-stage { opacity: 1; }
 /* Labels live in plate space; font sizes are plate px set by js/labels.js (floor 12 screen px). */
 .scene-labels .sign, .scene-labels .stage-name { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; text-align: center; }
 .scene-labels .sign { font-family: var(--display); font-weight: 500; color: #fff3e2; letter-spacing: .01em; text-shadow: 0 0 .35em rgba(255, 214, 160, .55), 0 0 1.2em rgba(255, 190, 110, .35); }
-.scene-labels .stage-name { font-family: var(--body); font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: .12em; text-shadow: 0 0 .5em rgba(255, 224, 180, .6); }
+.scene-labels .stage-name { font-family: var(--body); font-weight: 600; color: #fff; text-transform: uppercase; letter-spacing: .12em; text-shadow: 0 0 .5em rgba(6, 18, 31, .85), 0 0 .2em rgba(6, 18, 31, .9); }
 
 /* Door hotspots: a transparent button the size of the door frame; the ring and chip inside are
    counter-scaled so they keep a screen size. */
@@ -97,8 +97,9 @@ html.is-ready .experience-stage { opacity: 1; }
 .hotspots .door:focus { outline: none; }
 .hotspots.hidden .door, .hotspots .door.hidden { opacity: 0; pointer-events: none; }
 .marker { position: absolute; left: var(--mx); top: var(--my); transform: translate(-50%, -15px) scale(var(--counter)); transform-origin: 50% 15px; display: flex; flex-direction: column; align-items: center; gap: 9px; pointer-events: none; }
-.marker .ring { width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .85); box-shadow: 0 0 0 4px rgba(6, 18, 31, .35), 0 0 22px rgba(37, 181, 214, .35); background: radial-gradient(circle, rgba(255, 255, 255, .18), rgba(255, 255, 255, 0) 70%); transition: border-color 150ms, box-shadow 150ms, transform 150ms; animation: pulse 8s var(--ease) infinite; animation-delay: calc(var(--i, 0) * 2.7s); }
-.marker .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: var(--navy); color: #fff; font: 600 13px/1.2 var(--body); letter-spacing: .01em; white-space: nowrap; border: 1px solid rgba(255, 255, 255, .14); box-shadow: 0 6px 18px rgba(0, 0, 0, .35); transition: transform 150ms, background 150ms, color 150ms; }
+.marker .ring { width: 30px; height: 30px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .85); box-shadow: 0 0 0 4px rgba(6, 18, 31, .35), 0 0 22px rgba(37, 181, 214, .35); background: radial-gradient(circle, rgba(255, 255, 255, .18), rgba(255, 255, 255, 0) 70%); animation: pulse 8s var(--ease) infinite; animation-delay: calc(var(--i, 0) * 2.7s); }
+.hotspots.hidden .ring, body.layer-open .ring, body.walking .ring { animation-play-state: paused; }
+.marker .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: var(--navy); color: #fff; font: 600 13px/1.2 var(--body); letter-spacing: .01em; white-space: nowrap; border: 1px solid rgba(255, 255, 255, .14); box-shadow: 0 6px 18px rgba(0, 0, 0, .35); transition: transform 150ms; }
 .marker .chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent, var(--cyan)); }
 .door[data-color="cyan"] { --accent: var(--cyan); }
 .door[data-color="orange"] { --accent: var(--orange); }
@@ -108,7 +109,7 @@ html.is-ready .experience-stage { opacity: 1; }
 .door:focus-visible .ring { outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 4px var(--navy-deep), 0 0 30px var(--accent); }
 .door[aria-current="true"] .chip { background: var(--cyan); color: var(--navy-deep); border-color: transparent; }
 .door[aria-current="true"] .chip::before { background: var(--navy-deep); }
-@keyframes pulse { 0%, 88%, 100% { transform: scale(1); } 92% { transform: scale(1.18); } 96% { transform: scale(1); } }
+@keyframes pulse { 0%, 88%, 100% { opacity: 1; } 92% { opacity: .55; } 96% { opacity: 1; } }
 
 /* Door plate (hover/focus, fine pointers): opacity only. */
 .marker .plate { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 220px; padding: 10px 12px; border-radius: 10px; background: rgba(6, 18, 31, .92); border: 1px solid rgba(255, 255, 255, .12); color: var(--ink); font: 12px/1.35 var(--body); text-align: left; opacity: 0; transition: opacity 150ms; pointer-events: none; }
@@ -116,8 +117,9 @@ html.is-ready .experience-stage { opacity: 1; }
 .marker .plate i { display: block; font-style: normal; color: var(--ink-3); margin-bottom: 6px; }
 .marker .plate span { display: block; }
 .marker.flip .plate { left: auto; right: 0; transform: none; }
-@media (hover: hover) and (pointer: fine) { .door:hover .plate { opacity: 1; } }
+@media (hover: hover) and (pointer: fine) { .door:hover .plate { opacity: 1; pointer-events: auto; } }
 .door:focus-visible .plate { opacity: 1; }
+.door.plate-dismissed .plate { opacity: 0 !important; pointer-events: none !important; }
 
 /* Path chip on the stair pill */
 .hotspots .path-chip { position: absolute; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -131,11 +133,11 @@ html.is-ready .experience-stage { opacity: 1; }
 
 /* Heading block: fixed, placed by js/labels.js from the plate transform. */
 #floor-head { display: contents; }
-.intro { position: fixed; z-index: 20; left: 24px; top: 96px; max-width: min(46vw, 640px); padding: 10px 14px 12px; border-radius: 14px; background: rgba(6, 18, 31, .62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: opacity 400ms var(--ease); }
-.intro .eyebrow { margin: 0 0 6px; font: 600 12px/1.2 var(--body); letter-spacing: .18em; text-transform: uppercase; color: rgb(92, 199, 223); }
-.intro h1 { margin: 0; font-family: var(--display); font-weight: 600; line-height: 1.06; letter-spacing: -.015em; color: #fff; outline: none; }
+.intro { position: fixed; z-index: 20; left: 24px; top: 96px; max-width: calc(100vw - 48px); padding: 8px 14px 10px; border-radius: 14px; background: rgba(6, 18, 31, .62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: opacity 400ms var(--ease); }
+.intro .eyebrow { margin: 0 0 4px; font: 600 12px/1.2 var(--body); letter-spacing: .18em; text-transform: uppercase; color: rgb(92, 199, 223); }
+.intro h1 { margin: 0; font-family: var(--display); font-weight: 600; line-height: 1.02; letter-spacing: -.015em; color: #fff; outline: none; }
 .intro h1 .accent { color: var(--cyan-ink); }
-.intro .sub { margin: 10px 0 0; font-size: 17px; line-height: 1.4; color: var(--ink-2); max-width: 32em; }
+.intro .sub { margin: 8px 0 0; font-size: 17px; line-height: 1.4; color: var(--ink-2); max-width: 32em; }
 body.layer-open .intro, body.zoomed .intro, html[data-lobby-boot] .intro { visibility: hidden; opacity: 0; }
 
 /* Room layer (rendered rooms, O5) */
@@ -153,12 +155,11 @@ body.layer-open .intro, body.zoomed .intro, html[data-lobby-boot] .intro { visib
 .kiosk-line b { font-size: 22px; font-weight: 700; color: #fff; margin-right: .3em; }
 .kiosk-tag { margin: 3px 0 0; font-size: 19px; line-height: 1.12; color: #9fd9e8; letter-spacing: .03em; white-space: nowrap; }
 
-/* Room station pins: same marker as the doors, inside the room layer. */
-.room-pins .room-pin { position: absolute; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; width: 1px; height: 1px; overflow: visible; }
-.room-pins .room-pin .marker { --mx: 0px; --my: 0px; --i: 0; }
+/* Room station pins: pointer affordances inside the room layer (keyboard users use the panel's
+   station chips). The button is a 44 px hit box counter-scaled by the room's scale. */
+.room-pins .room-pin { position: absolute; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; width: 44px; height: 44px; transform: translate(-50%, -50%) scale(var(--counter)); transform-origin: 50% 50%; }
+.room-pins .room-pin .marker { --mx: 22px; --my: 22px; --i: 0; pointer-events: auto; transform: translate(-50%, -15px); }
 .room-pins .room-pin .ring { animation: none; width: 22px; height: 22px; }
-.room-pins .room-pin:focus { outline: none; }
-.room-pins .room-pin:focus-visible .ring { outline: 2px solid #fff; outline-offset: 2px; }
 .room-pins .room-pin .plate { display: none; }
 
 /* Panel: docked aside on desktop, bottom sheet when composed. */
@@ -171,7 +172,8 @@ body.layer-open .intro, body.zoomed .intro, html[data-lobby-boot] .intro { visib
 .panel .tab[aria-pressed="true"] { background: rgba(255, 255, 255, .12); border-color: #fff; color: #fff; }
 .panel .tab:focus-visible { outline: none; box-shadow: var(--focus); }
 .panel .kicker { margin: 0 0 4px; font: 600 12px/1.2 var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--cyan-ink); }
-.panel h2 { margin: 0 0 10px; font: 500 31px/1.12 var(--display); letter-spacing: -.012em; color: #fff; outline: none; }
+.panel h2 { margin: 0 0 10px; font: 500 31px/1.12 var(--display); letter-spacing: -.012em; color: #fff; }
+.panel h2:focus-visible { outline: 2px solid #fff; outline-offset: 4px; border-radius: 4px; }
 .panel .lede { margin: 0 0 8px; font-size: 16px; color: #fff; }
 .panel .audience { margin: 0 0 14px; color: var(--ink-2); }
 .panel .row { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 18px; }
@@ -215,7 +217,7 @@ body:not(.layer-open) .walk { right: 0; }
   body.composed .intro { position: static; max-width: none; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 0; }
   body.composed .intro h1 { font-size: clamp(28px, 8vw, 40px) !important; }
   body.composed .intro .sub { font-size: 15px; }
-  body.composed #floor-band { display: block; position: relative; width: 100%; overflow: hidden; background: var(--bg); }
+  body.composed #floor-band { display: block; position: relative; width: 100%; height: var(--band-h, 60vh); overflow: clip; background: var(--bg); }
   body.composed #stage { position: absolute; inset: 0; }
   body.composed .scene-labels, body.composed .marker .chip, body.composed .marker .plate, body.composed .path-chip { display: none; }
   body.composed .marker .ring { width: 44px; height: 44px; display: grid; place-items: center; font: 700 13px/1 var(--body); color: #fff; }
@@ -231,10 +233,12 @@ body:not(.layer-open) .walk { right: 0; }
   body.composed #floor-foot .legend { font-size: 12px; color: var(--ink-3); text-align: center; }
   body.composed.layer-open #floor-head, body.composed.layer-open #floor-rows, body.composed.layer-open #floor-foot { visibility: hidden; }
   body.composed.layer-open #floor-band { position: fixed; top: var(--hud-h); left: 0; right: 0; height: calc(var(--sheet-top) - var(--hud-h)); }
+  body.composed .btn.small, body.composed .panel .tab, body.composed .panel .stagelist .stage-doors button, body.composed .walk .btn { min-height: 44px; padding-top: 10px; padding-bottom: 10px; }
   body.composed .panel { top: var(--sheet-top); left: 0; right: 0; width: auto; border-radius: 16px 16px 0 0; border: 0; }
   body.composed.short .panel { top: var(--hud-h); border-radius: 0; }
   body.composed.short.layer-open #floor-band { display: none; }
-  body.composed .walk { right: 0; }
+  body.composed .walk { right: 0; flex-wrap: wrap; row-gap: 8px; }
+  body.composed .walk .caption { flex: 1 1 100%; order: -1; }
 }
 
 /* Reduced motion: nothing moves, nothing pulses, nothing fades. */

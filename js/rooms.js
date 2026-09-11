@@ -1,8 +1,8 @@
 // Rendered rooms (O5). A door whose manifest entry carries room.render opens onto its render;
 // station pins inside the room go to the same panel sections the chips do. `?rooms=0` turns the
 // layer off (spec-as-written behaviour); `?room-preview=<path>` mounts a candidate for the gate.
-import { getManifest, getGeometry, getParams, str, esc } from './content.js?v=2026-09-10c';
-import { onLayout, roomToScreen, getState } from './stage.js?v=2026-09-10c';
+import { getManifest, getGeometry, getParams, str, esc, safeRelative } from './content.js?v=2026-09-10d';
+import { onLayout, roomToScreen, getState, frameRect, bandOffset } from './stage.js?v=2026-09-10d';
 
 const pinsEl = document.getElementById('room-pins');
 let pins = [];
@@ -10,8 +10,7 @@ let previewFor = null;
 
 export function initRooms() {
   const p = getParams();
-  const prev = p.get('room-preview');
-  if (prev && !/^[a-z]+:|^\/\//i.test(prev) && !prev.includes('..')) previewFor = prev;
+  previewFor = safeRelative(p.get('room-preview'));
 }
 
 // Format support is probed once with 1x1 images; the size follows the viewport in device pixels.
@@ -50,9 +49,10 @@ export function showRoomPins(d, room, onStation) {
   if (!room.stations || getState().composed) return;
   pins = Object.entries(room.stations).map(([id, [x, y]]) => {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'room-pin'; b.dataset.station = id;
+    // Pointer affordance only: keyboard users reach the same sections through the panel's station
+    // chips, which keeps the Tab order panel-first and avoids duplicate stops.
+    b.type = 'button'; b.className = 'room-pin'; b.dataset.station = id; b.tabIndex = -1; b.setAttribute('aria-hidden', 'true');
     b.innerHTML = `<span class="marker" aria-hidden="true"><span class="ring"></span><span class="chip">${esc(str(id))}</span></span>`;
-    b.setAttribute('aria-label', str(id));
     b.addEventListener('click', () => onStation(id));
     pinsEl.appendChild(b);
     return { el: b, x, y };
@@ -63,7 +63,13 @@ export function showRoomPins(d, room, onStation) {
 // counter-scaled by the room's own scale, not the plate's.
 function placePins() {
   const f = getState().roomFit; if (!f) return;
-  for (const p of pins) { p.el.style.left = (p.x * f.Wr) + 'px'; p.el.style.top = (p.y * f.Hr) + 'px'; }
+  const R = frameRect(), o = bandOffset();
+  for (const p of pins) {
+    p.el.style.left = (p.x * f.Wr) + 'px'; p.el.style.top = (p.y * f.Hr) + 'px';
+    const sp = roomToScreen(p.x * f.Wr, p.y * f.Hr);
+    const inside = sp && sp.x >= R.x + o.x + 24 && sp.x <= R.x + o.x + R.w - 24 && sp.y >= R.y + o.y + 24 && sp.y <= R.y + o.y + R.h - 24;
+    p.el.hidden = !inside;
+  }
   pinsEl.style.setProperty('--counter', String(1 / f.s));
 }
 onLayout(placePins);

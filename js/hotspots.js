@@ -2,8 +2,8 @@
 // plate px; the ring sits on the doorway centre and the chip hangs below it, both counter-scaled
 // so they keep their screen size. Composed viewports show numbered rings only (rows carry the
 // names). Plates (hover/focus, fine pointers) list what is behind the door.
-import { getManifest, getGeometry, str, esc, stageName } from './content.js?v=2026-09-10c';
-import { onLayout, getState, project, viewport } from './stage.js?v=2026-09-10c';
+import { getManifest, getGeometry, str, esc, stageName } from './content.js?v=2026-09-10d';
+import { onLayout, getState, project, viewport } from './stage.js?v=2026-09-10d';
 
 const host = document.getElementById('doors');
 let doors = [];
@@ -29,6 +29,7 @@ export function buildDoors(onDoor, onPath) {
       `<span class="plate"><b>${esc(str('explore', { door: d.title }))}</b><i>${esc(str('for', { icp: d.icp }))}</i>${fams}</span>` +
       `</span>`;
     btn.addEventListener('click', () => onDoor(d));
+    for (const ev of ['blur', 'pointerleave']) btn.addEventListener(ev, () => btn.classList.remove('plate-dismissed'));
     host.appendChild(btn);
     return { door: d, el: btn, marker: btn.firstElementChild };
   });
@@ -54,6 +55,15 @@ function place() {
     const p = project(geo.center[0], geo.center[1]);
     marker.classList.toggle('flip', p.x > vw - 140);
   }
+  // The path chip's hit box is the stair pill, which is under 44 screen px tall on most desktops:
+  // floor its height at 44 px (in plate px) and keep the marker on the pill's centre.
+  if (pathChip) {
+    const [pl, pt, pr, pb] = getGeometry().stairPill; const s = getState().s;
+    const h = Math.max(pb - pt, 44 / s), w = Math.max(pr - pl, 44 / s);
+    pathChip.style.top = ((pt + pb) / 2 - h / 2) + 'px'; pathChip.style.height = h + 'px';
+    pathChip.style.left = ((pl + pr) / 2 - w / 2) + 'px'; pathChip.style.width = w + 'px';
+    pathChip.firstElementChild.style.setProperty('--mx', (w / 2) + 'px'); pathChip.firstElementChild.style.setProperty('--my', (h / 2) + 'px');
+  }
 }
 onLayout(place);
 
@@ -67,7 +77,14 @@ let token = 0;
 export function hideDoors() { token++; host.classList.add('hidden'); for (const { el } of doors) el.setAttribute('tabindex', '-1'); if (pathChip) pathChip.setAttribute('tabindex', '-1'); }
 export function showDoors() {
   const t = ++token;
-  setTimeout(() => { if (t !== token) return; host.classList.remove('hidden'); for (const { el } of doors) el.removeAttribute('tabindex'); if (pathChip) pathChip.removeAttribute('tabindex'); }, 0);
+  setTimeout(() => {
+    if (t !== token) return;
+    host.classList.remove('hidden');
+    // Composed: the rows are the keyboard controls; the band's numbered rings are decoration.
+    const composed = getState().composed;
+    for (const { el } of doors) { if (composed) { el.setAttribute('tabindex', '-1'); el.setAttribute('aria-hidden', 'true'); } else { el.removeAttribute('tabindex'); el.removeAttribute('aria-hidden'); } }
+    if (pathChip) { if (composed) pathChip.setAttribute('tabindex', '-1'); else pathChip.removeAttribute('tabindex'); }
+  }, 0);
 }
 export function doorElement(id) { return doors.find((d) => d.door.id === id)?.el || null; }
 export function pathElement() { return pathChip; }

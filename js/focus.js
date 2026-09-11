@@ -29,13 +29,15 @@ export function resetLayers() {
   if (top?.opener && document.contains(top.opener)) setTimeout(() => { if (!document.activeElement || document.activeElement === document.body) top.opener.focus({ preventScroll: true }); }, 0);
 }
 
+export function setOpener(el) { const top = stack[stack.length - 1]; if (top && el) top.opener = el; }
 export function topLayer() { return stack[stack.length - 1] || null; }
 export function depth() { return stack.length; }
 
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   const top = stack[stack.length - 1];
-  if (!top) return;
+  // At rest Escape is a no-op for focus (P2b-D01); it only dismisses a door's hover/focus plate (WCAG 1.4.13).
+  if (!top) { const a = document.activeElement; const d = a && a.closest && a.closest('#doors .door'); if (d) d.classList.add('plate-dismissed'); return; }
   e.preventDefault(); e.stopPropagation();
   if (top.onEscape) top.onEscape();
 }, true);
