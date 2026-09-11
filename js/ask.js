@@ -38,7 +38,7 @@
 // fails, a refused play(), the voice off) is read out in the console's own polite live region (the
 // page's live region is inert under a modal dialog). Closing Ask, or showing anything else, stops
 // the voice.
-import { getManifest, str, resolveHref, guideName, guideNames } from './content.js?v=2026-09-10f';
+import { getManifest, str, resolveHref, guideName, guideNames, learnMorePage } from './content.js?v=2026-09-10f';
 import { resolveLine, fillTemplate } from './tourtext.js?v=2026-09-10f';
 import { buildIndex, match, related, MAX_INPUT } from './ask-match.js?v=2026-09-10f';
 import { modal, icon, chapterRow } from './tourmap.js?v=2026-09-10f';
@@ -330,17 +330,6 @@ function talkLink(cls = 'ask-talk') {
   return a;
 }
 
-// Learn more: a question's page on 3hue.net, only from the manifest's allowlist (site.learnMore:
-// {hosts, pages: {key: {url, label}}}), and only https on a listed host with no query string.
-export function learnMoreOf(key) {
-  const lm = getManifest().site?.learnMore;
-  const page = key && lm?.pages?.[key];
-  if (!page || typeof page.url !== 'string') return null;
-  let u;
-  try { u = new URL(page.url); } catch { return null; }
-  if (u.protocol !== 'https:' || u.username || u.password || u.search || u.hash || !(lm.hosts || []).includes(u.host)) return null;
-  return { url: u.href, host: u.host, label: page.label || '' };
-}
 
 // A new entry: the one before it gives up the entry ids (its own number appended), and the oldest
 // goes past HISTORY.
@@ -395,7 +384,7 @@ function answer(id, { focus = false, announce = false, asked = null } = {}) {
   }
   const mail = el('a', 'btn outline ask-mail', str('tourAskSend')); mail.id = 'tour-ask-mail'; mail.href = mailFor(q);
   acts.append(mail);
-  const lm = learnMoreOf(q.learnMore);
+  const lm = learnMorePage(q.learnMore);   // the manifest's allowlist, checked again at runtime (js/content.js)
   if (lm) {
     const a = el('a', 'btn outline ask-learn', str('tourAskLearn', { host: lm.host })); a.id = 'tour-ask-learn';
     a.href = lm.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
