@@ -2,7 +2,7 @@
 //
 // Two placements exist. At rest the 2a rule holds (cover-fit, centred horizontally, lifted so
 // the heading clears the header). Everywhere else one function, place(), aims a plate point at
-// the centre of the visible frame R (viewport minus header minus panel) at zoom z and clamps so
+// the centre of the visible frame R (viewport minus header, panel and inset) at zoom z and clamps so
 // the plate always covers the whole stage. Composed viewports (phones, portrait, short) fit the
 // plate into the band the layout reserves for it, showing plate x 344.5..2514.8 so all three
 // doors are on screen.
@@ -20,7 +20,8 @@ const state = {
   sRest: 1, txRest: 0, tyRest: 0,
   z: 1,
   composed: false, short: false,
-  layerOpen: false, dock: 'right',
+  layerOpen: false, dock: 'right',   // dock: 'right' | 'left' (the panel's side) | 'none' (a layer with no panel)
+  insetBottom: 0,                    // desktop px reserved along the bottom edge (a tour card), see setInset()
   inRoom: false,
   listeners: new Set(),
 };
@@ -52,7 +53,8 @@ function panelWidth() {
 }
 
 // The frame a door or the tower has to land inside: the viewport minus the header, minus the
-// panel on the side it docks. Composed: the band above the sheet.
+// panel on the side it docks (none for a layer docked 'none'), minus any bottom inset. Composed:
+// the band above the sheet; the inset does not apply there.
 export function frameRect() {
   const { vw, vh } = viewport();
   const hud = headerH();
@@ -63,8 +65,9 @@ export function frameRect() {
     const r = { x: 0, y: 0, w: vw, h: b.h };
     r.cx = r.x + r.w / 2; r.cy = r.y + r.h / 2; return r;
   }
-  const pw = state.layerOpen ? panelWidth() : 0;
-  const r = { x: state.layerOpen && state.dock === 'left' ? pw : 0, y: hud, w: vw - pw, h: vh - hud };
+  const docked = state.layerOpen && state.dock !== 'none';
+  const pw = docked ? panelWidth() : 0;
+  const r = { x: docked && state.dock === 'left' ? pw : 0, y: hud, w: vw - pw, h: Math.max(0, vh - hud - state.insetBottom) };
   r.cx = r.x + r.w / 2; r.cy = r.y + r.h / 2;
   return r;
 }
@@ -156,7 +159,25 @@ export function place({ fx, fy, z = 1, animate = true }) {
 export function project(x, y) { const o = bandOffset(); return { x: o.x + state.tx + x * state.s, y: o.y + state.ty + y * state.s }; }
 export function projectRect([l, t, r, b]) { const a = project(l, t), c = project(r, b); return { left: a.x, top: a.y, right: c.x, bottom: c.y, width: c.x - a.x, height: c.y - a.y }; }
 
-export function setLayer(open, dock = 'right') { state.layerOpen = open; state.dock = dock; document.body.classList.toggle('layer-open', open); }
+// A layer is open over the lobby. dock names the panel's side, or 'none' for a layer with no
+// panel (the frame keeps the full width); body[data-dock] mirrors it while a layer is open.
+// Closing the last layer also releases any bottom inset.
+export function setLayer(open, dock = 'right') {
+  state.layerOpen = open; state.dock = dock;
+  if (!open) state.insetBottom = 0;
+  document.body.classList.toggle('layer-open', open);
+  if (open) document.body.dataset.dock = dock; else delete document.body.dataset.dock;
+}
+
+// Reserve px along the bottom of the desktop frame for something drawn over the stage (a tour
+// card), so place() and the room fit aim above it. Takes effect at the next place() or room fit;
+// listeners re-run at once so pin visibility follows. setLayer(false) resets it to 0.
+export function setInset({ bottom = 0 } = {}) {
+  const b = Math.max(0, Number(bottom) || 0);
+  if (b === state.insetBottom) return;
+  state.insetBottom = b;
+  emit();
+}
 
 // ---- Plate boot: <picture> with the manifest's srcsets; resolves once decoded. ----
 export function buildPicture(plate) {
@@ -227,13 +248,17 @@ function fitRoom(Wr, Hr, cover, R, focus) {
 // The rectangle a room render must fill. The panel is opaque, so the render only has to cover
 // the visible frame plus a bleed under the header and the panel's inner edge; covering the whole
 // viewport would push the image under the panel and crop the quiet third that was rendered for
-// it. Composed: the band plus a bleed under the sheet's rounded top.
+// it. With no panel (no layer, or a layer docked 'none') it covers the whole viewport. A bottom
+// inset never shortens it: what sits in the inset does not span the width, so the render still
+// runs to the bottom edge (the frame's centre, which the fit aims at, does move up). Composed:
+// the band plus a bleed under the sheet's rounded top.
 function roomCover() {
   const { vw, vh } = viewport();
   const bleed = 18;
   if (state.composed) { const b = bandRect(); return { x: 0, y: 0, w: vw, h: b.h + bleed }; }
+  if (!state.layerOpen || state.dock === 'none') return { x: 0, y: 0, w: vw, h: vh };
   const R = frameRect();
-  if (state.layerOpen && state.dock === 'left') return { x: Math.max(0, R.x - bleed), y: 0, w: vw - Math.max(0, R.x - bleed), h: vh };
+  if (state.dock === 'left') return { x: Math.max(0, R.x - bleed), y: 0, w: vw - Math.max(0, R.x - bleed), h: vh };
   return { x: 0, y: 0, w: Math.min(vw, R.x + R.w + bleed), h: vh };
 }
 let roomToken = 0;

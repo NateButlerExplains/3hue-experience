@@ -98,7 +98,61 @@
     "nextStep": "Next step",
     "prevStep": "Previous step",
     "logoLink": "{name}, opens {host} in a new tab",
-    "newTab": "opens {host} in a new tab"
+    "newTab": "opens {host} in a new tab",
+    "tourSpeaking": "Speaking",
+    "tourYourCall": "Your call",
+    "tourNext": "Next",
+    "tourPrev": "Previous",
+    "tourChoose": "Choose",
+    "tourContinue": "Continue",
+    "tourEnd": "End tour",
+    "tourSuggested": "Suggested",
+    "tourVisited": "Visited",
+    "tourDetails": "See the details",
+    "tourReplay": "Replay from the start",
+    "tourSummary": "Send me a summary",
+    "tourSummaryTitle": "Your tour summary",
+    "tourEmail": "Email it to myself",
+    "tourCopy": "Copy",
+    "tourCopied": "Copied",
+    "tourCopyFailed": "Select the summary to copy it",
+    "tourAsk": "Ask {guide}",
+    "tourTakeMeThere": "Take me there",
+    "tourBack": "Back to the tour",
+    "tourMap": "Tour map",
+    "tourChoicesLive": "Choices: {count}.",
+    "tourSuggestedLive": "Suggested: {label}.",
+    "tourChooseLive": "Press {choose} to pick one.",
+    "tourDocTitle": "{chapter} · {site}",
+    "tourClose": "Close",
+    "tourMapNow": "Now",
+    "tourMapLobby": "The lobby",
+    "tourMapTower": "The tower",
+    "tourMapKiosk": "The kiosk",
+    "tourMapDoor": "Door {number}",
+    "tourAskLabel": "Your question",
+    "tourAskSubmit": "Ask",
+    "tourAskAnswering": "Answering: {question}",
+    "tourAskSuggested": "Suggested questions",
+    "tourAskAll": "All questions ({count})",
+    "tourAskRelated": "Related questions",
+    "tourAskChoose": "Did you mean one of these?",
+    "tourAskNone": "I don't have an approved answer for that yet. The team does.",
+    "tourAskSend": "Send me this answer",
+    "tourAskMailSubject": "{question} · {site}",
+    "tourAskMailSite": "Walk the {site} lobby: {url}",
+    "tourAskMic": "Ask with the microphone",
+    "tourAskListening": "Listening. Ask your question.",
+    "tourMicDisclosure": "The microphone uses your browser's own speech recognition. Some browsers, Chrome among them, send the audio to the browser maker to turn it into text, under that company's own privacy terms. 3HUE never receives it, and this page keeps nothing.",
+    "tourMicConfirm": "Use the microphone",
+    "tourMicCancel": "Not now",
+    "tourMicBlocked": "The microphone is blocked in this browser. You can type your question instead.",
+    "tourMicNoSpeech": "I didn't catch that. Try again, or type your question.",
+    "tourMicFailed": "The microphone isn't available here. Type your question instead.",
+    "tourVoice": "Voice",
+    "tourPause": "Pause",
+    "tourResume": "Resume",
+    "tourPaused": "Paused"
   },
   "stages": [
     {
@@ -482,6 +536,23 @@
       "end": "That is the lobby: three doors, one path. Press Escape to leave the walk, or start again."
     }
   },
+  "tour": {
+    "manifest": "content/tour.json",
+    "voiceBase": "media/voice/",
+    "gate": "pending"
+  },
+  "guide": {
+    "name": "AiVRIC",
+    "title": "Your 3HUE guide",
+    "disclosure": "AiVRIC's voice is synthetic: computer-generated speech, not a recording of a person.",
+    "voice": {
+      "provider": "azure",
+      "name": "en-US-AvaNeural",
+      "locale": "en-US",
+      "rate": 0,
+      "required": false
+    }
+  },
   "share": {
     "lobby": {
       "route": "#/experience",
@@ -536,6 +607,14 @@
     {
       "id": "message-stack",
       "ref": "3Hue-Market-Intel@f04c0b4:assets/strategy/2026-09-08-09-source-library/03-messaging-and-campaigns/message-stack.pdf"
+    },
+    {
+      "id": "ship-list",
+      "ref": "3Hue-Market-Intel@f04c0b4:assets/strategy/2026-09-08-09-source-library/03-messaging-and-campaigns/ship-list.html"
+    },
+    {
+      "id": "brand-sheet",
+      "ref": "3Hue-Market-Intel@f04c0b4:assets/strategy/2026-09-08-09-source-library/01-company-and-brand/brand-sheet.pdf"
     },
     {
       "id": "catalog",

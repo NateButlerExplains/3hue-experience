@@ -76,13 +76,14 @@ export function openDoorPanel(d, { station, sameDoor, onBack, onTab, onStation }
   if (keepFocus) { const t = panel.querySelector(`.tab[data-door="${d.id}"]`) || panel.querySelector(focused ? `.tab[data-door="${focused}"]` : '.tab'); if (t) t.focus(); }
 }
 
-// Station pins in a room and the station chips in the panel both call this.
-export function setPanelStation(id, { room, animate } = {}) {
+// Station pins in a room and the station chips in the panel both call this. focus: false scrolls
+// the section into view and leaves focus where it is (a narrator pointing, not a visitor moving).
+export function setPanelStation(id, { room, animate, focus = true } = {}) {
   const h = panel.querySelector(`#st-${CSS.escape(id)}`);
   if (!h) return false;
   h.setAttribute('tabindex', '-1');
   h.scrollIntoView({ block: 'start', behavior: animate && !reducedMotion() ? 'smooth' : 'auto' });
-  h.focus({ preventScroll: true });
+  if (focus) h.focus({ preventScroll: true });
   return true;
 }
 

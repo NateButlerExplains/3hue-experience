@@ -1,0 +1,640 @@
+{
+  "version": 1,
+  "note": "The AiVRIC guided tour (O10/O11): the script under nodes, the Ask AiVRIC answers under ask, the summary template under summary. Off until tour.gate in content/experience.json is \"approved\"; ?tour=1 previews it. Every figure enters through a ref to a sourced manifest field, and names (doors, buyer labels, stages, catalog services, the guide) are tokens, so none is typed here. Every text line carries a source and a status; adapted, proposed and derived lines wait for the copy gate (docs/copy-sheets-tour.md, written by tools/tour-text.mjs). Shape: js/tourtext.js. Rules: tools/check-manifest.js.",
+  "start": "arrive",
+  "chapters": [
+    { "id": "arrival", "entry": "arrive", "title": "{str:legend}", "landmark": "lobby" },
+    { "id": "door-win-trust", "entry": "win-trust", "title": "{door:win-trust.title}", "eyebrow": "{door:win-trust.number}", "landmark": "door:win-trust" },
+    { "id": "door-gain-control", "entry": "gain-control", "title": "{door:gain-control.title}", "eyebrow": "{door:gain-control.number}", "landmark": "door:gain-control" },
+    { "id": "door-stay-ready", "entry": "stay-ready", "title": "{door:stay-ready.title}", "eyebrow": "{door:stay-ready.number}", "landmark": "door:stay-ready" },
+    { "id": "lens", "entry": "lens", "title": "Who signs off", "optional": true },
+    { "id": "path", "entry": "path", "title": "{ref:path.title}", "landmark": "tower" },
+    { "id": "kiosk", "entry": "kiosk", "title": "{ref:kiosk.header}", "landmark": "kiosk", "optional": true },
+    { "id": "close", "entry": "close", "title": "Before you go", "landmark": "lobby" }
+  ],
+  "routes": {
+    "next-door": [
+      { "when": { "notVisited": ["door-win-trust"] }, "go": "win-trust" },
+      { "when": { "notVisited": ["door-gain-control"] }, "go": "gain-control" },
+      { "when": { "notVisited": ["door-stay-ready"] }, "go": "stay-ready" },
+      { "go": "path" }
+    ]
+  },
+  "nodes": {
+    "arrive": {
+      "chapter": "arrival",
+      "scene": "rest",
+      "lines": [
+        { "id": "arrive-1", "text": "Welcome to the 3HUE lobby. I'm {guide}, the platform 3HUE built. 3HUE's managed programs run on me, and today I'm your guide.", "source": "The Message Stack §09, boilerplate", "status": "adapted" },
+        { "id": "arrive-2", "text": "There are three doors here. Each one is a different trigger, a different buyer and a different first sentence. Behind all three is the same thing: a program someone runs, and can prove.", "source": "The Forcing Function §02, the three segments", "status": "adapted" },
+        { "id": "arrive-3", "text": "Tell me who I'm walking with, and I'll start you at the right door.", "source": "Tour script, linking line", "status": "proposed" }
+      ],
+      "choice": {
+        "id": "segment",
+        "prompt": "Which door is yours?",
+        "remember": "segment",
+        "options": [
+          { "id": "win-trust", "label": "{door:win-trust.icp}", "sub": "{door:win-trust.title} · {door:win-trust.promise}", "next": "win-trust" },
+          { "id": "gain-control", "label": "{door:gain-control.icp}", "sub": "{door:gain-control.title} · {door:gain-control.promise}", "next": "gain-control" },
+          { "id": "stay-ready", "label": "{door:stay-ready.icp}", "sub": "{door:stay-ready.title} · {door:stay-ready.promise}", "next": "stay-ready" },
+          { "id": "all", "label": "Show me everything", "sub": "{str:legend}", "next": "=next-door" }
+        ]
+      }
+    },
+
+    "win-trust": {
+      "chapter": "door-win-trust",
+      "scene": { "kind": "door", "door": "win-trust" },
+      "lines": [
+        { "id": "wt-1", "text": "{door:win-trust.title}. This room is for {door:win-trust.icp} whose next contract depends on evidence they can't produce yet.", "source": "The Forcing Function, cover; §02, the three segments", "status": "adapted" },
+        { "id": "wt-2", "text": "Before I show you anything, tell me what's pressing. The answer changes what matters in here.", "source": "Tour script, linking line", "status": "proposed" }
+      ],
+      "choice": {
+        "id": "wt-pressure",
+        "prompt": "What's pressing right now?",
+        "remember": "pressure-win-trust",
+        "options": [
+          { "id": "deal", "label": "{door:win-trust.triggers.0}", "next": "win-trust-why" },
+          { "id": "evidence", "label": "{door:win-trust.triggers.1}", "next": "win-trust-why" },
+          { "id": "ai", "label": "{door:win-trust.triggers.2}", "next": "win-trust-why" },
+          { "id": "none", "label": "Nobody's asking yet", "sub": "No deal, renewal or insurer on the clock", "next": "win-trust-why" }
+        ]
+      }
+    },
+    "win-trust-why": {
+      "chapter": "door-win-trust",
+      "scene": { "kind": "station", "door": "win-trust", "station": "urgency" },
+      "lines": [
+        { "id": "wt-deal-1", "when": { "answers": { "pressure-win-trust": ["deal"] } }, "text": "Then you need two things fast: a readiness letter with a date on it, and someone negotiating scope, so you build only what the contract requires.", "source": "The Forcing Function §04, trigger events; §02, the three segments", "status": "adapted" },
+        { "id": "wt-evidence-1", "when": { "answers": { "pressure-win-trust": ["evidence"] } }, "text": "Then the fix isn't a faster scramble. It's evidence that regenerates instead of being reassembled every time someone with leverage asks.", "source": "The Message Stack §03, three pillars; The Forcing Function, cover", "status": "adapted" },
+        { "id": "wt-ai-1", "when": { "answers": { "pressure-win-trust": ["ai"] } }, "text": "Then four questions matter: what can it access, what can it change, who approved it, and what proves it stayed inside.", "source": "The Forcing Function §04, trigger events", "status": "adapted" },
+        { "id": "wt-ai-2", "when": { "answers": { "pressure-win-trust": ["ai"] } }, "text": "The AI Risk & Readiness Snapshot is framed around exactly those questions. On the service list, the follow-on is {door:win-trust.serviceFamilies.2.examples.2}.", "source": "The Forcing Function §04, trigger events; The Message Stack §05, claims library; 3HUE service catalog", "status": "proposed" },
+        { "id": "wt-early-1", "when": { "answers": { "pressure-win-trust": ["none"] } }, "text": "Then you may be early, and 3HUE would rather tell you that than sell you something. Here the trigger is usually a deal, a renewal or an insurer with a date.", "source": "The Ship List §06, discovery script; The Forcing Function §02, the three segments; §05, who to decline", "status": "adapted" },
+        { "id": "wt-why-1", "ref": "doors.win-trust.opening" },
+        { "id": "wt-why-2", "ref": "doors.win-trust.stat", "callout": ["doors.win-trust.stat"] },
+        { "id": "wt-why-3", "text": "The constraint isn't knowledge. It's capacity. The frameworks are public; what's missing is someone to run them.", "source": "The Message Stack §01, core narrative", "status": "adapted", "cue": { "station": "gap" } },
+        { "id": "wt-why-4", "ref": "doors.win-trust.statSecondary", "callout": ["doors.win-trust.statSecondary"] }
+      ],
+      "next": "win-trust-proof"
+    },
+    "win-trust-proof": {
+      "chapter": "door-win-trust",
+      "scene": { "kind": "station", "door": "win-trust", "station": "proof" },
+      "lines": [
+        { "id": "wt-proof-1", "ref": "doors.win-trust.proof.0", "callout": ["doors.win-trust.proof.0"] },
+        { "id": "wt-proof-2", "text": "3HUE's view: you get the report because your buyer needs it, and a program because you need it.", "source": "The Message Stack §06, objection handling", "status": "adapted" }
+      ],
+      "next": "win-trust-run"
+    },
+    "win-trust-run": {
+      "chapter": "door-win-trust",
+      "scene": { "kind": "station", "door": "win-trust", "station": "program" },
+      "lines": [
+        { "id": "wt-run-1", "text": "It runs in three moves: {ref:arc.0}, {ref:arc.1}, {ref:arc.2}.", "source": "Lobby manifest: arc", "status": "derived" },
+        { "id": "wt-run-2", "ref": "doors.win-trust.program.snapshot" },
+        { "id": "wt-run-3", "ref": "doors.win-trust.program.build" },
+        { "id": "wt-run-4", "ref": "doors.win-trust.program.operate" }
+      ],
+      "choice": {
+        "id": "wt-next",
+        "prompt": "Where next?",
+        "options": [
+          { "id": "lens", "label": "Who signs off on this?", "sub": "Who is in the room, and what each needs to hear", "next": "lens", "suggest": { "answers": { "segment": ["win-trust"] }, "notVisited": ["lens"] } },
+          { "id": "next-door", "label": "Take me to the next door", "next": "=next-door", "suggest": { "answers": { "segment": ["all"] } }, "hideWhen": { "visited": ["door-win-trust", "door-gain-control", "door-stay-ready"] } },
+          { "id": "path", "label": "Where do we start?", "sub": "{ref:path.title}", "next": "path", "suggest": {} },
+          { "id": "explore", "label": "{str:tourDetails}", "sub": "Opens this room's panel and ends the tour", "action": "explore" }
+        ]
+      }
+    },
+
+    "gain-control": {
+      "chapter": "door-gain-control",
+      "scene": { "kind": "door", "door": "gain-control" },
+      "lines": [
+        { "id": "gc-1", "text": "{door:gain-control.title}. This room is for private equity sponsors and family offices carrying cyber risk across operating companies with no standard.", "source": "The Forcing Function, cover", "status": "adapted" },
+        { "id": "gc-2", "text": "Tell me what's pressing. Nobody buys maturity on principle. They buy it when a customer, an insurer, an investor or a regulator makes them.", "source": "The Forcing Function §01, the fit model", "status": "adapted" }
+      ],
+      "choice": {
+        "id": "gc-pressure",
+        "prompt": "What's pressing right now?",
+        "remember": "pressure-gain-control",
+        "options": [
+          { "id": "acquisition", "label": "{door:gain-control.triggers.0}", "next": "gain-control-why" },
+          { "id": "reporting", "label": "{door:gain-control.triggers.1}", "next": "gain-control-why" },
+          { "id": "control", "label": "{door:gain-control.triggers.2}", "next": "gain-control-why" },
+          { "id": "none", "label": "Nobody's asking yet", "sub": "No deal, exit, lender or investor on the clock", "next": "gain-control-why" }
+        ]
+      }
+    },
+    "gain-control-why": {
+      "chapter": "door-gain-control",
+      "scene": { "kind": "station", "door": "gain-control", "station": "urgency" },
+      "lines": [
+        { "id": "gc-acq-1", "when": { "answers": { "pressure-gain-control": ["acquisition"] } }, "text": "Then start with a diligence-grade assessment for the acquisition, and make it the standard for every company that follows.", "source": "The Forcing Function §04, trigger events", "status": "adapted" },
+        { "id": "gc-rep-1", "when": { "answers": { "pressure-gain-control": ["reporting"] } }, "text": "Then the fix is one control set across every company, and reporting the investment committee can read without a translator.", "source": "The Forcing Function §06, what to say to each; §03, the buying committee", "status": "adapted" },
+        { "id": "gc-ctl-1", "when": { "answers": { "pressure-gain-control": ["control"] } }, "text": "Then the ask is oversight across entities without hiring a CISO for each one. Each company stays isolated, and the fund sees one view.", "source": "The Forcing Function §03, the buying committee; §02, the three segments", "status": "adapted" },
+        { "id": "gc-early-1", "when": { "answers": { "pressure-gain-control": ["none"] } }, "text": "Then you may be early, and 3HUE would rather tell you that than sell you something. For a fund, the trigger is usually an acquisition, an exit or a lender's conditions.", "source": "The Ship List §06, discovery script; The Forcing Function §02, the three segments; §05, who to decline", "status": "adapted" },
+        { "id": "gc-why-1", "ref": "doors.gain-control.opening", "callout": ["doors.gain-control.stat"] },
+        { "id": "gc-why-2", "text": "That gap isn't a philosophy difference. It's a staffing one.", "source": "The Forcing Function §06, what to say to each", "status": "adapted" },
+        { "id": "gc-why-3", "ref": "doors.gain-control.statSecondary", "callout": ["doors.gain-control.statSecondary"], "cue": { "station": "gap" } }
+      ],
+      "next": "gain-control-proof"
+    },
+    "gain-control-proof": {
+      "chapter": "door-gain-control",
+      "scene": { "kind": "station", "door": "gain-control", "station": "proof" },
+      "lines": [
+        { "id": "gc-proof-1", "ref": "doors.gain-control.proof.0", "callout": ["doors.gain-control.proof.0"] },
+        { "id": "gc-proof-2", "text": "The point is repeatability at scale: the same reason a sponsor shouldn't hire a different consultant for every portfolio company.", "source": "The Forcing Function §02, the three segments", "status": "adapted" }
+      ],
+      "next": "gain-control-run"
+    },
+    "gain-control-run": {
+      "chapter": "door-gain-control",
+      "scene": { "kind": "station", "door": "gain-control", "station": "program" },
+      "lines": [
+        { "id": "gc-run-1", "text": "For a fund, it runs in three moves: {ref:arc.0}, {ref:arc.1}, {ref:arc.2}.", "source": "Lobby manifest: arc", "status": "derived" },
+        { "id": "gc-run-2", "ref": "doors.gain-control.program.snapshot" },
+        { "id": "gc-run-3", "ref": "doors.gain-control.program.build" },
+        { "id": "gc-run-4", "ref": "doors.gain-control.program.operate" }
+      ],
+      "choice": {
+        "id": "gc-next",
+        "prompt": "Where next?",
+        "options": [
+          { "id": "lens", "label": "Who signs off on this?", "sub": "Who is in the room, and what each needs to hear", "next": "lens", "suggest": { "answers": { "segment": ["gain-control"] }, "notVisited": ["lens"] } },
+          { "id": "next-door", "label": "Take me to the next door", "next": "=next-door", "suggest": { "answers": { "segment": ["all"] } }, "hideWhen": { "visited": ["door-win-trust", "door-gain-control", "door-stay-ready"] } },
+          { "id": "path", "label": "Where do we start?", "sub": "{ref:path.title}", "next": "path", "suggest": {} },
+          { "id": "explore", "label": "{str:tourDetails}", "sub": "Opens this room's panel and ends the tour", "action": "explore" }
+        ]
+      }
+    },
+
+    "stay-ready": {
+      "chapter": "door-stay-ready",
+      "scene": { "kind": "door", "door": "stay-ready" },
+      "lines": [
+        { "id": "sr-1", "text": "{door:stay-ready.title}. This room is for banks, credit unions, lenders and operators with governance on paper and an examiner in the building.", "source": "The Forcing Function, cover", "status": "adapted" },
+        { "id": "sr-2", "text": "Here the conversation can be in the examiner's language from the first sentence. So, what's pressing?", "source": "The Forcing Function §02, the three segments; The Message Stack §04, the message by segment", "status": "adapted" }
+      ],
+      "choice": {
+        "id": "sr-pressure",
+        "prompt": "What's pressing right now?",
+        "remember": "pressure-stay-ready",
+        "options": [
+          { "id": "exam", "label": "{door:stay-ready.triggers.0}", "next": "stay-ready-why" },
+          { "id": "incident", "label": "{door:stay-ready.triggers.1}", "next": "stay-ready-why" },
+          { "id": "crossing", "label": "{door:stay-ready.triggers.2}", "next": "stay-ready-why" },
+          { "id": "none", "label": "Nobody's asking yet", "sub": "No exam, finding or board mandate on the clock", "next": "stay-ready-why" }
+        ]
+      }
+    },
+    "stay-ready-why": {
+      "chapter": "door-stay-ready",
+      "scene": { "kind": "station", "door": "stay-ready", "station": "urgency" },
+      "lines": [
+        { "id": "sr-exam-1", "when": { "answers": { "pressure-stay-ready": ["exam"] } }, "text": "Then the job is findings that close and stay closed, with evidence that survives the next exam, not just this one.", "source": "The Message Stack §04, the message by segment; The Forcing Function §04, trigger events", "status": "adapted" },
+        { "id": "sr-incident-1", "when": { "answers": { "pressure-stay-ready": ["incident"] } }, "text": "Then the question is whether you can demonstrate, on the worst day, that what you said was true was actually true.", "source": "The Ship List §04, LinkedIn post series", "status": "adapted" },
+        { "id": "sr-incident-2", "when": { "answers": { "pressure-stay-ready": ["incident"] } }, "text": "That usually means a response plan, playbooks and a tabletop exercise, so the team has rehearsed before it has to respond for real.", "source": "3HUE service catalog, as listed in this room's services", "status": "proposed" },
+        { "id": "sr-crossing-1", "when": { "answers": { "pressure-stay-ready": ["crossing"] } }, "text": "Then map it to the frameworks your examiner already uses.", "source": "The Forcing Function §02, the three segments", "status": "adapted" },
+        { "id": "sr-crossing-2", "when": { "answers": { "pressure-stay-ready": ["crossing"] } }, "text": "For AI, ask four questions of every use: what can it access, what can it change, who approved it, and what proves it stayed inside.", "source": "The Forcing Function §04, trigger events", "status": "adapted" },
+        { "id": "sr-early-1", "when": { "answers": { "pressure-stay-ready": ["none"] } }, "text": "Then you may be early, and 3HUE would rather tell you that than sell you something. Here the trigger is usually an exam finding, a remediation clock or a board mandate.", "source": "The Ship List §06, discovery script; The Forcing Function §02, the three segments; §05, who to decline", "status": "adapted" },
+        { "id": "sr-why-1", "ref": "doors.stay-ready.opening" },
+        { "id": "sr-why-2", "ref": "doors.stay-ready.stat", "callout": ["doors.stay-ready.stat"] },
+        { "id": "sr-why-3", "text": "Deployed is not operating. The gap between the two is where both audits and incidents happen.", "source": "The Message Stack §01, core narrative; §08, words we use", "status": "adapted", "cue": { "station": "gap" } },
+        { "id": "sr-why-4", "ref": "doors.stay-ready.statSecondary", "callout": ["doors.stay-ready.statSecondary"] }
+      ],
+      "next": "stay-ready-proof"
+    },
+    "stay-ready-proof": {
+      "chapter": "door-stay-ready",
+      "scene": { "kind": "station", "door": "stay-ready", "station": "proof" },
+      "lines": [
+        { "id": "sr-proof-1", "ref": "doors.stay-ready.proof.0", "callout": ["doors.stay-ready.proof.0"] },
+        { "id": "sr-proof-2", "text": "In this room the buyer is a peer, not a novice, so the practitioner's own record matters more than any case study.", "source": "The Forcing Function §02, the three segments", "status": "adapted" }
+      ],
+      "next": "stay-ready-run"
+    },
+    "stay-ready-run": {
+      "chapter": "door-stay-ready",
+      "scene": { "kind": "station", "door": "stay-ready", "station": "program" },
+      "lines": [
+        { "id": "sr-run-1", "text": "Here it runs in three moves: {ref:arc.0}, {ref:arc.1}, {ref:arc.2}.", "source": "Lobby manifest: arc", "status": "derived" },
+        { "id": "sr-run-2", "ref": "doors.stay-ready.program.snapshot" },
+        { "id": "sr-run-3", "ref": "doors.stay-ready.program.build" },
+        { "id": "sr-run-4", "ref": "doors.stay-ready.program.operate" }
+      ],
+      "choice": {
+        "id": "sr-next",
+        "prompt": "Where next?",
+        "options": [
+          { "id": "lens", "label": "Who signs off on this?", "sub": "Who is in the room, and what each needs to hear", "next": "lens", "suggest": { "answers": { "segment": ["stay-ready"] }, "notVisited": ["lens"] } },
+          { "id": "next-door", "label": "Take me to the next door", "next": "=next-door", "suggest": { "answers": { "segment": ["all"] } }, "hideWhen": { "visited": ["door-win-trust", "door-gain-control", "door-stay-ready"] } },
+          { "id": "path", "label": "Where do we start?", "sub": "{ref:path.title}", "next": "path", "suggest": {} },
+          { "id": "explore", "label": "{str:tourDetails}", "sub": "Opens this room's panel and ends the tour", "action": "explore" }
+        ]
+      }
+    },
+
+    "lens": {
+      "chapter": "lens",
+      "scene": "keep",
+      "lines": [
+        { "id": "lens-wt-1", "when": { "answers": { "door": ["win-trust"] } }, "text": "In this room the CEO or COO signs. The CTO or VP Engineering champions it, and increasingly so does the Head of Sales whose deal is blocked.", "source": "The Forcing Function §02, the three segments", "status": "adapted" },
+        { "id": "lens-wt-2", "when": { "answers": { "door": ["win-trust"] } }, "text": "The lead investor, outside counsel and the insurance broker influence it. There's usually no CISO in the room. That's the gap 3HUE fills.", "source": "The Forcing Function §02, the three segments; The Message Stack §06, objection handling", "status": "adapted" },
+        { "id": "lens-gc-1", "when": { "answers": { "door": ["gain-control"] } }, "text": "In a fund, the operating partner or fund CFO signs. Portfolio-company CTOs and the value-creation team champion it.", "source": "The Forcing Function §02, the three segments", "status": "adapted" },
+        { "id": "lens-gc-2", "when": { "answers": { "door": ["gain-control"] } }, "text": "The deal team, the insurance broker and the lender influence it. They think in portfolios and exits, not in controls.", "source": "The Forcing Function §02, the three segments", "status": "adapted" },
+        { "id": "lens-sr-1", "when": { "answers": { "door": ["stay-ready"] } }, "text": "Here the CIO, CISO or Chief Risk Officer signs, with the audit committee behind them. Internal audit, the examiner's letter and the board influence it.", "source": "The Forcing Function §02, the three segments", "status": "adapted" },
+        { "id": "lens-1", "text": "Each of them needs to hear something different, and the case that convinces the champion rarely convinces the person who signs.", "source": "The Forcing Function §03, the buying committee", "status": "adapted" }
+      ],
+      "choice": {
+        "id": "lens",
+        "prompt": "Whose view should I take?",
+        "remember": "lens",
+        "options": [
+          { "id": "signer", "label": "The person who signs", "next": "lens-signer", "suggest": [{ "answers": { "door": ["gain-control", "stay-ready"] } }, { "answers": { "door": ["win-trust"], "pressure-win-trust": ["evidence", "ai", "none"] } }] },
+          { "id": "champion", "label": "The champion", "sub": "Usually the CTO or IT Director", "next": "lens-champion", "hideWhen": { "answers": { "door": ["stay-ready"] } } },
+          { "id": "deadline", "label": "The person holding the deadline", "sub": "Usually the Head of Sales", "next": "lens-deadline", "suggest": { "answers": { "door": ["win-trust"], "pressure-win-trust": ["deal"] } }, "hideWhen": { "answers": { "door": ["gain-control", "stay-ready"] } } },
+          { "id": "skip", "label": "Skip to where we start", "sub": "{ref:path.title}", "next": "path" }
+        ]
+      }
+    },
+    "lens-more": {
+      "chapter": "lens",
+      "scene": "keep",
+      "lines": [
+        { "id": "lens-more-1", "text": "Same program, different listener.", "source": "Tour script, linking line; The Forcing Function §03, the buying committee", "status": "proposed" }
+      ],
+      "choice": {
+        "id": "lens-more",
+        "prompt": "Whose view next?",
+        "options": [
+          { "id": "signer", "label": "The person who signs", "next": "lens-signer" },
+          { "id": "champion", "label": "The champion", "sub": "Usually the CTO or IT Director", "next": "lens-champion", "hideWhen": { "answers": { "door": ["stay-ready"] } } },
+          { "id": "deadline", "label": "The person holding the deadline", "sub": "Usually the Head of Sales", "next": "lens-deadline", "hideWhen": { "answers": { "door": ["gain-control", "stay-ready"] } } },
+          { "id": "path", "label": "Where do we start?", "sub": "{ref:path.title}", "next": "path", "suggest": {} }
+        ]
+      }
+    },
+    "lens-signer": {
+      "chapter": "lens",
+      "scene": "keep",
+      "lines": [
+        { "id": "signer-wt-1", "when": { "answers": { "door": ["win-trust"] } }, "text": "The CEO or COO hears about security when a deal, a renewal or a policy is at risk. Never before.", "source": "The Forcing Function §03, the buying committee", "status": "adapted" },
+        { "id": "signer-wt-2", "when": { "answers": { "door": ["win-trust"] } }, "text": "They ask what it costs, how long it takes, and whether it closes the deal.", "source": "The Forcing Function §03, the buying committee", "status": "adapted" },
+        { "id": "signer-wt-3", "when": { "answers": { "door": ["win-trust"] } }, "text": "What they need to hear: a fixed-scope start with a date, the deal it unblocks, and the person who scopes the work on the call, not a junior team.", "source": "The Forcing Function §03, the buying committee; The Message Stack §05, claims library", "status": "adapted" },
+        { "id": "signer-gc-1", "when": { "answers": { "door": ["gain-control"] } }, "text": "The operating partner or fund CFO answers to an investment committee. They want oversight across entities without hiring a CISO for each one.", "source": "The Forcing Function §03, the buying committee; §02, the three segments", "status": "adapted" },
+        { "id": "signer-gc-2", "when": { "answers": { "door": ["gain-control"] } }, "text": "They ask what the exposure is across the portfolio, and whether the policy will pay out.", "source": "The Forcing Function §03, the buying committee", "status": "adapted" },
+        { "id": "signer-gc-3", "when": { "answers": { "door": ["gain-control"] } }, "text": "What they need to hear: one control set across every company, evidence that survives diligence, and reporting a board can read without a translator.", "source": "The Forcing Function §03, the buying committee", "status": "adapted" },
+        { "id": "signer-sr-1", "when": { "answers": { "door": ["stay-ready"] } }, "text": "The CIO, CISO or Chief Risk Officer answers to a board and an examiner. What they fear is a finding that won't close, or a voided claim after an incident.", "source": "The Forcing Function §03, the buying committee; §02, the three segments", "status": "adapted" },
+        { "id": "signer-sr-2", "when": { "answers": { "door": ["stay-ready"] } }, "text": "What they need to hear: findings that close and stay closed, named frameworks in the examiner's language, and reporting a board can read without a translator.", "source": "The Message Stack §04, the message by segment; The Forcing Function §03, the buying committee", "status": "adapted" }
+      ],
+      "choice": {
+        "id": "after-signer",
+        "prompt": "Where next?",
+        "options": [
+          { "id": "another", "label": "Hear another view", "next": "lens-more", "hideWhen": { "answers": { "door": ["stay-ready"] } } },
+          { "id": "next-door", "label": "Take me to the next door", "next": "=next-door", "suggest": { "answers": { "segment": ["all"] } }, "hideWhen": { "visited": ["door-win-trust", "door-gain-control", "door-stay-ready"] } },
+          { "id": "path", "label": "Where do we start?", "sub": "{ref:path.title}", "next": "path", "suggest": {} }
+        ]
+      }
+    },
+    "lens-champion": {
+      "chapter": "lens",
+      "scene": "keep",
+      "lines": [
+        { "id": "champion-1", "text": "The champion is often the CTO or IT Director, wearing the security hat alongside everything else. What they fear is engineering time burned on audit theater.", "source": "The Forcing Function §03, the buying committee", "status": "adapted" },
+        { "id": "champion-2", "text": "They ask you to tell them what they don't have to do. And they ask who is actually going to run this.", "source": "The Forcing Function §03, the buying committee", "status": "adapted" },
+        { "id": "champion-3", "text": "What they need to hear: the scope cut to what the standard requires, and 3HUE's line on the rest. We don't hand you a plan. We run the program.", "source": "The Forcing Function §03, the buying committee; The Message Stack §03, three pillars", "status": "adapted" }
+      ],
+      "choice": {
+        "id": "after-champion",
+        "prompt": "Where next?",
+        "options": [
+          { "id": "another", "label": "Hear another view", "next": "lens-more" },
+          { "id": "next-door", "label": "Take me to the next door", "next": "=next-door", "suggest": { "answers": { "segment": ["all"] } }, "hideWhen": { "visited": ["door-win-trust", "door-gain-control", "door-stay-ready"] } },
+          { "id": "path", "label": "Where do we start?", "sub": "{ref:path.title}", "next": "path", "suggest": {} }
+        ]
+      }
+    },
+    "lens-deadline": {
+      "chapter": "lens",
+      "scene": "keep",
+      "lines": [
+        { "id": "deadline-1", "text": "The person holding the deadline is often the Head of Sales. They know nothing about controls, but they're holding the procurement email that killed the deal.", "source": "The Forcing Function §03, the buying committee", "status": "adapted" },
+        { "id": "deadline-2", "text": "What they say is: we're losing to a worse product because they seemed more legit.", "source": "The Forcing Function §03, the buying committee", "status": "adapted" },
+        { "id": "deadline-3", "text": "What they need to hear: a readiness letter with a date for procurement, and someone who owns the questionnaire. The competitor that won wasn't better. They were provable.", "source": "The Forcing Function §03, the buying committee; The Message Stack §08, words we use", "status": "adapted" }
+      ],
+      "choice": {
+        "id": "after-deadline",
+        "prompt": "Where next?",
+        "options": [
+          { "id": "another", "label": "Hear another view", "next": "lens-more" },
+          { "id": "next-door", "label": "Take me to the next door", "next": "=next-door", "suggest": { "answers": { "segment": ["all"] } }, "hideWhen": { "visited": ["door-win-trust", "door-gain-control", "door-stay-ready"] } },
+          { "id": "path", "label": "Where do we start?", "sub": "{ref:path.title}", "next": "path", "suggest": {} }
+        ]
+      }
+    },
+
+    "path": {
+      "chapter": "path",
+      "scene": { "kind": "path" },
+      "lines": [
+        { "id": "path-1", "ref": "path.intro", "source": "Lobby manifest: path.intro", "status": "derived", "cue": { "stage": "assess" } },
+        { "id": "path-2", "text": "In order: {stage:assess}, {stage:strengthen}, {stage:operate} and {stage:advance}.", "source": "Lobby manifest: stages", "status": "derived" },
+        { "id": "path-3", "ref": "path.whereToStart", "callout": ["path.whereToStart"], "cue": { "stage": "where-to-start" } },
+        { "id": "path-4", "text": "You won't get a maturity score from me. The Snapshot ends with a scoped plan: how long, what it costs, and who does the work.", "source": "The Message Stack §08, words we use; The Ship List §03, landing page copy", "status": "adapted" }
+      ],
+      "choice": {
+        "id": "today",
+        "prompt": "Where are you today?",
+        "remember": "today",
+        "options": [
+          { "id": "asked", "label": "Someone has asked us to prove it", "sub": "A deal, renewal, exam or diligence, with a date", "next": "start-asked", "suggest": [{ "answers": { "door": ["win-trust"], "pressure-win-trust": ["deal", "evidence", "ai"] } }, { "answers": { "door": ["gain-control"], "pressure-gain-control": ["acquisition"] } }, { "answers": { "door": ["stay-ready"], "pressure-stay-ready": ["exam"] } }] },
+          { "id": "nothing", "label": "Nothing formal yet", "sub": "No program, or no recent end-to-end look", "next": "start-baseline" },
+          { "id": "paper", "label": "On paper, not in operation", "sub": "Tools and policies in place, nobody running them", "next": "start-operate", "suggest": [{ "answers": { "door": ["gain-control"], "pressure-gain-control": ["reporting", "control"] } }, { "answers": { "door": ["stay-ready"], "pressure-stay-ready": ["incident", "crossing"] } }] }
+        ]
+      }
+    },
+    "start-asked": {
+      "chapter": "path",
+      "scene": { "kind": "path", "stage": "where-to-start" },
+      "lines": [
+        { "id": "asked-1", "text": "Then the Snapshot points straight at that obligation, so you get to a decision you can act on.", "source": "The Ship List §07, offer one-pagers; The Forcing Function §02, the three segments", "status": "adapted" },
+        { "id": "asked-2", "text": "You finish with a straight answer on whether you'll pass, a scoped plan with a date, and the list of things you don't have to do.", "source": "The Ship List §03, landing page copy", "status": "adapted" },
+        { "id": "asked-3", "text": "After that, 3HUE builds only what the obligation requires, and manages the auditor relationship so there are no surprises.", "source": "The Forcing Function §02, the three segments; The Message Stack §06, objection handling", "status": "adapted" }
+      ],
+      "next": "kiosk"
+    },
+    "start-baseline": {
+      "chapter": "path",
+      "scene": { "kind": "path", "stage": "assess" },
+      "lines": [
+        { "id": "baseline-1", "text": "Then the Snapshot shows where you actually stand. On the service list, the full first look is the {door:win-trust.serviceFamilies.0.examples.0}.", "source": "Lobby manifest: path.whereToStart; 3HUE service catalog", "status": "proposed" },
+        { "id": "baseline-2", "text": "A published 3HUE engagement started exactly here.", "source": "Transit Technologies engagement, published customer story", "status": "adapted" },
+        { "id": "baseline-3", "ref": "doors.win-trust.proof.0", "callout": ["doors.win-trust.proof.0"] },
+        { "id": "baseline-4", "text": "If you want 3HUE to run the program after that, it does. If you'd rather run it yourself, you'll have something an internal hire can inherit.", "source": "The Ship List §03, landing page copy", "status": "adapted" }
+      ],
+      "next": "kiosk"
+    },
+    "start-operate": {
+      "chapter": "path",
+      "scene": { "kind": "path", "stage": "operate" },
+      "lines": [
+        { "id": "operate-1", "text": "Then the tools are bought and the policies are written, but nobody runs them between audits.", "source": "The Forcing Function §01, the fit model; The Message Stack §08, words we use", "status": "adapted" },
+        { "id": "operate-2", "text": "The Snapshot scopes what's actually running. On the service list, the recurring check is the {door:win-trust.serviceFamilies.0.examples.1}.", "source": "3HUE service catalog", "status": "proposed" },
+        { "id": "operate-3", "text": "Then comes continuous controls monitoring that replaces point-in-time testing, so the evidence is still there next quarter.", "source": "The Forcing Function §02, the three segments; The Ship List §03, landing page copy", "status": "adapted" }
+      ],
+      "next": "kiosk"
+    },
+
+    "kiosk": {
+      "chapter": "kiosk",
+      "scene": { "kind": "kiosk", "fallback": "rest" },
+      "lines": [
+        { "id": "kiosk-1", "text": "This is the kiosk, the {ref:kiosk.header}. What it shows is representative data, counted from this lobby rather than from any client.", "source": "Lobby manifest: kiosk (DECISIONS O9)", "status": "proposed" },
+        { "id": "kiosk-2", "text": "In an engagement, this is where the evidence lives, kept current between audits instead of assembled before each one.", "source": "The Message Stack §01, core narrative; §09, boilerplate", "status": "adapted" },
+        { "id": "kiosk-3", "text": "The module available today is CloudSignals+RiskOps. Everything else is in development, and I'll always say so.", "source": "The Message Stack §05, claims library; 3HUE Brand Sheet §06, naming conventions", "status": "adapted" }
+      ],
+      "next": "close"
+    },
+
+    "close": {
+      "chapter": "close",
+      "scene": "rest",
+      "lines": [
+        { "id": "close-1", "text": "That's the lobby: three doors, one path.", "source": "Lobby manifest: walk.captions.end, strings.legend", "status": "adapted" },
+        { "id": "close-2", "text": "You can talk to the team, ask me a question, take a summary with you, or walk it again. The summary stays in your browser unless you send it.", "source": "Tour script, linking line; DECISIONS O10", "status": "proposed" }
+      ],
+      "choice": {
+        "id": "close",
+        "prompt": "What would you like to do?",
+        "options": [
+          { "id": "talk", "action": "talk", "suggest": { "answers": { "today": ["asked"] } } },
+          { "id": "ask", "label": "Ask {guide} a question", "sub": "Answers from 3HUE's approved material", "action": "ask" },
+          { "id": "summary", "label": "{str:tourSummary}", "sub": "Opens your email app, or copy it", "action": "summary", "suggest": {} },
+          { "id": "replay", "label": "Walk it again", "sub": "From the lobby, with a clean slate", "action": "replay" }
+        ]
+      }
+    }
+  },
+
+  "ask": {
+    "intro": { "id": "ask-intro", "text": "Ask me about 3HUE. I answer only from 3HUE's approved material, and every answer shows where it comes from.", "source": "Tour script, linking line", "status": "proposed" },
+    "questions": [
+      {
+        "id": "what-is-3hue",
+        "q": "What is 3HUE?",
+        "keys": ["3hue", "who", "company", "firm", "about", "what do you do", "consulting"],
+        "lines": [
+          { "id": "ask-what-1", "text": "3HUE builds and operates security, compliance and AI governance programs for organizations that have to prove their controls work — and have no one inside to run them.", "source": "The Message Stack §09, boilerplate", "status": "approved-copy" }
+        ]
+      },
+      {
+        "id": "different",
+        "q": "How is 3HUE different from a consultant?",
+        "keys": ["different", "difference", "consultant", "consultancy", "advisor", "why you", "unique"],
+        "lines": [
+          { "id": "ask-different-1", "text": "Two things. 3HUE runs the program instead of handing you a plan, and the same advisor who scopes the work delivers it.", "source": "The Message Stack §03, three pillars; §05, claims library", "status": "adapted" },
+          { "id": "ask-different-2", "text": "The managed programs run on me, so the evidence stays current between audits.", "source": "The Message Stack §01, core narrative; §09, boilerplate", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "where-to-start",
+        "q": "Where do we start?",
+        "keys": ["start", "begin", "first", "snapshot", "diagnostic", "entry", "step"],
+        "goto": "path",
+        "lines": [
+          { "id": "ask-start-1", "ref": "path.whereToStart" },
+          { "id": "ask-start-2", "text": "You finish with a straight answer on whether you'll pass, a scoped plan with a date, and the list of things you don't have to do.", "source": "The Ship List §03, landing page copy", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "after-snapshot",
+        "q": "What happens after the Snapshot?",
+        "keys": ["after", "then", "next", "build", "operate", "program", "ongoing"],
+        "lines": [
+          { "id": "ask-after-1", "text": "Then {ref:arc.1} and {ref:arc.2}. If you want 3HUE to run the program, it does.", "source": "The lobby's Snapshot, Build, Operate; The Ship List §03, landing page copy", "status": "adapted" },
+          { "id": "ask-after-2", "text": "If you'd rather take the plan and run it yourself, that works too, and you'll have something an internal hire can inherit rather than start over.", "source": "The Ship List §03, landing page copy", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "pricing",
+        "q": "How does pricing work?",
+        "keys": ["price", "pricing", "cost", "costs", "fee", "budget", "expensive", "quote", "rate"],
+        "lines": [
+          { "id": "ask-price-1", "text": "Pricing is scoped, so there's no list price here. The Snapshot ends with a scoped plan: how long, what it costs, and who does the work.", "source": "The Ship List §03, landing page copy; §06, discovery script", "status": "adapted" },
+          { "id": "ask-price-2", "text": "Price it against the deal, exam or exit that's waiting on it, not against a tool subscription. For a figure, talk to the team.", "source": "The Message Stack §06, objection handling; The Forcing Function §01, the fit model", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "platform",
+        "q": "We already pay for a compliance platform. Why would we need you?",
+        "keys": ["platform", "tool", "software", "already", "compliance platform", "automation", "grc"],
+        "lines": [
+          { "id": "ask-platform-1", "text": "Keep it. A platform tells you what's wrong. The question is who fixes it, who answers the questionnaire, and who negotiates scope with the auditor.", "source": "The Message Stack §06, objection handling", "status": "adapted" },
+          { "id": "ask-platform-2", "text": "That's the job 3HUE does, on top of the tool you already bought.", "source": "The Message Stack §06, objection handling", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "theater",
+        "q": "Isn't this just compliance theater?",
+        "keys": ["theater", "theatre", "checkbox", "box ticking", "certificate", "paper"],
+        "lines": [
+          { "id": "ask-theater-1", "text": "Mostly, yes. A certificate says controls existed during a window.", "source": "The Message Stack §06, objection handling", "status": "adapted" },
+          { "id": "ask-theater-2", "text": "That's why 3HUE sells the operating layer, not the certificate: you get the report because your buyer needs it, and a program because you need it.", "source": "The Message Stack §06, objection handling", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "guarantee",
+        "q": "Can you guarantee we pass?",
+        "keys": ["guarantee", "pass", "promise", "fail", "certain", "sure"],
+        "lines": [
+          { "id": "ask-guarantee-1", "text": "No, and be careful with anyone who says otherwise.", "source": "The Ship List §03, landing page copy", "status": "adapted" },
+          { "id": "ask-guarantee-2", "text": "What 3HUE can do is tell you before you start whether you'll pass, scope the work to what the standard actually requires, and manage the auditor so there are no surprises.", "source": "The Message Stack §06, objection handling", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "hire",
+        "q": "Why not just hire a CISO?",
+        "keys": ["hire", "hiring", "ciso", "employee", "full-time", "in-house", "headcount", "someone"],
+        "lines": [
+          { "id": "ask-hire-1", "text": "Eventually you should. At your size, a full-time hire would be under-used for the first year.", "source": "The Message Stack §06, objection handling", "status": "adapted" },
+          { "id": "ask-hire-2", "text": "3HUE runs the program now and builds it so that hire inherits something rather than starting over.", "source": "The Message Stack §06, objection handling", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "msp",
+        "q": "Our MSP already handles security. Where do you fit?",
+        "keys": ["msp", "mssp", "managed service", "it provider", "vciso", "outsourced"],
+        "lines": [
+          { "id": "ask-msp-1", "text": "Ask them three questions: which framework are we assessed against, who signs off on risk acceptance, and what happens when an auditor challenges a control?", "source": "The Message Stack §06, objection handling", "status": "adapted" },
+          { "id": "ask-msp-2", "text": "If the answers are good, you're in fine shape. If they're vague, that's the gap 3HUE fills, alongside your MSP, not instead of it.", "source": "The Message Stack §06, objection handling; §07, battlecards", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "big-firm",
+        "q": "How is this different from a big-firm readiness engagement?",
+        "keys": ["big firm", "large firm", "accounting firm", "readiness engagement", "partner", "analysts"],
+        "lines": [
+          { "id": "ask-big-firm-1", "text": "Here, the person in the room is the person doing the work, and the scope stays where it was set.", "source": "The Message Stack §06, objection handling", "status": "adapted" },
+          { "id": "ask-big-firm-2", "text": "And when the report is delivered, 3HUE is still running the program. Continuity is usually the difference that matters.", "source": "The Message Stack §06, objection handling", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "frameworks",
+        "q": "Which frameworks do you work with?",
+        "keys": ["framework", "frameworks", "soc", "soc 2", "iso", "27001", "nist", "ffiec", "cobit", "standard"],
+        "lines": [
+          { "id": "ask-frameworks-1", "text": "It depends on who is asking you to prove it. For a bank, a credit union or a lender, 3HUE works in the frameworks the examiner already uses.", "source": "The Forcing Function §02, the three segments; The Message Stack §04, the message by segment", "status": "adapted" },
+          { "id": "ask-frameworks-2", "ref": "doors.stay-ready.program.snapshot" },
+          { "id": "ask-frameworks-3", "text": "For a software company selling into enterprise, the usual ask is SOC 2 or ISO 27001. The service list also includes {door:win-trust.serviceFamilies.2.examples.1}.", "source": "The Forcing Function §02, the three segments; 3HUE service catalog", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "ai",
+        "q": "Our customers are asking how we govern AI. Where do we begin?",
+        "keys": ["ai", "artificial intelligence", "governance", "model", "llm", "machine learning", "ai risk"],
+        "goto": "win-trust",
+        "lines": [
+          { "id": "ask-ai-1", "text": "With four questions: what can it access, what can it change, who approved it, and what proves it stayed inside.", "source": "The Forcing Function §04, trigger events", "status": "adapted" },
+          { "id": "ask-ai-2", "text": "The AI Risk & Readiness Snapshot is framed around them. On the service list, the follow-on is {door:win-trust.serviceFamilies.2.examples.2}.", "source": "The Forcing Function §04, trigger events; The Message Stack §05, claims library; 3HUE service catalog", "status": "proposed" }
+        ]
+      },
+      {
+        "id": "private-equity",
+        "q": "Do you work with private equity portfolios?",
+        "keys": ["private equity", "pe", "fund", "sponsor", "portfolio", "family office", "acquisition", "diligence"],
+        "goto": "gain-control",
+        "lines": [
+          { "id": "ask-pe-1", "text": "Yes. For a fund, it runs in three moves.", "source": "The Forcing Function §02, the three segments", "status": "proposed" },
+          { "id": "ask-pe-2", "ref": "doors.gain-control.program.snapshot" },
+          { "id": "ask-pe-3", "ref": "doors.gain-control.program.build" },
+          { "id": "ask-pe-4", "ref": "doors.gain-control.program.operate" }
+        ]
+      },
+      {
+        "id": "exam-findings",
+        "q": "We have open exam findings. What does the work look like?",
+        "keys": ["exam", "examiner", "finding", "findings", "mra", "regulator", "remediation", "bank"],
+        "goto": "stay-ready",
+        "lines": [
+          { "id": "ask-exam-1", "ref": "doors.stay-ready.program.operate" },
+          { "id": "ask-exam-2", "ref": "doors.stay-ready.program.build" },
+          { "id": "ask-exam-3", "ref": "doors.stay-ready.proof.0" }
+        ]
+      },
+      {
+        "id": "proof",
+        "q": "What proof do you have?",
+        "keys": ["proof", "evidence", "customer", "case study", "story", "result", "references", "track record"],
+        "lines": [
+          { "id": "ask-proof-1", "ref": "doors.win-trust.proof.0" },
+          { "id": "ask-proof-2", "ref": "doors.gain-control.proof.0" },
+          { "id": "ask-proof-3", "ref": "doors.stay-ready.proof.0" }
+        ]
+      },
+      {
+        "id": "aivric",
+        "q": "What is {guide}?",
+        "keys": ["aivric", "platform", "you", "guide", "cloudsignals", "product", "module"],
+        "lines": [
+          { "id": "ask-aivric-1", "text": "I'm the platform 3HUE built. 3HUE's managed programs run on me, so the evidence stays current between audits instead of being assembled before each one.", "source": "The Message Stack §09, boilerplate; §01, core narrative", "status": "adapted" },
+          { "id": "ask-aivric-2", "text": "The module available today is CloudSignals+RiskOps. Everything else is in development.", "source": "The Message Stack §05, claims library; 3HUE Brand Sheet §06, naming conventions", "status": "adapted" }
+        ]
+      },
+      {
+        "id": "voice",
+        "q": "Is this a real person's voice?",
+        "keys": ["voice", "real", "person", "human", "recording", "synthetic", "speech"],
+        "source": "Azure AI Speech, licensed synthetic voice",
+        "status": "derived",
+        "lines": [
+          { "id": "ask-voice-1", "ref": "guide.disclosure" }
+        ]
+      },
+      {
+        "id": "privacy",
+        "q": "What happens to my answers?",
+        "keys": ["privacy", "data", "answers", "tracking", "stored", "send", "email", "microphone"],
+        "lines": [
+          { "id": "ask-privacy-1", "text": "This lobby has no sign-up, no analytics and no sign-in. What you type into Ask is matched in this tab and never sent.", "source": "How this lobby is built: static files, nothing collected", "status": "proposed" },
+          { "id": "ask-privacy-2", "text": "Your answers stay in this browser tab, and the summary goes nowhere unless you send it yourself.", "source": "How this lobby is built: static files, nothing collected", "status": "proposed" },
+          { "id": "ask-privacy-3", "text": "If you use the microphone, your browser's own speech service may handle the audio. 3HUE never receives it.", "source": "How this lobby is built: the browser handles the microphone", "status": "proposed" }
+        ]
+      },
+      {
+        "id": "early",
+        "q": "Nobody has asked us to prove anything yet. Should we talk?",
+        "keys": ["early", "nobody", "not yet", "later", "no trigger", "should we talk", "ready"],
+        "lines": [
+          { "id": "ask-early-1", "text": "Maybe not yet. The trigger is usually a customer, an insurer, an investor or a regulator asking for proof, with a date.", "source": "The Message Stack §07, battlecards; The Forcing Function §05, who to decline", "status": "adapted" },
+          { "id": "ask-early-2", "text": "If nobody has asked, you may be early, and 3HUE would rather tell you that than sell you something.", "source": "The Ship List §06, discovery script", "status": "adapted" }
+        ]
+      }
+    ]
+  },
+
+  "summary": {
+    "subject": "Your tour of the 3HUE lobby",
+    "lines": [
+      { "id": "sum-intro", "text": "Your tour of the 3HUE lobby with {guide}. This summary was built in your browser.", "source": "Tour script, summary; DECISIONS O10", "status": "proposed" },
+      { "id": "sum-segment", "when": { "answers": { "segment": ["win-trust", "gain-control", "stay-ready"] } }, "text": "Your buyer segment: {answer:segment}", "source": "The visitor's answer, labelled from the lobby manifest", "status": "derived" },
+      { "id": "sum-win-trust", "when": { "visited": ["door-win-trust"] }, "text": "{door:win-trust.title}: {door:win-trust.promise}", "source": "Lobby manifest: door title and promise", "status": "derived" },
+      { "id": "sum-win-trust-stat", "when": { "visited": ["door-win-trust"] }, "ref": "doors.win-trust.stat" },
+      { "id": "sum-win-trust-pressure", "when": { "visited": ["door-win-trust"], "answers": { "pressure-win-trust": ["deal", "evidence", "ai", "none"] } }, "text": "What's pressing: {answer:pressure-win-trust}", "source": "The visitor's answer in this room, labelled from the lobby manifest", "status": "derived" },
+      { "id": "sum-gain-control", "when": { "visited": ["door-gain-control"] }, "text": "{door:gain-control.title}: {door:gain-control.promise}", "source": "Lobby manifest: door title and promise", "status": "derived" },
+      { "id": "sum-gain-control-stat", "when": { "visited": ["door-gain-control"] }, "ref": "doors.gain-control.stat" },
+      { "id": "sum-gain-control-pressure", "when": { "visited": ["door-gain-control"], "answers": { "pressure-gain-control": ["acquisition", "reporting", "control", "none"] } }, "text": "What's pressing: {answer:pressure-gain-control}", "source": "The visitor's answer in this room, labelled from the lobby manifest", "status": "derived" },
+      { "id": "sum-stay-ready", "when": { "visited": ["door-stay-ready"] }, "text": "{door:stay-ready.title}: {door:stay-ready.promise}", "source": "Lobby manifest: door title and promise", "status": "derived" },
+      { "id": "sum-stay-ready-stat", "when": { "visited": ["door-stay-ready"] }, "ref": "doors.stay-ready.stat" },
+      { "id": "sum-stay-ready-pressure", "when": { "visited": ["door-stay-ready"], "answers": { "pressure-stay-ready": ["exam", "incident", "crossing", "none"] } }, "text": "What's pressing: {answer:pressure-stay-ready}", "source": "The visitor's answer in this room, labelled from the lobby manifest", "status": "derived" },
+      { "id": "sum-lens", "when": { "answers": { "lens": ["signer", "champion", "deadline"] } }, "text": "Whose view you took: {answer:lens}", "source": "The visitor's answer", "status": "derived" },
+      { "id": "sum-today", "when": { "answers": { "today": ["asked", "nothing", "paper"] } }, "text": "Where you are today: {answer:today}", "source": "The visitor's answer", "status": "derived" },
+      { "id": "sum-start", "ref": "path.whereToStart" },
+      { "id": "sum-chapters", "text": "Chapters you visited: {chapters:visited}", "source": "Chapters visited in this browser, titled from the lobby manifest", "status": "derived" },
+      { "id": "sum-site", "text": "Walk the lobby again: {url:site}", "source": "Lobby manifest: site.url", "status": "derived" },
+      { "id": "sum-talk", "text": "{str:talk}: {url:booking}", "source": "Lobby manifest: site.bookingUrl (O2)", "status": "derived" }
+    ]
+  }
+}

@@ -21,10 +21,10 @@
 <link rel="icon" href="media/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="media/brand/apple-touch-icon-180.png">
 <script>
-// Boot cover, before first paint: a deep link into a door or the path must never flash the
-// resting lobby's heading and pins on the way in. main.js clears the attribute once the route
+// Boot cover, before first paint: a deep link into a door, the path or the tour must never flash
+// the resting lobby's heading and pins on the way in. main.js clears the attribute once the route
 // has been applied without animation.
-(function () { if (/^#\/(door|path)/.test(location.hash)) document.documentElement.setAttribute('data-lobby-boot', '1'); })();
+(function () { if (/^#\/(door|path|tour)/.test(location.hash)) document.documentElement.setAttribute('data-lobby-boot', '1'); })();
 </script>
 <link rel="preload" href="content/experience.json" as="fetch" crossorigin>
 <link rel="preload" href="content/geometry.json" as="fetch" crossorigin>
@@ -43,6 +43,14 @@
 <link rel="modulepreload" fetchpriority="low" href="js/screens.js?v=2026-09-10f">
 <link rel="modulepreload" fetchpriority="low" href="js/walk.js?v=2026-09-10f">
 <link rel="modulepreload" fetchpriority="low" href="js/rooms.js?v=2026-09-10f">
+<link rel="modulepreload" fetchpriority="low" href="js/tour.js?v=2026-09-10f">
+<link rel="modulepreload" fetchpriority="low" href="js/tourtext.js?v=2026-09-10f">
+<link rel="modulepreload" fetchpriority="low" href="js/dialogue.js?v=2026-09-10f">
+<link rel="modulepreload" fetchpriority="low" href="js/guide.js?v=2026-09-10f">
+<link rel="modulepreload" fetchpriority="low" href="js/tourmap.js?v=2026-09-10f">
+<link rel="modulepreload" fetchpriority="low" href="js/ask.js?v=2026-09-10f">
+<link rel="modulepreload" fetchpriority="low" href="js/ask-match.js?v=2026-09-10f">
+<link rel="modulepreload" fetchpriority="low" href="js/voice.js?v=2026-09-10f">
 <link rel="stylesheet" href="css/experience.css?v=2026-09-10f">
 </head>
 <body>
@@ -93,6 +101,20 @@
   <div id="floor-rows"></div>
   <div id="floor-foot"></div>
 </main>
+
+<!-- Guided tour (O10/O11): the AiVRIC card, its chapter title card and live region, and the map and
+     Ask dialogs. Empty until the tour starts; js/dialogue.js fills the card, js/tourmap.js and
+     js/ask.js fill the dialogs (and name them) from the manifest. -->
+<section id="tour" class="tour" hidden></section>
+<div id="tour-titlecard" class="tour-titlecard" hidden aria-hidden="true"></div>
+<div id="tour-live" class="sr" aria-live="polite" aria-atomic="true"></div>
+<dialog id="tour-map" class="tour-dialog"></dialog>
+<dialog id="tour-ask" class="tour-dialog"></dialog>
+<!-- AiVRIC's voice (js/voice.js): one element for the tour and one for Ask, so an answer never loses
+     the tour's place. Nothing loads until the visitor starts the tour; data-unlock is a 0.12 s silent
+     MP3 played inside that click so iOS lets these elements play the lines that follow. -->
+<audio id="tour-audio" preload="none" data-unlock="data:audio/mpeg;base64,//MkxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MkxCMAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MkxEYAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MkxGkAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MkxIwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"></audio>
+<audio id="ask-audio" preload="none"></audio>
 
 <!-- Door panel / path panel -->
 <aside id="panel" class="panel" hidden aria-labelledby="panel-h2"></aside>

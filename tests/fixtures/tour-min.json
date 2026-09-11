@@ -1,0 +1,240 @@
+{
+  "version": 1,
+  "note": "Test fixture for the tour engine specs, loaded against the live content/experience.json. It stays put while content/tour.json changes. It covers every scene kind (rest, door, station, path with and without a stage, kiosk, keep), every cue kind, a line filtered by when, suggest, hideWhen, routes used from options and from next (one route chaining into another), `@` (the door whose scene is up), callouts, an Ask block, a summary, a terminal node (end: true), an option back to the chapter on screen (hidden) and one to a chapter already seen (Visited), and every action (talk, ask, summary, replay, end, explore). Every visible word is a token or a ref into the manifest, so the fixture adds no copy.",
+  "start": "arrive",
+  "chapters": [
+    { "id": "arrival", "entry": "arrive", "title": "{str:legend}", "landmark": "lobby" },
+    { "id": "door-win-trust", "entry": "wt", "title": "{door:win-trust.title}", "eyebrow": "{door:win-trust.number}", "landmark": "door:win-trust" },
+    { "id": "door-gain-control", "entry": "gc", "title": "{door:gain-control.title}", "eyebrow": "{door:gain-control.number}", "landmark": "door:gain-control" },
+    { "id": "door-stay-ready", "entry": "sr", "title": "{door:stay-ready.title}", "eyebrow": "{door:stay-ready.number}", "landmark": "door:stay-ready" },
+    { "id": "decision", "entry": "lens", "title": "{str:decision}", "optional": true },
+    { "id": "path", "entry": "path", "title": "{ref:path.title}", "landmark": "tower" },
+    { "id": "kiosk", "entry": "kiosk", "title": "{ref:kiosk.header}", "landmark": "kiosk", "optional": true },
+    { "id": "close", "entry": "close", "title": "{str:talk}", "landmark": "lobby" }
+  ],
+  "routes": {
+    "next-door": [
+      { "when": { "notVisited": ["door-win-trust"] }, "go": "wt" },
+      { "when": { "notVisited": ["door-gain-control"] }, "go": "gc" },
+      { "when": { "notVisited": ["door-stay-ready"] }, "go": "sr" },
+      { "go": "path" }
+    ],
+    "after-door": [
+      { "when": { "answers": { "segment": ["all"] } }, "go": "=next-door" },
+      { "go": "lens" }
+    ],
+    "after-path": [
+      { "when": { "answers": { "segment": ["all"] } }, "go": "kiosk" },
+      { "go": "close" }
+    ]
+  },
+  "nodes": {
+    "arrive": {
+      "chapter": "arrival",
+      "scene": "rest",
+      "lines": [
+        { "id": "arrive-1", "ref": "lobby.eyebrow" },
+        { "id": "arrive-2", "ref": "lobby.heading", "cue": { "door": "win-trust" } }
+      ],
+      "choice": {
+        "id": "segment",
+        "prompt": "{str:doorsGroup}",
+        "remember": "segment",
+        "options": [
+          { "id": "win-trust", "label": "{door:win-trust.icp}", "sub": "{door:win-trust.title} · {door:win-trust.promise}", "next": "wt" },
+          { "id": "gain-control", "label": "{door:gain-control.icp}", "sub": "{door:gain-control.title} · {door:gain-control.promise}", "next": "gc" },
+          { "id": "stay-ready", "label": "{door:stay-ready.icp}", "sub": "{door:stay-ready.title} · {door:stay-ready.promise}", "next": "sr" },
+          { "id": "all", "label": "{str:legend}", "sub": "{ref:path.title}", "next": "=next-door" }
+        ]
+      }
+    },
+    "wt": {
+      "chapter": "door-win-trust",
+      "scene": { "kind": "door", "door": "win-trust" },
+      "lines": [
+        { "id": "wt-1", "ref": "doors.win-trust.opening" },
+        { "id": "wt-2", "ref": "doors.win-trust.audience", "when": { "answers": { "segment": ["win-trust"] } } },
+        { "id": "wt-3", "ref": "doors.win-trust.stat", "callout": ["doors.win-trust.stat"] }
+      ],
+      "next": "wt-proof"
+    },
+    "wt-proof": {
+      "chapter": "door-win-trust",
+      "scene": { "kind": "station", "door": "win-trust", "station": "proof" },
+      "lines": [
+        { "id": "wt-4", "ref": "doors.win-trust.proof.0", "callout": ["doors.win-trust.proof.0"] },
+        { "id": "wt-5", "ref": "doors.win-trust.program.snapshot", "cue": { "station": "program" } }
+      ],
+      "choice": {
+        "id": "wt-next",
+        "prompt": "{str:decision}",
+        "options": [
+          { "id": "onward", "label": "{str:nextStep}", "next": "=after-door" },
+          { "id": "explore", "label": "{str:tourDetails}", "action": "explore" },
+          { "id": "ask", "label": "{str:whereToStart}", "action": "ask" },
+          { "id": "again", "label": "{door:win-trust.title}", "sub": "{door:win-trust.promise}", "next": "wt" }
+        ]
+      }
+    },
+    "gc": {
+      "chapter": "door-gain-control",
+      "scene": { "kind": "door", "door": "gain-control" },
+      "lines": [
+        { "id": "gc-1", "ref": "doors.gain-control.opening" },
+        { "id": "gc-3", "ref": "doors.gain-control.decision", "cue": { "station": "decision" } },
+        { "id": "gc-2", "ref": "doors.gain-control.statSecondary", "callout": ["doors.gain-control.statSecondary"] }
+      ],
+      "choice": {
+        "id": "gc-next",
+        "prompt": "{str:decision}",
+        "options": [
+          { "id": "onward", "label": "{str:nextStep}", "next": "=after-door" },
+          { "id": "explore", "label": "{str:tourDetails}", "action": "explore" },
+          { "id": "to-wt", "label": "{door:win-trust.title}", "sub": "{door:win-trust.promise}", "next": "wt" }
+        ]
+      }
+    },
+    "sr": {
+      "chapter": "door-stay-ready",
+      "scene": { "kind": "door", "door": "stay-ready" },
+      "lines": [
+        { "id": "sr-1", "ref": "doors.stay-ready.opening" },
+        { "id": "sr-2", "ref": "doors.stay-ready.proof.0", "cue": { "station": "proof" }, "callout": ["doors.stay-ready.proof.0"] }
+      ],
+      "choice": {
+        "id": "sr-next",
+        "prompt": "{str:decision}",
+        "options": [
+          { "id": "onward", "label": "{str:nextStep}", "next": "=after-door" },
+          { "id": "explore", "label": "{str:tourDetails}", "action": "explore" }
+        ]
+      }
+    },
+    "lens": {
+      "chapter": "decision",
+      "scene": "keep",
+      "lines": [
+        { "id": "lens-1", "ref": "doors.@.decision" }
+      ],
+      "choice": {
+        "id": "lens",
+        "prompt": "{str:decision}",
+        "remember": "lens",
+        "options": [
+          { "id": "path", "label": "{ref:path.title}", "sub": "{str:route}", "next": "path", "suggest": { "answers": { "segment": ["win-trust", "gain-control", "stay-ready"] } } },
+          { "id": "more", "label": "{str:legend}", "next": "=next-door", "hideWhen": { "visited": ["door-win-trust", "door-gain-control", "door-stay-ready"] } },
+          { "id": "end", "label": "{str:tourEnd}", "action": "end" },
+          { "id": "bye", "label": "{str:openLobby}", "next": "bye" }
+        ]
+      }
+    },
+    "path": {
+      "chapter": "path",
+      "scene": { "kind": "path" },
+      "lines": [
+        { "id": "path-1", "ref": "path.intro", "cue": { "stage": "assess" } },
+        { "id": "path-2", "ref": "path.whereToStart", "callout": ["path.whereToStart"] }
+      ],
+      "choice": {
+        "id": "today",
+        "prompt": "{str:whereToStart}",
+        "remember": "today",
+        "options": [
+          { "id": "assess", "label": "{stage:assess}", "next": "stage-assess", "suggest": { "answers": { "segment": ["win-trust", "gain-control"] } } },
+          { "id": "operate", "label": "{stage:operate}", "next": "stage-operate", "suggest": { "answers": { "segment": ["stay-ready"] } } },
+          { "id": "where-to-start", "label": "{stage:where-to-start}", "next": "start-here" },
+          { "id": "explore", "label": "{str:tourDetails}", "action": "explore" }
+        ]
+      }
+    },
+    "stage-assess": {
+      "chapter": "path",
+      "scene": { "kind": "path", "stage": "assess" },
+      "lines": [
+        { "id": "stage-assess-1", "ref": "arc.0" }
+      ],
+      "next": "=after-path"
+    },
+    "stage-operate": {
+      "chapter": "path",
+      "scene": { "kind": "path", "stage": "operate" },
+      "lines": [
+        { "id": "stage-operate-1", "ref": "arc.2" },
+        { "id": "stage-operate-2", "ref": "stages.advance", "cue": { "stage": "advance" } }
+      ],
+      "next": "=after-path"
+    },
+    "start-here": {
+      "chapter": "path",
+      "scene": { "kind": "path", "stage": "where-to-start" },
+      "lines": [
+        { "id": "start-here-1", "ref": "path.whereToStart" }
+      ],
+      "next": "=after-path"
+    },
+    "kiosk": {
+      "chapter": "kiosk",
+      "scene": { "kind": "kiosk", "fallback": "rest" },
+      "lines": [
+        { "id": "kiosk-1", "ref": "kiosk.header" },
+        { "id": "kiosk-2", "ref": "kiosk.tag" }
+      ],
+      "next": "close"
+    },
+    "bye": {
+      "chapter": "close",
+      "scene": "rest",
+      "lines": [
+        { "id": "bye-1", "ref": "lobby.subline.0" }
+      ],
+      "end": true
+    },
+    "close": {
+      "chapter": "close",
+      "scene": "rest",
+      "lines": [
+        { "id": "close-1", "ref": "lobby.subline.1" }
+      ],
+      "choice": {
+        "id": "close",
+        "prompt": "{str:nextStep}",
+        "options": [
+          { "id": "talk", "action": "talk", "suggest": { "answers": { "today": ["assess", "where-to-start"] } } },
+          { "id": "ask", "label": "{str:whereToStart}", "action": "ask" },
+          { "id": "summary", "label": "{str:tourSummary}", "action": "summary" },
+          { "id": "replay", "label": "{str:tourReplay}", "action": "replay" }
+        ]
+      }
+    }
+  },
+  "ask": {
+    "questions": [
+      {
+        "id": "where-to-start",
+        "q": "{str:whereToStart}",
+        "keys": ["start", "begin", "first", "snapshot"],
+        "lines": [
+          { "id": "ask-start-1", "ref": "path.whereToStart" }
+        ],
+        "goto": "path"
+      },
+      {
+        "id": "proof",
+        "q": "{str:proof}",
+        "keys": ["proof", "evidence", "customer"],
+        "lines": [
+          { "id": "ask-proof-1", "ref": "doors.win-trust.proof.0" },
+          { "id": "ask-proof-2", "ref": "doors.gain-control.proof.0" }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "subject": "{ref:site.title}",
+    "lines": [
+      { "id": "sum-chapters", "text": "{chapters:visited}", "source": "Chapter titles visited in this browser, from the manifest", "status": "derived" },
+      { "id": "sum-start", "ref": "path.whereToStart" },
+      { "id": "sum-talk", "text": "{str:talk}: {url:booking}", "source": "site.bookingUrl (O2)", "status": "derived" }
+    ]
+  }
+}

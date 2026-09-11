@@ -1,0 +1,496 @@
+{
+ "note": "Word-boundary events shaped like microsoft-cognitiveservices-speech-sdk 1.51 (SpeechSynthesizer.wordBoundary: boundaryType, audioOffset and duration in 100 ns ticks, text, textOffset into the SSML as SynthesisTurn.updateTextOffset computes it, wordLength), for tools/voice/ssml.mjs timingJson(). Synthetic timings, not a recording: replace with art/voice-cache/check-events.json from `node tools/voice/build.mjs --check` once the key exists. The I’m event carries a curly apostrophe the SDK cannot find in the SSML (textOffset -1), and the vCISO entry is spoken through <sub alias>, so both fallbacks are exercised.",
+ "cases": [
+  {
+   "name": "escapes, a dash, a curly apostrophe the SDK cannot find, and a pronunciation entry",
+   "text": "Welcome to 3HUE — risk & compliance, done right. I'm AiVRIC; ask about SOC 2 or a vCISO.",
+   "lexicon": {
+    "vCISO": "virtual C I S O"
+   },
+   "ssml": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" xml:lang=\"en-US\"><voice name=\"en-US-AvaNeural\">Welcome to 3HUE — risk &amp; compliance, done right. I'm AiVRIC; ask about SOC 2 or a <sub alias=\"virtual C I S O\">vCISO</sub>.</voice></speak>",
+   "events": [
+    {
+     "type": "SentenceBoundary",
+     "offset": 500000,
+     "duration": 29000000,
+     "text": "Welcome to 3HUE — risk & compliance, done right.",
+     "textOffset": -1,
+     "wordLength": 48
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 500000,
+     "duration": 3750000,
+     "text": "Welcome",
+     "textOffset": 156,
+     "wordLength": 7
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 4650000,
+     "duration": 1500000,
+     "text": "to",
+     "textOffset": 164,
+     "wordLength": 2
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 6550000,
+     "duration": 2400000,
+     "text": "3HUE",
+     "textOffset": 167,
+     "wordLength": 4
+    },
+    {
+     "type": "PunctuationBoundary",
+     "offset": 9350000,
+     "duration": 0,
+     "text": "—",
+     "textOffset": 172,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 10850000,
+     "duration": 2400000,
+     "text": "risk",
+     "textOffset": 174,
+     "wordLength": 4
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 13650000,
+     "duration": 1050000,
+     "text": "&",
+     "textOffset": 179,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 15100000,
+     "duration": 5100000,
+     "text": "compliance",
+     "textOffset": 185,
+     "wordLength": 10
+    },
+    {
+     "type": "PunctuationBoundary",
+     "offset": 20600000,
+     "duration": 0,
+     "text": ",",
+     "textOffset": 195,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 22100000,
+     "duration": 2400000,
+     "text": "done",
+     "textOffset": 197,
+     "wordLength": 4
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 24900000,
+     "duration": 2850000,
+     "text": "right",
+     "textOffset": 202,
+     "wordLength": 5
+    },
+    {
+     "type": "PunctuationBoundary",
+     "offset": 28150000,
+     "duration": 0,
+     "text": ".",
+     "textOffset": 207,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 29650000,
+     "duration": 1950000,
+     "text": "I’m",
+     "textOffset": -1,
+     "wordLength": 3
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 32000000,
+     "duration": 3300000,
+     "text": "AiVRIC",
+     "textOffset": 213,
+     "wordLength": 6
+    },
+    {
+     "type": "PunctuationBoundary",
+     "offset": 35700000,
+     "duration": 0,
+     "text": ";",
+     "textOffset": 219,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 37200000,
+     "duration": 1950000,
+     "text": "ask",
+     "textOffset": 221,
+     "wordLength": 3
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 39550000,
+     "duration": 2850000,
+     "text": "about",
+     "textOffset": 225,
+     "wordLength": 5
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 42800000,
+     "duration": 1950000,
+     "text": "SOC",
+     "textOffset": 231,
+     "wordLength": 3
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 45150000,
+     "duration": 1050000,
+     "text": "2",
+     "textOffset": 235,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 46600000,
+     "duration": 1500000,
+     "text": "or",
+     "textOffset": 237,
+     "wordLength": 2
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 48500000,
+     "duration": 1050000,
+     "text": "a",
+     "textOffset": 240,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 49950000,
+     "duration": 3750000,
+     "text": "virtual",
+     "textOffset": -1,
+     "wordLength": 7
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 54100000,
+     "duration": 1050000,
+     "text": "C",
+     "textOffset": 272,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 55550000,
+     "duration": 1050000,
+     "text": "I",
+     "textOffset": 273,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 57000000,
+     "duration": 1050000,
+     "text": "S",
+     "textOffset": 274,
+     "wordLength": 1
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 58450000,
+     "duration": 1050000,
+     "text": "O",
+     "textOffset": 275,
+     "wordLength": 1
+    },
+    {
+     "type": "PunctuationBoundary",
+     "offset": 59900000,
+     "duration": 0,
+     "text": ".",
+     "textOffset": 282,
+     "wordLength": 1
+    }
+   ],
+   "duration": 6.29,
+   "expected": {
+    "words": [
+     [
+      0.05,
+      0.375,
+      "Welcome",
+      0,
+      7
+     ],
+     [
+      0.465,
+      0.15,
+      "to",
+      8,
+      10
+     ],
+     [
+      0.655,
+      0.24,
+      "3HUE",
+      11,
+      15
+     ],
+     [
+      1.085,
+      0.24,
+      "risk",
+      18,
+      22
+     ],
+     [
+      1.365,
+      0.105,
+      "&",
+      23,
+      24
+     ],
+     [
+      1.51,
+      0.51,
+      "compliance",
+      25,
+      35
+     ],
+     [
+      2.21,
+      0.24,
+      "done",
+      37,
+      41
+     ],
+     [
+      2.49,
+      0.285,
+      "right",
+      42,
+      47
+     ],
+     [
+      2.965,
+      0.195,
+      "I’m",
+      49,
+      52
+     ],
+     [
+      3.2,
+      0.33,
+      "AiVRIC",
+      53,
+      59
+     ],
+     [
+      3.72,
+      0.195,
+      "ask",
+      61,
+      64
+     ],
+     [
+      3.955,
+      0.285,
+      "about",
+      65,
+      70
+     ],
+     [
+      4.28,
+      0.195,
+      "SOC",
+      71,
+      74
+     ],
+     [
+      4.515,
+      0.105,
+      "2",
+      75,
+      76
+     ],
+     [
+      4.66,
+      0.15,
+      "or",
+      77,
+      79
+     ],
+     [
+      4.85,
+      0.105,
+      "a",
+      80,
+      81
+     ],
+     [
+      4.995,
+      0.375,
+      "virtual",
+      82,
+      87
+     ],
+     [
+      5.41,
+      0.105,
+      "C",
+      82,
+      87
+     ],
+     [
+      5.555,
+      0.105,
+      "I",
+      82,
+      87
+     ],
+     [
+      5.7,
+      0.105,
+      "S",
+      82,
+      87
+     ],
+     [
+      5.845,
+      0.105,
+      "O",
+      82,
+      87
+     ]
+    ],
+    "coverage": 1
+   }
+  },
+  {
+   "name": "a say line aligned to its caption",
+   "text": "3HUE runs SOC 2 programs.",
+   "say": "Three hue runs sock two programs.",
+   "ssml": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" xml:lang=\"en-US\"><voice name=\"en-US-AvaNeural\">Three hue runs sock two programs.</voice></speak>",
+   "events": [
+    {
+     "type": "WordBoundary",
+     "offset": 500000,
+     "duration": 2850000,
+     "text": "Three",
+     "textOffset": 156,
+     "wordLength": 5
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 3750000,
+     "duration": 1950000,
+     "text": "hue",
+     "textOffset": 162,
+     "wordLength": 3
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 6100000,
+     "duration": 2400000,
+     "text": "runs",
+     "textOffset": 166,
+     "wordLength": 4
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 8900000,
+     "duration": 2400000,
+     "text": "sock",
+     "textOffset": 171,
+     "wordLength": 4
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 11700000,
+     "duration": 1950000,
+     "text": "two",
+     "textOffset": 176,
+     "wordLength": 3
+    },
+    {
+     "type": "WordBoundary",
+     "offset": 14050000,
+     "duration": 4200000,
+     "text": "programs",
+     "textOffset": 180,
+     "wordLength": 8
+    },
+    {
+     "type": "PunctuationBoundary",
+     "offset": 18650000,
+     "duration": 0,
+     "text": ".",
+     "textOffset": 188,
+     "wordLength": 1
+    }
+   ],
+   "duration": 2.165,
+   "expected": {
+    "words": [
+     [
+      0.05,
+      0.285,
+      "Three",
+      0,
+      4
+     ],
+     [
+      0.375,
+      0.195,
+      "hue",
+      0,
+      4
+     ],
+     [
+      0.61,
+      0.24,
+      "runs",
+      5,
+      9
+     ],
+     [
+      0.89,
+      0.24,
+      "sock",
+      10,
+      13
+     ],
+     [
+      1.17,
+      0.195,
+      "two",
+      14,
+      15
+     ],
+     [
+      1.405,
+      0.42,
+      "programs",
+      16,
+      24
+     ]
+    ],
+    "coverage": 1
+   }
+  }
+ ]
+}

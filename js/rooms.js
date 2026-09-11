@@ -61,16 +61,30 @@ export function showRoomPins(d, room, onStation) {
 }
 // Pins are children of the transformed room layer, so they sit in room-image pixels and are
 // counter-scaled by the room's own scale, not the plate's.
+// The chip hangs below the ring, so a pin needs room for both above the frame's lower edge (the
+// tour card's reserve on desktop) or its label ends up half under the card. The narrated pin keeps
+// the tighter margin: the tour pans the room to bring it into view and it must stay visible.
+const PIN_FOOT = 64;
 function placePins() {
   const f = getState().roomFit; if (!f) return;
   const R = frameRect(), o = bandOffset();
   for (const p of pins) {
     p.el.style.left = (p.x * f.Wr) + 'px'; p.el.style.top = (p.y * f.Hr) + 'px';
     const sp = roomToScreen(p.x * f.Wr, p.y * f.Hr);
-    const inside = sp && sp.x >= R.x + o.x + 24 && sp.x <= R.x + o.x + R.w - 24 && sp.y >= R.y + o.y + 24 && sp.y <= R.y + o.y + R.h - 24;
+    const inside = sp && sp.x >= R.x + o.x + 24 && sp.x <= R.x + o.x + R.w - 24 && sp.y >= R.y + o.y + 24 && sp.y <= R.y + o.y + R.h - (p.el.classList.contains('is-active') ? 24 : PIN_FOOT);
     p.el.hidden = !inside;
   }
   pinsEl.style.setProperty('--counter', String(1 / f.s));
 }
 onLayout(placePins);
 export function clearRoomPins() { pins = []; pinsEl.innerHTML = ''; }
+
+// Mark the pin being narrated (null clears): an instant .is-active class, no motion of its own.
+// Visibility is re-judged against the current room fit, so call it after a panRoom(). Returns
+// whether a pin for that station is on the page.
+export function setActivePin(station) {
+  let found = false;
+  for (const p of pins) { const on = !!station && p.el.dataset.station === station; p.el.classList.toggle('is-active', on); found = found || on; }
+  placePins();
+  return found;
+}

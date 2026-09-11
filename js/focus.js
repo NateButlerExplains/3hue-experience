@@ -29,6 +29,18 @@ export function resetLayers() {
   if (top?.opener && document.contains(top.opener)) setTimeout(() => { if (!document.activeElement || document.activeElement === document.body) top.opener.focus({ preventScroll: true }); }, 0);
 }
 
+// Remove the innermost layer with this id without returning focus: whatever replaces it (a tour
+// handing over to a door, which pushes its own layer) places focus itself. Returns the entry.
+export function dropLayer(id) {
+  for (let i = stack.length - 1; i >= 0; i--) {
+    if (stack[i].id !== id) continue;
+    const [gone] = stack.splice(i, 1);
+    if (!stack.length) setInert(false);
+    return gone;
+  }
+  return null;
+}
+
 export function setOpener(el) { const top = stack[stack.length - 1]; if (top && el) top.opener = el; }
 export function topLayer() { return stack[stack.length - 1] || null; }
 export function depth() { return stack.length; }

@@ -1,6 +1,6 @@
 # Standalone acceptance register
 
-The 43 Done-when checks from the level-up documents, re-scoped for this site by the rule in [DECISIONS.md O7](DECISIONS.md): a clause that names dashboard chrome (header.topbar, the Experience button, Return to intelligence, catalog-shell, the admin modal, the drawer, `.icp-carousel`, Guide, the NB chip, dashboard data) is replaced by its standalone equivalent or removed; viewports, tolerances, timings and counts are kept verbatim. Six room checks (R-01 … R-06) are added for the rendered rooms (O5) and are never counted against the 43.
+The 43 Done-when checks from the level-up documents, re-scoped for this site by the rule in [DECISIONS.md O7](DECISIONS.md): a clause that names dashboard chrome (header.topbar, the Experience button, Return to intelligence, catalog-shell, the admin modal, the drawer, `.icp-carousel`, Guide, the NB chip, dashboard data) is replaced by its standalone equivalent or removed; viewports, tolerances, timings and counts are kept verbatim. Six room checks (R-01 … R-06) are added for the rendered rooms (O5) and are never counted against the 43. Twenty-four tour checks (T-01 … T-24) are added for the guided tour (O10, O11); they are never counted against the 43 either, and have their own summary lines.
 
 Every check keeps its ID and its original bullet, quoted verbatim from [levelup/acceptance.md](levelup/acceptance.md), then a disposition row. **Candidate (local)** is the working tree served by `node tools/serve.mjs`; **Published** is https://natebutlerexplains.github.io/3hue-experience/ (`CHECK_BASE=…`). Both columns are **Not run** until the named spec has produced a measured value and evidence under `docs/evidence/`. A check is Pass, Fail or Not run; nothing is accepted by inference, and a re-scoped clause is tested exactly as rewritten here.
 
@@ -13,17 +13,20 @@ Every check keeps its ID and its original bullet, quoted verbatim from [levelup/
 | dropped | 1 | P6-D04 |
 | **total** | **43** | |
 | rooms (new, outside the 43) | 6 | R-01, R-02, R-03, R-04, R-05, R-06 |
+| tour (new, O10/O11, outside the 43) | 24 (23 new, 1 dropped) | T-01 … T-19, T-21 … T-24 new; T-20 dropped |
 
 | Column | Pass | Fail | Not run |
 |---|---|---|---|
-| Candidate (local) | 47 | 0 | 1 |
+| Candidate (local) | 48 | 0 | 0 |
 | Published | 0 | 0 | 48 |
+| Tour, candidate (local) | 22 | 0 | 1 |
+| Tour, published | 0 | 0 | 23 |
 
-Dropped checks carry no result. Every earlier phase's rows are re-run at P4-D08 and P6-D06.
+Dropped checks carry no result. Every earlier phase's rows are re-run at P4-D08 and P6-D06 (rooms and tour rows are outside those roll-ups). The first two count rows cover the 43 and the rooms; the tour rows are counted on their own.
 
 ## Overrides referenced
 
-IDs are those in [DECISIONS.md](DECISIONS.md) (O1–O4 carried from [levelup/overrides.md](levelup/overrides.md); O5–O9 new for this build).
+IDs are those in [DECISIONS.md](DECISIONS.md) (O1–O4 carried from [levelup/overrides.md](levelup/overrides.md); O5–O9 new for this build; O10–O11 added for the guided tour on 2026-09-11).
 
 | ID | Decision | Rows it touches |
 |---|---|---|
@@ -36,6 +39,8 @@ IDs are those in [DECISIONS.md](DECISIONS.md) (O1–O4 carried from [levelup/ove
 | O7 | Standalone re-scope rule: dashboard-chrome clauses replaced or removed; viewports, tolerances, timings and counts verbatim. | P2a-D05, P2b-D01, P3-D01, P3-D05, P3-D07, P4-D04, P4-D07, P5-D02, P6-D01, P6-D03, P6-D04, P6-D05 |
 | O8 | Header logo links to https://3hue.net; there is no "Return to intelligence". | P2a-D03, P2b-D05, P3-D05 |
 | O9 | Kiosk shows manifest-derived counts under "Representative data" with the "AiVRIC intelligence layer" header line. | P5-D01, P5-D02 |
+| O10 | A voiced guided tour (AiVRIC, Azure AI Speech `en-US-AvaNeural` rendered at build time), audio only after the visitor starts it; overrides the no-sound rule for the tour only. | T-01 … T-24 |
+| O11 | The walk button hands over to the tour once `tour.gate` is `approved`; `?tour=1` previews, `?tour=0` always walks. | T-04, T-09, T-21, T-22, P6-D01, P6-D02, P6-D05, P6-D06 |
 
 ## Spec map
 
@@ -64,10 +69,26 @@ Placeholders for the specs the plan lists (each reads `window.__lobby` under `?d
 | `tools/lighthouse.sh` | a11y 100, perf ≥ 90 desktop, CLS 0 (plan verification block; supports P2a-D05, P6-D06) |
 | `tools/gate-sheet.py` + RENDER-GATE.md | R-01 |
 | `tools/build-shares.js` (`media/share/cards.json`) | P5-D03 |
+| `tests/tour-manifest.spec.mjs` | T-01, T-02, T-03 |
+| `tests/voice-tool.spec.mjs`, `tests/secrets.spec.mjs` | T-02 |
+| `tests/tour.spec.mjs` | T-04, T-05, T-06, T-11 |
+| `tests/tour-scenes.spec.mjs` | T-07, T-08 |
+| `tests/tour-routes.spec.mjs` | T-09, T-10, T-21 |
+| `tests/tour-dialogs.spec.mjs` | T-12, T-13 |
+| `tests/ask-match.spec.mjs` | T-12 |
+| `tests/tour-voice.spec.mjs` | T-14, T-15 |
+| `tests/serve.spec.mjs` | T-15 |
+| `tests/tour-motion.spec.mjs` | T-16, T-17 |
+| `tests/tour-axe.spec.mjs` | T-18 |
+| `tests/tour-phone.spec.mjs` | T-19 |
+| `tests/tour-boot.spec.mjs` | T-22 |
+| `tests/tour-rename.spec.mjs` | T-23 |
+| `docs/evidence/manual.json` (screen readers, iOS) | T-24 |
 
 ```
-npm run lint                                  # tools/check-manifest.js
+npm run lint                                  # tools/check-manifest.js (manifest + tour) and tools/voice/lint.mjs
 npm run serve                                 # local candidate
+node tools/fill-register.mjs candidate tests/results/report.json   # MANUAL=docs/evidence/manual.json for the manual rows
 npx playwright test --project=chromium|webkit|chromium-reduced
 CHECK_BASE=https://natebutlerexplains.github.io/3hue-experience/ npx playwright test
 bash tools/bots.sh <live url>
@@ -671,7 +692,7 @@ Not part of the 43. Text as agreed for this build; gate criteria in [RENDER-GATE
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O5, O6) | Not run (automated criteria pass: OCR at 2x empty, no people, flat dark screens, every derivative <= 600 KB; Nate's written OK on the gate sheets not yet recorded) | Not run | `tools/gate-sheet.py` sheet + `?room-preview=` screenshots at 1440×900 and 390×844, Nate's written OK (the gate) · `tests/rooms.spec.mjs` (derivatives exist, each ≤ 600 KB, 2560/2048/1280 in avif/webp/jpg) |
+| new (O5, O6) | Pass (automated criteria pass: OCR at 2x empty, no people, flat dark screens, every derivative <= 600 KB; owner approval relayed by Nate on 2026-09-10, recorded in docs/RENDER-GATE.md) | Not run | `tools/gate-sheet.py` sheet + `?room-preview=` screenshots at 1440×900 and 390×844, Nate's written OK (the gate) · `tests/rooms.spec.mjs` (derivatives exist, each ≤ 600 KB, 2560/2048/1280 in avif/webp/jpg) |
 
 - Per door, per candidate. All nine RENDER-GATE.md criteria; O6 allows the Real-ESRGAN upscale, text / people / curved surfaces still fail.
 - RENDER-GATE.md names `tools/upscale-room.sh` and `tools/gate-sheet.js`; the repo has `tools/upscale-room.py` and `tools/gate-sheet.py` (observation).
@@ -726,6 +747,222 @@ Not part of the 43. Text as agreed for this build; gate criteria in [RENDER-GATE
 
 - `showRoom`, `hideRoom` and `panRoom` all branch on `reducedMotion()` and the global `prefers-reduced-motion` rule sets `transition: none !important`; the check proves it rather than trusting it.
 
+### Tour — T-01 … T-24 (new, O10/O11, outside the 43)
+
+Not part of the 43, and tallied on their own summary lines. Text as agreed for this build from the approved tour plan, with the decisions that overrode the planner reports: the tour is one layer at `#/tour/<node>` (the start pushes one entry, every step replaces it); the walk button starts it only when `tour.gate` is `"approved"` or with `?tour=1`, and `?tour=0` always gives the silent walk; no panel opens during the tour (stat and proof lines show callout tiles with their printed source, and "See the details" hands over to `#/door/<id>/<station>`); with the voice on the voice sets the pace, otherwise the visitor presses Next; captions always work alone; focus moves only on a visitor action. The engine specs run on `tests/fixtures/tour-min.json` (`?tour=1&tour-manifest=…`), whose every visible word is a token or ref into the manifest, so they hold while `content/tour.json` changes; the lint, Ask, the real close and T-23's voice check run on the real script. Specs name their rows in their titles (`T-NN …`), which `tools/fill-register.mjs` reads.
+
+#### T-01 — new
+
+> The tour is gated off in the manifest (`tour.gate` "pending" until the copy gate; `guide.voice.required` false until audio exists), and both `content/tour.json` and the engine fixture hold the graph and schema rules: start and chapter entries exist, every target and route resolves, every node is reachable from the start, the map or Ask, no loop runs without a choice, scenes and cues are valid for their doors, choices have at most 4 options with one of next or action, ids are unique, statuses are from the allowed list; the fixture covers every scene kind, cue kind, condition, route and action.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10, O11) | Pass (18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-manifest.spec.mjs` |
+
+- A station scene through `@` (the door whose scene is up) must name a station every door has; the lint and the spec apply the same rule.
+
+#### T-02 — new
+
+> `npm run lint` (tools/check-manifest.js for the manifest and the script, then tools/voice/lint.mjs) reports 0 errors and refuses every broken rule: typed door titles, buyer labels or stage names; figures typed or spelled out outside a sourced ref; lines without source and status; forbidden vocabulary and brand spelling; unresolved refs and tokens; dead ends, loops, unreachable nodes, more than 4 options, over-long labels; a malformed tour flag or guide. Missing or stale audio is a warning while `guide.voice.required` is false and an error once it is true; the voice pipeline renders what the voice lint then passes; the speech key never enters the repo.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (75 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-manifest.spec.mjs` · `tests/voice-tool.spec.mjs` · `tests/secrets.spec.mjs` · `npm run lint` |
+
+- The voice pipeline is checked without a key: hashes, SSML escaping, SDK-shaped word events (`tests/fixtures/voice/boundaries.json`, synthetic until the first real `--check`), the dry-run plan and cost, the ffmpeg encode, and a full render through a stand-in synthesiser. See `docs/VOICE.md`.
+
+#### T-03 — new
+
+> The arrival choice resolves to the O1 buyer labels in door order, each leading to its own door; refs resolve with the source and status printed beside them; template tokens fill names from the manifest and a renamed door title follows into every tour label; conditions, next targets, caption tokens and the line hash behave as `js/tourtext.js` documents.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O1, O10) | Pass (18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-manifest.spec.mjs` |
+
+#### T-04 — new
+
+> Behind the gate, Enter on the walk button (`#floor-foot button` on composed layouts) at 1440×900 and 390×844 starts the tour: `#/tour/<start>`, exactly one history entry, focus on Next, the lobby inert, no panel, and 30 Tab presses land only on visible controls; nothing of the tour is fetched before the start. With the gate pending, or with `?tour=0`, the walk button starts the silent walk and no script is fetched; `?tour=1` previews the tour.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O11) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour.spec.mjs` |
+
+#### T-05 — new
+
+> With the voice off, the tour's live region speaks each line exactly once, with the chapter when it changes and the choice (prompt, count, suggestion, how to choose) when one waits; nothing runs on a timer, and focus stays on Next as the lines run out.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour.spec.mjs` |
+
+#### T-06 — new
+
+> Choices are buttons in a group labelled by the prompt: labels, sub-labels and prompts come from the manifest; every option is at least 44 px and hit-testable; arrow keys move focus and a digit commits; the answer is stored and history length holds; `when` filters lines, Suggested marks the first matching option, `hideWhen` hides, Visited marks a chapter already seen, the chapter on screen is not offered. Every action works: Talk is a new-tab link to the booking page (O2), the summary is a mail draft with no recipient plus Copy, Ask opens its dialog, Replay starts over.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O2, O10) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour.spec.mjs` |
+
+#### T-07 — new
+
+> Each scene does what it names, through the scene API in `js/main.js`: rest (z 1, the doors on screen but inert, a door cue marks its door); door (the dolly to z 1.3, the room up with its pins, no panel, focus still in the card, the callout printing its source); station (its pin marked and inside the frame); path (the tower at dolly zoom, the chip current, the stage lit); kiosk (framed when legible at dolly zoom, otherwise the lobby plus a tile of its derived counts under its tag, O9); keep; and the same with `?rooms=0`.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O5, O9, O10) | Pass (30 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-scenes.spec.mjs` |
+
+- The narrated-pin check runs where every station fits. At 1280×720 the decision stations of Win Trust and Gain Control (82% down their rooms) cannot enter the frame above the card: the room is already at its maximum zoom with its bottom edge on the screen's, so the pin is marked but hidden by the existing out-of-frame rule. They fit from 1440×900. Fixing it means a higher zoom cap in `js/stage.js` or a smaller pin margin in `js/rooms.js` (observation).
+
+#### T-08 — new
+
+> While the card speaks at 1280×720, 1440×900 and 1920×1080 it covers no door frame at rest, no lit ring, no kiosk, no active pin and no panel. The frame the camera aims into ends above the card's reserve (`--tour-h`); a longer line grows the card past the reserve only as far as its content needs (at most min(52vh, 440 px)), so its printed sources and the voice disclosure are never cut off.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-scenes.spec.mjs` |
+
+#### T-09 — new
+
+> `#/tour/<node>` pasted into a fresh tab opens that node over exactly the lobby, without a dolly; Back closes it onto `#/experience`; Forward and reload restore it with the session's answers; an unknown node, or `#/tour` alone, opens the start; with the tour off a tour link opens the lobby and fetches no script. The tour keeps one sessionStorage key and sets no cookie.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O3, O11) | Pass (33 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-routes.spec.mjs` |
+
+- P4-D04's O3 rule (a deep link has exactly the lobby beneath it) is the same rule, measured the same way against a plain lobby load.
+
+#### T-10 — new
+
+> "See the details" hands the scene on screen to its route by replacing the tour's entry: the door at the station last narrated (focus on that station's heading, and the room does not fade in again) or the path at its stage (focus on the heading); Escape or Back then lands on the lobby.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O3, O10) | Pass (6 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-routes.spec.mjs` |
+
+#### T-11 — new
+
+> Keys act only while focus is in the card (→ and ← move between lines, digits pick an option; no global arrows, digits or Space); a hidden tab moves nothing; Escape, End tour, the end action, a terminal node and browser Back all end the tour on the lobby with focus on the walk button.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour.spec.mjs` |
+
+#### T-12 — new
+
+> The Tour map and Ask AiVRIC are native modal dialogs named by their headings: Escape closes only the dialog and focus returns to the button or option that opened it, Tab stays inside, and opening pauses the tour. The map lists every chapter by its lobby landmark with Now and Visited; a row jumps (history holds, focus on Next); Replay forgets every answer. Ask has one unnamed text field in a form that submits nowhere; it shows "Answering: {q}" with the approved lines and their sources, a mail draft with no recipient and none of the visitor's words, Talk (O2) and related questions; a near miss offers "Did you mean", no match says so. The microphone appears only with speech recognition and shows the manifest's disclosure before anything listens. The static matcher ranks the right question first for at least 90% of visitor wordings, never answers a wrong one, and sends off-topic and injection-style text to the fallback.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O2, O10) | Pass (48 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-dialogs.spec.mjs` · `tests/ask-match.spec.mjs` (`tests/fixtures/ask-paraphrases.json`) |
+
+#### T-13 — new
+
+> The close: Talk is a new-tab link to the booking page (O2); the summary is a mail draft with no recipient, at most 1800 characters, naming the chapters visited and only the rooms the visitor entered, plus Copy; Replay clears the answers. Nothing leaves the page: through the tour, the map, Ask and the summary every request is a same-origin GET, there are no cookies, nothing is written to localStorage, and sessionStorage holds only the tour's key.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O2, O10) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-dialogs.spec.mjs` |
+
+- The one thing the tour ever writes to localStorage is the visitor's own mute choice (`3hue-experience:voice` = `off`, removed when the voice is turned back on); T-13 runs without touching the Voice toggle, and T-15 checks the mute rule.
+
+#### T-14 — new
+
+> On the simulated voice back end (`?voice=sim&rate=N`: the real fetches and checks, a clock instead of sound): nothing under the voice folder before the start, then the voice manifest and each line's timing file with `?h=`; lines move at the voice's pace (350 ms after a line ends) and a choice waits; the highlighted word moves forward; only the next line of the node is preloaded; the live region never reads a voiced line; a line without usable audio (no entry, the script changed, a 404, stale timing text) runs captions for that line only and waits for Next; Pause, a hidden tab, the map and Ask hold the voice where it is; Next skips and Previous says the earlier line again; a deep link opens with the voice locked; Ask says its intro and answers on its own element while the tour keeps its place.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-voice.spec.mjs` (voice folders from `tests/voice-fixture.mjs`) |
+
+#### T-15 — new
+
+> The Voice toggle (`aria-pressed`, described by the synthetic-voice disclosure) and Pause meet 44 px and axe; turning the voice off mid-line reads the line out once and waits for Next; the mute choice survives a reload and nothing is fetched while muted; a refused `play()` locks the voice without storing anything; on the audio back end a real one-second MP3 plays through `<audio id="tour-audio">` after a silent unlock inside the start click, its successor preloads as a blob, and a 404 MP3 falls back for that line; `guide.voice.required` turns the voice on by default and `?voice=0` always turns it off. The local server serves MP3 as `audio/mpeg` with byte ranges, as Pages does.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (30 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-voice.spec.mjs` (`tests/fixtures/voice/one-second.mp3`) · `tests/serve.spec.mjs` |
+
+#### T-16 — new
+
+> Under reduced motion every tour step completes with no animation (`document.getAnimations()` empty), no chapter title card shows, and the guide's sphere draws one still frame per state with no drawing loop.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (1 runs; chromium-reduced) | Not run | `tests/tour-motion.spec.mjs` (chromium-reduced) |
+
+#### T-17 — new
+
+> Otherwise only transform and opacity animate through the tour, its dialogs and its scenes, and nothing keeps `will-change` once the camera has settled; the sphere draws only while the card is on screen, stops when the tab is hidden, starts again when it returns, and stops for good when the tour ends.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (4 runs; chromium, webkit) | Not run | `tests/tour-motion.spec.mjs` (chromium, webkit) |
+
+#### T-18 — new
+
+> axe (WCAG 2.1 AA) at 1280×720 and 390×844: 0 violations while the guide speaks at rest, while a choice waits, in a door, at a station, on the path, at the kiosk, at the close and its summary, with the Tour map open, and with Ask open (every question shown, an answer, and the microphone's disclosure).
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (72 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-axe.spec.mjs` (results in `tests/results/axe-tour-*.json`) |
+
+- P6-D05 proves the default lobby (the walk included); at go-live `?tour=0` is added to its walk entry, and T-18 carries axe over to the tour.
+
+#### T-19 — new
+
+> On phones, portrait tablets and short screens (390×844, 768×1024, 844×390, 320×640) the card takes the sheet's place (from `--sheet-top`, or from the header when the band hides), full width with no horizontal overflow; every control is at least 44×44 and each choice at least 56 px tall; no panel opens; callouts print their text and source from the manifest; a rotation re-applies the scene without animation and keeps the line.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Pass (15 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-phone.spec.mjs` |
+
+#### T-20 — dropped
+
+> With `?idle=3`: no attract loop while touring; starting the tour during attract stops it.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| dropped (O10) | — | — | — |
+
+**Reason.** The idle attract tour was never built and is dropped (DECISIONS.md, "Idle attract tour dropped"): its review found screen-reader users in browse mode would have the page rewritten under them, and the guided tour covers the same purpose. There is no director to coordinate with.
+
+#### T-21 — new
+
+> The captioned walk (P6) survives the tour: `#/walk/<n>` opens the silent walk at that step whether the tour is on, off or at the manifest's default, fetches nothing of the tour and shows no tour card; the walk's own checks (P6-D01, P6-D02, P6-D05) keep passing, with `?tour=0` added to their walk entry points at go-live.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O11) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-routes.spec.mjs` (T-21) · `tests/walk.spec.mjs`, `tests/motion.spec.mjs`, `tests/axe.spec.mjs` (P6-D01, P6-D02, P6-D05) |
+
+- While the gate is pending the default walk button is the silent walk, so P6-D01, P6-D02 and P6-D05 prove it as written; after go-live they prove it under `?tour=0`, and T-04, T-08 and T-18 prove the default.
+
+#### T-22 — new
+
+> The tour costs the lobby's boot nothing: with the tour and a voice switched on, nothing of either (script, tour stylesheet, voice folder) is fetched before the visitor starts it and the two `<audio preload="none">` elements hold no source; the click brings the script, then the voice manifest, then the first line's timing; layout does not shift from navigation through the first voiced line (CLS 0) and the plate is still one file; with the gate pending (the default) even `?voice=sim` fetches nothing of the tour or its voice.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10, O11) | Pass (6 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-boot.spec.mjs` · `tests/boot.spec.mjs` (P2a-D05, P4-D07 re-run) |
+
+- The tour's rules live in `css/tour.css`, which `js/tour.js` loads when the tour starts (with `css/experience.css`'s `?v=` stamp), so the render-blocking stylesheet is unchanged and P2a-D05's first-paint budget holds.
+
+#### T-23 — new
+
+> With a renamed door title in the manifest, the tour's arrival options, chapter label and title card, document title, Tour map, summary and its mail draft show the new title and the old one appears nowhere; voice rendered before the rename is never played for a line the rename changed (that line runs captions with the new title, and nothing is fetched for it), while untouched lines stay voiced.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O1, O10) | Pass (6 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-rename.spec.mjs` |
+
+#### T-24 — new
+
+> VoiceOver (macOS and iOS Safari) and NVDA: no double speech with the voice on; the captions-only route is fully readable; on iOS the voice plays with the silent switch off and behaves as the platform does with it on.
+
+| Disposition | Candidate (local) | Published | Proof |
+|---|---|---|---|
+| new (O10) | Not run | Not run | manual, recorded in `docs/evidence/manual.json` (candidate) and `docs/evidence/manual-published.json` (published) |
+
+- Needs the rendered voice (`media/voice/`), so it runs after the voice render and before go-live. The pronunciation check (3HUE, AiVRIC, SOC 2, NIST CSF, vCISO) is the listening report in `docs/VOICE.md`.
+
 ## Observations logged while re-scoping
 
 Code-reading notes for the spec authors, recorded so the rows above are not read as results. None is a measured outcome; each is proven or refuted by the spec named on its row. Files under `js/`, `css/`, `index.html` and `content/` are not edited from this register.
@@ -742,5 +979,11 @@ Code-reading notes for the spec authors, recorded so the rows above are not read
 - R-04: `showStationChips` (js/panel.js) is imported by main.js but never called, so `#panel-stations` stays hidden; plan step 6 also mentions `panRoom` on a station route, which `setPanelStation` does not call. Neither affects R-04 as worded.
 - R-01: RENDER-GATE.md names `tools/upscale-room.sh` and `tools/gate-sheet.js`; the repo has `tools/upscale-room.py` and `tools/gate-sheet.py`.
 - P5-D03: the plan's spec list has no spec for card text; the row relies on the capture record and the Gate B sheet until one is added.
+- P6-D01, P6-D02, P6-D05 (tour, O11): while `tour.gate` is pending these prove the default walk; at go-live `?tour=0` is added to the walk entry points in `walk.spec`, `motion.spec` and `axe.spec` (a deliberate, recorded change, the same pattern as R-05), and the default is proven through T-04, T-08 and T-18.
+- P4-D04 / T-09: the O3 rule is one rule; the tour's deep links are measured against a plain lobby load exactly as the door and path links are.
+- P6-D06 (tour): the share-card recapture rule fires at go-live, when `strings.walk` changes the resting lobby's header.
+- T-07: at 1280×720 the Win Trust and Gain Control decision stations cannot fit above the tour card (the room is at its zoom cap with its bottom edge on the screen's); the pin is marked but hidden by the out-of-frame rule. A higher zoom cap (`js/stage.js`) or a smaller pin margin (`js/rooms.js`) would fix it.
+- T-13 / T-15: the visitor's mute choice is the only thing the tour writes to localStorage (`3hue-experience:voice`), which the voice plan chose over sessionStorage so the choice survives a later visit.
+- T-22 (default load, gate pending): the eight tour modules (`js/tour.js`, `tourtext`, `dialogue`, `guide`, `tourmap`, `ask`, `ask-match`, `voice`, about 119 KB, 44 KB gzipped) are requested on every visit, through the static import in `js/main.js` and `js/debug.js` and their low-priority modulepreloads; the script, the tour stylesheet and the voice folder are not. Imports stay static so `tools/stamp-version.py` stamps every module; loading the tour lazily would need `import('./tour.js?v=…')` in `js/main.js`, a hook instead of the import in `js/debug.js`, and the stamp tool's pattern extended to dynamic imports. Recorded as an accepted deviation from "zero new requests" until that is decided.
 
-<!-- Candidate (local) column filled 2026-09-11T00:51:55.055Z from tests/results/candidate-all.json + docs/evidence/manual.json -->
+<!-- Candidate (local) column filled 2026-09-11T09:14:02.911Z from tests/results/candidate-all.json + docs/evidence/manual.json -->

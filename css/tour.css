@@ -1,0 +1,194 @@
+/* The guided tour (O10/O11): the AiVRIC card, its chapter title card, the narrated station pin, and
+   the Tour map and Ask dialogs.
+   Loaded by js/tour.js only when the tour starts (with the ?v= stamp of css/experience.css), so the
+   lobby's render-blocking stylesheet, and its first paint (P2a-D05), carry none of it. Tokens
+   (--cyan, --ease, --focus, …), .btn and .sr come from css/experience.css.
+
+   Desktop: the card is fixed at the bottom-left of the frame, as tall as its content up to
+   min(52vh, 440px), so a line, its printed sources and the synthetic-voice disclosure show whole at
+   laptop sizes. --tour-h is only the camera's reserve: js/tour.js reserves --tour-h plus the 16 px
+   bottom margin under the frame through setInset() so the camera aims above a card of that height
+   (keep reserve() there in step with --tour-h here); a taller card is never a reason to re-aim.
+   Past the cap the body scrolls, and js/dialogue.js makes it a focusable region while it does.
+   Composed viewports: the card takes the sheet's place (below); on short ones the whole card
+   scrolls instead. */
+
+/* The station the tour is narrating (rooms.js setActivePin): an instant state change, no motion. */
+.room-pins .room-pin.is-active .ring { border-color: #fff; background: rgba(37, 181, 214, .45); box-shadow: 0 0 0 4px rgba(6, 18, 31, .35), 0 0 26px rgba(37, 181, 214, .9); }
+.room-pins .room-pin.is-active .chip { background: var(--cyan); color: var(--navy-deep); border-color: transparent; }
+.room-pins .room-pin.is-active .chip::before { background: var(--navy-deep); }
+
+:root { --tour-h: clamp(168px, 24vh, 240px); }
+.tour { position: fixed; z-index: 36; left: 16px; bottom: 16px; width: min(1040px, calc(100vw - 32px)); max-height: min(52vh, 440px); display: flex; flex-direction: column; padding: 10px 14px 12px; border-radius: 16px; background: #0b1727; border: 1px solid rgba(82, 204, 227, .22); box-shadow: 0 18px 48px rgba(0, 0, 0, .5); color: var(--ink); }
+.tour-head { flex: none; display: flex; align-items: center; gap: 12px; min-height: 44px; }
+/* The guide's sphere: js/guide.js draws it (a still frame under reduced motion). */
+.tour-orb { flex: none; width: 44px; height: 44px; border-radius: 50%; }
+.tour-who { display: flex; flex-direction: column; min-width: 0; }
+.tour-who p, .tour-chapter { margin: 0; }
+.tour-name { font: 600 15px/1.2 var(--display); color: #fff; }
+.tour-state { min-height: 1.3em; font: 600 11px/1.3 var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--cyan-ink); }
+.tour-chapter { flex: 1; min-width: 0; font-size: 13px; color: var(--ink-3); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tour-end { flex: none; }
+.tour-x { font-size: 18px; line-height: 1; }
+/* Map and Ask (js/tourmap.js, js/ask.js): icon and name on desktop, the icon alone when composed. */
+.tour-head .btn { padding-left: 14px; padding-right: 14px; }
+.tour-tool { flex: none; }
+.tour-icon { flex: none; width: 20px; height: 20px; }
+.tour-progress { flex: none; height: 3px; margin: 8px 0 10px; border-radius: 2px; background: rgba(255, 255, 255, .1); overflow: hidden; }
+.tour-progress > span { display: block; width: 100%; height: 100%; background: var(--cyan); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); transition: transform 400ms var(--ease); }
+.tour-main { flex: 1 1 auto; min-height: 0; display: flex; align-items: flex-end; gap: 16px; }
+/* The text column: the body (which scrolls past the cap) and, after it, the disclosure. */
+.tour-text { flex: 1 1 auto; min-width: 0; min-height: 0; align-self: stretch; display: flex; flex-direction: column; }
+.tour-body { flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.tour-body:focus-visible { outline: none; border-radius: 4px; box-shadow: var(--focus); }
+.tour-caption { margin: 0; max-width: 68ch; font: 400 17px/1.45 var(--body); color: #fff; overflow-wrap: anywhere; }
+.tour-src { margin: 4px 0 0; font-size: 12px; color: var(--ink-3); }
+/* One column that may shrink below its longest word (the lobby's address in the summary), whose
+   text wraps anywhere, so a tile never widens the body at 320 px. */
+.tour-callouts { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; margin-top: 8px; max-width: 72ch; }
+.tour-callout { padding: 8px 12px; border-left: 3px solid var(--cyan); border-radius: 8px; background: rgba(37, 181, 214, .08); }
+.tour-callout p { margin: 0; font-size: 14px; line-height: 1.4; color: #fff; overflow-wrap: anywhere; }
+.tour-callout .src { margin-top: 2px; font-size: 12px; color: var(--ink-3); }
+.tour-choice { margin-top: 10px; }
+.tour-prompt { margin: 0 0 8px; font: 600 14px/1.3 var(--display); color: #fff; }
+.tour-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+.tour-opt { position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; min-height: 44px; margin: 0; padding: 8px 12px 8px 42px; border-radius: var(--radius); border: 1px solid rgba(255, 255, 255, .2); background: rgba(255, 255, 255, .04); color: var(--ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer; animation: tour-in 240ms var(--ease) both; }
+.tour-opt:hover { border-color: #fff; }
+.tour-opt:focus-visible { outline: none; box-shadow: var(--focus); }
+.tour-opt .n { position: absolute; left: 10px; top: 50%; margin-top: -11px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgba(82, 204, 227, .75); font: 700 12px/1 var(--body); color: #fff; }
+.tour-opt-label { font-size: 14px; font-weight: 600; line-height: 1.3; color: #fff; }
+.tour-opt-sub { font-size: 13px; line-height: 1.3; color: var(--ink-3); }
+.tour-tag { margin-top: 2px; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: .04em; }
+.tour-tag.suggested { background: rgba(37, 181, 214, .2); color: var(--cyan-ink); }
+.tour-tag.visited { background: rgba(255, 255, 255, .1); color: var(--ink-2); }
+.tour-bar { flex: none; display: flex; gap: 8px; }
+/* Previous on a first line is aria-disabled (it keeps focus), styled as the disabled state. */
+.tour-bar .btn[disabled], .tour-bar .btn[aria-disabled="true"] { opacity: .45; cursor: default; }
+.tour-bar .btn.outline[aria-disabled="true"]:hover { border-color: rgba(226, 232, 240, .45); }
+@keyframes tour-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* The voice (js/voice.js through js/tour.js). The Voice toggle sits with Map and Ask (a speaker,
+   struck through while off; its state is aria-pressed); Pause / Resume sits between Previous and
+   Next while the voice is on; the synthetic-voice disclosure (guide.disclosure) shows under the
+   card's text while it is on, outside the scrolling body so it never scrolls away. The word being
+   said gets a tint and an underline; no word is ever dimmed, and nothing here moves (no
+   transitions), so reduced motion needs nothing more. */
+.tour-voice, .tour-pause { transition: none; }
+.tour-voice .v-off { display: none; }
+.tour-voice[aria-pressed="false"] .v-on { display: none; }
+.tour-voice[aria-pressed="false"] .v-off { display: inline; }
+.tour-voice[aria-pressed="true"] { border-color: var(--cyan); background: rgba(37, 181, 214, .16); }
+.tour-pause { flex: none; min-width: 92px; }
+.tour-note { flex: none; margin: 8px 0 0; font-size: 12px; line-height: 1.4; color: var(--ink-3); }
+.tour-words .w.now { border-radius: 3px; background: rgba(37, 181, 214, .3); text-decoration: underline 2px var(--cyan); text-underline-offset: .2em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+
+/* The chapter title card: decorative, over the centre of the frame, opacity and transform only. */
+.tour-titlecard { position: fixed; z-index: 33; max-width: 90vw; transform: translate(-50%, -50%); text-align: center; pointer-events: none; opacity: 0; }
+.tour-titlecard.on { animation: tour-card 1900ms var(--ease) both; }
+.tour-tc-eyebrow { margin: 0 0 6px; font: 600 40px/1 var(--display); color: var(--cyan-ink); text-shadow: 0 0 .5em rgba(6, 18, 31, .9); }
+.tour-tc-title { margin: 0; font: 600 clamp(28px, 4vw, 52px)/1.1 var(--display); letter-spacing: -.01em; color: #fff; text-shadow: 0 0 .45em rgba(6, 18, 31, .95), 0 0 1.4em rgba(37, 181, 214, .45); }
+@keyframes tour-card { 0% { opacity: 0; transform: translate(-50%, -44%); } 16%, 76% { opacity: 1; transform: translate(-50%, -50%); } 100% { opacity: 0; transform: translate(-50%, -54%); } }
+
+/* Composed layout (mirrors isComposed() in js/stage.js): the card takes the sheet's place, from
+   --sheet-top (the header when short) to the bottom, full width. The body scrolls (the whole card
+   when short); the Previous / Next bar stays at the foot, clear of the home bar. */
+@media (max-width: 900px), (orientation: portrait), (max-height: 499px) {
+  body.composed .tour { top: var(--sheet-top); left: 0; right: 0; bottom: 0; width: auto; max-height: none; border-radius: 16px 16px 0 0; border-width: 1px 0 0; padding: 12px 16px 0; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  body.composed.short .tour { top: var(--hud-h); border-radius: 0; }
+  body.composed .tour-head { flex-wrap: wrap; row-gap: 4px; }
+  body.composed .tour-chapter { order: 3; flex: 1 1 100%; text-align: left; }
+  body.composed .tour-head { column-gap: 8px; }
+  body.composed #tour-map-btn { margin-left: auto; }
+  body.composed #tour-voice { margin-left: auto; }
+  body.composed #tour-voice:not([hidden]) ~ #tour-map-btn { margin-left: 0; }
+  body.composed .tour-head .btn { width: 44px; padding: 0; gap: 0; }
+  body.composed .tour-tool-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  body.composed .tour-end { font-size: 0; }
+  body.composed .tour-end .tour-x { font-size: 20px; }
+  body.composed .tour-main { flex-direction: column; align-items: stretch; gap: 0; }
+  body.composed .tour-body { padding-bottom: 12px; }
+  body.composed .tour-caption { font-size: 16px; }
+  body.composed .tour-options { grid-template-columns: 1fr; }
+  body.composed .tour-opt { min-height: 56px; }
+  body.composed .tour-bar { padding: 10px 0; padding-bottom: max(10px, env(safe-area-inset-bottom)); border-top: 1px solid rgba(255, 255, 255, .08); }
+  body.composed .tour-bar .btn { flex: 1 1 0; min-height: 44px; }
+  /* Short viewports (a phone on its side, a desktop at 400% zoom): a fixed head and bar would leave
+     the caption a sliver, so the whole card scrolls instead, with Previous / Next held at its foot
+     (.tour-main steps out of the way so the card is the bar's containing block) and the sphere left
+     out. scroll-padding keeps an option scrolled into view clear of the bar. */
+  body.composed.short .tour { overflow-y: auto; overscroll-behavior: contain; scroll-padding-bottom: 72px; }
+  body.composed.short .tour-orb { display: none; }
+  body.composed.short .tour-main { display: contents; }
+  body.composed.short .tour-text { flex: none; }
+  body.composed.short .tour-body { flex: none; overflow: visible; }
+  body.composed.short .tour-bar { position: sticky; bottom: 0; z-index: 1; background: #0b1727; }
+}
+
+/* Tour map and Ask: native modal dialogs over a dimmed page. The body scrolls; head and foot stay.
+   Composed layouts: a sheet from the bottom, below the header; short ones scroll as a whole. */
+.tour-dialog { width: min(640px, calc(100vw - 32px)); max-width: none; max-height: min(84vh, 760px); margin: auto; padding: 0; border: 1px solid rgba(82, 204, 227, .28); border-radius: 16px; background: #0b1727; color: var(--ink); box-shadow: 0 24px 64px rgba(0, 0, 0, .6); overflow: hidden; }
+.tour-dialog[open] { display: flex; flex-direction: column; animation: tour-dlg-in 220ms var(--ease) both; }
+.tour-dialog::backdrop { background: rgba(3, 9, 16, .66); }
+@keyframes tour-dlg-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.tour-dlg-head { flex: none; display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 20px; border-bottom: 1px solid rgba(255, 255, 255, .08); }
+.tour-dlg-title { flex: 1; min-width: 0; margin: 0; font: 600 18px/1.3 var(--display); color: #fff; }
+.tour-dlg-x { flex: none; width: 44px; padding: 0; }
+.tour-dlg-body { flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 16px 20px 20px; }
+.tour-dlg-foot { flex: none; display: flex; justify-content: flex-end; gap: 8px; padding: 12px 20px; padding-bottom: max(12px, env(safe-area-inset-bottom)); border-top: 1px solid rgba(255, 255, 255, .08); }
+.tour-dialog .tour-tag { display: inline-block; }
+
+.tour-map-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.tour-map-row { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; margin: 0; padding: 8px 12px; border-radius: var(--radius); border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .04); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.tour-map-row:hover { border-color: #fff; }
+.tour-map-row:focus-visible { outline: none; box-shadow: var(--focus); }
+.tour-map-row .n { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(82, 204, 227, .75); font: 700 12px/1 var(--body); color: #fff; }
+.tour-map-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.tour-map-where { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--cyan-ink); }
+.tour-map-title { font-size: 15px; font-weight: 600; line-height: 1.3; color: #fff; }
+.tour-tag.now { background: var(--cyan); color: var(--navy-deep); }
+
+.ask-intro { margin: 0 0 14px; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+.ask-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: #fff; }
+.ask-row { display: flex; gap: 8px; }
+.ask-input { flex: 1 1 auto; min-width: 0; min-height: 44px; padding: 0 12px; border-radius: var(--radius); border: 1px solid rgba(226, 232, 240, .45); background: #06121f; color: #fff; font: 400 16px/1.3 var(--body); }
+.ask-input:focus-visible { outline: none; box-shadow: var(--focus); border-color: #fff; }
+.ask-mic { flex: none; width: 44px; padding: 0; }
+.ask-mic.on { background: var(--cyan); border-color: var(--cyan); color: var(--navy-deep); }
+.ask-mic-note { margin-top: 10px; padding: 12px; border-radius: var(--radius); border: 1px solid rgba(82, 204, 227, .35); background: rgba(37, 181, 214, .08); }
+.ask-mic-text { margin: 0 0 10px; font-size: 14px; line-height: 1.45; color: #fff; }
+.ask-mic-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+.ask-status { margin: 8px 0 0; font-size: 13px; color: var(--cyan-ink); }
+.ask-status:empty { margin: 0; }
+.ask-result { margin-top: 16px; }
+.ask-group + .ask-all, .ask-none + .ask-group, .ask-lines + .ask-actions, .ask-actions + .ask-group { margin-top: 16px; }
+.ask-h { margin: 0 0 8px; font: 600 13px/1.3 var(--body); letter-spacing: .04em; color: var(--ink-2); }
+.ask-chips { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ask-chip { display: block; width: 100%; min-height: 44px; margin: 0; padding: 10px 12px; border-radius: var(--radius); border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .04); color: #fff; font: 500 14px/1.35 var(--body); text-align: left; cursor: pointer; }
+.ask-chip:hover { border-color: #fff; }
+.ask-chip:focus-visible { outline: none; box-shadow: var(--focus); }
+.ask-all > summary { display: flex; align-items: center; min-height: 44px; padding: 0 4px; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--cyan-ink); cursor: pointer; }
+.ask-all > summary:focus-visible { outline: none; box-shadow: var(--focus); }
+.ask-all[open] > summary { margin-bottom: 8px; }
+.ask-answering { margin: 0 0 10px; font: 600 13px/1.35 var(--body); letter-spacing: .03em; color: var(--cyan-ink); }
+.ask-answering:focus { outline: none; }
+.ask-answering:focus-visible { box-shadow: var(--focus); border-radius: 4px; }
+.ask-line { margin: 0 0 8px; font-size: 16px; line-height: 1.5; color: #fff; overflow-wrap: anywhere; }
+.ask-src { margin: -4px 0 12px; font-size: 12px; color: var(--ink-3); }
+.ask-note { margin: 0; font-size: 16px; line-height: 1.5; color: #fff; }
+.ask-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.ask-none .ask-actions { margin-top: 12px; }
+
+@media (max-width: 900px), (orientation: portrait), (max-height: 499px) {
+  body.composed .tour-dialog { width: 100%; max-height: calc(100% - var(--hud-h)); margin: auto 0 0; border-radius: 16px 16px 0 0; border-width: 1px 0 0; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+  body.composed .tour-dlg-body { padding: 14px 16px 16px; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+  body.composed .tour-dlg-foot { padding-left: 16px; padding-right: 16px; }
+  /* Short viewports: the whole dialog scrolls, so its foot (Replay from the start) can be reached. */
+  body.composed.short .tour-dialog[open] { display: block; overflow-y: auto; overscroll-behavior: contain; }
+  body.composed.short .tour-dlg-body { overflow: visible; }
+}
+
+/* Reduced motion: css/experience.css already stops every transition and animation; the title card
+   is not shown at all (the chapter is still in the card and announced). */
+@media (prefers-reduced-motion: reduce) {
+  .tour-titlecard { display: none !important; }
+}

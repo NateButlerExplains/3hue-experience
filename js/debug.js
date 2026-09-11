@@ -1,6 +1,7 @@
 // ?debug=1: draw every geometry item on the plate and expose window.__lobby for the checks.
 import { getManifest, getGeometry, getParams } from './content.js?v=2026-09-10f';
 import { getState, project, projectRect, onLayout, frameRect, bandOffset } from './stage.js?v=2026-09-10f';
+import { tourState } from './tour.js?v=2026-09-10f';
 
 const svg = document.getElementById('debug');
 const NS = 'http://www.w3.org/2000/svg';
@@ -21,6 +22,9 @@ export function initDebug() {
       return out;
     },
   };
+  // The guided tour's state for the checks: node, line, phase, answers, visited chapters, the scene
+  // on screen, and what the modules that join later report (voice, pause reasons, guide frames).
+  Object.defineProperty(window, '__tour', { configurable: true, get: () => tourState() });
   if (!on) return;
   svg.hidden = false;
   const g = getGeometry();

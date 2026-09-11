@@ -43,6 +43,18 @@ Every file carried into this repo, where it came from, and its SHA-256 at copy t
 | `tools/stamp-version.py` | AiVRIC `experience/tools/stamp-version.py` | `62b2d1779bbaceef…` |
 | `media/fonts/*.woff2` | Google Fonts latin variable subsets, Sora and IBM Plex Sans (OFL) | `3902474d3ece89c8…` / `056e4e2459f57a00…` |
 
+## Written for this repo (guided tour, O10)
+
+| File | Origin | SHA-256 |
+|---|---|---|
+| `js/guide.js` | Original code written for this repo: the guide's sphere (a Fibonacci sphere of nodes and threads that breathes idle and pulses from the voice's word timings). It takes the owner's visual style only. No code was copied from `3HUE/3HUE-Website` (`experience/js/tour/guide.js` at `3b8fd6c`), which carries no licence. | — |
+| `js/tour.js`, `js/tourtext.js`, `js/dialogue.js`, `js/tourmap.js`, `js/ask.js`, `js/ask-match.js`, `js/voice.js`, `css/tour.css`, `tools/voice/*.mjs`, `tools/tour-text.mjs` | Original code written for this repo. | — |
+| `index.html` `#tour-audio` `data-unlock` | 0.12 s of silence, MP3, made with ffmpeg; played inside the start click so iOS lets the voice play. | — |
+| `tests/fixtures/voice/one-second.mp3` | 1 s of silence, 24 kHz mono 48 kbps CBR (the published voice format), made with ffmpeg. | `30aec6451a7d4d05…` |
+| `tests/fixtures/voice/tiny.mp3` | 0.3 s ffmpeg-generated test signal (not speech), 24 kHz mono 48 kbps; for the voice tooling's MP3 header parser and the local server's byte-range checks. | `a4e521e2776f5ceb…` |
+| `tests/fixtures/voice/boundaries.json` | Synthetic word-boundary events shaped like the Speech SDK 1.51 events; replace with `art/voice-cache/check-events.json` from the first real `node tools/voice/build.mjs --check`. | `0f97352a9b2dd9f9…` |
+| `media/voice/` (not yet rendered) | Azure AI Speech `en-US-AvaNeural`, rendered at build time on 3HUE's own S0 resource (a licensed commercial use), normalised and encoded with ffmpeg; see `docs/VOICE.md`. | per file in `media/voice/manifest.json` |
+
 ## Left in the fork, cited by path
 
 | Item | Fork path | SHA-256 | Why not copied |

@@ -3,12 +3,13 @@
 //   #/door/<id>[/<station>]            a door (panel; room when wired)
 //   #/path[/<stage>|/where-to-start]   the maturity path
 //   #/walk/<n>                         the captioned walk, step n
+//   #/tour[/<node>]                    the guided tour at a node of content/tour.json (O10/O11)
 //
 // go(state) is the only thing that touches the URL. Opening a layer pushes one entry; a change
-// inside a layer (tab switch, next stage, next walk step) replaces. Back therefore closes exactly
-// one layer. A deep link in a fresh tab gets the lobby placed beneath it so Back lands on the
-// lobby and not on whatever was before this site (O3: customer stack, no dashboard entry).
-const LAYER = { experience: 0, door: 1, path: 1, walk: 1 };
+// inside a layer (tab switch, next stage, next walk step, next tour node) replaces. Back therefore
+// closes exactly one layer. A deep link in a fresh tab gets the lobby placed beneath it so Back
+// lands on the lobby and not on whatever was before this site (O3: customer stack, no dashboard entry).
+const LAYER = { experience: 0, door: 1, path: 1, walk: 1, tour: 1 };
 
 export function parse(hash = location.hash) {
   const h = (hash || '#/experience').replace(/^#/, '');
@@ -16,6 +17,7 @@ export function parse(hash = location.hash) {
   if ((m = h.match(/^\/door\/([\w-]+)(?:\/([\w-]+))?/))) return { view: 'door', id: m[1], station: m[2] || null };
   if ((m = h.match(/^\/path(?:\/([\w-]+))?/))) return { view: 'path', stage: m[1] || null };
   if ((m = h.match(/^\/walk(?:\/(\d+))?/))) return { view: 'walk', step: m[1] ? +m[1] : 0 };
+  if ((m = h.match(/^\/tour(?:\/([\w-]+))?/))) return { view: 'tour', node: m[1] || null };
   return { view: 'experience' };
 }
 
@@ -23,6 +25,7 @@ export function hashFor(st) {
   if (st.view === 'door') return `#/door/${st.id}${st.station ? '/' + st.station : ''}`;
   if (st.view === 'path') return `#/path${st.stage ? '/' + st.stage : ''}`;
   if (st.view === 'walk') return `#/walk/${st.step || 0}`;
+  if (st.view === 'tour') return `#/tour${st.node ? '/' + st.node : ''}`;
   return '#/experience';
 }
 
