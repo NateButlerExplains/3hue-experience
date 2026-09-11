@@ -2,8 +2,8 @@
 // plate px; the ring sits on the doorway centre and the chip hangs below it, both counter-scaled
 // so they keep their screen size. Composed viewports show numbered rings only (rows carry the
 // names). Plates (hover/focus, fine pointers) list what is behind the door.
-import { getManifest, getGeometry, str, esc, stageName } from './content.js?v=2026-09-10d';
-import { onLayout, getState, project, viewport } from './stage.js?v=2026-09-10d';
+import { getManifest, getGeometry, str, esc, stageName } from './content.js?v=2026-09-10e';
+import { onLayout, getState, project, viewport } from './stage.js?v=2026-09-10e';
 
 const host = document.getElementById('doors');
 let doors = [];
@@ -12,6 +12,7 @@ let pathChip = null;
 export function buildDoors(onDoor, onPath) {
   const m = getManifest(), g = getGeometry();
   host.innerHTML = '';
+  host.classList.add('hidden');   // revealed by showDoors() once the first route has settled; a deep link never shows them
   doors = m.doors.map((d, i) => {
     const geo = g.doorways[d.id];
     const [l, t, r, b] = geo.frame;

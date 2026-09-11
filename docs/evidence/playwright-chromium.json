@@ -124,12 +124,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1944,
+                  "duration": 1984,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:30.247Z",
+                  "startTime": "2026-09-11T00:29:21.134Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -168,12 +168,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2103,
+                  "duration": 2161,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:30.247Z",
+                  "startTime": "2026-09-11T00:29:21.134Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -212,12 +212,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2087,
+                  "duration": 2129,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:32.620Z",
+                  "startTime": "2026-09-11T00:29:23.578Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -256,12 +256,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2075,
+                  "duration": 2137,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:32.778Z",
+                  "startTime": "2026-09-11T00:29:23.751Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -300,12 +300,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2075,
+                  "duration": 2084,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:34.711Z",
+                  "startTime": "2026-09-11T00:29:25.712Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -344,12 +344,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2068,
+                  "duration": 2119,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:34.858Z",
+                  "startTime": "2026-09-11T00:29:25.892Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -388,12 +388,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2073,
+                  "duration": 2130,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:36.790Z",
+                  "startTime": "2026-09-11T00:29:27.801Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -432,12 +432,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3162,
+                  "duration": 3214,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:36.930Z",
+                  "startTime": "2026-09-11T00:29:28.016Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -476,12 +476,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1906,
+                  "duration": 1883,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:38.866Z",
+                  "startTime": "2026-09-11T00:29:29.935Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -520,12 +520,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2068,
+                  "duration": 2071,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:40.095Z",
+                  "startTime": "2026-09-11T00:29:31.234Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -564,12 +564,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2072,
+                  "duration": 2059,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:40.776Z",
+                  "startTime": "2026-09-11T00:29:31.822Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -608,12 +608,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2063,
+                  "duration": 2056,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:42.168Z",
+                  "startTime": "2026-09-11T00:29:33.309Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -652,12 +652,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2066,
+                  "duration": 2050,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:42.852Z",
+                  "startTime": "2026-09-11T00:29:33.885Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -696,12 +696,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2063,
+                  "duration": 2058,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:44.234Z",
+                  "startTime": "2026-09-11T00:29:35.369Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -740,12 +740,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2123,
+                  "duration": 2055,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:44.923Z",
+                  "startTime": "2026-09-11T00:29:35.939Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -784,12 +784,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2013,
+                  "duration": 2026,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:46.301Z",
+                  "startTime": "2026-09-11T00:29:37.430Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -806,6 +806,156 @@
           "file": "axe.spec.mjs",
           "line": 19,
           "column": 5
+        }
+      ]
+    },
+    {
+      "title": "boot.spec.mjs",
+      "file": "boot.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "P4-D07 a deep link never shows the resting lobby: no frame with the heading or pins before the door opens",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [
+                {
+                  "type": "measured",
+                  "description": "{\"frames\":93,\"leaked\":[]}"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1594,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T00:29:39.599Z",
+                  "annotations": [
+                    {
+                      "type": "measured",
+                      "description": "{\"frames\":93,\"leaked\":[]}"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b02518f0a684676f2be4-8bfb60f86c58d1d83ab8",
+          "file": "boot.spec.mjs",
+          "line": 60,
+          "column": 1
+        }
+      ],
+      "suites": [
+        {
+          "title": "P2a-D05 boot on Fast 4G, cold cache, 1440x900",
+          "file": "boot.spec.mjs",
+          "line": 17,
+          "column": 6,
+          "specs": [
+            {
+              "title": "placeholder or plate paints within 350 ms of navigation start; exactly one plate file, <= 500 KB; CLS 0",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "measured",
+                      "description": "{\"firstPaintMs\":301,\"plateReadyAt\":1680,\"cls\":0,\"plate\":[{\"name\":\"lobby-plate-1920.avif\",\"bytes\":75506,\"at\":851}],\"ttfb\":29}"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1716,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-11T00:29:38.001Z",
+                      "annotations": [
+                        {
+                          "type": "measured",
+                          "description": "{\"firstPaintMs\":301,\"plateReadyAt\":1680,\"cls\":0,\"plate\":[{\"name\":\"lobby-plate-1920.avif\",\"bytes\":75506,\"at\":851}],\"ttfb\":29}"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b02518f0a684676f2be4-99f720d7e0fa4514535f",
+              "file": "boot.spec.mjs",
+              "line": 19,
+              "column": 3
+            },
+            {
+              "title": "warm reopen skips the placeholder fade and re-fetches nothing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "measured",
+                      "description": "{\"before\":1,\"plateFetches\":[{\"name\":\"lobby-plate-1920.avif\",\"transfer\":300}],\"readyAt\":39}"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 128,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-11T00:29:39.464Z",
+                      "annotations": [
+                        {
+                          "type": "measured",
+                          "description": "{\"before\":1,\"plateFetches\":[{\"name\":\"lobby-plate-1920.avif\",\"transfer\":300}],\"readyAt\":39}"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b02518f0a684676f2be4-9b1d79d57434aca055a1",
+              "file": "boot.spec.mjs",
+              "line": 45,
+              "column": 3
+            }
+          ]
         }
       ]
     },
@@ -836,12 +986,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5017,
+                  "duration": 5015,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:47.054Z",
+                  "startTime": "2026-09-11T00:29:39.728Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -888,12 +1038,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 850,
+                  "duration": 906,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:48.322Z",
+                  "startTime": "2026-09-11T00:29:41.201Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -932,12 +1082,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 22465,
+                  "duration": 22653,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:49.176Z",
+                  "startTime": "2026-09-11T00:29:42.111Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -976,12 +1126,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3720,
+                  "duration": 3698,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:52.078Z",
+                  "startTime": "2026-09-11T00:29:44.750Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1020,12 +1170,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 849,
+                  "duration": 899,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:55.802Z",
+                  "startTime": "2026-09-11T00:29:48.452Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1064,12 +1214,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 22496,
+                  "duration": 22504,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:20:56.655Z",
+                  "startTime": "2026-09-11T00:29:49.355Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1108,12 +1258,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3711,
+                  "duration": 3758,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:11.647Z",
+                  "startTime": "2026-09-11T00:30:04.768Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1152,12 +1302,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3068,
+                  "duration": 3086,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:15.363Z",
+                  "startTime": "2026-09-11T00:30:08.531Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1196,12 +1346,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3118,
+                  "duration": 3153,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:18.435Z",
+                  "startTime": "2026-09-11T00:30:11.621Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1240,12 +1390,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3169,
+                  "duration": 3099,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:19.157Z",
+                  "startTime": "2026-09-11T00:30:11.863Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1284,12 +1434,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3094,
+                  "duration": 3128,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:21.557Z",
+                  "startTime": "2026-09-11T00:30:14.779Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1328,12 +1478,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3161,
+                  "duration": 3099,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:22.331Z",
+                  "startTime": "2026-09-11T00:30:14.966Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1372,12 +1522,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2987,
+                  "duration": 2971,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:24.655Z",
+                  "startTime": "2026-09-11T00:30:17.912Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1416,12 +1566,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3092,
+                  "duration": 3046,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:25.496Z",
+                  "startTime": "2026-09-11T00:30:18.069Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1460,12 +1610,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3040,
+                  "duration": 3050,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:27.647Z",
+                  "startTime": "2026-09-11T00:30:20.888Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1504,12 +1654,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3094,
+                  "duration": 3041,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:28.594Z",
+                  "startTime": "2026-09-11T00:30:21.120Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1556,12 +1706,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 905,
+                  "duration": 895,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:30.696Z",
+                  "startTime": "2026-09-11T00:30:23.947Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1597,15 +1747,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 847,
+                  "duration": 893,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:31.608Z",
+                  "startTime": "2026-09-11T00:30:24.168Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1641,15 +1791,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 834,
+                  "duration": 892,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:31.697Z",
+                  "startTime": "2026-09-11T00:30:24.846Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1685,15 +1835,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 898,
+                  "duration": 892,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:32.460Z",
+                  "startTime": "2026-09-11T00:30:25.064Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1729,15 +1879,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 837,
+                  "duration": 889,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:32.535Z",
+                  "startTime": "2026-09-11T00:30:25.742Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1773,15 +1923,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 897,
+                  "duration": 892,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:33.363Z",
+                  "startTime": "2026-09-11T00:30:25.960Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1817,15 +1967,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 838,
+                  "duration": 889,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:33.376Z",
+                  "startTime": "2026-09-11T00:30:26.634Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1864,12 +2014,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 893,
+                  "duration": 891,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:34.220Z",
+                  "startTime": "2026-09-11T00:30:26.856Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1908,12 +2058,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 841,
+                  "duration": 888,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:34.265Z",
+                  "startTime": "2026-09-11T00:30:27.527Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -1944,15 +2094,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1533,
+                  "duration": 1529,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:35.112Z",
+                  "startTime": "2026-09-11T00:30:27.752Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1991,15 +2141,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 839,
+                  "duration": 890,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:35.123Z",
+                  "startTime": "2026-09-11T00:30:28.422Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2038,12 +2188,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 842,
+                  "duration": 913,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:35.967Z",
+                  "startTime": "2026-09-11T00:30:29.289Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2082,12 +2232,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 834,
+                  "duration": 899,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:36.654Z",
+                  "startTime": "2026-09-11T00:30:29.316Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2126,12 +2276,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 830,
+                  "duration": 901,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:36.814Z",
+                  "startTime": "2026-09-11T00:30:30.208Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2170,12 +2320,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 883,
+                  "duration": 893,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:37.493Z",
+                  "startTime": "2026-09-11T00:30:30.221Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2214,12 +2364,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 885,
+                  "duration": 893,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:37.647Z",
+                  "startTime": "2026-09-11T00:30:31.114Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2258,12 +2408,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 832,
+                  "duration": 888,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:38.380Z",
+                  "startTime": "2026-09-11T00:30:31.118Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2299,15 +2449,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 881,
+                  "duration": 901,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:38.536Z",
+                  "startTime": "2026-09-11T00:30:32.010Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2343,15 +2493,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 879,
+                  "duration": 914,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:39.216Z",
+                  "startTime": "2026-09-11T00:30:32.012Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2395,15 +2545,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 830,
+                  "duration": 899,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:39.424Z",
+                  "startTime": "2026-09-11T00:30:32.919Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2439,15 +2589,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 834,
+                  "duration": 889,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:40.103Z",
+                  "startTime": "2026-09-11T00:30:32.934Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2483,15 +2633,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 883,
+                  "duration": 896,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:40.258Z",
+                  "startTime": "2026-09-11T00:30:33.822Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2527,15 +2677,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 884,
+                  "duration": 894,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:40.941Z",
+                  "startTime": "2026-09-11T00:30:33.827Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2571,15 +2721,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 884,
+                  "duration": 909,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:41.144Z",
+                  "startTime": "2026-09-11T00:30:34.725Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2615,15 +2765,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2608,
+                  "duration": 2629,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:41.829Z",
+                  "startTime": "2026-09-11T00:30:34.727Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2659,15 +2809,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1390,
+                  "duration": 1443,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:42.032Z",
+                  "startTime": "2026-09-11T00:30:35.639Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -2698,15 +2848,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 882,
+                  "duration": 945,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:43.426Z",
+                  "startTime": "2026-09-11T00:30:37.086Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -2755,7 +2905,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-09-11T00:21:44.315Z",
+                      "startTime": "2026-09-11T00:30:37.365Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2784,12 +2934,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 20,
+                      "duration": 21,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-09-11T00:21:44.324Z",
+                      "startTime": "2026-09-11T00:30:37.375Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2823,7 +2973,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-09-11T00:21:44.348Z",
+                      "startTime": "2026-09-11T00:30:37.399Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2857,7 +3007,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-09-11T00:21:44.354Z",
+                      "startTime": "2026-09-11T00:30:37.405Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2886,12 +3036,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 25,
+                      "duration": 27,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-09-11T00:21:44.358Z",
+                      "startTime": "2026-09-11T00:30:37.409Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2925,7 +3075,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-09-11T00:21:44.386Z",
+                      "startTime": "2026-09-11T00:30:37.440Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2959,12 +3109,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2,
+                      "duration": 1,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-09-11T00:21:44.390Z",
+                      "startTime": "2026-09-11T00:30:37.443Z",
                       "annotations": [
                         {
                           "type": "measured",
@@ -3002,7 +3152,7 @@
               "annotations": [
                 {
                   "type": "measured",
-                  "description": "{\"samples\":17,\"changed\":[\"--counter\",\"--k\",\"transform\"],\"transformsDistinct\":11,\"movingSamples\":12,\"willChangeDuring\":[\"auto\",\"transform\"],\"anims\":[{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"intro\"},{\"type\":\"CSSTransition\",\"prop\":\"transform\",\"target\":\"plate\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"}]}"
+                  "description": "{\"samples\":17,\"changed\":[\"--counter\",\"--k\",\"transform\"],\"transformsDistinct\":13,\"movingSamples\":13,\"willChangeDuring\":[\"auto\",\"transform\"],\"anims\":[{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"intro\"},{\"type\":\"CSSTransition\",\"prop\":\"transform\",\"target\":\"plate\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"}]}"
                 }
               ],
               "expectedStatus": "passed",
@@ -3013,16 +3163,16 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6122,
+                  "duration": 6187,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:44.401Z",
+                  "startTime": "2026-09-11T00:30:37.451Z",
                   "annotations": [
                     {
                       "type": "measured",
-                      "description": "{\"samples\":17,\"changed\":[\"--counter\",\"--k\",\"transform\"],\"transformsDistinct\":11,\"movingSamples\":12,\"willChangeDuring\":[\"auto\",\"transform\"],\"anims\":[{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"intro\"},{\"type\":\"CSSTransition\",\"prop\":\"transform\",\"target\":\"plate\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"}]}"
+                      "description": "{\"samples\":17,\"changed\":[\"--counter\",\"--k\",\"transform\"],\"transformsDistinct\":13,\"movingSamples\":13,\"willChangeDuring\":[\"auto\",\"transform\"],\"anims\":[{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"intro\"},{\"type\":\"CSSTransition\",\"prop\":\"transform\",\"target\":\"plate\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSTransition\",\"prop\":\"opacity\",\"target\":\"door\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"},{\"type\":\"CSSAnimation\",\"prop\":\"pulse\",\"target\":\"ring\"}]}"
                     }
                   ],
                   "attachments": []
@@ -3057,12 +3207,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1848,
+                  "duration": 1895,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:44.443Z",
+                  "startTime": "2026-09-11T00:30:38.037Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3101,12 +3251,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1641,
+                  "duration": 1690,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:46.295Z",
+                  "startTime": "2026-09-11T00:30:39.935Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3150,12 +3300,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "skipped",
-                  "duration": 39,
+                  "duration": 31,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:47.942Z",
+                  "startTime": "2026-09-11T00:30:41.629Z",
                   "annotations": [
                     {
                       "type": "skip",
@@ -3207,12 +3357,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 842,
+                  "duration": 833,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:47.990Z",
+                  "startTime": "2026-09-11T00:30:41.668Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3251,12 +3401,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3393,
+                  "duration": 3394,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:48.837Z",
+                  "startTime": "2026-09-11T00:30:42.504Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3295,12 +3445,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 849,
+                  "duration": 898,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:50.535Z",
+                  "startTime": "2026-09-11T00:30:43.647Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3339,12 +3489,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3497,
+                  "duration": 3392,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:51.390Z",
+                  "startTime": "2026-09-11T00:30:44.549Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3383,12 +3533,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 850,
+                  "duration": 891,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:52.238Z",
+                  "startTime": "2026-09-11T00:30:45.902Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3427,12 +3577,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3452,
+                  "duration": 3392,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:53.094Z",
+                  "startTime": "2026-09-11T00:30:46.797Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3471,12 +3621,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 854,
+                  "duration": 894,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:54.893Z",
+                  "startTime": "2026-09-11T00:30:47.945Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3515,12 +3665,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3416,
+                  "duration": 3414,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:55.753Z",
+                  "startTime": "2026-09-11T00:30:48.844Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3559,12 +3709,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 852,
+                  "duration": 842,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:56.552Z",
+                  "startTime": "2026-09-11T00:30:50.193Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3603,12 +3753,12 @@
                   "workerIndex": 1,
                   "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3507,
+                  "duration": 3355,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:57.409Z",
+                  "startTime": "2026-09-11T00:30:51.039Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3647,12 +3797,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 896,
+                  "duration": 832,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:21:59.175Z",
+                  "startTime": "2026-09-11T00:30:52.262Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3691,12 +3841,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 998,
+                  "duration": 989,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:00.078Z",
+                  "startTime": "2026-09-11T00:30:53.098Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3732,15 +3882,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3073,
+                  "duration": 3029,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:00.924Z",
+                  "startTime": "2026-09-11T00:30:54.090Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3776,15 +3926,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3053,
+                  "duration": 3088,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:01.081Z",
+                  "startTime": "2026-09-11T00:30:54.398Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3820,15 +3970,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4567,
+                  "duration": 4460,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:04.003Z",
+                  "startTime": "2026-09-11T00:30:57.122Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3864,15 +4014,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 858,
+                  "duration": 889,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:04.138Z",
+                  "startTime": "2026-09-11T00:30:57.490Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3908,15 +4058,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2182,
+                  "duration": 2183,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:04.999Z",
+                  "startTime": "2026-09-11T00:30:58.383Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -3952,15 +4102,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2193,
+                  "duration": 2191,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:07.186Z",
+                  "startTime": "2026-09-11T00:31:00.570Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4004,15 +4154,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1951,
+                  "duration": 2064,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:08.576Z",
+                  "startTime": "2026-09-11T00:31:01.590Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4043,15 +4193,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1440,
+                  "duration": 1476,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:09.388Z",
+                  "startTime": "2026-09-11T00:31:02.770Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -4090,15 +4240,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1051,
+                  "duration": 1046,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:10.539Z",
+                  "startTime": "2026-09-11T00:31:03.662Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4129,15 +4279,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2708,
+                  "duration": 2733,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:11.602Z",
+                  "startTime": "2026-09-11T00:31:04.715Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -4168,15 +4318,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 830,
+                  "duration": 887,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:10.836Z",
+                  "startTime": "2026-09-11T00:31:04.254Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4212,7 +4362,7 @@
               "annotations": [
                 {
                   "type": "measured",
-                  "description": "{\"win-trust\":{\"ms\":1178},\"gain-control\":{\"ms\":1170},\"stay-ready\":{\"ms\":1167}}"
+                  "description": "{\"win-trust\":{\"ms\":1170},\"gain-control\":{\"ms\":1171},\"stay-ready\":{\"ms\":1170}}"
                 }
               ],
               "expectedStatus": "passed",
@@ -4220,19 +4370,19 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 6033,
+                  "duration": 6083,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:11.678Z",
+                  "startTime": "2026-09-11T00:31:05.153Z",
                   "annotations": [
                     {
                       "type": "measured",
-                      "description": "{\"win-trust\":{\"ms\":1178},\"gain-control\":{\"ms\":1170},\"stay-ready\":{\"ms\":1167}}"
+                      "description": "{\"win-trust\":{\"ms\":1170},\"gain-control\":{\"ms\":1171},\"stay-ready\":{\"ms\":1170}}"
                     }
                   ],
                   "attachments": []
@@ -4256,7 +4406,7 @@
               "annotations": [
                 {
                   "type": "measured",
-                  "description": "{\"win-trust\":{\"ms\":639},\"gain-control\":{\"ms\":686},\"stay-ready\":{\"ms\":689}}"
+                  "description": "{\"win-trust\":{\"ms\":697},\"gain-control\":{\"ms\":687},\"stay-ready\":{\"ms\":682}}"
                 }
               ],
               "expectedStatus": "passed",
@@ -4264,19 +4414,19 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2060,
+                  "duration": 2111,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:14.319Z",
+                  "startTime": "2026-09-11T00:31:07.455Z",
                   "annotations": [
                     {
                       "type": "measured",
-                      "description": "{\"win-trust\":{\"ms\":639},\"gain-control\":{\"ms\":686},\"stay-ready\":{\"ms\":689}}"
+                      "description": "{\"win-trust\":{\"ms\":697},\"gain-control\":{\"ms\":687},\"stay-ready\":{\"ms\":682}}"
                     }
                   ],
                   "attachments": []
@@ -4308,15 +4458,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8484,
+                  "duration": 8424,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:16.383Z",
+                  "startTime": "2026-09-11T00:31:09.570Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4352,15 +4502,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 8495,
+                  "duration": 8454,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:17.716Z",
+                  "startTime": "2026-09-11T00:31:11.240Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4396,15 +4546,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8365,
+                  "duration": 8423,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:24.874Z",
+                  "startTime": "2026-09-11T00:31:17.999Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4440,15 +4590,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 8994,
+                  "duration": 8986,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:26.216Z",
+                  "startTime": "2026-09-11T00:31:19.698Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4484,15 +4634,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8698,
+                  "duration": 8689,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:33.247Z",
+                  "startTime": "2026-09-11T00:31:26.427Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4540,15 +4690,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 4310,
+                  "duration": 4277,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:35.217Z",
+                  "startTime": "2026-09-11T00:31:28.688Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4596,15 +4746,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2072,
+                  "duration": 2057,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:39.533Z",
+                  "startTime": "2026-09-11T00:31:32.969Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4640,15 +4790,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 3948,
+                  "duration": 3942,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:41.612Z",
+                  "startTime": "2026-09-11T00:31:35.030Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4692,15 +4842,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1086,
+                  "duration": 1083,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:41.956Z",
+                  "startTime": "2026-09-11T00:31:35.124Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4736,15 +4886,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5538,
+                  "duration": 5537,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:43.771Z",
+                  "startTime": "2026-09-11T00:31:36.946Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4780,15 +4930,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5533,
+                  "duration": 5544,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:49.314Z",
+                  "startTime": "2026-09-11T00:31:42.487Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4824,15 +4974,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5528,
+                  "duration": 5542,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:54.850Z",
+                  "startTime": "2026-09-11T00:31:48.034Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4868,15 +5018,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5527,
+                  "duration": 5540,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:00.381Z",
+                  "startTime": "2026-09-11T00:31:53.579Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4912,15 +5062,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5532,
+                  "duration": 5538,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:05.912Z",
+                  "startTime": "2026-09-11T00:31:59.122Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -4956,15 +5106,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5528,
+                  "duration": 5545,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:11.448Z",
+                  "startTime": "2026-09-11T00:32:04.664Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5000,15 +5150,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 5501,
+                  "duration": 5535,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:45.569Z",
+                  "startTime": "2026-09-11T00:31:38.980Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5044,15 +5194,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 5492,
+                  "duration": 5540,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:51.752Z",
+                  "startTime": "2026-09-11T00:31:45.253Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5088,15 +5238,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 5490,
+                  "duration": 5536,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:22:57.248Z",
+                  "startTime": "2026-09-11T00:31:50.796Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5132,15 +5282,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 5443,
+                  "duration": 5548,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:02.742Z",
+                  "startTime": "2026-09-11T00:31:56.336Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5176,15 +5326,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 5035,
+                  "duration": 5103,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:08.189Z",
+                  "startTime": "2026-09-11T00:32:01.887Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5215,15 +5365,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2295,
+                  "duration": 2369,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:13.227Z",
+                  "startTime": "2026-09-11T00:32:06.994Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -5262,15 +5412,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 8283,
+                  "duration": 8303,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:15.529Z",
+                  "startTime": "2026-09-11T00:32:09.370Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5306,15 +5456,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8147,
+                  "duration": 8095,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:16.984Z",
+                  "startTime": "2026-09-11T00:32:10.219Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5350,15 +5500,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 2948,
+                  "duration": 3053,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:23.817Z",
+                  "startTime": "2026-09-11T00:32:17.680Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5394,15 +5544,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2978,
+                  "duration": 3051,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:25.136Z",
+                  "startTime": "2026-09-11T00:32:18.319Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5438,15 +5588,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 5820,
+                  "duration": 5873,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:26.769Z",
+                  "startTime": "2026-09-11T00:32:20.740Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5482,15 +5632,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5852,
+                  "duration": 5879,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:28.118Z",
+                  "startTime": "2026-09-11T00:32:21.374Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5526,15 +5676,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 30,
+                  "duration": 31,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:32.594Z",
+                  "startTime": "2026-09-11T00:32:26.619Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5578,15 +5728,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 23954,
+                  "duration": 24022,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:32.630Z",
+                  "startTime": "2026-09-11T00:32:26.657Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5622,15 +5772,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1372,
+                  "duration": 1373,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:33.980Z",
+                  "startTime": "2026-09-11T00:32:27.260Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5666,15 +5816,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2274,
+                  "duration": 2336,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:35.359Z",
+                  "startTime": "2026-09-11T00:32:28.636Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5710,15 +5860,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 19813,
+                  "duration": 19814,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:37.638Z",
+                  "startTime": "2026-09-11T00:32:30.977Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5754,15 +5904,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
                   "status": "passed",
-                  "duration": 1352,
+                  "duration": 1343,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:56.590Z",
+                  "startTime": "2026-09-11T00:32:50.686Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5798,15 +5948,15 @@
               "projectName": "chromium",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1166,
+                  "duration": 1159,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-09-11T00:23:57.456Z",
+                  "startTime": "2026-09-11T00:32:50.795Z",
                   "annotations": [
                     {
                       "type": "measured",
@@ -5829,9 +5979,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-09-11T00:20:29.949Z",
-    "duration": 208699.689,
-    "expected": 128,
+    "startTime": "2026-09-11T00:29:20.816Z",
+    "duration": 211240.395,
+    "expected": 131,
     "skipped": 1,
     "unexpected": 0,
     "flaky": 0

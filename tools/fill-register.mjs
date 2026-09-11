@@ -15,7 +15,12 @@ for (const f of files) {
   const rep = JSON.parse(fs.readFileSync(f, 'utf8'));
   const walk = (s) => {
     for (const sp of s.specs || []) {
-      const ids = [...(sp.title.match(/\b(P\d[ab]?-D\d\d|R-\d\d)\b/g) || [])];
+      // "P2b-D01/D06", "P3-D01/02/03/06/07" and "P4-D02/D06/D07" name several checks of one phase.
+      const ids = [];
+      for (const m of sp.title.matchAll(/\b(P\d[ab]?|R)-D?(\d\d)((?:\/D?\d\d)+)?/g)) {
+        const phase = m[1]; ids.push(`${phase}-${phase === 'R' ? '' : 'D'}${m[2]}`);
+        for (const extra of (m[3] || '').match(/\d\d/g) || []) ids.push(`${phase}-${phase === 'R' ? '' : 'D'}${extra}`);
+      }
       for (const t of sp.tests || []) for (const x of t.results || []) { if (x.status === 'skipped') continue; for (const id of ids) add(id, x.status === 'passed', t.projectName); }
     }
     for (const c of s.suites || []) walk(c);
@@ -34,7 +39,7 @@ const tally = { candidate: { pass: 0, fail: 0, notrun: 0 }, published: { pass: 0
 for (let i = 0; i < lines.length; i++) {
   const h = lines[i].match(/^#### (P\d[ab]?-D\d\d|R-\d\d)\b/);
   if (h) { current = h[1]; continue; }
-  if (current && /^\| (applies|re-scoped|dropped)/.test(lines[i])) {
+  if (current && /^\| (applies|re-scoped|dropped|new)/.test(lines[i])) {
     const cells = lines[i].split('|').map((c) => c.trim());   // ['', disposition, candidate, published, proof, '']
     if (cells[1].startsWith('dropped')) { current = null; continue; }
     if (verdicts[current]) { cells[col + 1] = verdicts[current]; changed++; }
@@ -43,6 +48,18 @@ for (let i = 0; i < lines.length; i++) {
     current = null;
   }
 }
+// P4-D08 and P6-D06 re-run every earlier row: they pass when every other filled row in this column passes.
+for (const meta of ['P4-D08', 'P6-D06']) {
+  const others = []; let cur = null;
+  for (const l of lines) { const h = l.match(/^#### (P\d[ab]?-D\d\d|R-\d\d)\b/); if (h) { cur = h[1]; continue; } if (cur && /^\| (applies|re-scoped|new)/.test(l)) { const c = l.split('|').map((x) => x.trim()); if (cur !== meta && !['P4-D08', 'P6-D06'].includes(cur)) others.push([cur, c[col + 1]]); cur = null; } }
+  const failed = others.filter(([, v]) => v.startsWith('Fail')).map(([id]) => id), notrun = others.filter(([, v]) => !v.startsWith('Pass') && !v.startsWith('Fail')).map(([id]) => id);
+  const verdict = failed.length ? `Fail (${failed.join(', ')} fail)` : notrun.length ? `Not run (${notrun.length} rows not run: ${notrun.join(', ')})` : `Pass (every other row passes)`;
+  let c2 = null;
+  for (let i = 0; i < lines.length; i++) { const h = lines[i].match(/^#### (P\d[ab]?-D\d\d)\b/); if (h) { c2 = h[1]; continue; } if (c2 === meta && /^\| (applies|re-scoped)/.test(lines[i])) { const c = lines[i].split('|').map((x) => x.trim()); c[col + 1] = verdict; lines[i] = `| ${c.slice(1, -1).join(' | ')} |`; c2 = null; } }
+}
+// Recount after the meta rows so the summary reflects the final columns.
+for (const k of Object.keys(tally)) tally[k] = { pass: 0, fail: 0, notrun: 0 };
+{ let cur = null; for (const l of lines) { const h = l.match(/^#### (P\d[ab]?-D\d\d|R-\d\d)\b/); if (h) { cur = h[1]; continue; } if (cur && /^\| (applies|re-scoped|new)/.test(l)) { const c = l.split('|').map((x) => x.trim()); for (const [k, idx] of [['candidate', 2], ['published', 3]]) { const v = c[idx]; tally[k][v.startsWith('Pass') ? 'pass' : v.startsWith('Fail') ? 'fail' : 'notrun']++; } cur = null; } } }
 // Summary rows: "| Candidate (local) | 0 | 0 | 42 + 6 rooms |"
 for (let i = 0; i < lines.length; i++) {
   for (const [k, label] of [['candidate', 'Candidate (local)'], ['published', 'Published']]) {

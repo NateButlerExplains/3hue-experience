@@ -31,7 +31,10 @@ http.createServer((req, res) => {
       res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
       return fs.existsSync(nf) ? fs.createReadStream(nf).pipe(res) : res.end('not found');
     }
-    res.writeHead(200, { 'Content-Type': MIME[path.extname(file).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-store' });
+    // Revalidating cache like Pages: a reload sends If-Modified-Since and gets a 304 for unchanged files.
+    const lm = st.mtime.toUTCString();
+    if (req.headers['if-modified-since'] === lm) { res.writeHead(304, { 'Last-Modified': lm }); return res.end(); }
+    res.writeHead(200, { 'Content-Type': MIME[path.extname(file).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'max-age=0, must-revalidate', 'Last-Modified': lm, 'Content-Length': st.size });
     fs.createReadStream(file).pipe(res);
   });
 }).listen(PORT, '127.0.0.1', () => console.log(`serving ${ROOT} at http://127.0.0.1:${PORT}${BASE}`));

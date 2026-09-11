@@ -6,7 +6,7 @@
 // the plate always covers the whole stage. Composed viewports (phones, portrait, short) fit the
 // plate into the band the layout reserves for it, showing plate x 344.5..2514.8 so all three
 // doors are on screen.
-import { getGeometry, reducedMotion } from './content.js?v=2026-09-10d';
+import { getGeometry, reducedMotion } from './content.js?v=2026-09-10e';
 
 const stageEl = document.getElementById('stage');
 const plateEl = document.getElementById('plate');
@@ -172,7 +172,8 @@ export function buildPicture(plate) {
   img.sizes = sizes;
   img.width = plate.width; img.height = plate.height;
   img.src = plate.fallback;
-  document.getElementById('placeholder').style.backgroundImage = `url("${plate.placeholder}")`;
+  // The placeholder is inlined in index.html so it paints before any script; a manifest swap can still override it.
+  if (plate.placeholder) document.getElementById('placeholder').style.backgroundImage = `url("${plate.placeholder}")`;
   // decode() is the signal the spec asks for, but Chromium defers it while a tab is hidden and a
   // few browsers lack it, so it is raced against the load event plus a short timeout: the plate
   // must never stay at opacity 0 behind a resolved network request.

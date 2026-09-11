@@ -1,0 +1,6 @@
+{
+  "P1-D05": "Pass (manual, docs/evidence/phase1.md: every media/plate file 200 from the Pages origin; AVIF 125 KB, WebP 258 KB)",
+  "P5-D03": "Pass (manual, tools/bots.sh: cards are screenshots of the published page, 1200x630 JPEG < 300 KB, media/share/cards.json records the innerText)",
+  "P5-D05": "Pass (manual, tools/bots.sh: root and every s/*.html serve og:title/description/url/image and twitter:card to Slackbot, LinkedInBot, Twitterbot and facebookexternalhit; no meta refresh)",
+  "P5-D06": "Pass (manual, tools/bots.sh: robots.txt 200 with no Disallow; favicon-32.png and apple-touch-icon-180.png 200)"
+}

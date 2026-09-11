@@ -1,17 +1,17 @@
 // Boot: manifests → plate → stage → doors/labels/hud → panel/path/walk → router.
-import { loadContent, getManifest, getGeometry, getParams, str, reducedMotion } from './content.js?v=2026-09-10d';
-import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden, panRoom } from './stage.js?v=2026-09-10d';
-import { buildDoors, setCurrent, hideDoors, showDoors, doorElement, pathElement, firstDoorElement } from './hotspots.js?v=2026-09-10d';
-import { buildLabels, headingElement } from './labels.js?v=2026-09-10d';
-import { buildHud, rowElement, walkButton } from './hud.js?v=2026-09-10d';
-import { parse, go, back, onRoute, currentRoute } from './router.js?v=2026-09-10d';
-import { initDebug } from './debug.js?v=2026-09-10d';
-import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStation, showStationChips } from './panel.js?v=2026-09-10d';
-import { pushLayer, popLayer, resetLayers, setOpener } from './focus.js?v=2026-09-10d';
-import { lightStage, clearArcs, buildArcs } from './path.js?v=2026-09-10d';
-import { initKiosk, placeKiosk } from './kiosk.js?v=2026-09-10d';
-import { initWalk, startWalk, endWalk, isWalking, walkStep } from './walk.js?v=2026-09-10d';
-import { initRooms, roomFor, showRoomPins, clearRoomPins, probeFormats } from './rooms.js?v=2026-09-10d';
+import { loadContent, getManifest, getGeometry, getParams, str, reducedMotion } from './content.js?v=2026-09-10e';
+import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden, panRoom } from './stage.js?v=2026-09-10e';
+import { buildDoors, setCurrent, hideDoors, showDoors, doorElement, pathElement, firstDoorElement } from './hotspots.js?v=2026-09-10e';
+import { buildLabels, headingElement } from './labels.js?v=2026-09-10e';
+import { buildHud, rowElement, walkButton } from './hud.js?v=2026-09-10e';
+import { parse, go, back, onRoute, currentRoute } from './router.js?v=2026-09-10e';
+import { initDebug } from './debug.js?v=2026-09-10e';
+import { openDoorPanel, openPathPanel, closePanel, panelHeading, setPanelStation, showStationChips } from './panel.js?v=2026-09-10e';
+import { pushLayer, popLayer, resetLayers, setOpener } from './focus.js?v=2026-09-10e';
+import { lightStage, clearArcs, buildArcs } from './path.js?v=2026-09-10e';
+import { initKiosk, placeKiosk } from './kiosk.js?v=2026-09-10e';
+import { initWalk, startWalk, endWalk, isWalking, walkStep } from './walk.js?v=2026-09-10e';
+import { initRooms, roomFor, showRoomPins, clearRoomPins, probeFormats } from './rooms.js?v=2026-09-10e';
 
 const plateEl = document.getElementById('plate');
 const params = getParams();
@@ -58,6 +58,7 @@ async function main() {
   // The first paint: rest transform is already applied; fade the plate up once decoded.
   await decoded;
   await formats;
+  await document.fonts.ready;   // the heading is set in Sora; revealing it before the swap would shift layout
   document.documentElement.classList.add('is-ready');
   document.documentElement.dataset.plateReady = '1';
   document.getElementById('boot').setAttribute('aria-hidden', 'true');

@@ -1,9 +1,9 @@
 // The kiosk: a display-only surface perspective-mapped onto the painted screen. Mounts only once
 // geometry.kiosk.quad exists (two independent measurements agreeing within 2 px). Hidden, never
 // squashed, when a line would render under 12 px or a corner leaves the frame by more than 2 px.
-import { getManifest, getGeometry, kioskLines, esc } from './content.js?v=2026-09-10d';
-import { onLayout, getState, project, viewport } from './stage.js?v=2026-09-10d';
-import { quadToMatrix3d, quadSize } from './screens.js?v=2026-09-10d';
+import { getManifest, getGeometry, kioskLines, esc } from './content.js?v=2026-09-10e';
+import { onLayout, getState, project, viewport } from './stage.js?v=2026-09-10e';
+import { quadToMatrix3d, quadSize } from './screens.js?v=2026-09-10e';
 
 const mount = document.getElementById('kiosk-mount');
 let el = null, size = null;
