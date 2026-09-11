@@ -34,7 +34,7 @@ const Q = (id, T = REAL) => {
 const newTab = () => fill(S.newTab, { host: new URL(m.site.bookingUrl).host });
 // What the matcher makes of a text (tests/ask-match.spec.mjs checks its judgement; here, that the
 // dialog shows exactly what it found).
-const IX = buildIndex(REAL.ask.questions.map((x) => { const q = Q(x.id); return { id: x.id, q: q.label, keys: x.keys, text: q.lines.map((l) => l.text).join(' ') }; }), { names: [m.guide.name] });
+const IX = buildIndex(REAL.ask.questions.map((x) => { const q = Q(x.id); return { id: x.id, q: q.label, keys: x.keys, text: q.lines.map((l) => l.text).join(' ') }; }), { names: Object.values(m.guide.guides).map((x) => x.name) });
 const M = (text) => match(IX, text);
 
 const DIALOG = (id) => {
@@ -170,7 +170,7 @@ test.describe('T-12 Ask', () => {
     await page.waitForFunction(() => document.getElementById('tour-ask').open && document.activeElement?.id === 'tour-ask-q', null, { polling: 30 });
     let d = await dialog(page, 'tour-ask');
     expect(d.modal === null ? true : d.modal, ':modal').toBe(true);
-    expect(d.name).toBe(fill(S.tourAsk, { guide: m.guide.name }));
+    expect(d.name).toBe(fill(S.tourAsk, { guide: m.guide.guides[m.guide.lead].name }));
     expect(d.dialog).toBe('ask');
     expect(d.pausedBy).toContain('ask');
     // The one field: text, no name, no autocomplete, in a form with no action; nothing else to fill.

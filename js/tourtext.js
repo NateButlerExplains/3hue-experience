@@ -12,7 +12,12 @@
 //
 // Template tokens fill names from the manifest so none is ever typed into the script:
 //   {door:<id|@>.<path>}  {stage:<id|where-to-start>}  {str:<key>}  {ref:<path>}
-//   {guide}  {guide:<field>}  {url:booking|site|logo}
+//   {guide}  {guide:<field>}  {guide:<id>}  {guide:<id>.<field>}  {url:booking|site|logo}
+//   {offer:<id>}  {program:<id>}
+// Two guides (O12): {guide} and {guide:<field>} are whoever speaks the line (ctx.guide: the line's
+// `who`, else the lead), {guide:<id>} names one guide. A field a guide does not carry falls back to
+// the shared guide block (guide.title). {offer:<id>} is a quote-builder name (offers.<id>.name, O15)
+// and {program:<id>} a program name (programs.<id>.name).
 // and two that only the runtime can fill: {answer:<key>} (the chosen label, else the stored value)
 // and {chapters:visited} (visited chapter titles). A static token that does not resolve stays
 // visible as written so a typo shows on screen (content.js fmt does the same); a runtime token with
@@ -23,12 +28,12 @@
 // Every clause must hold; an array of conditions matches when any one does; an absent one always does.
 // Next targets: a node id, "=routeName" (a key of tour.routes), or [{when?, go}] (first match wins).
 //
-// ctx, where a function takes one: {door, answers:{key:value}, chosen:{key:label}, visited:[ids], tour}.
+// ctx, where a function takes one: {door, guide, answers:{key:value}, chosen:{key:label}, visited:[ids], tour}.
 
 export const SCENES = ['rest', 'door', 'station', 'path', 'kiosk', 'keep'];
 export const ACTIONS = ['talk', 'ask', 'summary', 'replay', 'end', 'explore'];
 export const STATUSES = ['approved-copy', 'verified', 'substantiated', 'adapted', 'proposed', 'derived'];
-export const TOKEN_KINDS = ['door', 'stage', 'str', 'ref', 'guide', 'url', 'answer', 'chapters'];
+export const TOKEN_KINDS = ['door', 'stage', 'str', 'ref', 'guide', 'url', 'offer', 'program', 'answer', 'chapters'];
 const RUNTIME_KINDS = new Set(['answer', 'chapters']);
 const TOKEN = /\{([a-z]+)(?::([^{}\s]+))?\}/g;
 const URL_KEYS = { booking: 'bookingUrl', site: 'url', logo: 'logoHref' };
@@ -62,6 +67,18 @@ export function resolveRef(m, ref, ctx = {}) {
   return { text, source, status, path: trail.join('.') };
 }
 
+// The guides (O12). guideIds: the ids in manifest order ([] for a single-guide manifest). guideId:
+// the guide a line is spoken by: the id given when the manifest has it, else the lead, else the
+// first. A line's `who` pins it; an unpinned line is spoken by the lead.
+export const guideIds = (m) => (isObj(m?.guide?.guides) ? Object.keys(m.guide.guides) : []);
+export function guideId(m, id) {
+  const ids = guideIds(m);
+  if (!ids.length) return null;
+  if (id && ids.includes(id)) return id;
+  return ids.includes(m.guide.lead) ? m.guide.lead : ids[0];
+}
+export const speakerOf = (line, m, lead) => guideId(m, isObj(line) && typeof line.who === 'string' ? line.who : lead);
+
 // One token → its text, or null when it cannot be filled.
 export function resolveToken(kind, arg, m, ctx = {}) {
   switch (kind) {
@@ -76,8 +93,17 @@ export function resolveToken(kind, arg, m, ctx = {}) {
     }
     case 'str': return arg && typeof m?.strings?.[arg] === 'string' ? m.strings[arg] : null;
     case 'ref': return arg ? resolveRef(m, arg, ctx)?.text ?? null : null;
-    case 'guide': { const v = m?.guide?.[arg || 'name']; return typeof v === 'string' ? v : null; }
+    case 'guide': {
+      const gd = m?.guide, gs = isObj(gd?.guides) ? gd.guides : null;
+      if (!gs) { const v = gd?.[arg || 'name']; return typeof v === 'string' ? v : null; }
+      let id = guideId(m, ctx.guide), field = arg || 'name';
+      if (arg) { const [a, b] = arg.split('.'); if (own(gs, a)) { id = a; field = b || 'name'; } else if (b !== undefined) return null; }
+      const v = isObj(gs[id]) && typeof gs[id][field] === 'string' ? gs[id][field] : gd[field];
+      return typeof v === 'string' && field !== 'guides' ? v : null;
+    }
     case 'url': { const k = URL_KEYS[arg]; return k && typeof m?.site?.[k] === 'string' ? m.site[k] : null; }
+    case 'offer': { const o = arg && isObj(m?.offers) && own(m.offers, arg) ? m.offers[arg] : null; return isObj(o) && typeof o.name === 'string' ? o.name : null; }
+    case 'program': { const o = arg && isObj(m?.programs) && own(m.programs, arg) ? m.programs[arg] : null; return isObj(o) && typeof o.name === 'string' ? o.name : null; }
     case 'answer': { if (!arg) return null; const v = ctx.chosen?.[arg] ?? ctx.answers?.[arg]; return v == null ? null : String(v); }
     case 'chapters': {
       if (arg !== 'visited') return null;

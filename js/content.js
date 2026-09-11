@@ -46,6 +46,15 @@ export function door(id) { return (manifest?.doors || []).find((d) => d.id === i
 export function stage(id) { return (manifest?.stages || []).find((s) => s.id === id) || null; }
 export function stageName(id) { return stage(id)?.name || id; }
 
+// The guides (O12). guideName(id): that guide's name, or the lead's for an unknown id; a manifest
+// with one guide (guide.name) answers with it for any id.
+export function guideName(id) {
+  const g = manifest?.guide;
+  if (!g?.guides) return g?.name || '';
+  return g.guides[id]?.name || g.guides[g.lead]?.name || Object.values(g.guides)[0]?.name || '';
+}
+export function guideNames() { const g = manifest?.guide; return g?.guides ? Object.values(g.guides).map((x) => x.name) : [g?.name].filter(Boolean); }
+
 // Every "Talk to our team" resolves through here (O2). No other module knows the URL.
 export function resolveHref(key) {
   if (key === 'booking') return manifest.site.bookingUrl;

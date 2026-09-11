@@ -542,12 +542,44 @@
     "gate": "pending"
   },
   "guide": {
-    "name": "AiVRIC",
     "title": "Your 3HUE guide",
-    "disclosure": "AiVRIC's voice is synthetic: computer-generated speech, not a recording of a person.",
+    "lead": "avi",
+    "disclosure": "Avi's and Huey's voices are synthetic: computer-generated speech, not recordings of people.",
+    "guides": {
+      "avi": {
+        "name": "Avi",
+        "voice": {
+          "provider": "elevenlabs",
+          "name": "PAdXflgOFROGTlJEdlSu",
+          "model": "eleven_multilingual_v2",
+          "settings": {
+            "stability": 0.5,
+            "similarity_boost": 0.75,
+            "style": 0,
+            "use_speaker_boost": true,
+            "speed": 1
+          },
+          "seed": 7
+        }
+      },
+      "huey": {
+        "name": "Huey",
+        "voice": {
+          "provider": "elevenlabs",
+          "name": "d9DA0yC1x1RCfpwZPDMM",
+          "model": "eleven_multilingual_v2",
+          "settings": {
+            "stability": 0.5,
+            "similarity_boost": 0.75,
+            "style": 0,
+            "use_speaker_boost": true,
+            "speed": 1
+          },
+          "seed": 7
+        }
+      }
+    },
     "voice": {
-      "provider": "azure",
-      "name": "en-US-AvaNeural",
       "locale": "en-US",
       "rate": 0,
       "required": false

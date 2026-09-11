@@ -14,7 +14,7 @@
 // auto-repeated digit, Enter or Space is ignored, and so is the second click of a double-click on an
 // option, so one press never commits a choice the visitor has not seen yet. Every word comes from
 // the manifest or the tour script; this file only arranges them.
-import { getManifest, str, reducedMotion } from './content.js?v=2026-09-10f';
+import { getManifest, str, reducedMotion, guideName } from './content.js?v=2026-09-10f';
 import { tokens } from './tourtext.js?v=2026-09-10f';
 
 const card = document.getElementById('tour');
@@ -30,13 +30,13 @@ export function buildCard(handlers) {
   on = { ...on, ...handlers };
   if (els) return;
   const m = getManifest();
-  card.setAttribute('aria-label', `${m.guide.name}, ${m.guide.title}`);
+  card.setAttribute('aria-label', `${guideName()}, ${m.guide.title}`);
   card.replaceChildren();
 
   const head = el('div', 'tour-head');
   const orb = el('canvas', 'tour-orb'); orb.id = 'tour-guide'; orb.width = 88; orb.height = 88; orb.setAttribute('aria-hidden', 'true');
   const who = el('div', 'tour-who');
-  const name = el('p', 'tour-name', m.guide.name);
+  const name = el('p', 'tour-name', guideName());
   const state = el('p', 'tour-state'); state.id = 'tour-state';
   who.append(name, state);
   const chapter = el('p', 'tour-chapter'); chapter.id = 'tour-chapter';

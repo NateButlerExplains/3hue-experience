@@ -61,7 +61,7 @@ test.describe('T-04 starting the tour', () => {
       expect(st.title).toBe(fill(S.tourDocTitle, { chapter: chapterTitle(FX.chapters.find((x) => x.entry === FX.start).id), site: m.site.name }));
       expect(c.hidden).toBe(false);
       expect(st.role).toBe('SECTION');
-      expect(c.label).toBe(`${m.guide.name}, ${m.guide.title}`);
+      expect(c.label).toBe(`${m.guide.guides[m.guide.lead].name}, ${m.guide.title}`);
       expect(c.active).toBe('tour-next');
       expect(c.caption).toBe(linesOf(FX.start)[0].text);
       expect(c.state).toBe(S.tourSpeaking);

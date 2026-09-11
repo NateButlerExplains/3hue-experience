@@ -77,10 +77,16 @@ test.describe('tour manifest (no browser)', () => {
     expect(m.tour.manifest).toBe('content/tour.json');
     expect(m.tour.voiceBase).toBe('media/voice/');
     expect(['pending', 'approved']).toContain(m.tour.gate);
-    expect(m.guide.name).toBe('AiVRIC');
+    // Two guides (O12): Avi leads until the visitor picks; both voices are ElevenLabs voices.
+    expect(Object.keys(m.guide.guides)).toEqual(['avi', 'huey']);
+    expect(m.guide.lead).toBe('avi');
+    expect(m.guide.guides.avi.name).toBe('Avi');
+    expect(m.guide.guides.huey.name).toBe('Huey');
+    expect(m.guide.guides.avi.voice).toMatchObject({ provider: 'elevenlabs', name: 'PAdXflgOFROGTlJEdlSu' });
+    expect(m.guide.guides.huey.voice).toMatchObject({ provider: 'elevenlabs', name: 'd9DA0yC1x1RCfpwZPDMM' });
     expect(isStr(m.guide.title)).toBe(true);
-    expect(m.guide.disclosure, 'the guide says its voice is synthetic').toMatch(/synthetic/i);
-    expect(m.guide.voice).toEqual({ provider: 'azure', name: 'en-US-AvaNeural', locale: 'en-US', rate: 0, required: m.guide.voice.required });
+    expect(m.guide.disclosure, 'the guides say their voices are synthetic').toMatch(/synthetic/i);
+    expect(m.guide.voice).toEqual({ locale: 'en-US', rate: 0, required: m.guide.voice.required });
     expect(typeof m.guide.voice.required).toBe('boolean');
     if (!fs.existsSync(path.join(ROOT, m.tour.voiceBase, 'manifest.json'))) expect(m.guide.voice.required, 'no audio yet, so the voice cannot be required').toBe(false);
     // The tour and guide settings stay out of the visible-string checks; the guide's words do not.
@@ -261,6 +267,11 @@ test.describe('tour manifest (no browser)', () => {
       [(x) => { x.guide.disclosure = ''; }, /guide\.disclosure must be a non-empty string/],
       [(x) => { x.guide.voice.required = 'no'; }, /guide\.voice\.required must be true or false/],
       [(x) => { delete x.guide; }, /tour needs a guide block/],
+      [(x) => { x.guide.lead = 'ava'; }, /guide\.lead must name a guide/],
+      [(x) => { x.guide.guides.huey.name = 'Avi'; }, /two guides share a name/],
+      [(x) => { delete x.guide.guides.huey.voice.name; }, /guide\.guides\.huey\.voice\.name must be a non-empty string/],
+      [(x) => { x.guide.guides.title = { name: 'X', voice: { provider: 'azure', name: 'x' } }; }, /cannot be a guide id/],
+      [(x) => { x.guide.name = 'AiVRIC'; }, /each guide carries its own name/],
     ];
     for (const [mutate, re] of cases) {
       const x = clone(m);
@@ -325,7 +336,10 @@ test.describe('tour manifest (no browser)', () => {
     expect(fillTemplate('{stage:assess}', m)).toBe(m.stages[0].name);
     expect(fillTemplate('{stage:where-to-start}', m)).toBe(m.strings.whereToStart);
     expect(fillTemplate('{str:talk}', m)).toBe(m.strings.talk);
-    expect(fillTemplate('{guide} · {guide:title}', m)).toBe(`${m.guide.name} · ${m.guide.title}`);
+    expect(fillTemplate('{guide} · {guide:title}', m)).toBe(`Avi · ${m.guide.title}`);
+    expect(fillTemplate('{guide} · {guide:title}', m, { guide: 'huey' }), 'the speaker').toBe(`Huey · ${m.guide.title}`);
+    expect(fillTemplate('{guide:huey}, {guide:avi}', m, { guide: 'huey' }), 'a named guide').toBe('Huey, Avi');
+    expect(fillTemplate('{guide:nobody.name}', m), 'an unknown guide stays visible').toBe('{guide:nobody.name}');
     expect(fillTemplate('{url:booking}', m)).toBe(m.site.bookingUrl);
     expect(fillTemplate('{ref:path.title}', m)).toBe(m.path.title);
     expect(fillTemplate('{door:nope.title}', m), 'a static token that does not resolve stays visible').toBe('{door:nope.title}');

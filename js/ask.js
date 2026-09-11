@@ -21,7 +21,7 @@
 // whatever the voice does not actually play (no audio, an MP3 that fails, a refused play(), the
 // voice off) is read out in the dialog's own polite live region (the page's live region is inert
 // under a modal dialog). Closing Ask, or showing anything else, stops the voice.
-import { getManifest, str, resolveHref } from './content.js?v=2026-09-10f';
+import { getManifest, str, resolveHref, guideName, guideNames } from './content.js?v=2026-09-10f';
 import { resolveLine, fillTemplate } from './tourtext.js?v=2026-09-10f';
 import { buildIndex, match, related, MAX_INPUT } from './ask-match.js?v=2026-09-10f';
 import { modal, dialogHead, toolButton, icon } from './tourmap.js?v=2026-09-10f';
@@ -42,7 +42,7 @@ export function initAsk(a) {
   shell = modal(dlg, 'ask', { onOpen: () => api.hold('ask', true), onClose: () => { stopMic(true); api.hush?.(); api.hold('ask', false); } });
 }
 export function askButton() {
-  const b = toolButton('tour-ask-btn', str('tourAsk', { guide: getManifest().guide.name }), 'ask');
+  const b = toolButton('tour-ask-btn', str('tourAsk', { guide: guideName() }), 'ask');
   b.addEventListener('click', () => openAsk(b));
   return b;
 }
@@ -71,7 +71,7 @@ function load() {
     const lines = (x.lines || []).map((l) => { const r = resolveLine(l, m, c); if (r && !r.source && x.source) r.source = x.source; if (r) r.say = typeof l.say === 'string' ? fillTemplate(l.say, m, c) : ''; return r; }).filter((r) => r && r.text.trim());
     return { id: x.id, label: fillTemplate(x.q, m, c), keys: x.keys || [], goto: x.goto || null, lines };
   }).filter((x) => x.label.trim() && x.lines.length);
-  index = buildIndex(Q.map((x) => ({ id: x.id, q: x.label, keys: x.keys, text: x.lines.map((l) => l.text).join(' ') })), { names: [m.guide.name] });
+  index = buildIndex(Q.map((x) => ({ id: x.id, q: x.label, keys: x.keys, text: x.lines.map((l) => l.text).join(' ') })), { names: guideNames() });
   return Q.length > 0;
 }
 const byId = (id) => Q.find((x) => x.id === id) || null;
@@ -80,7 +80,7 @@ function build() {
   if (els) return;
   const m = getManifest();
   dlg.replaceChildren();
-  const { head } = dialogHead(dlg, 'tour-ask-h', str('tourAsk', { guide: m.guide.name }), () => closeAsk());
+  const { head } = dialogHead(dlg, 'tour-ask-h', str('tourAsk', { guide: guideName() }), () => closeAsk());
   const body = el('div', 'tour-dlg-body');
   const intro = el('p', 'ask-intro'); intro.id = 'tour-ask-intro';
 

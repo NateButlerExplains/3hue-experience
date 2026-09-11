@@ -23,7 +23,9 @@ function questions(T) {
   const c = { tour: T, answers: {}, chosen: {}, visited: [], door: null };
   return T.ask.questions.map((x) => ({ id: x.id, q: fillTemplate(x.q, m, c), keys: x.keys || [], text: x.lines.map((l) => resolveLine(l, m, c)?.text || '').join(' ') }));
 }
-const indexOf = (T) => buildIndex(questions(T), { names: [m.guide.name] });
+const NAMES = Object.values(m.guide.guides).map((x) => x.name);
+const LEAD = m.guide.guides[m.guide.lead].name;
+const indexOf = (T) => buildIndex(questions(T), { names: NAMES });
 const REAL = SCRIPTS['content/tour.json'];
 const IX = indexOf(REAL);
 const IDS = REAL.ask.questions.map((q) => q.id);
@@ -95,9 +97,9 @@ test('T-12 matcher: empty or blank input does nothing; long input is cut at 400 
 });
 
 test('T-12 matcher: the guide addressed by name at the start is not part of the question; alone, the name asks about the guide', () => {
-  expect(match(IX, `${m.guide.name}, how much does it cost?`)).toMatchObject({ kind: 'answer', id: 'pricing' });
-  expect(match(IX, `hey ${m.guide.name.toLowerCase()} what proof do you have`)).toMatchObject({ kind: 'answer', id: 'proof' });
-  expect(match(IX, `What is ${m.guide.name}?`)).toMatchObject({ kind: 'answer', id: 'aivric' });
+  expect(match(IX, `${LEAD}, how much does it cost?`)).toMatchObject({ kind: 'answer', id: 'pricing' });
+  expect(match(IX, `hey ${LEAD.toLowerCase()} what proof do you have`)).toMatchObject({ kind: 'answer', id: 'proof' });
+  expect(match(IX, 'What is AiVRIC?')).toMatchObject({ kind: 'answer', id: 'aivric' });
 });
 
 test('T-12 matcher: related questions are other approved questions, at most three, and the same every time', () => {

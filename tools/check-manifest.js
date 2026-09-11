@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveRef, resolveLine, resolveToken, fillTemplate, templateTokens, stripTokens, sceneOf, optionValue, SCENES, ACTIONS, STATUSES, TOKEN_KINDS } from '../js/tourtext.js';
+import { resolveRef, resolveLine, resolveToken, fillTemplate, templateTokens, stripTokens, sceneOf, optionValue, guideIds, SCENES, ACTIONS, STATUSES, TOKEN_KINDS } from '../js/tourtext.js';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const readJson = (p) => JSON.parse(fs.readFileSync(path.resolve(ROOT, p), 'utf8'));
@@ -22,7 +22,7 @@ const safeRelative = (p) => typeof p === 'string' && /^[\w./-]+$/.test(p) && !/(
 
 // Strings no visitor reads: provenance, paths, URLs, plate data, and the tour and voice settings.
 const NON_VISIBLE = /\.(source|basis|provenance|ref|placeholder|src|srcset2x|card|url|bookingUrl|logoHref|route|derive)$/;
-const SETTINGS = /^(plate|tour|guide\.voice)(\.|\[|$)/;
+const SETTINGS = /^(plate|tour|guide\.voice|guide\.lead|guide\.guides\.[a-z]+\.voice)(\.|\[|$)/;
 export function visibleStrings(m) {
   const strings = [];
   (function walk(v, p) {
@@ -128,15 +128,43 @@ export function lintManifest(m, g) {
       if (!isObj(m.guide)) err('tour needs a guide block');
     }
   }
+  // Two guides (O12): guide.guides maps an id to {name, voice}; guide.lead names who leads until the
+  // visitor picks; guide.voice holds what both voices share. A manifest without guides keeps the
+  // single-guide shape (guide.name, guide.voice.provider and .name).
   if (m.guide !== undefined) {
     const gd = m.guide;
     if (!isObj(gd)) err('guide must be an object');
     else {
-      for (const k of ['name', 'title', 'disclosure']) if (!isStr(gd[k])) err(`guide.${k} must be a non-empty string`);
+      const gs = gd.guides;
+      for (const k of gs === undefined ? ['name', 'title', 'disclosure'] : ['title', 'disclosure']) if (!isStr(gd[k])) err(`guide.${k} must be a non-empty string`);
+      if (gs !== undefined) {
+        if (!isObj(gs) || !Object.keys(gs).length) err('guide.guides must map a guide id to {name, voice}');
+        else {
+          if (gd.name !== undefined) err('guide.name: with guide.guides each guide carries its own name');
+          const shared = new Set(['title', 'disclosure', 'lead', 'guides', 'voice', 'name']);
+          for (const [id, one] of Object.entries(gs)) {
+            const p = `guide.guides.${id}`;
+            if (!ID.test(id)) err(`${p}: a guide id must match ^[a-z0-9-]+$`);
+            if (shared.has(id)) err(`${p}: "${id}" is a field of the guide block, so it cannot be a guide id`);
+            if (!isObj(one)) { err(`${p} must be {name, voice}`); continue; }
+            if (!isStr(one.name)) err(`${p}.name must be a non-empty string`);
+            const vc = one.voice;
+            if (!isObj(vc)) err(`${p}.voice must be an object`);
+            else {
+              for (const k of ['provider', 'name']) if (!isStr(vc[k])) err(`${p}.voice.${k} must be a non-empty string`);
+              if (vc.settings !== undefined && !isObj(vc.settings)) err(`${p}.voice.settings must be an object`);
+              if (vc.seed !== undefined && !Number.isInteger(vc.seed)) err(`${p}.voice.seed must be an integer`);
+            }
+          }
+          const names = Object.values(gs).filter(isObj).map((x) => x.name);
+          if (new Set(names).size !== names.length) err('guide.guides: two guides share a name');
+          if (!own(gs, gd.lead)) err(`guide.lead must name a guide in guide.guides, got ${JSON.stringify(gd.lead)}`);
+        }
+      }
       const vc = gd.voice;
       if (!isObj(vc)) err('guide.voice must be an object');
       else {
-        for (const k of ['provider', 'name', 'locale']) if (!isStr(vc[k])) err(`guide.voice.${k} must be a non-empty string`);
+        for (const k of gs === undefined ? ['provider', 'name', 'locale'] : ['locale']) if (!isStr(vc[k])) err(`guide.voice.${k} must be a non-empty string`);
         if (typeof vc.rate !== 'number' || !Number.isFinite(vc.rate)) err('guide.voice.rate must be a number');
         if (typeof vc.required !== 'boolean') err('guide.voice.required must be true or false');
       }
@@ -149,7 +177,7 @@ export function lintManifest(m, g) {
 const TOP_KEYS = ['version', 'note', 'start', 'chapters', 'routes', 'nodes', 'ask', 'summary'];
 const CHAPTER_KEYS = ['id', 'entry', 'title', 'eyebrow', 'landmark', 'optional'];
 const NODE_KEYS = ['chapter', 'scene', 'lines', 'choice', 'next', 'quiet', 'end'];
-const LINE_KEYS = ['id', 'text', 'ref', 'say', 'source', 'status', 'when', 'cue', 'callout'];
+const LINE_KEYS = ['id', 'text', 'ref', 'say', 'source', 'status', 'when', 'cue', 'callout', 'who'];
 const CHOICE_KEYS = ['id', 'prompt', 'remember', 'options'];
 const OPTION_KEYS = ['id', 'label', 'sub', 'value', 'next', 'action', 'suggest', 'hideWhen'];
 const QUESTION_KEYS = ['id', 'q', 'keys', 'lines', 'goto', 'source', 'status'];
@@ -186,6 +214,10 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
   const chapterIds = chapters.filter(isObj).map((c) => c.id);
   const doorCtxs = doorIds.map((door) => ({ door }));
   const ctxsFor = (s) => (/(^|[.:])@(\.|$)/.test(s || '') ? doorCtxs : [{}]);
+  // Two guides (O12): a line's `who` pins it to one guide; an unpinned line is spoken by the lead,
+  // so {guide} in it must work for every guide.
+  const gIds = guideIds(m);
+  const withGuides = (ctxs, who) => (gIds.length ? ctxs.flatMap((c) => (who ? [{ ...c, guide: who }] : gIds.map((guide) => ({ ...c, guide })))) : ctxs);
   const v = m.vocabulary || {};
 
   // What every choice with `remember` can store, so conditions naming an answer can be checked.
@@ -199,16 +231,18 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
     remember.set(c.remember, set);
   }
 
-  // Names live in the manifest only: door titles and stage names as written, buyer labels in any case.
+  // Names live in the manifest only: door titles, stage names and guide names as written, buyer
+  // labels in any case.
   const names = [
     ...doors.map((d) => [d.title, 'door title', '']),
     ...doors.map((d) => [d.icp, 'buyer label', 'i']),
     ...(m.stages || []).map((s) => [s.name, 'stage name', '']),
+    ...gIds.map((id) => [m.guide.guides[id]?.name, 'guide name', '']),
   ].filter(([s]) => isStr(s)).map(([s, what, flags]) => [s, what, nameRe(s, flags)]);
 
   // A visitor-readable template: tokens resolve (for every door when `@` is used) and bring in no
   // figure; what the author typed passes the vocabulary, brand, figure and typed-name rules.
-  function checkText(p, raw, { required = true } = {}) {
+  function checkText(p, raw, { required = true, who = null } = {}) {
     if (raw === undefined && !required) return;
     if (typeof raw !== 'string' || !raw.trim()) { err(p, 'must be a non-empty string'); return; }
     stats.visible++;
@@ -216,7 +250,7 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
       if (!TOKEN_KINDS.includes(tk.kind)) { err(p, `unknown token ${tk.raw}`); continue; }
       if (tk.kind === 'answer') { if (!remember.has(tk.arg)) err(p, `${tk.raw}: no choice remembers ${tk.arg}`); continue; }
       if (tk.kind === 'chapters') { if (tk.arg !== 'visited') err(p, `${tk.raw}: the only chapters token is {chapters:visited}`); continue; }
-      for (const ctx of ctxsFor(tk.arg)) {
+      for (const ctx of tk.kind === 'guide' ? withGuides(ctxsFor(tk.arg), who) : ctxsFor(tk.arg)) {
         const val = resolveToken(tk.kind, tk.arg, m, ctx);
         if (val == null) { err(p, `${tk.raw} does not resolve${ctx.door ? ` for door ${ctx.door}` : ''}`); break; }
         const f = figures(val);
@@ -341,6 +375,8 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
     if (!ID.test(line.id || '')) err(p, `line id ${JSON.stringify(line.id)} must match ^[a-z0-9-]+$`);
     else if (lineIds.has(line.id)) err(p, `line id ${line.id} is also used at ${lineIds.get(line.id)}; voice files are named by line id`);
     else lineIds.set(line.id, p);
+    if (line.who !== undefined && !(gIds.includes(line.who))) err(`${p}.who`, gIds.length ? `who must name a guide: ${gIds.join(', ')}` : 'who pins a line to a guide, but guide.guides is not set');
+    const who = gIds.includes(line.who) ? line.who : null;
     const hasRef = line.ref !== undefined, hasText = line.text !== undefined;
     if (hasRef === hasText) err(p, 'a line has exactly one of text or ref');
     let source = line.source ?? inherit?.source ?? null, status = line.status ?? inherit?.status ?? null;
@@ -348,7 +384,7 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
       const r = checkRef(`${p}.ref`, line.ref);
       if (r && r.status) { source = r.source; status = r.status; }
     } else if (hasText && !hasRef) {
-      checkText(`${p}.text`, line.text);
+      checkText(`${p}.text`, line.text, { who });
       if (!isStr(source) || !isStr(status)) err(p, 'a text line needs a source and a status');
       if (typeof line.text === 'string') {
         const words = Math.max(0, ...ctxsFor(line.text.includes('@') ? '@' : '').map((ctx) => fillTemplate(line.text, m, ctx).split(/\s+/).filter(Boolean).length));
@@ -357,7 +393,7 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
     }
     if (faq && !(isStr(source) && isStr(status))) err(p, 'an Ask answer needs a source and a status (from its ref, the line or the question)');
     if (status != null && !STATUSES.includes(status)) err(p, `status "${status}" is not one of ${STATUSES.join(', ')}`);
-    checkText(`${p}.say`, line.say, { required: false });
+    checkText(`${p}.say`, line.say, { required: false, who });
     checkCond(`${p}.when`, line.when);
     if (line.cue !== undefined) checkCue(`${p}.cue`, line.cue, scene);
     if (line.callout !== undefined) {
@@ -373,6 +409,11 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
     checkText(`${p}.prompt`, c.prompt);
     if (c.remember !== undefined && (typeof c.remember !== 'string' || !/^[a-z][a-zA-Z0-9-]*$/.test(c.remember))) err(p, 'remember is a plain key');
     if (c.remember === 'door') err(p, 'remember "door" is reserved: door scenes record it');
+    if (c.remember === 'lead') {
+      // The visitor's pick of who leads (O12): every option stores a guide id.
+      if (!gIds.length) err(p, 'remember "lead" picks a guide, but guide.guides is not set');
+      else for (const [i, o] of (Array.isArray(c.options) ? c.options : []).entries()) if (!gIds.includes(String(optionValue(o)))) err(`${p}.options[${i}]`, `a lead option stores a guide id (${gIds.join(', ')}), not ${JSON.stringify(optionValue(o))}`);
+    }
     const opts = Array.isArray(c.options) ? c.options : [];
     if (!opts.length) err(p, 'a choice needs options');
     if (opts.length > MAX_OPTIONS) err(p, `${opts.length} options; at most ${MAX_OPTIONS} per choice`);
