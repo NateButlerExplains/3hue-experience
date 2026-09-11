@@ -63,7 +63,7 @@
       "scene": { "kind": "station", "door": "win-trust", "station": "proof" },
       "lines": [
         { "id": "wt-4", "ref": "doors.win-trust.proof.0", "callout": ["doors.win-trust.proof.0"] },
-        { "id": "wt-5", "ref": "doors.win-trust.program.snapshot", "cue": { "station": "program" } }
+        { "id": "wt-5", "ref": "doors.win-trust.program.start", "cue": { "station": "program" } }
       ],
       "choice": {
         "id": "wt-next",

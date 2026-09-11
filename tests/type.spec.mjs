@@ -1,8 +1,11 @@
 // P2b-D04/D05 and P5-D01: no visible text under 12 px on screen, one filled Talk per door panel
 // above the fold, every Talk points at the booking URL in a new tab, and no forbidden or
-// retired word on any surface.
+// retired word on any surface. O15: each door panel lists its bundles (hidden when it has none) and
+// the programs that run it, in the quote builder's names, and every Learn more link opens an
+// allowlisted 3hue.net page in a new tab.
 import { test, expect } from '@playwright/test';
-import { open, panelOpen, doorsShown, manifest as m, S, DOORS, doorById, doorH2, vp, annotate, r1 } from './helpers.mjs';
+import { open, panelOpen, doorsShown, manifest as m, S, DOORS, doorById, doorH2, fill, vp, annotate, r1 } from './helpers.mjs';
+import { learnMoreProblem } from '../tools/check-manifest.js';
 
 const STATES = [
   { id: 'lobby', hash: '#/experience' },
@@ -120,6 +123,61 @@ test('P2b-D05 / O2 every Talk is a link to the booking URL, new tab, noopener; n
     }
     if (st.id !== 'lobby') expect(r.filter((t) => t.inPanel).length).toBeGreaterThanOrEqual(1);
   }
+  annotate(testInfo, log);
+});
+
+// What a door panel should list, from the manifest: its packages and its programs, held ones skipped;
+// under each program, what builds and runs it other than the item it is named for.
+const shown = (id) => { const o = m.offers[id]; if (o && !o.held) return o.name; const p = m.programs[id]; return p && !p.held && p.name ? p.name : null; };
+const expectedLists = (d) => ({
+  packages: d.packages.map((id) => m.offers[id]).filter((o) => o && !o.held).map((o) => ({ name: o.name, text: o.summary?.text ?? '' })),
+  programs: d.programs.map((id) => m.programs[id]).filter((p) => p && !p.held && p.name).map((p) => ({ name: p.name, text: [...p.build, ...p.run].map(shown).filter((n) => n && n !== p.name).join(' · ') })),
+});
+
+test('O15 each door panel lists its ready-made bundles (hidden when it has none) and the programs that run it, in the quote builder\'s names', async ({ page }, testInfo) => {
+  const log = {};
+  for (const id of DOORS) {
+    const d = doorById(id);
+    await open(page, { hash: `#/door/${id}` });
+    await panelOpen(page);
+    const r = await page.evaluate(() => {
+      const list = (h) => (h ? [...h.nextElementSibling.querySelectorAll(':scope > li')].map((li) => ({ name: li.querySelector('b').textContent.trim(), text: li.querySelector('span')?.textContent.trim() ?? '' })) : null);
+      const pk = document.getElementById('panel-packages'), pr = document.getElementById('panel-programs');
+      return { packagesHeading: pk?.textContent.trim() ?? null, packages: list(pk), programsHeading: pr?.textContent.trim() ?? null, programs: list(pr), inServices: [pk, pr].filter(Boolean).every((h) => h.compareDocumentPosition(document.getElementById('st-services')) & Node.DOCUMENT_POSITION_PRECEDING) };
+    });
+    log[id] = r;
+    const want = expectedLists(d);
+    if (want.packages.length) { expect(r.packagesHeading).toBe(S.packages); expect(r.packages).toEqual(want.packages); }
+    else expect(r.packagesHeading, `${id} has no packages, so the list hides`).toBeNull();
+    expect(r.programsHeading).toBe(S.programs);
+    expect(r.programs).toEqual(want.programs);
+    expect(r.inServices, 'bundles and programs sit under Services on this path').toBe(true);
+  }
+  expect(DOORS.some((id) => doorById(id).packages.length === 0), 'a door with no packages exercises the hidden list').toBe(true);
+  annotate(testInfo, log);
+});
+
+test('O15 every Learn more link opens an allowlisted 3hue.net page in a new tab, noopener noreferrer, named for that page', async ({ page }, testInfo) => {
+  const log = {};
+  const pages = Object.values(m.site.learnMore.pages);
+  for (const st of [...DOORS.map((id) => `#/door/${id}`), '#/path/where-to-start']) {
+    await open(page, { hash: st });
+    await panelOpen(page);
+    const links = await page.evaluate(() => [...document.querySelectorAll('#panel a.learn')].map((a) => { const r = a.getBoundingClientRect(); return { href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel'), text: a.textContent.trim(), label: a.getAttribute('aria-label'), h: r.height, w: r.width }; }));
+    log[st] = links;
+    for (const l of links) {
+      expect(learnMoreProblem(l.href), l.href).toBeNull();
+      const pg = pages.find((p) => p.url === l.href);
+      expect(pg, `${l.href} is a site.learnMore page`).toBeTruthy();
+      expect(l.target).toBe('_blank');
+      expect(l.rel).toContain('noopener');
+      expect(l.rel).toContain('noreferrer');
+      expect(l.text).toBe(S.learnMore);
+      expect(l.label).toBe(`${S.learnMore}: ${pg.label}, ${fill(S.newTab, { host: new URL(l.href).host })}`);
+      expect(Math.min(l.h, l.w), `${l.href} target size`).toBeGreaterThanOrEqual(44);
+    }
+  }
+  expect(Object.values(log).flat().length, 'the door panels carry Learn more links').toBeGreaterThan(0);
   annotate(testInfo, log);
 });
 

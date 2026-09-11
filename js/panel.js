@@ -1,6 +1,6 @@
 // The docked panel (bottom sheet when composed): one template for a door, one for the path.
 // Every string comes from the manifest; this file only arranges them.
-import { getManifest, str, esc, resolveHref, stageName } from './content.js?v=2026-09-10f';
+import { getManifest, str, esc, resolveHref, stageName, learnMorePage } from './content.js?v=2026-09-10f';
 import { getState } from './stage.js?v=2026-09-10f';
 import { reducedMotion } from './content.js?v=2026-09-10f';
 
@@ -10,6 +10,25 @@ let currentId = null;
 
 const talk = (filled) => `<a class="btn ${filled ? 'primary' : 'outline'} small" href="${esc(resolveHref('booking'))}" target="_blank" rel="noopener noreferrer" aria-label="${esc(str('talk'))}, ${esc(str('newTab', { host: new URL(resolveHref('booking')).host }))}">${esc(str('talk'))}</a>`;
 const src = (o) => (o?.source ? `<span class="src">${esc(o.source)}</span>` : '');
+
+// Quote-builder names (O15): offers and programs by id, exactly as the manifest carries them. Held
+// items (awaiting the owner) and anything missing are skipped, never shown.
+const offerOf = (id) => { const o = getManifest().offers?.[id]; return o && !o.held && typeof o.name === 'string' ? o : null; };
+const programOf = (id) => { const p = getManifest().programs?.[id]; return p && !p.held && typeof p.name === 'string' ? p : null; };
+const nameOf = (id) => offerOf(id)?.name ?? programOf(id)?.name ?? null;
+// Learn more on 3hue.net: a new tab, named for the page it opens (the same name always opens the same page).
+function learn(key) {
+  const pg = learnMorePage(key);
+  return pg ? `<a class="learn" href="${esc(pg.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(`${str('learnMore')}: ${pg.label}, ${str('newTab', { host: pg.host })}`)}">${esc(str('learnMore'))}</a>` : '';
+}
+// A start as the path panel shows it: the lead, "/" its alternative, "+" what goes with it.
+const startNames = (s) => [[s.lead, s.alt].map(nameOf).filter(Boolean).map(esc).join(' / '), ...(s.with || []).map(nameOf).filter(Boolean).map(esc)].join(' + ');
+// A door's starts, one per trigger in trigger order, each under the trigger it answers. The early
+// start answers no trigger and has no label in the lobby, so the tour carries it.
+function startList(d) {
+  const rows = Object.values(d.starts || {}).filter((s) => Number.isInteger(s?.trigger) && typeof d.triggers?.[s.trigger] === 'string' && nameOf(s.lead)).sort((a, b) => a.trigger - b.trigger);
+  return rows.length ? `<p class="kicker">${esc(str('starts'))}</p><ul class="families starts">${rows.map((s) => `<li><span>${esc(d.triggers[s.trigger])}</span><b>${startNames(s)}</b></li>`).join('')}</ul>` : '';
+}
 
 function doorTabs(active, onTab) {
   const m = getManifest();
@@ -44,6 +63,12 @@ export function openDoorPanel(d, { station, sameDoor, onBack, onTab, onStation }
   const research = gated(d);
   const stages = m.stages.map((s) => `<li${d.maturityEmphasis.includes(s.id) ? '' : ' class="off"'}>${esc(s.name)}${d.maturityEmphasis.includes(s.id) ? `<span class="tag">${esc(str('inPath'))}</span>` : ''}</li>`).join('');
   const fams = d.serviceFamilies.map((f) => `<li><b>${esc(f.name)}</b>${f.examples?.length ? `<span>${f.examples.map(esc).join(' · ')}</span>` : ''}</li>`).join('');
+  // The door's ready-made bundles (none on some doors: the list hides) and the programs that run it,
+  // each program with what builds and runs it. Summaries share one printed source.
+  const pk = (d.packages || []).map(offerOf).filter(Boolean);
+  const pr = (d.programs || []).map(programOf).filter(Boolean);
+  const bundles = pk.length ? `<h4 id="panel-packages">${esc(str('packages'))}</h4><ul class="families bundles">${pk.map((o) => `<li><b>${esc(o.name)}</b>${o.summary?.text ? `<span>${esc(o.summary.text)}</span>` : ''}${learn(o.learnMore)}</li>`).join('')}</ul>${[...new Set(pk.map((o) => o.summary?.source).filter(Boolean))].map((s) => `<span class="src">${esc(s)}</span>`).join('')}` : '';
+  const runs = pr.length ? `<h4 id="panel-programs">${esc(str('programs'))}</h4><ul class="families runs">${pr.map((p) => { const parts = [...(p.build || []), ...(p.run || [])].map(nameOf).filter((n) => n && n !== p.name); return `<li><b>${esc(p.name)}</b>${parts.length ? `<span>${parts.map(esc).join(' · ')}</span>` : ''}${learn(p.learnMore)}</li>`; }).join('')}</ul>` : '';
   panel.innerHTML = `
     <div class="toolbar"><button class="btn outline small" type="button" id="panel-back">${esc(str('back'))}</button></div>
     <div id="panel-tabs"></div>
@@ -62,8 +87,10 @@ export function openDoorPanel(d, { station, sameDoor, onBack, onTab, onStation }
     ${research && d.statSecondary ? `<p>${esc(d.statSecondary.text)}${src(d.statSecondary)}</p>` : ''}
     <h3 id="st-services" tabindex="-1">${esc(str('services'))}</h3>
     <ul class="families">${fams}</ul>
+    ${bundles}
+    ${runs}
     ${research && d.proof?.length ? `<h3 id="st-proof" tabindex="-1">${esc(str('proof'))}</h3>${d.proof.map((p) => `<p>${esc(p.text)}<span class="src">${esc(p.basis)}</span></p>`).join('')}` : ''}
-    ${research && d.program ? `<h3 id="st-program" tabindex="-1">${esc(str('program'))}</h3><ol class="arc">${m.arc.map((a, i) => `<li><b>${esc(a)}</b>${esc([d.program.snapshot, d.program.build, d.program.operate][i] || '')}</li>`).join('')}</ol><p class="pillars">${m.pillars.map(esc).join(' · ')}</p>` : ''}
+    ${research && d.program ? `<h3 id="st-program" tabindex="-1">${esc(str('program'))}</h3><ol class="arc">${m.arc.map((a, i) => `<li><b>${esc(a)}</b>${esc([d.program.start, d.program.build, d.program.operate][i] || '')}</li>`).join('')}</ol><p class="pillars">${m.pillars.map(esc).join(' · ')}</p>` : ''}
     <h3 id="st-route" tabindex="-1">${esc(str('route'))}</h3>
     <ol class="stagelist">${stages}</ol>
     <h3 id="st-decision" tabindex="-1">${esc(str('decision'))}</h3>
@@ -124,7 +151,7 @@ export function openPathPanel({ stage, samePanel, onBack, onDoor, onStage }) {
     <p class="audience">${esc(m.path.intro || '')}</p>
     <div class="climb"><button class="btn outline small" type="button" id="stage-prev"${idx <= 0 ? ' disabled' : ''}>${esc(str('prev'))}</button><button class="btn outline small" type="button" id="stage-next"${showStart ? ' disabled' : ''}>${esc(nextLabel)}</button></div>
     <ol class="stagelist" id="stage-list">${li}</ol>
-    ${showStart ? `<h3 id="where-to-start" tabindex="-1">${esc(str('whereToStart'))}</h3><p>${esc(m.path.whereToStart.lead)}${src(m.path.whereToStart)}</p><ul>${m.doors.map((d) => `<li><button type="button" class="tab" data-door="${d.id}">${esc(d.title)}</button> ${esc(d.maturityEmphasis.map(stageName).join(', '))}</li>`).join('')}</ul>` : ''}
+    ${showStart ? `<h3 id="where-to-start" tabindex="-1">${esc(str('whereToStart'))}</h3><p>${esc(m.path.whereToStart.lead)}${src(m.path.whereToStart)}</p><ul class="door-starts">${m.doors.map((d) => `<li><div class="door-start"><button type="button" class="tab" data-door="${d.id}">${esc(d.title)}</button> ${esc(d.maturityEmphasis.map(stageName).join(', '))}</div>${startList(d)}</li>`).join('')}</ul>` : ''}
     <div class="row">${talk(true)}</div>`;
   panel.querySelector('#panel-back').addEventListener('click', onBack);
   for (const b of panel.querySelectorAll('[data-door]')) b.addEventListener('click', () => onDoor(b.dataset.door));

@@ -1,7 +1,12 @@
 // P4-D03: from #/path, Next stage lights the rings bottom to top, each arc directly above its
-// stage's name and fully visible beside the panel, then Where to start.
+// stage's name and fully visible beside the panel, then Where to start with each door's first step
+// per trigger in the quote builder's names (O15).
 import { test, expect } from '@playwright/test';
 import { open, panelOpen, manifest as m, S, STAGES, DOORS, stageById, doorById, annotate, r1, frameToRect, inside, intersects } from './helpers.mjs';
+
+// A start as the path panel names it, from the manifest's offers and programs (held ones skipped).
+const nameOf = (id) => { const o = m.offers[id]; if (o && !o.held) return o.name; const p = m.programs[id]; return p && !p.held && p.name ? p.name : null; };
+const startText = (s) => [[s.lead, s.alt].map(nameOf).filter(Boolean).join(' / '), ...(s.with || []).map(nameOf).filter(Boolean)].join(' + ');
 
 const measureLit = (page, st) => page.evaluate((st) => {
   const L = window.__lobby;
@@ -74,7 +79,11 @@ test('P4-D03 Next stage lights Assess → Advance bottom to top, then Where to s
     hash: location.hash, h3: document.getElementById('where-to-start').textContent.trim(),
     lead: document.getElementById('where-to-start').nextElementSibling?.textContent.trim(),
     lit: document.querySelectorAll('#arcs path.lit').length, nextDisabled: document.querySelector('#stage-next').disabled,
-    buttons: [...document.querySelectorAll('#where-to-start ~ ul button[data-door]')].map((b) => ({ id: b.dataset.door, text: b.textContent.trim(), stages: b.parentElement.textContent.replace(b.textContent, '').trim() })),
+    buttons: [...document.querySelectorAll('#where-to-start ~ ul button[data-door]')].map((b) => ({
+      id: b.dataset.door, text: b.textContent.trim(), stages: b.parentElement.textContent.replace(b.textContent, '').trim(),
+      startsLabel: b.closest('li').querySelector('.kicker')?.textContent.trim() ?? null,
+      starts: [...b.closest('li').querySelectorAll('.starts li')].map((li) => ({ trigger: li.querySelector('span').textContent.trim(), names: li.querySelector('b').textContent.trim() })),
+    })),
     talk: [...document.querySelectorAll('#panel .btn.primary')].map((a) => a.textContent.trim()),
     current: document.querySelectorAll('#stage-list li[aria-current="step"]').length,
   }));
@@ -90,6 +99,11 @@ test('P4-D03 Next stage lights Assess → Advance bottom to top, then Where to s
     const d = doorById(b.id);
     expect(b.text).toBe(d.title);
     expect(b.stages).toBe(d.maturityEmphasis.map((s) => stageById(s).name).join(', '));
+    // O15: each door's first step per trigger, in trigger order, named exactly as the Builder names
+    // it (the lead, "/" its alternative, "+" what goes with it; held items are not shown).
+    expect(b.startsLabel).toBe(S.starts);
+    expect(b.starts).toEqual(Object.values(d.starts).filter((s) => Number.isInteger(s.trigger)).sort((x, y) => x.trigger - y.trigger).map((s) => ({ trigger: d.triggers[s.trigger], names: startText(s) })));
+    expect(b.starts.map((s) => s.trigger), `${d.id}: a start for every trigger`).toEqual(d.triggers);
   }
   expect(end.talk, 'a filled Talk ends the Where to start panel').toContain(S.talk);
   // A door button under Where to start opens that door.

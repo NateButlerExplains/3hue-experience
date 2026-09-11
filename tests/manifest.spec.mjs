@@ -39,7 +39,7 @@ test.describe('manifest (no browser)', () => {
     expect(L.heading[1].includes(L.headingAccent.text), 'headingAccent.text is a substring of heading[1]').toBe(true);
     expect(L.headingAccent.color).toMatch(/^#[0-9a-f]{6}$/i);
 
-    const need = ['explore', 'accessibleName', 'for', 'walk', 'talk', 'back', 'pathChip', 'loading', 'representative', 'skip', 'doorsGroup', 'urgency', 'gap', 'services', 'proof', 'program', 'route', 'inPath', 'decision', 'current', 'next', 'prev', 'whereToStart', 'endWalk', 'openLobby', 'stagesGroup', 'emphasisedBy', 'stations', 'legend', 'nextStep', 'prevStep'];
+    const need = ['explore', 'accessibleName', 'for', 'walk', 'talk', 'back', 'pathChip', 'loading', 'representative', 'skip', 'doorsGroup', 'urgency', 'gap', 'services', 'proof', 'program', 'route', 'inPath', 'decision', 'current', 'next', 'prev', 'whereToStart', 'endWalk', 'openLobby', 'stagesGroup', 'emphasisedBy', 'stations', 'legend', 'nextStep', 'prevStep', 'packages', 'starts', 'programs', 'learnMore'];
     for (const k of need) expect(isStr(m.strings[k]), `strings.${k}`).toBe(true);
     expect(m.strings.explore).toContain('{door}');
     expect(m.strings.accessibleName).toContain('{door}');
@@ -65,9 +65,12 @@ test.describe('manifest (no browser)', () => {
       for (const s of d.maturityEmphasis) expect(stageIds, `${d.id} emphasises ${s}`).toContain(s);
       for (const k of ['opening', 'stat', 'statSecondary', 'program']) { expect(isStr(d[k].source), `${d.id}.${k}.source`).toBe(true); expect(isStr(d[k].status), `${d.id}.${k}.status`).toBe(true); }
       expect(isStr(d.opening.text) && isStr(d.stat.text)).toBe(true);
-      expect(isStr(d.program.snapshot) && isStr(d.program.build) && isStr(d.program.operate)).toBe(true);
+      expect(isStr(d.program.start) && isStr(d.program.build) && isStr(d.program.operate), `${d.id}.program: start, build, operate (O15: the first step is no longer a Snapshot)`).toBe(true);
+      expect(d.program.snapshot).toBeUndefined();
       expect(d.serviceFamilies, `${d.id} has four service families`).toHaveLength(4);
-      for (const f of d.serviceFamilies) { expect(isStr(f.name)).toBe(true); expect(Array.isArray(f.examples)).toBe(true); }
+      // Families are Builder categories with Builder items (O15); no family is empty any more.
+      for (const f of d.serviceFamilies) { expect(isStr(f.name)).toBe(true); expect(Array.isArray(f.examples) && f.examples.length > 0, `${d.id} ${f.name} names its items`).toBe(true); }
+      expect(Array.isArray(d.packages) && Array.isArray(d.programs) && d.starts && typeof d.starts === 'object', `${d.id}: packages, programs, starts`).toBe(true);
       expect(d.proof.length).toBeGreaterThan(0);
       for (const p of d.proof) expect(isStr(p.text) && isStr(p.basis) && isStr(p.status), `${d.id}.proof`).toBe(true);
       expect(d.stations.length).toBeGreaterThan(0);
@@ -87,6 +90,8 @@ test.describe('manifest (no browser)', () => {
     expect(isStr(m.path.whereToStart.lead) && isStr(m.path.whereToStart.source) && isStr(m.path.whereToStart.status)).toBe(true);
     expect(isStr(m.path.share.title) && isStr(m.path.share.card)).toBe(true);
     expect(m.arc).toHaveLength(3);
+    for (const a of m.arc) expect(isStr(a)).toBe(true);
+    expect(m.arc, 'O15: the arc starts with a scoped first step, not a Snapshot').not.toContain('Snapshot');
     expect(m.pillars.length).toBeGreaterThan(0);
 
     expect(isStr(m.kiosk.header) && isStr(m.kiosk.tag)).toBe(true);
