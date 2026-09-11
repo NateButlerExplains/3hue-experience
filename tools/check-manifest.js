@@ -8,8 +8,10 @@
 // lintManifest, lintTour and figures directly; running the file is the CLI.
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { resolveRef, resolveLine, resolveToken, fillTemplate, templateTokens, stripTokens, sceneOf, optionValue, guideIds, SCENES, ACTIONS, STATUSES, TOKEN_KINDS } from '../js/tourtext.js';
+import { resolveRef, resolveLine, resolveToken, fillTemplate, templateTokens, stripTokens, sceneOf, optionValue, guideIds, SCENES, ACTIONS, STATUSES, TOKEN_KINDS, tokens, WRITE_KINDS, MAX_WRITE_ITEMS } from '../js/tourtext.js';
+import { quadToMatrix3d, quadSize, quadProblem, normalizeQuad } from '../js/screens.js';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const readJson = (p) => JSON.parse(fs.readFileSync(path.resolve(ROOT, p), 'utf8'));
@@ -70,8 +72,80 @@ export function figures(s) {
   return out;
 }
 
+// ---- Room surfaces (O14): geometry.rooms.<door>.surfaces, in master pixels of the 2560x1440 render.
+// They live in content/surfaces.json (rooms.<door>: {measuredOn, surfaces}, tools/import-surfaces.mjs),
+// off the boot path; the page merges them into the geometry once the tour is on and readGeometry()
+// does the same here, so every check below reads geometry.rooms.<door>.surfaces.
+// Each is read twice (passes a and b) and the two agree within 2 px on every corner that could be
+// seen; the quad is their mean within 0.5 px (a hidden corner is rebuilt, so neither rule applies
+// there); it maps to a matrix3d; its station is one of the door's; its occluders and text box stay
+// on the image. measuredOn names the render they were read on with its SHA-256, so a new render of
+// the room fails here until it is measured again (tools/geometry-tool.html) and re-imported.
+export function mergeSurfaces(g, sf) {
+  for (const [door, r] of Object.entries(isObj(sf?.rooms) ? sf.rooms : {})) if (isObj(r)) { g.rooms = g.rooms || {}; g.rooms[door] = { ...(g.rooms[door] || {}), ...r }; }
+  return g;
+}
+export function readGeometry(root = ROOT) {
+  const read = (f) => JSON.parse(fs.readFileSync(path.resolve(root, f), 'utf8'));
+  const g = read('content/geometry.json');
+  return fs.existsSync(path.resolve(root, 'content/surfaces.json')) ? mergeSurfaces(g, read('content/surfaces.json')) : g;
+}
+export const SURFACE_ROLES = ['glass', 'screen', 'scrim', 'region', 'dial'];
+const PASS_PX = 2, MEAN_PX = 0.5;
+export function lintSurfaces(d, room, err, root = ROOT) {
+  const p0 = `geometry.rooms.${d.id}`;
+  const S = room.surfaces;
+  if (!isObj(S) || !Object.keys(S).length) { err(`${p0}.surfaces must map a surface id to its measurements`); return; }
+  const W = Number(room.width) || 2560, H = Number(room.height) || 1440;
+  const on = room.measuredOn;
+  if (!isObj(on) || on.file !== `media/rooms/${d.id}-${W}.jpg` || !/^[0-9a-f]{64}$/.test(on.sha256 || '')) err(`${p0}.measuredOn must be {file: "media/rooms/${d.id}-${W}.jpg", sha256}`);
+  else {
+    const f = path.resolve(root, on.file);
+    if (!fs.existsSync(f)) err(`${p0}.measuredOn: ${on.file} does not exist`);
+    else if (crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex') !== on.sha256) err(`${p0}: ${on.file} is not the render the surfaces were measured on (sha256 differs); measure the new render in tools/geometry-tool.html and re-run tools/import-surfaces.mjs`);
+  }
+  const onImage = ([x, y]) => x >= 0 && y >= 0 && x <= W && y <= H;
+  for (const [id, s] of Object.entries(S)) {
+    const p = `${p0}.surfaces.${id}`;
+    if (!ID.test(id)) err(`${p}: a surface id must match ^[a-z0-9-]+$`);
+    if (!isObj(s)) { err(`${p} must be an object`); continue; }
+    if (!SURFACE_ROLES.includes(s.role)) err(`${p}.role must be one of ${SURFACE_ROLES.join(', ')}`);
+    if (s.station !== undefined && !(d.stations || []).includes(s.station)) err(`${p}.station ${JSON.stringify(s.station)} is not a station of ${d.id}`);
+    if (typeof s.target !== 'boolean') err(`${p}.target must be true or false`);
+    const q = normalizeQuad(s.quad), a = normalizeQuad(s.measurements?.a), b = normalizeQuad(s.measurements?.b);
+    if (!q) { err(`${p}.quad must be four [x, y] corners (TL, TR, BR, BL)`); continue; }
+    const why = quadProblem(q);
+    if (why) err(`${p}.quad: ${why}`);
+    const { width: w, height: h } = quadSize(q);
+    if (!quadToMatrix3d(q, w, h)) err(`${p}.quad does not map to a matrix3d`);
+    if (!q.every(onImage)) err(`${p}.quad leaves the ${W}x${H} image`);
+    const hidden = s.hidden === undefined ? [] : s.hidden;
+    if (!Array.isArray(hidden) || hidden.some((i) => !Number.isInteger(i) || i < 0 || i > 3) || new Set(hidden).size !== hidden.length || hidden.length > 2) err(`${p}.hidden lists at most two corner indexes 0-3`);
+    if (!a || !b) err(`${p}.measurements needs passes a and b, four corners each`);
+    else for (let i = 0; i < 4; i++) {
+      if (hidden.includes(i)) continue;
+      const dist = Math.hypot(a[i][0] - b[i][0], a[i][1] - b[i][1]);
+      if (dist > PASS_PX) err(`${p}: corner ${i} disagrees by ${dist.toFixed(2)} px between passes a and b (at most ${PASS_PX}; a corner that cannot be seen is declared in hidden)`);
+      for (let j = 0; j < 2; j++) {
+        const mean = (a[i][j] + b[i][j]) / 2;
+        if (Math.abs(q[i][j] - mean) > MEAN_PX) err(`${p}: quad corner ${i} axis ${j} is ${q[i][j]}, not the mean ${mean.toFixed(2)} of the passes (within ${MEAN_PX} px)`);
+      }
+    }
+    const polys = s.occluders;
+    if (!Array.isArray(polys) || polys.some((o) => !Array.isArray(o) || o.length < 3 || o.some((pt) => !Array.isArray(pt) || pt.length !== 2 || !pt.every(Number.isFinite)))) err(`${p}.occluders must be a list of polygons of [x, y] points`);
+    else if (polys.some((o) => !o.every(onImage))) err(`${p}.occluders leave the ${W}x${H} image`);
+    if (s.text !== null) {
+      const t = s.text;
+      const ok = isObj(t) && ['top', 'bottom', 'left', 'right'].every((k) => Number.isFinite(t[k]) && t[k] >= 0 && t[k] < 1) && t.top + t.bottom < 1 && t.left + t.right < 1;
+      if (!ok) err(`${p}.text must be null or {top, bottom, left, right} insets that leave a box`);
+    }
+    if (s.panes !== undefined && (!isObj(s.panes) || Object.values(s.panes).some((x) => !normalizeQuad(x) || quadProblem(normalizeQuad(x))))) err(`${p}.panes must map a name to a quad`);
+    if (s.dial !== undefined && (!isObj(s.dial) || !normalizeQuad([s.dial.centre, s.dial.centre, s.dial.centre, s.dial.centre]) || !onImage(s.dial.centre) || !(s.dial.radius > 0))) err(`${p}.dial must be {centre, radius} on the image`);
+  }
+}
+
 // ---- content/experience.json ----
-export function lintManifest(m, g, b = builderNames()) {
+export function lintManifest(m, g, b = builderNames(), { root = ROOT } = {}) {
   const errors = [], warnings = [];
   const err = (s) => errors.push(s);
   const warn = (s) => warnings.push(s);
@@ -119,6 +193,8 @@ export function lintManifest(m, g, b = builderNames()) {
   }
   // Rooms that are wired must have geometry.
   for (const d of m.doors || []) if (d.room?.render && !g.rooms?.[d.id]) err(`${d.id}.room.render set but geometry.rooms.${d.id} missing`);
+  // The rooms' own surfaces (O14), as tools/import-surfaces.mjs writes them.
+  for (const d of m.doors || []) if (g.rooms?.[d.id]?.surfaces !== undefined) lintSurfaces(d, g.rooms[d.id], err, root);
 
   // The tour flag (O11) and the guide (O10). The tour stays off until the gate is "approved".
   if (m.tour !== undefined) {
@@ -427,8 +503,9 @@ export function builderTypedNames(m, b = builderNames()) {
 // ---- content/tour.json: the guided-tour script, linted against the manifest it quotes ----
 const TOP_KEYS = ['version', 'note', 'start', 'chapters', 'routes', 'nodes', 'ask', 'summary'];
 const CHAPTER_KEYS = ['id', 'entry', 'title', 'eyebrow', 'landmark', 'optional'];
-const NODE_KEYS = ['chapter', 'scene', 'lines', 'choice', 'next', 'quiet', 'end', 'ask'];
-const LINE_KEYS = ['id', 'text', 'ref', 'say', 'source', 'status', 'when', 'cue', 'callout', 'who'];
+const NODE_KEYS = ['chapter', 'scene', 'lines', 'choice', 'next', 'quiet', 'end', 'ask', 'write'];
+const LINE_KEYS = ['id', 'text', 'ref', 'say', 'source', 'status', 'when', 'cue', 'callout', 'who', 'write'];
+const ENTRY_KEYS = ['kind', 'lines', 'at'];
 const CHOICE_KEYS = ['id', 'prompt', 'remember', 'options'];
 const OPTION_KEYS = ['id', 'label', 'sub', 'value', 'next', 'action', 'suggest', 'hideWhen'];
 const QUESTION_KEYS = ['id', 'q', 'keys', 'lines', 'goto', 'source', 'status', 'learnMore'];
@@ -440,7 +517,7 @@ const INTERNAL_SOURCE = /DECISIONS|manifest/i;
 const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const nameRe = (s, flags) => new RegExp(`(?<![\\p{L}\\p{N}])${escRe(s)}(?![\\p{L}\\p{N}])`, `u${flags}`);
 
-export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {}) {
+export function lintTour(t, m, { root = ROOT, file = 'content/tour.json', geometry = null } = {}) {
   const errors = [], warnings = [];
   const err = (p, s) => errors.push(`${file}: ${p ? `${p}: ` : ''}${s}`);
   const warn = (p, s) => warnings.push(`${file}: ${p ? `${p}: ` : ''}${s}`);
@@ -457,6 +534,9 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
   const allStations = [...new Set(doors.flatMap((d) => d.stations || []))];
   // `@` (the door whose scene is up) must work for every door.
   const stationsOf = (id) => (id === '@' ? allStations.filter((s) => doors.every((d) => (d.stations || []).includes(s))) : doors.find((d) => d.id === id)?.stations || []);
+  // The rooms' surfaces (O14) from the geometry: ids belong to one room, so `@` never carries one.
+  const geo = geometry || (fs.existsSync(path.resolve(root, 'content/geometry.json')) ? readGeometry(root) : {});
+  const surfacesOf = (id) => (id && id !== '@' && isObj(geo.rooms?.[id]?.surfaces) ? geo.rooms[id].surfaces : {});
   const stageIds = [...(m.stages || []).map((s) => s.id), 'where-to-start'];
   const nodes = isObj(t.nodes) ? t.nodes : {};
   const nodeIds = Object.keys(nodes);
@@ -602,10 +682,15 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
   // A cue points at something inside the node's scene (a keep scene can be anything, so only the
   // value is checked there).
   function checkCue(p, cue, sc) {
-    if (!isObj(cue) || Object.keys(cue).length !== 1 || !['station', 'stage', 'door'].includes(Object.keys(cue)[0])) { err(p, 'a cue is {station}, {stage} or {door}'); return; }
+    if (!isObj(cue) || Object.keys(cue).length !== 1 || !['station', 'stage', 'door', 'surface'].includes(Object.keys(cue)[0])) { err(p, 'a cue is {station}, {stage}, {door} or {surface}'); return; }
     const [[k, val]] = Object.entries(cue);
     const kind = sc?.kind;
-    if (k === 'station') {
+    if (k === 'surface') {
+      // Frames that surface in the room and marks it (O14): a surface of the node's own room.
+      if (!['door', 'station'].includes(kind)) err(p, `a surface cue needs a door or station scene, not ${kind ?? 'none'}`);
+      else if (sc.door === '@') err(p, 'a surface cue needs a named door: surface ids belong to one room, so @ cannot carry one');
+      else if (!own(surfacesOf(sc.door), val)) err(p, `surface ${JSON.stringify(val)} is not in ${sc.door}`);
+    } else if (k === 'station') {
       if (kind === 'keep' || !sc) { if (!allStations.includes(val)) err(p, `unknown station ${val}`); }
       else if (!['door', 'station'].includes(kind)) err(p, `a station cue needs a door or station scene, not ${kind}`);
       else if (!stationsOf(sc.door).includes(val)) err(p, `station ${val} is not in ${sc.door}`);
@@ -615,6 +700,52 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
     } else {
       if (!doorIds.includes(val)) err(p, `unknown door ${val}`);
       else if (kind && !['rest', 'keep'].includes(kind)) err(p, `a door cue points from the lobby, so it needs a rest scene, not ${kind}`);
+    }
+  }
+
+  // A write (O14): {<surface id>: entry | null} on a node (its base state) or a line, in a door or
+  // station scene with a named door (surface ids belong to one room). An entry is {kind, lines, at?}:
+  // glow has no lines; the others have one to four items (sign two at most, card at least one ref),
+  // each a template checked as a caption or {ref} to a sourced field (a figure only enters that way).
+  // A surface with no text box takes glow only. `at` (a line's writes only) must be a word of that
+  // line's caption for every door and guide it can be said with.
+  function checkWrite(p, w, sc, line = null, who = null) {
+    if (!isObj(w) || !Object.keys(w).length) { err(p, 'a write maps a surface id to an entry or null'); return; }
+    if (!['door', 'station'].includes(sc?.kind)) { err(p, `a write needs a door or station scene, not ${sc?.kind ?? 'none'}`); return; }
+    if (sc.door === '@') { err(p, 'a write needs a named door: surface ids belong to one room, so @ cannot carry them'); return; }
+    const S = surfacesOf(sc.door);
+    const captions = line ? (() => {
+      const src = typeof line.ref === 'string' ? line.ref : typeof line.text === 'string' ? line.text : '';
+      return withGuides(ctxsFor(src), who).map((ctx) => resolveLine(line, m, ctx)?.text).filter((x) => typeof x === 'string');
+    })() : [];
+    for (const [id, e] of Object.entries(w)) {
+      const q = `${p}.${id}`;
+      if (!own(S, id)) { err(q, `${id} is not a surface of ${sc.door}`); continue; }
+      if (e === null) continue;
+      if (!isObj(e)) { err(q, 'an entry is {kind, lines, at?} or null'); continue; }
+      for (const k of Object.keys(e)) if (!ENTRY_KEYS.includes(k)) err(q, `unknown key ${k}`);
+      if (!WRITE_KINDS.includes(e.kind)) { err(q, `kind must be one of ${WRITE_KINDS.join(', ')}`); continue; }
+      const items = e.lines;
+      if (e.kind === 'glow') { if (items !== undefined && !(Array.isArray(items) && !items.length)) err(q, 'a glow has no lines'); }
+      else {
+        if (S[id].text === null) err(q, `${id} carries no text (nothing may be written on it); give it a glow`);
+        if (!Array.isArray(items) || !items.length) err(q, `a ${e.kind} needs lines`);
+        else {
+          const max = e.kind === 'sign' ? 2 : MAX_WRITE_ITEMS;
+          if (items.length > max) err(q, `${items.length} lines; a ${e.kind} carries at most ${max}`);
+          items.forEach((it, i) => {
+            if (typeof it === 'string') checkText(`${q}.lines[${i}]`, it, { who });
+            else if (isObj(it) && Object.keys(it).length === 1 && typeof it.ref === 'string') checkRef(`${q}.lines[${i}].ref`, it.ref);
+            else err(`${q}.lines[${i}]`, 'an item is a template or {ref}');
+          });
+          if (e.kind === 'card' && !items.some((it) => isObj(it) && typeof it.ref === 'string')) err(q, 'a card carries a ref, so its figure keeps its source');
+        }
+      }
+      if (e.at !== undefined) {
+        if (!line) err(`${q}.at`, 'at waits for a word of a line, so it belongs on a line\'s write, not the node\'s');
+        else if (typeof e.at !== 'string' || !/^\S+$/.test(e.at)) err(`${q}.at`, 'at is one word of the line');
+        else for (const text of captions) if (!tokens(text).some((t) => t.word.toLowerCase() === e.at.toLowerCase())) { err(`${q}.at`, `"${e.at}" is not a word of the line's caption: ${text}`); break; }
+      }
     }
   }
 
@@ -649,6 +780,7 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
     checkText(`${p}.say`, line.say, { required: false, who });
     checkCond(`${p}.when`, line.when);
     if (line.cue !== undefined) checkCue(`${p}.cue`, line.cue, scene);
+    if (line.write !== undefined) { if (faq || !scene) err(`${p}.write`, 'only a node\'s lines write on the room'); else checkWrite(`${p}.write`, line.write, scene, line, who); }
     if (line.callout !== undefined) {
       if (!Array.isArray(line.callout) || !line.callout.length) err(`${p}.callout`, 'a callout is a list of refs');
       else line.callout.forEach((r, i) => checkRef(`${p}.callout[${i}]`, r));
@@ -738,6 +870,7 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
     for (const k of Object.keys(n)) if (!NODE_KEYS.includes(k)) warn(p, `unknown key ${k}`);
     if (!chapterIds.includes(n.chapter)) err(p, `chapter ${n.chapter} is not in chapters`);
     const sc = checkScene(`${p}.scene`, n.scene);
+    if (n.write !== undefined) checkWrite(`${p}.write`, n.write, sc);
     if (!Array.isArray(n.lines)) err(p, 'lines is a list');
     else {
       if (!n.lines.length && !n.choice) err(p, 'a node with no lines needs a choice');
@@ -855,7 +988,7 @@ function main(argv) {
   let file = 'content/experience.json', tourArg = null;
   for (let i = 0; i < argv.length; i++) { if (argv[i] === '--tour') tourArg = argv[++i]; else file = argv[i]; }
   const m = readJson(file);
-  const g = readJson('content/geometry.json');
+  const g = readGeometry();
   const r = lintManifest(m, g);
   const errors = [...r.errors], warnings = [...r.warnings], summary = [`${file}: ${r.errors.length} errors, ${r.warnings.length} warnings, ${r.visible} visible strings checked`];
   const tourFile = tourArg || m.tour?.manifest || null;

@@ -1,0 +1,68 @@
+/* The rooms' own surfaces (O14, js/surfaces.js). Loaded by js/surfaces.js only once the tour is on
+   (with the ?v= stamp tools/stamp-version.py puts on css/experience.css), so the lobby's first paint
+   pays nothing for it. #room, transformed and isolated, is the one blend group the parts blend in.
+   Each part is a box of its surface's size placed at the quad's top-left and mapped onto the quad
+   (matrix3d, origin 0 0); the host and its layers are plain boxes (no transform, opacity or z-index),
+   so each part's blend lands on the render. Units inside a part are surface px (about one master
+   px). --settle is the render's settle duration. Reduced motion: css/experience.css turns every
+   transition off. */
+#room { isolation: isolate; }
+.room-surfaces, .surf-layer { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
+.surf, .surf-occ { position: absolute; left: 0; top: 0; transform-origin: 0 0; pointer-events: none; transition: opacity 450ms var(--ease), transform var(--settle, 0ms) var(--ease); }
+.surf { overflow: hidden; opacity: 0; }
+.surf-occ { max-width: none; user-select: none; -webkit-user-drag: none; }
+.surf p, .surf ul { margin: 0; padding: 0; }
+.surf-hit { opacity: 1; background: transparent; }
+.surf-hit.on { pointer-events: auto; cursor: pointer; }
+/* Glass: its own light turned up (color-dodge, proportional, so the render's edge glow keeps its
+   shape): the whole pane (the sheen) when the line points at it or the pointer is over it, and a
+   feathered backlight behind any type, so the ink keeps 4.5:1 on mid-tone frosted glass; ink printed
+   into it (multiply, so the backlight's fall-off shows through the letters). */
+.surf-lift { mix-blend-mode: color-dodge; opacity: 1; }
+.surf-sheen, .surf-backlight { position: absolute; opacity: 0; transition: opacity 450ms var(--ease); }
+.surf-sheen { inset: 0; background: linear-gradient(180deg, rgb(27 27 27) 0%, rgb(77 77 77) 10%, rgb(63 63 63) 52%, rgb(77 77 77) 86%, rgb(27 27 27) 100%); }
+.surf-lift.is-hover .surf-sheen { opacity: .45; }
+.surf-lift.is-active .surf-sheen, .surf-lift.is-glow .surf-sheen { opacity: 1; }
+/* Feathered by its shadow, not a filter: a filter inside a matrix3d part draws hard edges in WebKit. */
+.surf-backlight { background: rgb(132 132 132); border-radius: 8px; box-shadow: 0 0 8px 4px rgb(132 132 132); }
+.surf-lift.is-written:not(.is-glow) .surf-backlight, .surf-lift.is-label .surf-backlight { opacity: 1; }
+.surf-ink { mix-blend-mode: multiply; color: #0a162b; }
+.surf-ink.is-written, .surf-ink.is-label, .surf-ink.is-active { opacity: 1; }
+.surf-ink .surf-t { -webkit-text-stroke: .025em rgba(255, 255, 255, .4); }
+/* Screens: emissive type on a lit ground (screen), the render's own reflections kept. A screen wakes
+   (its ground alone) under the pointer. */
+.surf-emit { mix-blend-mode: screen; color: #e8f6fb; }
+.surf-ground { position: absolute; inset: 3px; border-radius: 1px; background: radial-gradient(ellipse 90% 100% at 50% 42%, rgb(15 34 51) 0%, rgb(9 21 34) 62%, rgb(5 12 21) 100%); }
+.surf-emit.role-dial .surf-ground { display: none; }
+.surf-emit.is-hover { opacity: .55; }
+.surf-emit.is-written, .surf-emit.is-label, .surf-emit.is-active { opacity: 1; }
+.surf-emit .surf-box { text-shadow: 0 0 1px rgba(232, 246, 251, .5), 0 0 3px rgba(120, 205, 238, .28); }
+/* Scrim: a dark plate over a busy face (the rack), light type. */
+.surf-plate { color: #e8f6fb; }
+.surf-plate .surf-ground { inset: 0; background: rgba(5, 12, 21, .8); }
+.surf-plate.is-hover { opacity: .45; }
+.surf-plate.is-written, .surf-plate.is-label, .surf-plate.is-active { opacity: 1; }
+/* Regions and the dial: a glow in the surface's own plane. */
+.surf-glow { mix-blend-mode: screen; background: radial-gradient(ellipse 58% 62% at 50% 50%, rgb(96 150 176) 0%, rgb(58 104 130) 45%, rgb(24 48 64) 80%, rgb(0 0 0) 100%); }
+.surf-glow.dial { background: radial-gradient(circle at 50% 50%, rgba(150, 214, 240, 0) 38%, rgba(150, 214, 240, .5) 47%, rgba(120, 200, 235, .18) 50%, rgba(120, 200, 235, 0) 60%); }
+.surf-glow.is-hover { opacity: .5; }
+.surf-glow.is-written, .surf-glow.is-active { opacity: 1; }
+/* Type. Sizes are set by js/surfaces.js (fitted, never under 12 CSS px on screen: .is-small hides it). */
+.surf-box { position: absolute; display: flex; flex-direction: column; align-items: flex-start; overflow: hidden; }
+.surf-box.is-small { visibility: hidden; }
+.surf-box.no-src .surf-src { display: none; }
+.surf-rule { display: block; flex: none; width: 30px; height: 3px; margin: 0 0 11px; background: currentColor; border-radius: 1px; }
+.surf-t { font-family: var(--body); }
+.surf-sign, .surf-label, .surf-status { font-weight: 600; line-height: 1.12; letter-spacing: -.006em; }
+.surf-sign .ln, .surf-status .ln { display: block; white-space: nowrap; width: max-content; }
+.surf-t.wrap .ln { white-space: normal; width: auto; text-wrap: balance; }
+.surf-label .ln { display: block; text-wrap: balance; }
+.surf-list { list-style: none; font-weight: 500; line-height: 1.2; }
+.surf-list li { margin: 0 0 .35em; }
+.surf-card { font-weight: 400; line-height: 1.22; }
+.surf-card b { font-weight: 700; font-size: 1.2em; line-height: 1; }
+.surf-src { margin: .45em 0 .6em; font-size: .62em; line-height: 1.25; font-weight: 500; opacity: .9; }
+.surf-mark.ok { color: #62d2ea; }
+.surf-mark.q { color: #ffcf8a; }
+.surf-ink .surf-mark.ok { color: #0e6f86; }
+.surf-ink .surf-mark.q { color: #8a4b00; }

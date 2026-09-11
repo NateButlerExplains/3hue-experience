@@ -1,6 +1,6 @@
 // Boot: manifests → plate → stage → doors/labels/hud → panel/path/walk → router.
 import { loadContent, getManifest, getGeometry, getParams, str, reducedMotion } from './content.js?v=2026-09-10f';
-import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden, panRoom, roomToScreen, frameRect, bandOffset } from './stage.js?v=2026-09-10f';
+import { layout, rest, place, buildPicture, setLayer, getState, setResizeHandler, warmRoom, showRoom, hideRoom, whenRoomHidden, panRoom, frameRoom, roomToScreen, frameRect, bandOffset } from './stage.js?v=2026-09-10f';
 import { buildDoors, setCurrent, hideDoors, showDoors, doorElement, pathElement, firstDoorElement } from './hotspots.js?v=2026-09-10f';
 import { buildLabels, headingElement } from './labels.js?v=2026-09-10f';
 import { buildHud, rowElement, walkButton } from './hud.js?v=2026-09-10f';
@@ -12,9 +12,11 @@ import { lightStage, clearArcs, buildArcs } from './path.js?v=2026-09-10f';
 import { initKiosk, placeKiosk, kioskCentroid, kioskVisibleAt } from './kiosk.js?v=2026-09-10f';
 import { initWalk, startWalk, endWalk, isWalking, walkStep } from './walk.js?v=2026-09-10f';
 import { initRooms, roomFor, showRoomPins, clearRoomPins, setActivePin, probeFormats } from './rooms.js?v=2026-09-10f';
+import { mountSurfaces, clearSurfaces, setActiveSurface, surfaceBBox, stationSurfaces, surfacesOn, warmSurfaces } from './surfaces.js?v=2026-09-10f';
 import { initTour, startTour, tourRoute, endTour, isTouring } from './tour.js?v=2026-09-10f';
 
 const plateEl = document.getElementById('plate');
+const roomEl = document.getElementById('room');
 const params = getParams();
 
 // Run fn once the plate has finished travelling; a transition that never starts (same transform
@@ -92,7 +94,7 @@ async function main() {
     sceneToken++;
     const leaving = openDoor || getState().inRoom;
     openDoor = null;
-    clearRoomPins();
+    clearRoomPins(); clearSurfaces();
     hideRoom(animate);
     closePanel();
     if (layer) setLayer(true, 'none');
@@ -117,7 +119,12 @@ async function main() {
   // `panel: false` no panel opens and nothing docks, so the frame keeps the full width. `adopt`
   // takes over a room that is already up (a tour handing over): the panel renders fresh and the
   // pins and chips re-bind to this caller's onStation instead of the room fading in again.
-  function doorScene(d, { station = null, animate = true, resize = false, panel = true, adopt: adopting = false, onBack, onTab, onStation }) {
+  // While the tour is on (O14), the room's own surfaces replace the pins (js/surfaces.js): in the
+  // door view they carry the station labels and open the stations (not composed, where no pin shows
+  // either); under the tour (onSurface given) they show what the script writes. The pins stay the
+  // default with the tour off, for a ?room-preview= candidate (its surfaces are not measured), and
+  // when the surfaces cannot load. The room counts as shown once its surfaces are mounted.
+  function doorScene(d, { station = null, animate = true, resize = false, panel = true, adopt: adopting = false, onBack, onTab, onStation, onSurface = null }) {
     sceneToken++;
     const sameDoor = !!(openDoor && openDoor !== 'path' && openDoor.id === d.id);
     const switching = !!(openDoor && openDoor !== 'path' && openDoor.id !== d.id);   // door-to-door tab switch: same layer
@@ -129,7 +136,13 @@ async function main() {
     const tgt = doorTarget(d);
     place({ ...tgt, z: g.layout.dolly.zoom, animate });
     const room = roomOf(d);
-    const bind = () => { showRoomPins(d, room, onStation); showStationChips(d, room.stations ? Object.keys(room.stations) : null, onStation); };
+    const bind = () => {
+      const mode = surfaceModeFor(d, room, !!onSurface);
+      showStationChips(d, room.stations ? Object.keys(room.stations) : null, onStation);
+      if (!mode) { clearSurfaces(); showRoomPins(d, room, onStation); return Promise.resolve(); }
+      clearRoomPins();
+      return mountSurfaces(d.id, roomEl, { mode, onPick: mode === 'tour' ? onSurface : onStation }).then((ok) => { if (ok === false && openDoor === d) showRoomPins(d, room, onStation); });
+    };
     // A resize on the open door only re-aims the camera and refits the room; the panel keeps its
     // scroll position and focus. A station change on the open door keeps the room where it is.
     const sameRender = sameDoor && getState().inRoom && room && document.getElementById('room-img').getAttribute('src') === room.render;
@@ -137,11 +150,18 @@ async function main() {
     else if (!(resize && sameDoor)) openDoorPanel(d, { station, sameDoor: (sameDoor || switching) && !adopting, onBack, onTab, onStation });
     let shown = Promise.resolve(false);
     if (room && room.render && !(sameRender && !resize)) {
-      shown = showRoom(room.render, room.focus, { animate: animate && !sameRender, delay: animate && !sameRender ? 400 : 0 }).then((ok) => { if (ok && openDoor === d) bind(); return ok; });
-    } else if (!room || !room.render) { hideRoom(animate); clearRoomPins(); }
-    else if (sameRender) { panRoom(room.focus, 900); if (adopting) bind(); shown = Promise.resolve(true); }
+      shown = showRoom(room.render, room.focus, { animate: animate && !sameRender, delay: animate && !sameRender ? 400 : 0 }).then((ok) => (ok && openDoor === d ? bind().then(() => ok) : ok));
+    } else if (!room || !room.render) { hideRoom(animate); clearRoomPins(); clearSurfaces(); }
+    else if (sameRender) { panRoom(room.focus, 900); shown = adopting ? bind().then(() => true) : Promise.resolve(true); }
     return { room, sameDoor, switching, shown };
   }
+  // The surfaces' own data loads on demand (js/surfaces.js), so whether this room has any is known only
+  // once it has; a room without them resolves the mount false and keeps its pins.
+  const surfaceModeFor = (d, room, touring) => {
+    if (!tourOn || !room || room.preview) return null;
+    return touring ? 'tour' : getState().composed ? null : 'door';
+  };
+  const masterWidth = (d) => Number(g.rooms?.[d.id]?.width) || 2560;
 
   // A station inside the open door's room, as a narrator points at it: scroll its panel section
   // into view without taking focus (when a panel is open), mark its pin, and pan the room about a
@@ -157,6 +177,11 @@ async function main() {
   function stationScene(d, s, animate) {
     const room = roomOf(d);
     setPanelStation(s, { room, animate, focus: false });
+    // With the room's surfaces up (O14), the station is its surfaces: framed whole and marked. A
+    // station no surface stands for pans toward its pin point as before, with nothing marked.
+    const ids = openDoor === d && surfacesOn(d.id) ? stationSurfaces(s) : [];
+    if (ids.length) { frameRoom(surfaceBBox(ids), { W: masterWidth(d), focus: room.focus, ms: animate ? 900 : 0 }); setActiveSurface(ids); return; }
+    if (surfacesOn(d.id)) setActiveSurface(null);
     const at = room?.stations?.[s];
     if (at && openDoor === d) {
       for (const k of [0.35, 0.6, 0.85, 1]) {
@@ -173,7 +198,7 @@ async function main() {
     const wasPath = openDoor === 'path';
     const fromDoor = !!(openDoor && openDoor !== 'path');
     openDoor = 'path'; revealed = true;
-    clearRoomPins();
+    clearRoomPins(); clearSurfaces();
     hideRoom(animate);
     hideDoors();
     setCurrent('path');
@@ -194,7 +219,7 @@ async function main() {
     if (!k) { restScene(animate, { layer: true }); return false; }
     sceneToken++;
     openDoor = null; revealed = true;
-    clearRoomPins();
+    clearRoomPins(); clearSurfaces();
     hideRoom(animate);
     closePanel();
     setLayer(true, 'none');
@@ -225,19 +250,28 @@ async function main() {
       restScene(animate, { layer: true });
       return settled(animate, before);
     },
-    door(door, { station = null, animate = true, resize = false, panel = false, onBack = () => back(), onTab = () => {}, onStation = () => {} } = {}) {
+    door(door, { station = null, animate = true, resize = false, panel = false, onBack = () => back(), onTab = () => {}, onStation = () => {}, onSurface = null } = {}) {
       const d = doorOf(door);
       if (!d) return Promise.resolve();
       cancelPendingReveal();
       const before = camera();
-      const { shown } = doorScene(d, { station, animate, resize, panel, onBack, onTab, onStation });
-      setActivePin(null);
+      const { shown } = doorScene(d, { station, animate, resize, panel, onBack, onTab, onStation, onSurface });
+      setActivePin(null); setActiveSurface(null);
       const token = sceneToken;
       return Promise.all([settled(animate, before), shown]).then(() => { if (station && token === sceneToken) stationScene(d, station, animate); });
     },
     station(door, s, { animate = true } = {}) {
       const d = doorOf(door);
       if (d && openDoor === d) stationScene(d, s, animate);
+      return Promise.resolve();
+    },
+    // Surfaces of the open door's room a line points at (O14): framed inside the frame (a phone's room
+    // strip zooms in past the door's own fit so their type is legible) and marked.
+    surface(door, ids, { animate = true } = {}) {
+      const d = doorOf(door);
+      const list = [].concat(ids ?? []);
+      const box = d && openDoor === d && surfacesOn(d.id) ? surfaceBBox(list) : null;
+      if (box) { frameRoom(box, { W: masterWidth(d), focus: roomOf(d)?.focus, ms: animate ? 900 : 0 }); setActiveSurface(list); }
       return Promise.resolve();
     },
     path({ stage = null, animate = true, resize = false, panel = false, onBack = () => back(), onDoor = () => {}, onStage = () => {} } = {}) {
@@ -328,7 +362,8 @@ async function main() {
 
   // Warm every wired room one at a time once the lobby is on screen and idle.
   const idle = (fn) => (window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 2000 }) : setTimeout(fn, 500));
-  idle(async () => { for (const d of m.doors) { const r = roomFor(d); if (r?.render) await warmRoom(r.render); } });
+  // With the tour on, the rooms' surfaces (their measurements and stylesheet) warm first (O14).
+  idle(async () => { if (tourOn && roomsOn) warmSurfaces(); for (const d of m.doors) { const r = roomFor(d); if (r?.render) await warmRoom(r.render); } });
 
   // Escape unwinds one layer; focus.js handles it in the capture phase. Nothing else here.
 }

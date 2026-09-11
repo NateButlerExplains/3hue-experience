@@ -2,6 +2,7 @@
 import { getManifest, getGeometry, getParams } from './content.js?v=2026-09-10f';
 import { getState, project, projectRect, onLayout, frameRect, bandOffset } from './stage.js?v=2026-09-10f';
 import { tourState } from './tour.js?v=2026-09-10f';
+import { surfaceStats } from './surfaces.js?v=2026-09-10f';
 
 const svg = document.getElementById('debug');
 const NS = 'http://www.w3.org/2000/svg';
@@ -12,6 +13,9 @@ export function initDebug() {
     get manifest() { return getManifest(); },
     get geometry() { return getGeometry(); },
     get stage() { const s = getState(); return { s: s.s, tx: s.tx, ty: s.ty, z: s.z, sRest: s.sRest, composed: s.composed, layerOpen: s.layerOpen, dock: s.dock, inRoom: s.inRoom }; },
+    // The room's fit ({s, ox, oy, Wr, Hr}: room px to stage px) and its surfaces as drawn (O14).
+    get roomFit() { const f = getState().roomFit; return f ? { ...f } : null; },
+    get surfaces() { return surfaceStats(); },
     project, projectRect, frame: () => { const r = frameRect(), o = bandOffset(); return { ...r, x: r.x + o.x, y: r.y + o.y, cx: r.cx + o.x, cy: r.cy + o.y }; },
     get rects() {
       const g = getGeometry();

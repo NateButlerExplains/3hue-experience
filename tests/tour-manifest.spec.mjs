@@ -180,7 +180,8 @@ test.describe('tour manifest (no browser)', () => {
     const nodes = Object.values(FIXTURE.nodes);
     const lines = nodes.flatMap((n) => n.lines);
     const opts = nodes.flatMap((n) => n.choice?.options || []);
-    expect(new Set(lines.flatMap((l) => Object.keys(l.cue || {})))).toEqual(new Set(['station', 'stage', 'door']));
+    expect(new Set(lines.flatMap((l) => Object.keys(l.cue || {})))).toEqual(new Set(['station', 'stage', 'door', 'surface']));
+    expect(nodes.some((n) => n.write) && lines.some((l) => l.write && Object.values(l.write).some((e) => e?.at)), 'a node\'s base write and a line\'s write waiting for its word (O14)').toBe(true);
     expect(lines.some((l) => l.when), 'a line filtered by when').toBe(true);
     expect(lines.some((l) => l.callout), 'a callout').toBe(true);
     expect(lines.some((l) => /@/.test(l.ref || '')), 'a ref through @').toBe(true);

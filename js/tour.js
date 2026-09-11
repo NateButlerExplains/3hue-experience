@@ -37,18 +37,28 @@
 // Next while the voice is on. The `ask` action opens Ask too; the summary stays in the card (a mail
 // draft with no recipient, plus Copy).
 //
+// Rooms that talk back (O14). In a door or station scene the room's own surfaces (js/surfaces.js)
+// show the fold of the node's writes (js/tourtext.js foldWrites): the node's base write, then every
+// shown line's write up to the line on screen, re-derived on every render, so Previous, a deep link, a
+// resize and each trigger version need no state of their own and nothing carries into the next node.
+// An entry with `at` waits, while the voice says its line, for that word (lobby:voice word events);
+// otherwise it shows as its line starts. A line's {surface} cue frames that surface and marks it; a
+// click on a lit surface goes back to the first line of the node that writes or cues it. The card
+// carries a visually hidden list of what the room shows, so none of it is visual only.
+//
 // Node fields read here (shape and rules: js/tourtext.js, tools/check-manifest.js): chapter, scene,
-// lines (when, cue, callout), choice (prompt, remember, options with next|action, suggest,
-// hideWhen), next, end, and quiet (no chapter title card when this node opens its chapter).
-import { getManifest, getParams, str, safeRelative, resolveHref, kioskLines, guideName } from './content.js?v=2026-09-10f';
+// write, lines (when, cue, callout, write), choice (prompt, remember, options with next|action,
+// suggest, hideWhen), next, end, and quiet (no chapter title card when this node opens its chapter).
+import { getManifest, getGeometry, getParams, str, safeRelative, resolveHref, kioskLines, guideName } from './content.js?v=2026-09-10f';
 import { setInset, frameRect, bandOffset } from './stage.js?v=2026-09-10f';
 import { go, back, currentRoute } from './router.js?v=2026-09-10f';
 import { pushLayer, dropLayer, setOpener, topLayer } from './focus.js?v=2026-09-10f';
 import { walkButton } from './hud.js?v=2026-09-10f';
 import { setCurrent } from './hotspots.js?v=2026-09-10f';
 import { lightStage, clearArcs } from './path.js?v=2026-09-10f';
-import { resolveRef, resolveLine, fillTemplate, sceneOf, matches, resolveNext, optionValue, guideId, guideIds, speakerOf } from './tourtext.js?v=2026-09-10f';
-import { buildCard, showCard, cardContains, cardParts, setHead, setLine, setChoice, setNext, setPrev, focusNext, focusFirstOption, say, showTitleCard, hideTitleCard, syncBody, setSpeaker, setCardLabel } from './dialogue.js?v=2026-09-10f';
+import { resolveRef, resolveLine, fillTemplate, sceneOf, matches, resolveNext, optionValue, guideId, guideIds, speakerOf, foldWrites, resolveEntry, entryText } from './tourtext.js?v=2026-09-10f';
+import { buildCard, showCard, cardContains, cardParts, setHead, setLine, setChoice, setNext, setPrev, focusNext, focusFirstOption, say, showTitleCard, hideTitleCard, syncBody, setSpeaker, setCardLabel, setRoomShows } from './dialogue.js?v=2026-09-10f';
+import { setSurfaceState, clearSurfaces, surfaceStation, surfaceStats } from './surfaces.js?v=2026-09-10f';
 import { initGuide, guideStats } from './guide.js?v=2026-09-10f';
 import { initMap, mapButton, closeMap, mapOpen } from './tourmap.js?v=2026-09-10f';
 import { initAsk, openAsk, askOpen, showAskButton, setAskLead, resetAsk } from './ask.js?v=2026-09-10f';
@@ -83,6 +93,8 @@ const st = {
   gapT: 0, stepPending: false,   // the step after a voiced line: waiting out the gap, or held by a pause
   chapterDue: null,              // a chapter on screen whose announcement has not been made yet
   heard: null,                   // the guide whose line the live region read last (its name leads a change)
+  said: Infinity,                // the caption token the voice has reached on this line (Infinity: not voicing it)
+  room: {},                      // what the room's surfaces show: {surfaceId: {kind, items}} (O14)
 };
 let vc = null;                   // the voice controls: {voice, pause, note}
 let pickFocus = false;           // a pick is entering its target: a choice with no lines takes focus itself
@@ -125,6 +137,14 @@ export function initTour({ scene: api }) {
   parts.next.before(vc.pause);
   parts.body.after(vc.note);
   document.addEventListener('visibilitychange', () => { if (touring && document.hidden) hold('hidden', true); });
+  // The voice reaching a word of the line on screen: a write waiting for it (`at`) shows (O14).
+  document.addEventListener('lobby:voice', (e) => {
+    const d = e.detail || {};
+    if (!touring || d.type !== 'word' || !Number.isInteger(d.index) || d.index <= st.said) return;
+    if (d.line == null || d.line !== (st.frame?.lines[st.li]?.id ?? null)) return;
+    st.said = d.index;
+    syncSurfaces();
+  });
 }
 export function isTouring() { return touring; }
 // A pause reason from outside the tour's own controls (a layer that joins later: 'layer').
@@ -291,6 +311,7 @@ function teardown() {
   setChoice(null);
   say('');
   document.body.classList.remove('touring', 'tour-choosing');
+  clearSurfaces(); st.room = {}; st.said = Infinity; setRoomShows(null);
   setInset({ bottom: 0 });
   st.node = null; st.chapter = null; st.frame = st.nodeFrame = null; st.li = 0; st.chapterDue = null;
   st.view = { kind: 'rest' }; st.ready = Promise.resolve(); st.sceneReady = true; st.applied = false;
@@ -352,7 +373,7 @@ function enterNode(id, { animate = true, boot = false } = {}) {
   // The scene first: a door scene sets the door that `@` means in the lines below.
   st.sceneReady = false;
   st.ready = applyScene(sceneOf(node), { animate });
-  st.ready.then(() => { if (token !== nodeToken) return; st.sceneReady = true; applyCue(st.frame?.kind === 'node' ? st.frame.lines[st.li] : null, animate); });
+  st.ready.then(() => { if (token !== nodeToken) return; st.sceneReady = true; applyCue(st.frame?.kind === 'node' ? st.frame.lines[st.li] : null, animate); syncSurfaces(); });
   st.nodeFrame = st.frame = nodeFrame(node);
   st.li = 0;
   save();
@@ -368,7 +389,7 @@ function nodeFrame(node) {
   const c = ctx();
   const lines = (node.lines || []).filter((l) => matches(l.when, c)).map((l) => lineOf(l, c)).filter(Boolean);
   const onContinue = node.next != null ? () => { const to = resolveNext(node.next, ctx(), T); if (to && T.nodes[to]) goNode(to); else endTour(); } : null;
-  return { kind: 'node', lines, choice: node.choice ? choiceOf(node.choice, c) : null, onContinue };
+  return { kind: 'node', write: isObj(node.write) ? node.write : null, lines, choice: node.choice ? choiceOf(node.choice, c) : null, onContinue };
 }
 
 // say: what the voice read instead of the caption, filled as tools/voice/items.mjs fills it; it is
@@ -380,7 +401,7 @@ function lineOf(l, c) {
   const lc = who ? { ...c, guide: who } : c;
   const r = resolveLine(l, m, lc);
   if (!r || !r.text.trim()) return null;
-  return { ...r, who, say: typeof l.say === 'string' ? fillTemplate(l.say, m, lc) : '', cue: isObj(l.cue) ? l.cue : null, callout: Array.isArray(l.callout) ? l.callout : [] };
+  return { ...r, who, say: typeof l.say === 'string' ? fillTemplate(l.say, m, lc) : '', cue: isObj(l.cue) ? l.cue : null, callout: Array.isArray(l.callout) ? l.callout : [], write: isObj(l.write) ? l.write : null };
 }
 
 // A choice as shown: hidden options dropped (hideWhen, a target that does not resolve, the chapter
@@ -428,7 +449,7 @@ function applyScene(sc, { animate = true } = {}) {
       st.door = d; st.answers.door = d;
       st.view = { kind: 'door', door: d, station };
       if (same && station) return scene.station(d, station, { animate });
-      return scene.door(d, { station, animate, panel: false, onStation: onPin });
+      return scene.door(d, { station, animate, panel: false, onStation: onPin, onSurface });
     }
   }
   if (k === 'path') { st.view = { kind: 'path', stage: sc.stage ?? null }; return scene.path({ stage: sc.stage ?? null, animate, panel: false }); }
@@ -437,13 +458,14 @@ function applyScene(sc, { animate = true } = {}) {
   return scene.rest({ animate });
 }
 
-// A line's cue, once its scene has settled: a station inside the room, a stage on the tower, or a
-// door pointed at from the lobby.
+// A line's cue, once its scene has settled: a surface or a station inside the room, a stage on the
+// tower, or a door pointed at from the lobby.
 function applyCue(line, animate = true) {
   const c = line?.cue;
   if (!c) return;
   const v = st.view;
-  if (c.station && v.kind === 'door') { v.station = c.station; scene.station(v.door, c.station, { animate }); }
+  if (c.surface && v.kind === 'door') { v.surface = c.surface; v.station = surfaceStation(c.surface) || v.station; scene.surface(v.door, c.surface, { animate }); }
+  else if (c.station && v.kind === 'door') { v.station = c.station; v.surface = null; scene.station(v.door, c.station, { animate }); }
   else if (c.stage && v.kind === 'path') { v.stage = c.stage; lightStage(c.stage); }
   else if (c.door && (v.kind === 'rest' || (v.kind === 'kiosk' && !v.kiosk))) { v.cueDoor = c.door; setCurrent(c.door); }
 }
@@ -452,7 +474,13 @@ function applyCue(line, animate = true) {
 function reapply() {
   setInset({ bottom: reserve() });
   const v = st.view;
-  if (v.kind === 'door') scene.door(v.door, { station: v.station, animate: false, resize: true, panel: false, onStation: onPin });
+  if (v.kind === 'door') {
+    scene.door(v.door, { station: v.station, animate: false, resize: true, panel: false, onStation: onPin, onSurface }).then(() => {
+      if (st.view !== v || !touring) return;
+      if (v.surface) scene.surface(v.door, v.surface, { animate: false });
+      syncSurfaces();
+    });
+  }
   else if (v.kind === 'path') { scene.path({ stage: v.stage, animate: false, resize: true, panel: false }); }
   else if (v.kind === 'kiosk') {
     const shown = !!scene.kiosk({ animate: false }).shown;
@@ -471,6 +499,25 @@ function onPin(s) {
   st.view.station = s;
   scene.station(st.view.door, s, { animate: true });
   if (i >= 0 && i !== st.li) { st.li = i; render(); }
+}
+
+// A lit surface clicked during the tour (O14): the first line in this node that writes it or cues
+// it; failing that, the line that points at the station it stands for (or the node's first line when
+// the node's own scene is that station), as a pin did. The camera stays where it is unless that line
+// cues something.
+function onSurface(id) {
+  if (!touring || st.view.kind !== 'door' || st.frame?.kind !== 'node') return;
+  const f = st.frame;
+  let i = f.lines.findIndex((l) => (isObj(l.write) && Object.prototype.hasOwnProperty.call(l.write, id)) || l.cue?.surface === id);
+  const s = surfaceStation(id);
+  if (i < 0 && s) {
+    i = f.lines.findIndex((l) => l.cue?.station === s);
+    if (i < 0 && f.lines.length && sceneOf(T.nodes[st.node]).station === s) i = 0;
+  }
+  if (i < 0 || i === st.li) return;
+  release();
+  st.li = i;
+  render();
 }
 
 // Desktop px reserved under the frame for the card while it speaks: --tour-h in the stylesheet
@@ -510,7 +557,34 @@ function render({ chapter = false, quiet = false } = {}) {
   refreshHead();
   refreshControls();
   if (line && st.sceneReady && f.kind === 'node') applyCue(line);
+  syncSurfaces();
   emit('line');
+}
+
+// ---- The room's surfaces (O14) ----
+// What they show for the line on screen: the fold of the node's writes, each entry resolved for the
+// guide whose line wrote it; entries of this line waiting for their `at` word stay out until the
+// voice says it. Outside a door scene nothing is written.
+function roomState() {
+  const f = st.frame;
+  if (!touring || f?.kind !== 'node' || st.view.kind !== 'door') return null;
+  const tag = (w, who) => (isObj(w) ? Object.fromEntries(Object.entries(w).map(([k, e]) => [k, isObj(e) ? { ...e, who } : e])) : null);
+  const lines = f.lines.map((l) => ({ text: l.text, write: tag(l.write, l.who) }));
+  const folded = foldWrites(f.write, lines, st.li, st.said);
+  const m = getManifest(), c = ctx(), out = {};
+  for (const [id, e] of Object.entries(folded)) { const r = resolveEntry(e, m, e.who ? { ...c, guide: e.who } : c); if (r) out[id] = r; }
+  return out;
+}
+// Push that state to the room (it waits there for its room to mount) and to the card's list for a
+// screen reader: every lit surface's words in the room's order, a ref's source after its figure. The
+// summary, shown in the card, leaves the room as its node left it.
+function syncSurfaces() {
+  if (!touring || (st.frame && st.frame.kind !== 'node')) return;
+  const r = roomState();
+  st.room = r || {};
+  if (r) setSurfaceState(r, { door: st.view.door });
+  const order = Object.keys((st.view.kind === 'door' && getGeometry()?.rooms?.[st.view.door]?.surfaces) || {});
+  setRoomShows(Object.entries(st.room).sort(([a], [b]) => order.indexOf(a) - order.indexOf(b)).map(([, e]) => e.items.map((x) => (x.source ? `${x.text} (${x.source})` : x.text)).join('; ')));
 }
 
 function refreshHead() {
@@ -584,6 +658,7 @@ function present(line, ph, chapter) {
   if (!line || f?.kind !== 'node' || !voiceOn()) { announce(line, ph, takeChapter()); return; }
   const my = st.voiceSeq;
   st.speaking = true;
+  st.said = -1;   // the room's `at` writes on this line wait for their words (O14)
   const after = f.lines[st.li + 1] || null;
   let heard = null, onHeard = null;
   if (st.chapterDue) heard = new Promise((r) => { onHeard = r; });
@@ -600,12 +675,14 @@ function present(line, ph, chapter) {
     }
     // No audio for this line (none rendered, out of date, unreadable): captions, and Next moves on.
     st.speaking = false;
+    st.said = Infinity; syncSurfaces();
     announce(line, ph, takeChapter());
     refreshHead(); refreshControls(); emit('line');
   });
   h.done.then((how) => {
     if (my !== st.voiceSeq || !st.speaking) return;
     st.speaking = false;
+    st.said = Infinity; syncSurfaces();
     if (how === 'done') { afterVoiced(); return; }
     // The browser refused to play (no gesture: the voice locks until the visitor turns it on) or the
     // audio would not load: this line becomes a caption the live region reads, and Next moves on.
@@ -621,6 +698,7 @@ function stopVoice() {
   cancelVoice();
   clearTimeout(st.gapT); st.gapT = 0; st.stepPending = false;
   st.speaking = false;
+  st.said = Infinity;
 }
 
 // A voiced line has been said: a choice becomes the visitor's call (read out once), a terminal
@@ -701,6 +779,7 @@ function toggleVoice() {
   if (voiceOn()) {
     setVoiceMuted(true);
     stopVoice();
+    syncSurfaces();
     refreshHead(); refreshControls();
     if (st.frame.kind === 'node') announce(st.frame.lines[st.li] || null, phase(), takeChapter());
     emit('line');
@@ -710,6 +789,7 @@ function toggleVoice() {
   setVoiceMuted(false);
   release();
   present(st.frame.lines[st.li] || null, phase(), null);
+  syncSurfaces();
   refreshHead(); refreshControls();
   emit('line');
 }
@@ -868,6 +948,9 @@ export function tourState() {
     answers: { ...st.answers }, chosen: { ...st.chosen }, visited: [...st.visited], door: st.door,
     lead: touring ? lead() : null, speaker: touring ? (f?.lines[st.li]?.who || lead()) : null,
     scene: { ...st.view }, pausedBy: [...st.pausedBy],
+    // The room's surfaces (O14): each lit surface's words (its kind for a glow), the caption token the
+    // voice has reached on this line, and the surfaces as drawn (js/surfaces.js surfaceStats).
+    surfaces: Object.fromEntries(Object.entries(st.room).map(([id, e]) => [id, entryText(e) || e.kind])), said: Number.isFinite(st.said) ? st.said : null, room: surfaceStats(),
     dialog: mapOpen() ? 'map' : askOpen() ? 'ask' : null,
     guideFrames: guideStats().frames, guide: guideStats(),
   };

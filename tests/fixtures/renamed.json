@@ -231,7 +231,8 @@
     "tourVoice": "Voice",
     "tourPause": "Pause",
     "tourResume": "Resume",
-    "tourPaused": "Paused"
+    "tourPaused": "Paused",
+    "tourRoomShows": "The room shows:"
   },
   "stages": [
     {

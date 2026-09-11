@@ -185,6 +185,59 @@ export function tokens(text) {
   return out;
 }
 
+// ---- Rooms that talk back (O14) ----
+// A node (its base state) and any of its lines may carry write: {<surface id>: entry | null}, where
+// entry = {kind, lines: [item], at?} and an item is a template (as a caption) or {ref} (a sourced
+// field: the only way a figure reaches a surface; its source prints with it). Kinds: sign (one or two
+// short lines, large), list (up to four short items), card (a ref'd figure and its source), status (a
+// short label; a typed ✓ or ? is its mark), glow (no text: the surface lights). `at` names a word of
+// the line's caption: with the voice on, the entry waits until that word is said.
+export const WRITE_KINDS = ['sign', 'list', 'card', 'status', 'glow'];
+export const MAX_WRITE_ITEMS = 4;
+
+// The token index of `word` in a caption (compared without punctuation and case), or -1.
+export function atIndex(text, word) {
+  const w = String(word ?? '').toLowerCase();
+  return w ? tokens(text).findIndex((t) => t.word.toLowerCase() === w) : -1;
+}
+
+// What a node's surfaces show at line li: the node's base write, then the write of every shown line
+// (lines: the node's lines already filtered by `when`, each {text, write}) from the first to li, in
+// order; null clears a surface. Nothing carries over from the node before. On line li itself an entry
+// with `at` waits while the voice has not reached that word: heard is the token index the voice has
+// said (Infinity when the line is not being voiced). → {surfaceId: entry}. Pure, so Previous, a deep
+// link, a resize and each trigger version all come back to the same state.
+export function foldWrites(base, lines, li, heard = Infinity) {
+  const out = {};
+  const put = (w, line) => {
+    if (!isObj(w)) return;
+    for (const [id, e] of Object.entries(w)) {
+      if (e === null) { delete out[id]; continue; }
+      if (!isObj(e)) continue;
+      if (line && typeof e.at === 'string' && heard < atIndex(line.text, e.at)) continue;
+      out[id] = e;
+    }
+  };
+  put(base, null);
+  for (let i = 0; i <= li && i < (lines || []).length; i++) put(lines[i]?.write, i === li ? lines[i] : null);
+  return out;
+}
+
+// An entry as shown: {kind, items: [{text, source}]} with templates filled and refs resolved (a ref
+// keeps the source the manifest prints beside it), or null when nothing resolves.
+export function resolveEntry(e, m, ctx = {}) {
+  if (!isObj(e) || !WRITE_KINDS.includes(e.kind)) return null;
+  const items = [];
+  for (const it of Array.isArray(e.lines) ? e.lines : []) {
+    if (typeof it === 'string') { const text = fillTemplate(it, m, ctx).trim(); if (text) items.push({ text, source: null }); }
+    else if (isObj(it) && typeof it.ref === 'string') { const r = resolveRef(m, it.ref, ctx); if (r?.text) items.push({ text: r.text, source: r.status ? r.source : null }); }
+  }
+  if (e.kind !== 'glow' && !items.length) return null;
+  return { kind: e.kind, items: e.kind === 'glow' ? [] : items };
+}
+// The words an entry puts on its surface, for the screen-reader list and the checks; a glow has none.
+export const entryText = (r) => (r?.items || []).map((x) => x.text).join(' · ');
+
 // SHA-256 of NFC(text) + "\0" + NFC(say), first 16 hex characters. Browser and Node (WebCrypto).
 export async function hashLine(text, say = '') {
   const data = new TextEncoder().encode(`${String(text ?? '').normalize('NFC')}\u0000${String(say ?? '').normalize('NFC')}`);

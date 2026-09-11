@@ -13,6 +13,15 @@ import { doorsShown, settled, isReduced, annotate } from './helpers.mjs';
 import { tour, openTour, startTour, atNode, toLast, pick, cont } from './tour-helpers.mjs';
 
 const ALLOWED = new Set(['transform', '-webkit-transform', 'opacity', 'offset', 'easing', 'composite', 'computedOffset']);
+// Escape closes Ask and hands focus back to its button in the header (O12); the card's keys act only
+// inside the card, so a step after Ask waits for that hand-back, then puts focus on Next. The hand-back
+// comes twice (the dialog's own, then the layer stack's on a zero timeout, js/focus.js popLayer), so it
+// is given a moment to finish first.
+const backFromAsk = async (page) => {
+  await page.waitForFunction(() => !document.getElementById('tour-ask').open && document.activeElement?.id === 'tour-ask-btn', null, { polling: 30, timeout: 5000 });
+  await page.waitForTimeout(150);
+  await page.focus('#tour-next');
+};
 // Every running animation with the properties it changes: a transition's property, or the
 // properties named in an animation's keyframes.
 const ANIMS = () => document.getAnimations().map((a) => {
@@ -79,7 +88,7 @@ test('T-16 reduced motion: every tour step completes with no animation, no title
   await page.keyboard.press('Enter');
   s = await check('ask answered');
   await page.keyboard.press('Escape');
-  await page.focus('#tour-next');   // Escape returned focus to Ask in the header
+  await backFromAsk(page);
   await pick(page, 'onward');
   await atNode(page, 'lens');
   s = await check('keep');
@@ -122,7 +131,7 @@ test('T-17 only transform and opacity animate through the tour, its dialogs and 
   await press('#tour-ask-btn');
   await sample('ask open', 3);
   await page.keyboard.press('Escape');
-  await page.focus('#tour-next');   // Escape returned focus to Ask in the header
+  await backFromAsk(page);
   await toLast(page);
   await pick(page, 'onward');
   await atNode(page, 'lens');

@@ -17,6 +17,8 @@ Pass only if all of these hold:
 
 Nate's written OK on the sheet is the gate. Then: `bash tools/build-derivatives.sh <door>` → `media/rooms/<door>-{2560,2048,1280}.{avif|webp,jpg}` (each ≤ 600 KB), measure the focus point and station pins on the 2560 master in `tools/geometry-tool.html` → `geometry.rooms.<door>`, set `doors[].room.render`, recapture the door's share card.
 
+A new render also needs its surfaces measured again (O14): two passes per surface on the 2560 master (the geometry tool's room mode, or the measurement files and `node tools/import-surfaces.mjs`). `content/surfaces.json` `rooms.<door>.measuredOn.sha256` records the render the surfaces were read on, and `npm run lint` fails while it differs from the shipped `media/rooms/<door>-2560.jpg`.
+
 ## Sign-off record
 
 | Date | Rooms | Decision |

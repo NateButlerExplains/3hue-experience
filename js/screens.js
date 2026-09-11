@@ -99,7 +99,7 @@ function warnOnce(key, ...args) {
 }
 
 // Accepts [[x,y] x4] or [{x,y} x4]; returns a clean [[x,y] x4] or null.
-function normalizeQuad(quad) {
+export function normalizeQuad(quad) {
   if (!Array.isArray(quad) || quad.length !== 4) return null;
   const out = [];
   for (const p of quad) {
@@ -116,8 +116,9 @@ function normalizeQuad(quad) {
 const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
 
 // A quad is usable when it is simple (not a bow-tie) and has real area, i.e. the four
-// turns all go the same way. Corners must be given in order around the surface.
-function quadProblem(q) {
+// turns all go the same way. Corners must be given in order around the surface. Returns the
+// problem in words, or null (the geometry lint and js/surfaces.js share it).
+export function quadProblem(q) {
   let pos = 0, neg = 0;
   for (let i = 0; i < 4; i++) {
     const c = cross(q[i], q[(i + 1) % 4], q[(i + 2) % 4]);
