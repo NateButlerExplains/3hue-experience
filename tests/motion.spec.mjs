@@ -71,14 +71,14 @@ test('P4-D02 every animation running during a door open is a transform or opacit
   expect(others, `animations on properties other than transform/opacity during a door open: ${JSON.stringify(others)}`).toEqual([]);
 });
 
-test('P4-D02 the resting pulse is the only rest-state animation and it is transform-only', async ({ page }, testInfo) => {
+test('P4-D02 the resting pulse is the only rest-state animation and it animates opacity only', async ({ page }, testInfo) => {
   test.skip(isReduced(testInfo), 'no pulse under reduced motion');
   await open(page);
   await doorsShown(page);
   await page.waitForTimeout(800);
   const anims = await page.evaluate(ANIMS);
   annotate(testInfo, anims);
-  const others = anims.filter((a) => !(a.prop === 'pulse' || a.prop === 'opacity' || a.prop === 'transform'));
+  const others = anims.filter((a) => !(a.prop === 'pulse' || a.prop === 'opacity'));
   expect(others).toEqual([]);
 });
 

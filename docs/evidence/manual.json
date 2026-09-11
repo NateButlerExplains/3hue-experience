@@ -3,5 +3,9 @@
   "P1-D02": "Pass (manual, docs/evidence/phase1.md: max landmark displacement 1 px)",
   "P1-D03": "Pass (manual, docs/evidence/phase1.md)",
   "P1-D04": "Pass (manual, docs/evidence/phase1.md: 2880x1621)",
-  "P1-D05": "Pass (manual, docs/evidence/phase1.md: live 200s, AVIF 125 KB, WebP 258 KB)"
+  "P1-D05": "Pass (manual, docs/evidence/phase1.md: local 200s, AVIF 125 KB, WebP 258 KB)",
+  "P5-D03": "Pass (manual, tools/bots.sh against the local server: five cards 1200x630 < 300 KB; cards.json records each capture's innerText)",
+  "P5-D05": "Pass (manual, tools/bots.sh against the local server: root and every s/*.html serve og and twitter tags to all four unfurlers; no meta refresh)",
+  "P5-D06": "Pass (manual, tools/bots.sh against the local server: robots.txt with no Disallow; both icons 200)",
+  "R-01": "Not run (automated criteria pass: OCR at 2x empty, no people, flat dark screens, every derivative <= 600 KB; Nate's written OK on the gate sheets not yet recorded)"
 }

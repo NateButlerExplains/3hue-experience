@@ -2,7 +2,7 @@
 // frame without a seam, each render is requested once per page, ?rooms=0 keeps the layer off,
 // station pins route to #/door/<id>/<station> and focus the matching h3.
 import { test, expect } from '@playwright/test';
-import { open, ready, doorsShown, panelOpen, settled, roomVisible, manifest as m, geometry as g, S, DOORS, doorById, annotate, r1, hash } from './helpers.mjs';
+import { open, ready, doorsShown, panelOpen, settled, roomVisible, manifest as m, geometry as g, S, DOORS, doorById, annotate, r1, hash, isReduced } from './helpers.mjs';
 
 const WIRED = m.doors.filter((d) => d.room?.render).map((d) => d.id);
 
@@ -15,7 +15,7 @@ const ROOM = () => {
   return { opacity: getComputedStyle(room).opacity, ariaHidden: room.getAttribute('aria-hidden'), on: room.classList.contains('on'), src: img.currentSrc || img.getAttribute('src'), natural: [img.naturalWidth, img.naturalHeight], img: { left: r.left, top: r.top, right: r.right, bottom: r.bottom }, panel: { left: panel.left, top: panel.top, right: panel.right, bottom: panel.bottom }, dock: L.stage.dock, inRoom: L.stage.inRoom, vw: innerWidth, vh: innerHeight, pins: [...document.querySelectorAll('#room-pins .room-pin')].map((b) => { const ring = b.querySelector('.ring').getBoundingClientRect(); return { station: b.dataset.station, label: b.querySelector('.chip')?.textContent, ring: { x: ring.left + ring.width / 2, y: ring.top + ring.height / 2, w: ring.width }, btn: b.getBoundingClientRect().toJSON() }; }) };
 };
 
-test('R-01 after a door opens from the lobby the room reaches opacity 1 within 3 s', async ({ page }, testInfo) => {
+test('R-03 after a door opens from the lobby the room reaches opacity 1 within 3 s', async ({ page }, testInfo) => {
   const log = {};
   for (const id of WIRED) {
     await open(page);
@@ -33,7 +33,7 @@ test('R-01 after a door opens from the lobby the room reaches opacity 1 within 3
   annotate(testInfo, log);
 });
 
-test('R-01 a deep link into each door shows its room within 3 s', async ({ page }, testInfo) => {
+test('R-03 a deep link into each door shows its room within 3 s', async ({ page }, testInfo) => {
   const log = {};
   for (const id of WIRED) {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -48,7 +48,7 @@ test('R-01 a deep link into each door shows its room within 3 s', async ({ page 
 });
 
 for (const [w, h] of [[1440, 900], [1920, 1080], [1280, 720]]) {
-  test(`R-02 at ${w}x${h} the room image covers the visible frame with no seam`, async ({ page }, testInfo) => {
+  test(`R-03 at ${w}x${h} the room image covers the visible frame with no seam`, async ({ page }, testInfo) => {
     const log = {};
     for (const id of WIRED) {
       await open(page, { viewport: { width: w, height: h }, hash: `#/door/${id}` });
@@ -70,7 +70,7 @@ for (const [w, h] of [[1440, 900], [1920, 1080], [1280, 720]]) {
   });
 }
 
-test('R-03 each room render is requested exactly once per page (warm, open, tab through)', async ({ page }, testInfo) => {
+test('R-02 each room render is requested exactly once per page (warm, open, tab through)', async ({ page }, testInfo) => {
   await page.goto('about:blank');
   const reqs = [];
   page.on('request', (rq) => { if (/\/media\/rooms\//.test(rq.url())) reqs.push(rq.url()); });
@@ -95,7 +95,7 @@ test('R-03 each room render is requested exactly once per page (warm, open, tab 
   for (const id of WIRED) expect(Object.keys(counts).some((k) => k.startsWith(id + '-')), `a render for ${id} was fetched`).toBe(true);
 });
 
-test('R-04 ?rooms=0 leaves #room at opacity 0 and requests no render', async ({ page }, testInfo) => {
+test('R-05 ?rooms=0 leaves #room at opacity 0 and requests no render; doors still dolly and open their panels', async ({ page }, testInfo) => {
   await page.goto('about:blank');
   const reqs = [];
   page.on('request', (rq) => { if (/\/media\/rooms\//.test(rq.url())) reqs.push(rq.url()); });
@@ -122,7 +122,7 @@ test('R-04 ?rooms=0 leaves #room at opacity 0 and requests no render', async ({ 
   expect(await page.evaluate(() => window.__lobby.stage.z)).toBeCloseTo(1.3, 5);
 });
 
-test('R-05 station pins are present, labelled from the manifest, and a click routes to #/door/<id>/<station> focusing its h3', async ({ page }, testInfo) => {
+test('R-04 station pins are present, labelled from the manifest, and a click routes to #/door/<id>/<station> focusing its h3', async ({ page }, testInfo) => {
   const log = {};
   for (const id of WIRED) {
     await open(page, { hash: `#/door/${id}` });
@@ -153,7 +153,7 @@ test('R-05 station pins are present, labelled from the manifest, and a click rou
   annotate(testInfo, log);
 });
 
-test('R-05 a station pin\'s hit area covers its ring (a pointer click on the ring routes)', async ({ page }, testInfo) => {
+test('R-04 a station pin\'s hit area covers its ring (a pointer click on the ring routes)', async ({ page }, testInfo) => {
   const id = WIRED[0];
   await open(page, { hash: `#/door/${id}` });
   await panelOpen(page);
@@ -170,7 +170,7 @@ test('R-05 a station pin\'s hit area covers its ring (a pointer click on the rin
   expect(hits.every((h) => h.pin), `elementFromPoint at the ring centre and 8 px around it: ${JSON.stringify(hits)}`).toBe(true);
 });
 
-test('R-06 a deep link #/door/<id>/<station> opens the room and focuses the matching h3', async ({ page }, testInfo) => {
+test('R-04 a deep link #/door/<id>/<station> opens the room and focuses the matching h3', async ({ page }, testInfo) => {
   const log = {};
   for (const id of WIRED) {
     const station = doorById(id).stations[3];
@@ -185,4 +185,31 @@ test('R-06 a deep link #/door/<id>/<station> opens the room and focuses the matc
     expect(st.h3Visible, `${id}/${station}: h3 scrolled into the panel`).toBe(true);
   }
   annotate(testInfo, log);
+});
+
+test('R-01 automated render-gate criteria: every shipped room derivative exists, is 16:9 and is at most 600 KB', async ({}, testInfo) => {
+  const fs = await import('node:fs'); const path = await import('node:path');
+  const dir = path.join(process.cwd(), 'media', 'rooms');
+  const rows = [];
+  for (const d of WIRED) for (const w of [2560, 2048, 1280]) for (const ext of ['avif', 'webp', 'jpg']) {
+    const f = path.join(dir, `${d}-${w}.${ext}`);
+    const exists = fs.existsSync(f); const bytes = exists ? fs.statSync(f).size : 0;
+    rows.push({ file: `${d}-${w}.${ext}`, exists, kb: Math.round(bytes / 1024) });
+    expect(exists, `${d}-${w}.${ext} exists`).toBe(true);
+    expect(bytes, `${d}-${w}.${ext} ${Math.round(bytes / 1024)} KB`).toBeLessThanOrEqual(600 * 1024);
+  }
+  annotate(testInfo, rows);
+});
+
+test('R-06 reduced motion cuts every room transition: the room is on at once and nothing animates', async ({ page }, testInfo) => {
+  test.skip(!isReduced(testInfo), 'reduced-motion project only');
+  await page.goto('about:blank');
+  await page.goto('?debug=1#/experience');
+  await ready(page);
+  await page.click(`#doors .door[data-door="${WIRED[0]}"]`);
+  await panelOpen(page);
+  await page.waitForFunction(() => parseFloat(getComputedStyle(document.getElementById('room')).opacity) === 1, null, { polling: 25, timeout: 3000 });
+  const r = await page.evaluate(() => ({ anims: document.getAnimations().map((a) => a.transitionProperty || a.animationName), room: getComputedStyle(document.getElementById('room')).transitionDuration, img: getComputedStyle(document.getElementById('room-img')).transitionDuration }));
+  annotate(testInfo, r);
+  expect(r.anims).toEqual([]);
 });

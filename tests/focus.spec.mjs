@@ -13,7 +13,7 @@ const panelState = (page) => page.evaluate(() => {
 });
 
 for (const [w, h] of KEYBOARD_VPS) {
-  test(`P2b-D01 Tab order at ${w}x${h}: skip → brand → walk → talk → doors → path chip`, async ({ page }, testInfo) => {
+  test(`P2b-D01 / P6-D03 Tab order at ${w}x${h}: skip → brand → walk → talk → doors → path chip`, async ({ page }, testInfo) => {
     await open(page, { viewport: vp(w, h) });
     await doorsShown(page);
     const seq = await tabSequence(page, 8);
@@ -26,7 +26,7 @@ for (const [w, h] of KEYBOARD_VPS) {
     expect(skip.targetExists).toBe(true);
   });
 
-  test(`P2b-D01/D06 keyboard open and close at ${w}x${h}: Enter focuses #panel-h2, Escape refocuses the opener, second Escape is a no-op`, async ({ page }, testInfo) => {
+  test(`P2b-D01/D06 / P6-D03 keyboard open and close at ${w}x${h}: Enter focuses #panel-h2, Escape refocuses the opener, second Escape is a no-op`, async ({ page }, testInfo) => {
     await open(page, { viewport: vp(w, h) });
     await doorsShown(page);
     const log = [];
@@ -166,3 +166,20 @@ for (const [w, h] of FRAME_VPS) {
     annotate(testInfo, log);
   });
 }
+
+test('P6-D03 every keyboard stop in the lobby and in a door panel shows a visible focus indicator', async ({ page }, testInfo) => {
+  await open(page, { viewport: vp(1440, 900) });
+  const probe = () => {
+    const a = document.activeElement; if (!a || a === document.body) return null;
+    const vis = (el) => { if (!el) return false; const cs = getComputedStyle(el); return (cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0) || (cs.boxShadow && cs.boxShadow !== 'none'); };
+    return { key: a.id || a.dataset.door || a.className || a.tagName, ok: vis(a) || vis(a.querySelector('.ring')) || vis(a.querySelector('.chip')) };
+  };
+  const seen = [];
+  for (let i = 0; i < 8; i++) { await page.keyboard.press('Tab'); const r = await page.evaluate(probe); if (r) seen.push(r); }
+  await page.locator('#doors .door[data-door="win-trust"]').focus();
+  await page.keyboard.press('Enter');
+  await panelOpen(page);
+  for (let i = 0; i < 8; i++) { await page.keyboard.press('Tab'); const r = await page.evaluate(probe); if (r) seen.push(r); }
+  annotate(testInfo, seen);
+  expect(seen.filter((s) => !s.ok), 'stops without a visible focus indicator').toEqual([]);
+});

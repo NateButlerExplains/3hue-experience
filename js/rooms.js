@@ -1,8 +1,8 @@
 // Rendered rooms (O5). A door whose manifest entry carries room.render opens onto its render;
 // station pins inside the room go to the same panel sections the chips do. `?rooms=0` turns the
 // layer off (spec-as-written behaviour); `?room-preview=<path>` mounts a candidate for the gate.
-import { getManifest, getGeometry, getParams, str, esc, safeRelative } from './content.js?v=2026-09-10e';
-import { onLayout, roomToScreen, getState, frameRect, bandOffset } from './stage.js?v=2026-09-10e';
+import { getManifest, getGeometry, getParams, str, esc, safeRelative } from './content.js?v=2026-09-10f';
+import { onLayout, roomToScreen, getState, frameRect, bandOffset } from './stage.js?v=2026-09-10f';
 
 const pinsEl = document.getElementById('room-pins');
 let pins = [];

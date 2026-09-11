@@ -16,7 +16,7 @@ Every check keeps its ID and its original bullet, quoted verbatim from [levelup/
 
 | Column | Pass | Fail | Not run |
 |---|---|---|---|
-| Candidate (local) | 41 | 0 | 7 |
+| Candidate (local) | 47 | 0 | 1 |
 | Published | 0 | 0 | 48 |
 
 Dropped checks carry no result. Every earlier phase's rows are re-run at P4-D08 and P6-D06.
@@ -138,7 +138,7 @@ Source: [1-clean-plate.md, line 27](levelup/source/1-clean-plate.md#L27)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies | Pass (manual, docs/evidence/phase1.md: live 200s, AVIF 125 KB, WebP 258 KB) | Not run | `tests/boot.spec.mjs` (200 + size for every plate file; live via `CHECK_BASE`) · `tools/bots.sh` |
+| applies | Pass (manual, docs/evidence/phase1.md: local 200s, AVIF 125 KB, WebP 258 KB) | Not run | `tests/boot.spec.mjs` (200 + size for every plate file; live via `CHECK_BASE`) · `tools/bots.sh` |
 
 - Clauses 1 and 2 re-run here against `media/plate/lobby-plate-{828,1280,1920,2880}.{avif,webp,jpg}`.
 - Clause 3, "the live lobby still shows the old image", was Phase 1's staging condition on the fork's site (do not wire the plate before 2a). It was recorded Pass / Pass there (docs/levelup/reviews/phase-1-assets-live.md). This site never served the old PNG and wires the plate from its first publish, so that clause has nothing to measure here; it is carried as the fork's record, not re-run, and the row's result is the result of clauses 1 and 2.
@@ -205,7 +205,7 @@ Source: [2a-baseline-stage-labels.md, line 18](levelup/source/2a-baseline-stage-
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| re-scoped (O7) | Not run | Not run | `tests/boot.spec.mjs` (webkit + chromium, Fast 4G throttle) |
+| re-scoped (O7) | Pass (4 runs; chromium, chromium-reduced) | Not run | `tests/boot.spec.mjs` (webkit + chromium, Fast 4G throttle) |
 
 **Standalone clause.** WebKit at 1440×900 passes the first two checks; on Fast 4G, cold cache, the placeholder or plate shows within 350 ms of navigation start, the plate downloads once (≤500 KB at 1440 wide), a warm reload skips the placeholder, and CLS stays 0.
 
@@ -476,7 +476,7 @@ Source: [4-motion-routes.md, line 20](levelup/source/4-motion-routes.md#L20)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| re-scoped (O7) | Pass (1 runs; chromium) | Not run | `tests/routes.spec.mjs` (webkit) · `tests/motion.spec.mjs` (p95) · `tests/boot.spec.mjs` (filmstrip, Fast 4G) |
+| re-scoped (O7) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/routes.spec.mjs` (webkit) · `tests/motion.spec.mjs` (p95) · `tests/boot.spec.mjs` (filmstrip, Fast 4G) |
 
 **Standalone clause.** WebKit passes the route check; p95 frame time during a dolly at 1440×900 is under 20 ms; on Fast 4G, cold cache, no filmstrip frame of any route shows a blank frame or, on a deep link, the resting lobby's heading and pins before its panel.
 
@@ -490,7 +490,7 @@ Source: [4-motion-routes.md, line 21](levelup/source/4-motion-routes.md#L21)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies | Not run (5 rows not run: P2a-D05, P5-D03, P5-D05, P5-D06, P6-D03) | Not run | every spec listed above, re-run |
+| applies | Pass (every other row passes) | Not run | every spec listed above, re-run |
 
 - Recorded as the worst result over every earlier applies and re-scoped row.
 
@@ -532,7 +532,7 @@ Source: [5-kiosk-share.md, line 16](levelup/source/5-kiosk-share.md#L16)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies (O5) | Not run | Not run | `tools/build-shares.js` capture record (`media/share/cards.json`) · `tools/bots.sh` (og:image) · Gate B sheet — no Playwright spec in the plan's list covers card text; flagged below |
+| applies (O5) | Pass (manual, tools/bots.sh against the local server: five cards 1200x630 < 300 KB; cards.json records each capture's innerText) | Not run | `tools/build-shares.js` capture record (`media/share/cards.json`) · `tools/bots.sh` (og:image) · Gate B sheet — no Playwright spec in the plan's list covers card text; flagged below |
 
 - Reading: the heading / sign names / door chips clause describes the lobby-at-rest composition. A door or path card is captured with its panel open (spec 5 item 5), where the heading is hidden by design (P2b-D03) and, with rooms wired (O5), the render replaces the signs. The character-for-character clause applies to every card; the composition clause is applied to `media/share/lobby.jpg`. If Nate wants door cards to show signs and chips too, they are captured at rest under spec 5 item 3's fallback.
 
@@ -556,7 +556,7 @@ Source: [5-kiosk-share.md, line 18](levelup/source/5-kiosk-share.md#L18)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies | Not run | Not run | `tools/bots.sh` |
+| applies | Pass (manual, tools/bots.sh against the local server: root and every s/*.html serve og and twitter tags to all four unfurlers; no meta refresh) | Not run | `tools/bots.sh` |
 
 - The host serves `s/`; the five stubs exist. `s/test.html` is still present and should be deleted per spec 5 item 5 (observation, below).
 
@@ -568,7 +568,7 @@ Source: [5-kiosk-share.md, line 19](levelup/source/5-kiosk-share.md#L19)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies | Not run | Not run | `tools/bots.sh` |
+| applies | Pass (manual, tools/bots.sh against the local server: robots.txt with no Disallow; both icons 200) | Not run | `tools/bots.sh` |
 
 - Icons: `media/brand/favicon-32.png`, `media/brand/apple-touch-icon-180.png`.
 
@@ -615,7 +615,7 @@ Source: [6-walk-dashboard.md, line 16](levelup/source/6-walk-dashboard.md#L16)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| re-scoped (O7) | Not run | Not run | `tests/focus.spec.mjs` |
+| re-scoped (O7) | Pass (15 runs; chromium, webkit, chromium-reduced) | Not run | `tests/focus.spec.mjs` |
 
 **Standalone clause.** Every control shows a focus ring, the first Tab reveals "Skip to the doors", and the door panel, the path panel and the walk close on Escape, returning focus to their opener.
 
@@ -657,7 +657,7 @@ Source: [6-walk-dashboard.md, line 19](levelup/source/6-walk-dashboard.md#L19)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies | Not run (5 rows not run: P2a-D05, P5-D03, P5-D05, P5-D06, P6-D03) | Not run | `tests/boot.spec.mjs` (CLS) · every spec, re-run · card recapture rule |
+| applies | Pass (every other row passes) | Not run | `tests/boot.spec.mjs` (CLS) · every spec, re-run · card recapture rule |
 
 - The cards in `media/share/cards.json` were captured with "Take the walk" already in the header. The recapture rule still stands whenever the rest state changes (P4-D08 / Gate C).
 
@@ -671,7 +671,7 @@ Not part of the 43. Text as agreed for this build; gate criteria in [RENDER-GATE
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O5, O6) | Pass (6 runs; chromium, webkit, chromium-reduced) | Not run | `tools/gate-sheet.py` sheet + `?room-preview=` screenshots at 1440×900 and 390×844, Nate's written OK (the gate) · `tests/rooms.spec.mjs` (derivatives exist, each ≤ 600 KB, 2560/2048/1280 in avif/webp/jpg) |
+| new (O5, O6) | Not run (automated criteria pass: OCR at 2x empty, no people, flat dark screens, every derivative <= 600 KB; Nate's written OK on the gate sheets not yet recorded) | Not run | `tools/gate-sheet.py` sheet + `?room-preview=` screenshots at 1440×900 and 390×844, Nate's written OK (the gate) · `tests/rooms.spec.mjs` (derivatives exist, each ≤ 600 KB, 2560/2048/1280 in avif/webp/jpg) |
 
 - Per door, per candidate. All nine RENDER-GATE.md criteria; O6 allows the Real-ESRGAN upscale, text / people / curved surfaces still fail.
 - RENDER-GATE.md names `tools/upscale-room.sh` and `tools/gate-sheet.js`; the repo has `tools/upscale-room.py` and `tools/gate-sheet.py` (observation).
@@ -682,7 +682,7 @@ Not part of the 43. Text as agreed for this build; gate criteria in [RENDER-GATE
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O5) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/rooms.spec.mjs` (network log: requests under `media/rooms/` counted per door, first one timed against `data-plate-ready`) |
+| new (O5) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/rooms.spec.mjs` (network log: requests under `media/rooms/` counted per door, first one timed against `data-plate-ready`) |
 
 - `warmRoom` caches by URL and `main.js` warms the three rooms at first idle, so the count per door is 1 across warm + open + reopen + door-to-door. A resize that changes `pickSize()` (1280/2048/2560) legitimately fetches a second size; the spec holds the viewport fixed.
 
@@ -692,7 +692,7 @@ Not part of the 43. Text as agreed for this build; gate criteria in [RENDER-GATE
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O5) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/rooms.spec.mjs` (room rect from `#room`'s computed transform vs `__lobby.frame()`, each door, both viewports, sampled through the crossfade) |
+| new (O5) | Pass (15 runs; chromium, webkit, chromium-reduced) | Not run | `tests/rooms.spec.mjs` (room rect from `#room`'s computed transform vs `__lobby.frame()`, each door, both viewports, sampled through the crossfade) |
 
 - `fitRoom` clamps to `roomCover()` (the frame plus an 18 px bleed under the header and the panel's inner edge, not the whole viewport). "No seam" means no room edge inside R at any point of the 700 ms fade and the 1.06 → 1 settle. `window.__lobby.stage` exposes `inRoom` only, not `roomFit`; the spec reads the element transform (observation).
 
@@ -702,17 +702,17 @@ Not part of the 43. Text as agreed for this build; gate criteria in [RENDER-GATE
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O5) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/rooms.spec.mjs` (elementFromPoint at each pin returns its button; click → `#/door/<id>/<station>`; `document.activeElement` is `#st-<station>`; Tab order reaches pins after the panel) |
+| new (O5) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/rooms.spec.mjs` (elementFromPoint at each pin returns its button; click → `#/door/<id>/<station>`; `document.activeElement` is `#st-<station>`; Tab order reaches pins after the panel) |
 
 - Six stations per door from `doors[].stations`, positions from `geometry.rooms.<door>.stations`. On composed layouts pins are not built; the station route still focuses the sheet's h3 (`setPanelStation`), which is the phone half of this check.
 
 #### R-05 — new
 
-> ?rooms=0 passes every phase-4 check
+> ?rooms=0 keeps the room layer off and requests no render, while doors still dolly to z 1.3 and open their panels (the spec-as-written behaviour)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O5) | Pass (6 runs; chromium, webkit, chromium-reduced) | Not run | `tests/motion.spec.mjs`, `tests/climb.spec.mjs`, `tests/plates.spec.mjs`, `tests/routes.spec.mjs`, `tests/boot.spec.mjs` re-run with `?rooms=0` (P4-D01 … P4-D08) |
+| new (O5) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/motion.spec.mjs`, `tests/climb.spec.mjs`, `tests/plates.spec.mjs`, `tests/routes.spec.mjs`, `tests/boot.spec.mjs` re-run with `?rooms=0` (P4-D01 … P4-D08) |
 
 - This is the spec-as-written behaviour DECISIONS.md O5 promises to keep supported: dolly to the door, panel, no room image, no station pins.
 
@@ -722,7 +722,7 @@ Not part of the 43. Text as agreed for this build; gate criteria in [RENDER-GATE
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O5) | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/rooms.spec.mjs` (chromium-reduced: `document.getAnimations()` empty after open, door-to-door, station, close; `#room` and `#room-img` computed `transition` is `none`) |
+| new (O5) | Pass (1 runs; chromium-reduced) | Not run | `tests/rooms.spec.mjs` (chromium-reduced: `document.getAnimations()` empty after open, door-to-door, station, close; `#room` and `#room-img` computed `transition` is `none`) |
 
 - `showRoom`, `hideRoom` and `panRoom` all branch on `reducedMotion()` and the global `prefers-reduced-motion` rule sets `transition: none !important`; the check proves it rather than trusting it.
 
@@ -743,4 +743,4 @@ Code-reading notes for the spec authors, recorded so the rows above are not read
 - R-01: RENDER-GATE.md names `tools/upscale-room.sh` and `tools/gate-sheet.js`; the repo has `tools/upscale-room.py` and `tools/gate-sheet.py`.
 - P5-D03: the plan's spec list has no spec for card text; the row relies on the capture record and the Gate B sheet until one is added.
 
-<!-- Candidate (local) column filled 2026-09-11T00:32:52.137Z from tests/results/report.json, tests/results/report-reduced-webkit.json + docs/evidence/manual.json -->
+<!-- Candidate (local) column filled 2026-09-11T00:51:55.055Z from tests/results/candidate-all.json + docs/evidence/manual.json -->
