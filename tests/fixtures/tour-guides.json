@@ -1,0 +1,57 @@
+{
+  "version": 2,
+  "note": "Test fixture for the two guides (T-25) and Ask's console (T-26), loaded against the live content/experience.json. Lines pinned to each guide, a line the lead speaks, the lead choice, a door and the tower, Ask's suggestions per step, and three questions. Every visible word is a token or a ref into the manifest, so the fixture adds no copy.",
+  "start": "meet",
+  "chapters": [
+    { "id": "arrival", "entry": "meet", "title": "{str:legend}", "landmark": "lobby" },
+    { "id": "door-win-trust", "entry": "wt", "title": "{door:win-trust.title}", "eyebrow": "{door:win-trust.number}", "landmark": "door:win-trust" },
+    { "id": "path", "entry": "path", "title": "{ref:path.title}", "landmark": "tower" }
+  ],
+  "nodes": {
+    "meet": {
+      "chapter": "arrival",
+      "scene": "rest",
+      "lines": [
+        { "id": "g-avi", "who": "avi", "text": "{guide}", "source": "Test fixture", "status": "derived" },
+        { "id": "g-huey", "who": "huey", "text": "{guide}", "source": "Test fixture", "status": "derived" },
+        { "id": "g-lead", "text": "{guide} · {guide:title}", "source": "Test fixture", "status": "derived" }
+      ],
+      "choice": {
+        "id": "lead",
+        "prompt": "{str:legend}",
+        "remember": "lead",
+        "options": [
+          { "id": "huey", "label": "{guide:huey}", "next": "wt" },
+          { "id": "avi", "label": "{guide:avi}", "next": "wt" }
+        ]
+      },
+      "ask": ["q-b", "q-a"]
+    },
+    "wt": {
+      "chapter": "door-win-trust",
+      "scene": { "kind": "door", "door": "win-trust" },
+      "lines": [
+        { "id": "g-wt-1", "text": "{door:win-trust.title} · {guide}", "source": "Test fixture", "status": "derived" },
+        { "id": "g-wt-2", "text": "{door:win-trust.promise}", "source": "Test fixture", "status": "derived" }
+      ],
+      "next": "path",
+      "ask": ["q-c"]
+    },
+    "path": {
+      "chapter": "path",
+      "scene": { "kind": "path" },
+      "lines": [
+        { "id": "g-path-1", "text": "{ref:path.title}", "source": "Test fixture", "status": "derived" }
+      ],
+      "end": true
+    }
+  },
+  "ask": {
+    "intro": { "id": "g-ask-intro", "text": "{guide} · {guide:title}", "source": "Test fixture", "status": "derived" },
+    "questions": [
+      { "id": "q-a", "q": "{door:win-trust.title}", "goto": "wt", "source": "Test fixture", "status": "derived", "keys": ["win trust"], "lines": [{ "id": "g-qa-1", "text": "{door:win-trust.promise}" }] },
+      { "id": "q-b", "q": "{door:gain-control.title}", "source": "Test fixture", "status": "derived", "keys": ["gain control"], "lines": [{ "id": "g-qb-1", "text": "{door:gain-control.promise} · {guide}" }] },
+      { "id": "q-c", "q": "{door:stay-ready.title}", "source": "Test fixture", "status": "derived", "keys": ["stay ready"], "lines": [{ "id": "g-qc-1", "text": "{door:stay-ready.promise}" }] }
+    ]
+  }
+}

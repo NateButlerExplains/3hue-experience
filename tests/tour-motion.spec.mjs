@@ -79,6 +79,7 @@ test('T-16 reduced motion: every tour step completes with no animation, no title
   await page.keyboard.press('Enter');
   s = await check('ask answered');
   await page.keyboard.press('Escape');
+  await page.focus('#tour-next');   // Escape returned focus to Ask in the header
   await pick(page, 'onward');
   await atNode(page, 'lens');
   s = await check('keep');

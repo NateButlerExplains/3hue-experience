@@ -206,6 +206,8 @@ test.describe('tour manifest (no browser)', () => {
     expect(r.stdout).toMatch(/^tests\/fixtures\/tour-min\.json: 0 errors/m);
     expect(lintTour(FIXTURE, m, { file: FIXTURE_FILE }).errors).toEqual([]);
     expect(lintTour(TOUR, m).errors).toEqual([]);
+    // The two-guide fixture (T-25, T-26) too.
+    expect(lintTour(readJson('tests/fixtures/tour-guides.json'), m, { file: 'tests/fixtures/tour-guides.json' }).errors).toEqual([]);
   });
 
   test('T-02 the lint refuses a script that breaks a rule', () => {
