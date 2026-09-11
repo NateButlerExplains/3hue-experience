@@ -669,7 +669,7 @@ test.describe('T-15 the voice controls and the audio back end', () => {
       await page.waitForFunction(() => !!document.querySelector('#tour-caption .w.now'), null, { polling: 20 });
       const box = await page.evaluate(() => {
         const c = document.getElementById('tour').getBoundingClientRect();
-        return ['tour-voice', 'tour-pause', 'tour-map-btn', 'tour-ask-btn', 'tour-end', 'tour-prev', 'tour-next'].map((id) => { const r = document.getElementById(id).getBoundingClientRect(); return { id, w: r.width, h: r.height, inside: r.left >= c.left - 0.5 && r.right <= c.right + 0.5 && r.top >= c.top - 0.5 && r.bottom <= c.bottom + 0.5 }; });
+        return ['tour-voice', 'tour-pause', 'tour-map-btn', 'tour-end', 'tour-prev', 'tour-next'].map((id) => { const r = document.getElementById(id).getBoundingClientRect(); return { id, w: r.width, h: r.height, inside: r.left >= c.left - 0.5 && r.right <= c.right + 0.5 && r.top >= c.top - 0.5 && r.bottom <= c.bottom + 0.5 }; });
       });
       const scroll = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       const res = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();

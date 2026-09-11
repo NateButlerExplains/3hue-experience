@@ -40,18 +40,18 @@
 // Node fields read here (shape and rules: js/tourtext.js, tools/check-manifest.js): chapter, scene,
 // lines (when, cue, callout), choice (prompt, remember, options with next|action, suggest,
 // hideWhen), next, end, and quiet (no chapter title card when this node opens its chapter).
-import { getManifest, getParams, str, safeRelative, resolveHref, kioskLines } from './content.js?v=2026-09-10f';
+import { getManifest, getParams, str, safeRelative, resolveHref, kioskLines, guideName } from './content.js?v=2026-09-10f';
 import { setInset, frameRect, bandOffset } from './stage.js?v=2026-09-10f';
 import { go, back, currentRoute } from './router.js?v=2026-09-10f';
 import { pushLayer, dropLayer, setOpener, topLayer } from './focus.js?v=2026-09-10f';
 import { walkButton } from './hud.js?v=2026-09-10f';
 import { setCurrent } from './hotspots.js?v=2026-09-10f';
 import { lightStage, clearArcs } from './path.js?v=2026-09-10f';
-import { resolveRef, resolveLine, fillTemplate, sceneOf, matches, resolveNext, optionValue } from './tourtext.js?v=2026-09-10f';
-import { buildCard, showCard, cardContains, cardParts, setHead, setLine, setChoice, setNext, setPrev, focusNext, focusFirstOption, say, showTitleCard, hideTitleCard, syncBody } from './dialogue.js?v=2026-09-10f';
+import { resolveRef, resolveLine, fillTemplate, sceneOf, matches, resolveNext, optionValue, guideId, guideIds, speakerOf } from './tourtext.js?v=2026-09-10f';
+import { buildCard, showCard, cardContains, cardParts, setHead, setLine, setChoice, setNext, setPrev, focusNext, focusFirstOption, say, showTitleCard, hideTitleCard, syncBody, setSpeaker, setCardLabel } from './dialogue.js?v=2026-09-10f';
 import { initGuide, guideStats } from './guide.js?v=2026-09-10f';
 import { initMap, mapButton, closeMap, mapOpen } from './tourmap.js?v=2026-09-10f';
-import { initAsk, askButton, openAsk, closeAsk, askOpen } from './ask.js?v=2026-09-10f';
+import { initAsk, openAsk, askOpen, showAskButton, setAskLead, resetAsk } from './ask.js?v=2026-09-10f';
 import { initVoice, beginVoice, endVoice, unlockVoice, speak, cancelVoice, pauseVoice, resumeVoice, voiceWanted, voiceOn, setVoiceMuted, speakAsk, hushAsk, voiceStats } from './voice.js?v=2026-09-10f';
 
 const KEY = '3hue-experience:tour';   // sessionStorage only: the node, answers and visited chapters
@@ -82,6 +82,7 @@ const st = {
   voiceSeq: 0,                   // bumped whenever the voice is stopped, so a late report is ignored
   gapT: 0, stepPending: false,   // the step after a voiced line: waiting out the gap, or held by a pause
   chapterDue: null,              // a chapter on screen whose announcement has not been made yet
+  heard: null,                   // the guide whose line the live region read last (its name leads a change)
 };
 let vc = null;                   // the voice controls: {voice, pause, note}
 let pickFocus = false;           // a pick is entering its target: a choice with no lines takes focus itself
@@ -98,20 +99,28 @@ export function initTour({ scene: api }) {
   // its place; an answer the voice cannot say (no audio, or audio that will not load or play) is read
   // out in Ask's own live region instead (opts.onMiss). Asking is the visitor's own move, so it lifts
   // a hidden tab's hold, which also holds Ask's element; the tour stays held for Ask until it closes.
+  // Ask lives in the header (O12) and works outside the tour too: it fetches the script itself, and a
+  // jump from it starts the tour at that node.
   initAsk({
-    script: () => T, ctx, jump: jumpTo, chapterOf: (id) => T?.nodes[id]?.chapter ?? null, chapter: () => st.chapter, node: () => st.node, hold,
+    script: () => T, ensure: () => Promise.all([load(), loadStyles()]).then(([t, css]) => !!(t && css)),
+    ctx, lead, touring: () => touring, canSpeak: () => touring && voiceWanted(),
+    suggest: () => (touring && T?.nodes[st.node]?.ask) || null, chapters: mapChapters,
+    jump: (id) => { if (touring) jumpTo(id); else startTour(id); },
+    chapterOf: (id) => T?.nodes[id]?.chapter ?? null, chapter: () => st.chapter, node: () => st.node, hold,
     speak: (lines, opts) => {
       hushAsk();
       if (st.pausedBy.delete('hidden')) { syncPause(); emit('resume'); }
-      return speakAsk((lines || []).map((l) => ({ id: l.id, text: l.text, say: l.say || '' })), opts);
+      return speakAsk((lines || []).map((l) => ({ id: l.id, text: l.text, say: l.say || '', who: lead() })), opts);
     },
     hush: hushAsk,
   });
-  // Voice, Map and Ask sit in the head row before End tour; End keeps its name when a composed
-  // layout shows only its ×. Pause sits between Previous and Next. The disclosure sits under the
-  // card's text, outside the scrolling body.
+  // Voice and Map sit in the head row before End tour (Ask is in the header); End keeps its name when
+  // a composed layout shows only its ×. Pause sits between Previous and Next. The disclosure sits
+  // under the card's text, outside the scrolling body.
   vc = voiceControls();
-  parts.end.before(vc.voice, mapButton(), askButton());
+  hooks.lead = setAskLead;
+  showAskButton(true);
+  parts.end.before(vc.voice, mapButton());
   parts.end.setAttribute('aria-label', str('tourEnd'));
   parts.next.before(vc.pause);
   parts.body.after(vc.note);
@@ -120,7 +129,7 @@ export function initTour({ scene: api }) {
 export function isTouring() { return touring; }
 // A pause reason from outside the tour's own controls (a layer that joins later: 'layer').
 export function holdTour(reason, on) { if (REASONS.has(reason)) hold(reason, on); }
-// Later modules: setTourHooks({summary}) replaces the in-card summary.
+// Later modules: setTourHooks({summary}) replaces the in-card summary; {lead(id)} hears the lead change.
 export function setTourHooks(h) { Object.assign(hooks, h); }
 // A jump the visitor asked for (the map, an Ask answer): that node, focus on Next. It moves the tour
 // as Next does, so a Pause or a hidden tab's hold goes and the node's first line is heard.
@@ -129,6 +138,7 @@ export function jumpTo(id) { if (touring && T?.nodes[id]) { goNode(id); release(
 export function replayTour() {
   if (!touring || !T) return;
   forget(); clearStore(); st.chapter = null;
+  resetAsk();
   goNode(T.start);
   afterPick();
 }
@@ -172,11 +182,11 @@ function mapChapters() {
 
 // The walk button, once the gate is open: push #/tour; the route fetches the script and replaces
 // it with #/tour/<start>. A fresh start forgets the last session's answers.
-export function startTour() {
+export function startTour(node = null) {
   if (!scene || touring) return;
   unlockVoice();   // inside the click, before anything awaits: the audio may play from here on
   clearStore();
-  go({ view: 'tour', node: null });
+  go({ view: 'tour', node: typeof node === 'string' ? node : null });
 }
 
 // Every #/tour route lands here (main.js route()).
@@ -238,7 +248,8 @@ function begin(node, { animate, boot }) {
   touring = true;
   const my = ++session;
   if (node == null) forget(); else restore();
-  st.node = null; st.chapter = null; st.frame = st.nodeFrame = null; st.li = 0; st.pausedBy.clear(); st.applied = false; st.chapterDue = null;
+  st.node = null; st.chapter = null; st.frame = st.nodeFrame = null; st.li = 0; st.pausedBy.clear(); st.applied = false; st.chapterDue = null; st.heard = null;
+  syncLead();
   beginVoice();   // locked unless the start click unlocked it: a deep link, a reload or Forward waits for the visitor
   refreshControls();
   document.body.classList.add('touring');
@@ -268,7 +279,8 @@ function fail() {
 
 function teardown() {
   // A dialog still open (Back, a hand-edited hash) closes with the tour; nothing gets focus back.
-  closeMap({ restore: false }); closeAsk({ restore: false });
+  // Ask's conversation goes with it.
+  closeMap({ restore: false }); resetAsk();
   stopVoice();
   endVoice();
   touring = false; session++; nodeToken++;
@@ -282,6 +294,9 @@ function teardown() {
   setInset({ bottom: 0 });
   st.node = null; st.chapter = null; st.frame = st.nodeFrame = null; st.li = 0; st.chapterDue = null;
   st.view = { kind: 'rest' }; st.ready = Promise.resolve(); st.sceneReady = true; st.applied = false;
+  st.heard = null;
+  delete document.body.dataset.lead;
+  setAskLead(lead());
   emit('end');
 }
 
@@ -304,7 +319,17 @@ function restore() {
 }
 
 // ---- Nodes ----
-const ctx = () => ({ door: st.door, answers: st.answers, chosen: st.chosen, visited: st.visited, tour: T });
+// The lead (O12): the guide the visitor picked (a choice remembering `lead`), else the manifest's.
+// It is an answer like any other, so saving, restoring, forgetting and Replay need nothing more.
+const lead = () => guideId(getManifest(), st.answers.lead);
+const ctx = () => ({ door: st.door, guide: lead(), answers: st.answers, chosen: st.chosen, visited: st.visited, tour: T });
+// The page follows the lead: body[data-lead] (the accent), the card's name, Ask's label.
+function syncLead() {
+  const id = lead();
+  if (id) document.body.dataset.lead = id; else delete document.body.dataset.lead;
+  setCardLabel(guideName(id));
+  hooks.lead?.(id);
+}
 const chapterOf = (id) => T.chapters.find((c) => c.id === id) || null;
 const fill = (tpl) => fillTemplate(tpl, getManifest(), ctx());
 const chapterTitle = (c) => (c ? fill(c.title) : '');
@@ -348,11 +373,14 @@ function nodeFrame(node) {
 
 // say: what the voice read instead of the caption, filled as tools/voice/items.mjs fills it; it is
 // part of the line's hash, so js/voice.js can tell a line whose audio is out of date.
+// who: the guide who says it (the line's `who`, else the lead), whose name {guide} fills with.
 function lineOf(l, c) {
   const m = getManifest();
-  const r = resolveLine(l, m, c);
+  const who = speakerOf(l, m, c.guide);
+  const lc = who ? { ...c, guide: who } : c;
+  const r = resolveLine(l, m, lc);
   if (!r || !r.text.trim()) return null;
-  return { ...r, say: typeof l.say === 'string' ? fillTemplate(l.say, m, c) : '', cue: isObj(l.cue) ? l.cue : null, callout: Array.isArray(l.callout) ? l.callout : [] };
+  return { ...r, who, say: typeof l.say === 'string' ? fillTemplate(l.say, m, lc) : '', cue: isObj(l.cue) ? l.cue : null, callout: Array.isArray(l.callout) ? l.callout : [] };
 }
 
 // A choice as shown: hidden options dropped (hideWhen, a target that does not resolve, the chapter
@@ -446,9 +474,9 @@ function onPin(s) {
 }
 
 // Desktop px reserved under the frame for the card while it speaks: --tour-h in the stylesheet
-// (clamp(168px, 24vh, 240px); keep the two in step) plus the card's 16 px bottom margin, so the
+// (clamp(176px, 24vh, 240px); keep the two in step) plus the card's 16 px bottom margin, so the
 // frame ends exactly at the top of a card at its tallest and a low station pin keeps its room.
-function reserve() { return Math.min(240, Math.max(168, window.innerHeight * 0.24)) + 16; }
+function reserve() { return Math.min(240, Math.max(176, window.innerHeight * 0.24)) + 16; }
 
 // ---- The card ----
 function phase() {
@@ -470,6 +498,9 @@ function render({ chapter = false, quiet = false } = {}) {
   const line = f.lines[st.li] || null;
   const ph = phase();
   const ch = chapterOf(st.chapter);
+  syncLead();
+  const who = line?.who || lead();
+  setSpeaker(who, guideName(who));
   setLine(line, { callouts: calloutsFor(line) });
   setChoice(ph === 'choice' ? f.choice : null);
   setNext(str(NEXT_LABEL[ph]));
@@ -524,7 +555,12 @@ const takeChapter = () => { const c = st.chapterDue; st.chapterDue = null; retur
 function announce(line, ph, chapter) {
   const parts = [];
   if (chapter) parts.push(sentence([chapterEyebrow(chapter), chapterTitle(chapter)].filter(Boolean).join(', ')));
-  if (line) parts.push(sentence(line.text));
+  // With two guides, a line from a different guide than the last one read out starts with its name.
+  if (line) {
+    if (line.who && guideIds(getManifest()).length > 1 && line.who !== st.heard) parts.push(str('tourSpeakerLive', { guide: guideName(line.who) }));
+    if (line.who) st.heard = line.who;
+    parts.push(sentence(line.text));
+  }
   if (ph === 'choice' && !(pickFocus && !st.frame.lines.length)) {
     const c = st.frame.choice;
     const sug = c.options.find((o) => o.tags.some((t) => t.kind === 'suggested'));
@@ -577,7 +613,7 @@ function present(line, ph, chapter) {
     refreshHead(); refreshControls(); emit('line');
   });
 }
-const voiceLine = (l) => ({ id: l.id, text: l.text, say: l.say || '', door: st.door });
+const voiceLine = (l) => ({ id: l.id, text: l.text, say: l.say || '', door: st.door, who: l.who || lead() });
 
 // Whatever the voice is saying stops, and the step it would have taken with it.
 function stopVoice() {
@@ -819,7 +855,7 @@ async function copy(text) {
 // ---- Signals for the modules that join later (guide sphere, voice) and the checks ----
 function emit(type) {
   const line = st.frame?.lines[st.li] || null;
-  document.dispatchEvent(new CustomEvent('lobby:tour', { detail: { type, node: st.node, line: line?.id ?? null, text: line?.text ?? null, phase: touring && st.frame ? shownPhase() : null, voice: touring && voiceOn(), pausedBy: [...st.pausedBy] } }));
+  document.dispatchEvent(new CustomEvent('lobby:tour', { detail: { type, node: st.node, line: line?.id ?? null, text: line?.text ?? null, speaker: touring ? (line?.who || lead()) : null, lead: touring ? lead() : null, phase: touring && st.frame ? shownPhase() : null, voice: touring && voiceOn(), pausedBy: [...st.pausedBy] } }));
 }
 
 export function tourState() {
@@ -830,6 +866,7 @@ export function tourState() {
     phase: touring ? phase() : null, mode: touring && voiceOn() ? 'voice' : 'captions', voice: touring && voiceOn(), speaking: st.speaking, voiceState: voiceStats(),
     options: f?.choice && phase() === 'choice' ? f.choice.options.map((o) => ({ id: o.id, label: o.label, sub: o.sub, tags: o.tags.map((t) => t.kind), target: o.target, action: o.action })) : [],
     answers: { ...st.answers }, chosen: { ...st.chosen }, visited: [...st.visited], door: st.door,
+    lead: touring ? lead() : null, speaker: touring ? (f?.lines[st.li]?.who || lead()) : null,
     scene: { ...st.view }, pausedBy: [...st.pausedBy],
     dialog: mapOpen() ? 'map' : askOpen() ? 'ask' : null,
     guideFrames: guideStats().frames, guide: guideStats(),

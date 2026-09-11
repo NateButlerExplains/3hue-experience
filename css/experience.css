@@ -67,6 +67,15 @@ html.is-ready #boot { opacity: 0; }
 #hud .brand img { height: 40px; width: auto; }
 #hud .brand:focus-visible { outline: none; box-shadow: var(--focus); }
 #hud .actions { display: flex; gap: 10px; align-items: center; }
+/* Ask the lead guide (O12, js/ask.js): the header's last control, outside .actions so it stays while
+   a layer hides them. Hidden until the tour is on. Its accent follows the lead (css/tour.css); no
+   colour transition, so the swap is instant. */
+#hud-actions { margin-left: auto; }
+.hud-ask { flex: none; margin-left: 10px; transition: none; }
+#tour-ask-btn { display: none; }
+html[data-tour-on] #tour-ask-btn { display: inline-flex; }
+.hud-ask svg { flex: none; width: 20px; height: 20px; }
+body[data-lead="huey"] .hud-ask { background: #2ee59d; border-color: #2ee59d; }
 body.layer-open #hud .actions { visibility: hidden; }
 body.walking #hud .actions { visibility: hidden; }
 

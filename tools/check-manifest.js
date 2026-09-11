@@ -176,11 +176,12 @@ export function lintManifest(m, g) {
 // ---- content/tour.json: the guided-tour script, linted against the manifest it quotes ----
 const TOP_KEYS = ['version', 'note', 'start', 'chapters', 'routes', 'nodes', 'ask', 'summary'];
 const CHAPTER_KEYS = ['id', 'entry', 'title', 'eyebrow', 'landmark', 'optional'];
-const NODE_KEYS = ['chapter', 'scene', 'lines', 'choice', 'next', 'quiet', 'end'];
+const NODE_KEYS = ['chapter', 'scene', 'lines', 'choice', 'next', 'quiet', 'end', 'ask'];
 const LINE_KEYS = ['id', 'text', 'ref', 'say', 'source', 'status', 'when', 'cue', 'callout', 'who'];
 const CHOICE_KEYS = ['id', 'prompt', 'remember', 'options'];
 const OPTION_KEYS = ['id', 'label', 'sub', 'value', 'next', 'action', 'suggest', 'hideWhen'];
-const QUESTION_KEYS = ['id', 'q', 'keys', 'lines', 'goto', 'source', 'status'];
+const QUESTION_KEYS = ['id', 'q', 'keys', 'lines', 'goto', 'source', 'status', 'learnMore'];
+const MAX_SUGGEST = 4;
 const SCENE_KEYS = { rest: [], keep: [], door: ['door'], station: ['door', 'station'], path: ['stage'], kiosk: ['fallback'] };
 const MAX_OPTIONS = 4, MAX_LABEL = 90, MAX_SUB = 60, MAX_WORDS = 35;
 // A source that points into this repo rather than citing something a visitor could look up.
@@ -495,6 +496,16 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
     if (hasNext) checkNext(`${p}.next`, n.next);
     if (!n.choice && !hasNext && n.end !== true) err(p, 'a dead end: no choice, no next, and not marked end: true');
     for (const k of ['quiet', 'end']) if (n[k] !== undefined && typeof n[k] !== 'boolean') err(p, `${k} is true or false`);
+    // Ask's suggested questions while this node is on screen (O12): approved question ids, at most four.
+    if (n.ask !== undefined) {
+      const qids = new Set((Array.isArray(t.ask?.questions) ? t.ask.questions : []).filter(isObj).map((q) => q.id));
+      if (!Array.isArray(n.ask) || !n.ask.length) err(`${p}.ask`, 'ask is a list of question ids');
+      else {
+        if (n.ask.length > MAX_SUGGEST) err(`${p}.ask`, `${n.ask.length} suggestions; at most ${MAX_SUGGEST}`);
+        if (new Set(n.ask).size !== n.ask.length) err(`${p}.ask`, 'a question is suggested twice');
+        for (const id of n.ask) if (!qids.has(id)) err(`${p}.ask`, `no approved question ${JSON.stringify(id)}`);
+      }
+    }
   }
   for (const c of chapters) if (isObj(c) && !Object.values(nodes).some((n) => isObj(n) && n.chapter === c.id)) warn(`chapters.${c.id}`, 'no node belongs to this chapter');
 
@@ -527,6 +538,11 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json' } = {})
         })];
         for (const [k, s] of printed) if (typeof s === 'string' && INTERNAL_SOURCE.test(s)) err(`${p}.${k}`, `Ask prints this source to visitors, so it must be a plain citation, not an internal reference: ${s}`);
         if (q.goto !== undefined) { if (typeof q.goto !== 'string' || q.goto.startsWith('=')) err(`${p}.goto`, 'goto is a node id'); else checkNext(`${p}.goto`, q.goto); }
+        // Learn more (O12): a key of site.learnMore.pages, a page on the manifest's allowlist.
+        if (q.learnMore !== undefined) {
+          const pages = m.site?.learnMore?.pages;
+          if (typeof q.learnMore !== 'string' || !isObj(pages) || !own(pages, q.learnMore)) err(`${p}.learnMore`, `${JSON.stringify(q.learnMore)} is not a page in site.learnMore.pages`);
+        }
       });
     }
   }
@@ -605,6 +621,11 @@ function main(argv) {
       summary.push(`${tourFile}: ${tr.errors.length} errors, ${tr.warnings.length} warnings, ${tr.visible} visible strings checked, ${tr.nodes} nodes, ${tr.lines} lines`);
     }
   }
+  // index.html decides before first paint whether the header shows Ask (O12); its tour-gate meta
+  // must say what tour.gate says.
+  const html = fs.existsSync(path.resolve(ROOT, 'index.html')) ? fs.readFileSync(path.resolve(ROOT, 'index.html'), 'utf8') : '';
+  const meta = (html.match(/<meta name="tour-gate" content="([^"]*)">/) || [])[1];
+  if (m.tour && meta !== m.tour.gate) errors.push(`index.html: <meta name="tour-gate"> says ${JSON.stringify(meta ?? null)}, but tour.gate is ${JSON.stringify(m.tour.gate)}`);
   for (const w of warnings) console.warn('warn:', w);
   for (const e of errors) console.error('error:', e);
   for (const s of summary) console.log(s);

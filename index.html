@@ -7,6 +7,7 @@
 <meta name="description" content="Advisory. Oversight. Operational confidence. Built for what's next.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0b1118">
+<meta name="tour-gate" content="pending">
 <link rel="canonical" href="https://natebutlerexplains.github.io/3hue-experience/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="3HUE">
@@ -24,7 +25,14 @@
 // Boot cover, before first paint: a deep link into a door, the path or the tour must never flash
 // the resting lobby's heading and pins on the way in. main.js clears the attribute once the route
 // has been applied without animation.
-(function () { if (/^#\/(door|path|tour)/.test(location.hash)) document.documentElement.setAttribute('data-lobby-boot', '1'); })();
+// data-tour-on, also before first paint: the header shows Ask (O12) from the start when the tour is
+// on (the tour-gate meta above mirrors tour.gate in content/experience.json, checked by the lint;
+// ?tour=1 previews, ?tour=0 turns it off), so the header never shifts when main.js arrives.
+(function () {
+  if (/^#\/(door|path|tour)/.test(location.hash)) document.documentElement.setAttribute('data-lobby-boot', '1');
+  var q = new URLSearchParams(location.search).get('tour'), g = document.querySelector('meta[name="tour-gate"]');
+  if (q !== '0' && (q === '1' || (g && g.content === 'approved'))) document.documentElement.setAttribute('data-tour-on', '');
+})();
 </script>
 <link rel="preload" href="content/experience.json" as="fetch" crossorigin>
 <link rel="preload" href="content/geometry.json" as="fetch" crossorigin>
@@ -68,6 +76,9 @@
     <button class="btn outline" type="button" id="walk-btn">Take the walk</button>
     <a class="btn primary" id="talk-btn" href="https://3hue.net/contact.html" target="_blank" rel="noopener noreferrer">Talk to our team</a>
   </div>
+  <!-- Ask the lead guide (O12): shown once the tour is on (js/ask.js); outside #hud-actions so it
+       stays usable while the tour's layer is open. -->
+  <button class="btn primary hud-ask" type="button" id="tour-ask-btn"><svg class="tour-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 5.5h15v10h-8l-4.5 3.5v-3.5H4.5z M9.5 9.2a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.7-.9 1.3 M12 14.6v.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="hud-ask-label">Ask Avi</span></button>
 </header>
 
 <!-- Floor composition. Desktop: display:contents, the stage is fixed and full-bleed. Composed
@@ -102,15 +113,16 @@
   <div id="floor-foot"></div>
 </main>
 
-<!-- Guided tour (O10/O11): the AiVRIC card, its chapter title card and live region, and the map and
-     Ask dialogs. Empty until the tour starts; js/dialogue.js fills the card, js/tourmap.js and
+<!-- Guided tour (O10/O11/O12): the guide card, its chapter title card and live region, the map
+     dialog, and Ask's console and its minimised pill. Empty until the tour starts; js/dialogue.js fills the card, js/tourmap.js and
      js/ask.js fill the dialogs (and name them) from the manifest. -->
 <section id="tour" class="tour" hidden></section>
 <div id="tour-titlecard" class="tour-titlecard" hidden aria-hidden="true"></div>
 <div id="tour-live" class="sr" aria-live="polite" aria-atomic="true"></div>
 <dialog id="tour-map" class="tour-dialog"></dialog>
 <dialog id="tour-ask" class="tour-dialog"></dialog>
-<!-- AiVRIC's voice (js/voice.js): one element for the tour and one for Ask, so an answer never loses
+<button type="button" id="ask-pill" class="ask-pill" hidden></button>
+<!-- The guides' voices (js/voice.js): one element for the tour and one for Ask, so an answer never loses
      the tour's place. Nothing loads until the visitor starts the tour; data-unlock is a 0.12 s silent
      MP3 played inside that click so iOS lets these elements play the lines that follow. -->
 <audio id="tour-audio" preload="none" data-unlock="data:audio/mpeg;base64,//MkxAAAAANIAAAAAExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MkxCMAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MkxEYAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MkxGkAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//MkxIwAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"></audio>

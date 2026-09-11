@@ -1,67 +1,61 @@
-// AiVRIC's sphere (O10): the guide's face in the tour card's head row (#tour-guide, aria-hidden).
-// This is this repo's own drawing code. The owner's tour has a sphere in the same visual style, but
-// its repo carries no licence, so nothing here is taken from it.
+// The guides' sphere (O10, O12): Avi's and Huey's face. Its drawing is the owner's tour's sphere,
+// ported with his permission from 3HUE/3HUE-Website experience/js/tour/guide.js at 797b153 (see
+// docs/PROVENANCE.md): 96 points on a Fibonacci sphere, every ninth one gold, threads between near
+// neighbours, a glow, a white-and-gold core and, while the visitor talks, a listening ring; drawn in
+// its 220-unit space so every size keeps its proportions. What is ours: the scheduler below, the tint
+// read from CSS per guide, the pulse taken from the voice's word timings instead of an audio
+// analyser (the voice's elements stay plain <audio>, so iOS unlocking and ?voice=sim need nothing
+// more), and several canvases drawn from one loop.
 //
-// A Fibonacci sphere of nodes, each tied by threads to its nearest neighbours, turning slowly.
-//   idle      it breathes (a slow swell of the radius) and turns;
-//   choice    "Your call": it slows and part of it warms to the lit-arc colour;
-//   speaking  the voice (js/voice.js) reports each word from the line's timings and the sphere
-//             pulses on it: brighter nodes, a wider halo, then it settles. While the voice is on
-//             the words are the only pulse; captions alone give one soft pulse per line.
-// The drawing loop runs only while the card is on screen and the page is visible, at about 30
-// frames a second, and stops when the tour ends or the tab is hidden. It never moves for more than
-// IDLE_MS after the last change (a new line or node, a choice, the voice starting or stopping, a
-// word's pulse, the tab coming back) unless the voice is speaking, and it holds still while the
-// visitor has paused the tour (Pause): so with the voice off the sphere settles into a still frame
-// a few seconds after each step, and no motion runs past 5 s without the visitor doing something
-// (WCAG 2.2.2). Under reduced motion there is no loop: one still frame is drawn each time the state
-// changes, and nothing pulses.
+// Canvases: the tour card's (#tour-guide) follows whoever says the line on screen; the Ask console's
+// and its minimised pill's (attachOrb(canvas, {follow: 'lead'})) follow the lead. Each canvas's
+// guide is its data-guide; css/tour.css maps a guide to --orb-a (accent), --orb-b (gold) and
+// --orb-c (pale), read here once per guide.
+//   idle      it breathes and turns (a turn about every 14 s, nodding ±20°);
+//   choice    "Your call": it turns at half speed;
+//   speaking  it pulses on each word the voice reports (js/voice.js), the nodes swell and shimmer;
+//             captions alone give one soft pulse per line;
+//   listening the microphone is on (Ask): the listening ring.
+// The loop runs only while a canvas is on screen and the page is visible, at about 30 frames a
+// second, and stops when nothing is shown or the tab is hidden. It never moves for more than IDLE_MS
+// after the last change (a new line or node, a choice, the voice starting or stopping, a word's
+// pulse, the tab coming back) unless the voice is speaking or the microphone listening, and it holds
+// still while the visitor has paused the tour (Pause): so with the voice off the sphere settles into
+// a still frame a few seconds after each step, and no motion runs past 5 s without the visitor doing
+// something (WCAG 2.2.2). Under reduced motion there is no loop: one still frame is drawn each time
+// the state, the guide or the size changes, and nothing pulses.
 //
-// The voice reports through pulseGuide() and speakingGuide(), or the same as events on document:
+// The voice reports through pulseGuide() and speakingGuide(), or as events on document:
 //   lobby:voice {type: 'play' | 'word' (strength 0..1) | 'stop'}; the tour's lobby:tour events carry
-// its pause reasons (pausedBy) with 'pause' and 'resume'.
+// its pause reasons (pausedBy) with 'pause' and 'resume', the speaker and the lead; Ask's lobby:ask
+// {type: 'listening', on} turns the listening ring on and off.
 import { reducedMotion } from './content.js?v=2026-09-10f';
 
 const TAU = Math.PI * 2;
-const GOLDEN = Math.PI * (3 - Math.sqrt(5));
-const COOL = [82, 204, 227];    // --cyan-ink
-const DEEP = [37, 181, 214];    // --cyan
-const WARM = [255, 217, 163];   // the path's lit arcs
-const N = 64, NEAREST = 3;
-const SPIN = { idle: 0.34, choice: 0.16, speaking: 0.5, off: 0 };   // radians a second
-const IDLE_MS = 4000;           // motion after a change while nothing is speaking
+const UNIT = 220;                 // the owner's canvas size: every length below is in these units
+const N = 96;
+const RATE = 0.51;                // his t per second (0.0085 a frame at 60 fps)
+const SPIN = { idle: 1, choice: 0.5, speaking: 1, listening: 1, off: 0 };
+const IDLE_MS = 4000;             // motion after a change while nothing is speaking or listening
+const DEFAULT_TINT = { a: [31, 182, 255], b: [255, 214, 58], c: [210, 240, 255] };
 
-let canvas = null, g = null;
-let pts = [], links = [];
-let mode = 'off', speaking = false, active = false, held = false;
-let energy = 0, warmth = 0, clock = 1.3, last = 0, until = 0;
-let raf = 0, running = false, frames = 0, drawn = null;
-
-// A change on screen: the sphere may move for IDLE_MS from now.
-const wake = () => { until = performance.now() + IDLE_MS; };
-
-// The sphere: N points spread evenly over a unit sphere (the golden-angle spiral), a warm share of
-// them picked by the same spiral so the warm patches are scattered, and each point's nearest
-// neighbours as threads (each pair once).
-function build() {
-  pts = [];
-  for (let i = 0; i < N; i++) {
-    const y = 1 - ((i + 0.5) / N) * 2, r = Math.sqrt(1 - y * y), a = i * GOLDEN;
-    pts.push({ x: Math.cos(a) * r, y, z: Math.sin(a) * r, warm: ((i * 0.618034) % 1) > 0.58 ? 1 : 0.2 });
-  }
-  const seen = new Set();
-  links = [];
-  pts.forEach((p, i) => {
-    const near = pts.map((q, j) => ({ j, d: (p.x - q.x) ** 2 + (p.y - q.y) ** 2 + (p.z - q.z) ** 2 })).filter((o) => o.j !== i).sort((a, b) => a.d - b.d).slice(0, NEAREST);
-    for (const { j } of near) { const k = i < j ? `${i}.${j}` : `${j}.${i}`; if (!seen.has(k)) { seen.add(k); links.push([i, j]); } }
-  });
+const PTS = [];
+for (let i = 0; i < N; i++) {
+  const y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), th = i * 2.399963;
+  PTS.push({ x: Math.cos(th) * r, y, z: Math.sin(th) * r, gold: i % 9 === 0 });
 }
 
+const orbs = [];                  // {canvas, g, follow: 'speaker' | 'lead', tint, tintKey}
+let speaker = null, lead = null;
+let mode = 'off', speaking = false, listening = false, active = false, held = false;
+let energy = 0, level = 0, clock = 1.3, last = 0, until = 0;
+let raf = 0, running = false, frames = 0, drawn = null;
+
+const wake = () => { until = performance.now() + IDLE_MS; };
+
 export function initGuide(el) {
-  if (canvas || !el) return;
-  canvas = el;
-  g = canvas.getContext('2d');
-  build();
+  if (!el || orbs.some((o) => o.canvas === el)) return;
+  attachOrb(el, { follow: 'speaker' });
   document.addEventListener('lobby:tour', onTour);
   document.addEventListener('lobby:voice', (e) => {
     const d = e.detail || {};
@@ -69,16 +63,30 @@ export function initGuide(el) {
     else if (d.type === 'stop') speakingGuide(false);
     else if (d.type === 'word') pulseGuide(d.strength ?? 0.8);
   });
+  document.addEventListener('lobby:ask', (e) => { const d = e.detail || {}; if (d.type === 'listening') listenGuide(!!d.on); else if (d.type === 'lead') setLeadGuide(d.lead); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) wake(); sync(); });
   try { matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', () => { drawn = null; sync(); }); } catch { /* old Safari: no change events */ }
 }
 
+// Another canvas drawing the same sphere (the Ask console's head, its pill), tinted by the lead.
+export function attachOrb(canvas, { follow = 'lead' } = {}) {
+  if (!canvas || orbs.some((o) => o.canvas === canvas)) return;
+  orbs.push({ canvas, g: canvas.getContext('2d'), follow, tint: DEFAULT_TINT, tintKey: null });
+  canvas.dataset.guide = (follow === 'lead' ? lead : speaker) || '';
+  drawn = null;
+  wake(); sync();
+}
+// Ask shows its console outside the tour too, before any lead has been picked.
+export function setLeadGuide(id) { if (id && id !== lead) { lead = id; retint(); } }
+
 // The tour's own signals (js/tour.js emit): a node or a line on screen, a choice waiting, a pause
-// reason on or off, the end.
+// reason on or off, the speaker and the lead, the end.
 function onTour(e) {
   const d = e.detail || {};
   if (d.type === 'end') { active = false; speaking = false; held = false; mode = 'off'; energy = 0; drawn = null; sync(); return; }
-  active = !!canvas && canvas.getClientRects().length > 0;
+  active = true;
+  if (d.speaker && d.speaker !== speaker) { speaker = d.speaker; retint(); }
+  if (d.lead && d.lead !== lead) { lead = d.lead; retint(); }
   if (d.type === 'pause' || d.type === 'resume') {
     held = Array.isArray(d.pausedBy) && d.pausedBy.includes('user');
     if (!held) wake();
@@ -90,104 +98,146 @@ function onTour(e) {
   }
   sync();
 }
+function retint() {
+  for (const o of orbs) { const id = (o.follow === 'lead' ? lead : speaker) || ''; if (o.canvas.dataset.guide !== id) { o.canvas.dataset.guide = id; o.drawn = false; } }
+  drawn = null; wake(); sync();
+}
 
 // The voice: speaking on or off, and one pulse per word (strength 0..1).
 export function speakingGuide(on) {
   speaking = !!on;
   if (mode !== 'off' && mode !== 'choice') mode = speaking ? 'speaking' : 'idle';
-  wake();
-  sync();
+  wake(); sync();
 }
 export function pulseGuide(strength = 0.8) {
-  if (reducedMotion() || mode === 'off') return;
+  if (reducedMotion() || mode === 'off' && !orbs.some(shownOutsideTour)) return;
   energy = Math.max(energy, Math.max(0, Math.min(1, +strength || 0)));
   wake();
 }
+export function listenGuide(on) { listening = !!on; drawn = null; wake(); sync(); }
 
-export function guideStats() { return { frames, running, mode, active, held }; }
+export function guideStats() { return { frames, running, mode, active, held, speaker, lead, listening, orbs: orbs.filter(visible).length }; }
 
-// Run the loop only while it can be seen and may move (speaking, or within IDLE_MS of a change, and
-// not held by Pause); otherwise the last frame stays. Under reduced motion draw the state once.
+const shownOutsideTour = (o) => o.follow === 'lead' && visible(o);
+function visible(o) { return o.canvas.isConnected && o.canvas.getClientRects().length > 0; }
+const shown = () => orbs.filter((o) => visible(o) && (o.follow === 'lead' || (active && mode !== 'off')));
+const modeFor = (o) => (o.follow === 'lead' && listening ? 'listening' : o.follow === 'lead' && mode === 'off' ? 'idle' : mode);
+
+// Run the loop only while a sphere can be seen and may move (speaking, listening, or within IDLE_MS
+// of a change, and not held by Pause); otherwise the last frame stays. Under reduced motion draw the
+// state once.
 function sync() {
-  const visible = active && !!canvas && !document.hidden && mode !== 'off';
-  if (visible && !reducedMotion() && !held && (speaking || performance.now() < until)) {
+  const list = document.hidden ? [] : shown();
+  const moving = speaking || listening || performance.now() < until;
+  if (list.length && !reducedMotion() && !held && moving) {
     if (!running) { running = true; last = performance.now(); raf = requestAnimationFrame(tick); }
     return;
   }
   if (running) { cancelAnimationFrame(raf); running = false; }
-  if (visible && reducedMotion()) still();
-  else if (visible && !frames) draw();   // never drawn yet: one frame, so the sphere is there
+  if (list.length && reducedMotion()) still(list);
+  else for (const o of list) if (!o.drawn) drawOrb(o);   // never drawn yet: one frame, so the sphere is there
 }
 
 function tick(now) {
   if (!running) return;
-  // Settled: nothing is speaking and the last change is IDLE_MS old. The frame on the canvas stays.
-  if (!speaking && now >= until) { running = false; return; }
+  // Settled: nothing is speaking or listening and the last change is IDLE_MS old. The frames stay.
+  if (!speaking && !listening && now >= until) { running = false; return; }
   raf = requestAnimationFrame(tick);
   const dt = now - last;
-  if (dt < 30) return;   // about 30 frames a second is plenty for a 44 px sphere
+  if (dt < 30) return;   // about 30 frames a second
   last = now;
   const s = Math.min(dt, 100) / 1000;
-  clock += s;
+  clock += s * (SPIN[mode] ?? 1);
   energy *= Math.exp(-s / 0.26);
-  warmth += ((mode === 'choice' ? 1 : 0) - warmth) * Math.min(1, s * 3);
-  draw();
+  const t = clock * RATE;
+  // His level: the speaking voice's loudness, here its word pulses; listening breathes on its own.
+  const target = listening ? 0.25 + 0.1 * Math.sin(t * 6) : speaking ? Math.max(0.3, energy) : energy * 0.6;
+  level += (target - level) * Math.min(1, s * 15);
+  for (const o of shown()) drawOrb(o);
 }
 
-// Reduced motion: one frame per state (and per size), no pulse, no easing.
-function still() {
-  const key = `${mode}|${size().join('x')}`;
+// Reduced motion: one frame per state, guide and size; a fixed moment, no pulse, no easing.
+function still(list) {
+  const key = `${mode}|${listening}|${list.map((o) => `${o.canvas.dataset.guide}:${size(o).join('x')}`).join(',')}`;
   if (key === drawn) return;
   drawn = key;
   energy = 0;
-  warmth = mode === 'choice' ? 1 : 0;
-  draw();
+  level = speaking || mode === 'speaking' ? 0.35 : 0;
+  for (const o of list) drawOrb(o, { at: 1.3 });
 }
 
-function size() {
-  const b = canvas.getBoundingClientRect();
+function size(o) {
+  const b = o.canvas.getBoundingClientRect();
   return [Math.max(1, Math.round(b.width)), Math.min(2, window.devicePixelRatio || 1)];
 }
 
-const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
-const rgba = (c, a) => `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${Math.max(0, Math.min(1, a)).toFixed(3)})`;
+// A guide's colours, from css/tour.css (--orb-a, --orb-b, --orb-c as "r g b"), read once per guide.
+function tintOf(o) {
+  const key = o.canvas.dataset.guide || '';
+  if (o.tintKey === key) return o.tint;
+  const cs = getComputedStyle(o.canvas);
+  const read = (name, fb) => { const v = cs.getPropertyValue(name).trim().split(/[\s,]+/).map(Number); return v.length === 3 && v.every((x) => Number.isFinite(x)) ? v : fb; };
+  o.tint = { a: read('--orb-a', DEFAULT_TINT.a), b: read('--orb-b', DEFAULT_TINT.b), c: read('--orb-c', DEFAULT_TINT.c) };
+  o.tintKey = key;
+  return o.tint;
+}
+const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${Math.max(0, Math.min(1, a)).toFixed(3)})`;
 
-function draw() {
-  const [css, dpr] = size();
+function drawOrb(o, { at = null } = {}) {
+  const [css, dpr] = size(o);
   const px = Math.round(css * dpr);
+  const { canvas, g } = o;
   if (canvas.width !== px || canvas.height !== px) { canvas.width = px; canvas.height = px; }
-  g.setTransform(dpr, 0, 0, dpr, 0, 0);
-  g.clearRect(0, 0, css, css);
-  const c = css / 2;
-  const breathe = mode === 'off' ? 0 : 0.035 * Math.sin((clock * TAU) / 4.2);
-  const R = css * 0.34 * (1 + breathe + 0.08 * energy);
+  g.setTransform(px / UNIT, 0, 0, px / UNIT, 0, 0);
+  g.clearRect(0, 0, UNIT, UNIT);
+  const tint = tintOf(o), m = modeFor(o);
+  const t = (at ?? clock) * RATE;
+  const lv = m === 'listening' && at != null ? 0.3 : level;
+  const W = UNIT, cx = W / 2, cy = W / 2;
+  const R = W * (0.30 + 0.05 * lv + (m === 'listening' ? 0.02 : 0)) * (1 + 0.012 * Math.sin(t * 2));
 
-  // Halo and core: the glow the nodes sit in.
-  const halo = g.createRadialGradient(c, c, R * 0.1, c, c, R * 1.45);
-  halo.addColorStop(0, rgba(mix(DEEP, WARM, warmth * 0.35), 0.34 + 0.3 * energy));
-  halo.addColorStop(0.55, rgba(DEEP, 0.12 + 0.12 * energy));
-  halo.addColorStop(1, rgba(DEEP, 0));
-  g.fillStyle = halo;
-  g.fillRect(0, 0, css, css);
+  // Glow.
+  const glow = g.createRadialGradient(cx, cy, R * 0.2, cx, cy, R * 1.55);
+  glow.addColorStop(0, rgba(tint.a, 0.20 + 0.35 * lv)); glow.addColorStop(0.55, rgba(tint.a, 0.06 + 0.12 * lv)); glow.addColorStop(1, rgba(tint.a, 0));
+  g.fillStyle = glow; g.beginPath(); g.arc(cx, cy, R * 1.55, 0, TAU); g.fill();
 
-  // Turn about the vertical axis, tilted towards the viewer, with a slight wobble.
-  const ay = clock * (SPIN[mode] ?? 0.3), ax = 0.42 + 0.05 * Math.sin(clock * 0.7);
-  const cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax);
-  const P = pts.map((p) => {
-    const x1 = p.x * cy + p.z * sy, z1 = -p.x * sy + p.z * cy;
-    const y2 = p.y * cx - z1 * sx, z2 = p.y * sx + z1 * cx;
-    return { x: c + x1 * R, y: c + y2 * R, d: (z2 + 1) / 2, warm: p.warm };
+  // Turn about the vertical axis, nodding.
+  const ay = t * 0.9, ax = Math.sin(t * 0.5) * 0.35, ca = Math.cos(ay), sa = Math.sin(ay), cb = Math.cos(ax), sb = Math.sin(ax);
+  const wobble = m === 'speaking' && at == null;
+  const P = PTS.map((p) => {
+    let x = p.x * ca - p.z * sa, z = p.x * sa + p.z * ca, y = p.y;
+    const y2 = y * cb - z * sb; z = y * sb + z * cb; y = y2;
+    const wob = 1 + (wobble ? lv * 0.12 * Math.sin(t * 20 + p.y * 6) : 0);
+    return { x: cx + x * R * wob, y: cy + y * R * wob, z, gold: p.gold };
   });
 
-  g.lineWidth = 0.6;
-  for (const [i, j] of links) {
-    const a = P[i], b = P[j], d = (a.d + b.d) / 2;
-    g.strokeStyle = rgba(mix(COOL, WARM, warmth * ((a.warm + b.warm) / 2)), 0.06 + 0.34 * d * d + 0.2 * energy);
-    g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
+  // Threads between near neighbours.
+  g.lineWidth = 1;
+  const near = R * R * 0.22;
+  for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
+    const a = P[i], b = P[j], dx = a.x - b.x, dy = a.y - b.y;
+    if (dx * dx + dy * dy < near) {
+      const depth = (a.z + b.z) / 2 + 1, al = (0.10 + 0.35 * depth / 2) * (0.6 + 0.8 * lv);
+      g.strokeStyle = a.gold && b.gold ? rgba(tint.b, al) : rgba(tint.a, al);
+      g.beginPath(); g.moveTo(a.x, a.y); g.lineTo(b.x, b.y); g.stroke();
+    }
   }
-  for (const p of [...P].sort((a, b) => a.d - b.d)) {
-    g.fillStyle = rgba(mix(COOL, WARM, warmth * p.warm), 0.3 + 0.7 * p.d + 0.2 * energy);
-    g.beginPath(); g.arc(p.x, p.y, 0.5 + 1.15 * p.d + 0.7 * energy * p.d, 0, TAU); g.fill();
+  // Nodes.
+  for (const p of P) {
+    const depth = (p.z + 1) / 2, r = 1.2 + depth * 1.8 + lv * 1.2;
+    g.fillStyle = p.gold ? rgba(tint.b, 0.5 + 0.5 * depth) : rgba(tint.c, 0.35 + 0.65 * depth);
+    g.beginPath(); g.arc(p.x, p.y, r, 0, TAU); g.fill();
   }
+  // Listening ring.
+  if (m === 'listening') {
+    const pulse = at == null ? Math.sin(t * 8) : 0;
+    g.strokeStyle = rgba(tint.a, 0.5 + 0.3 * pulse); g.lineWidth = 2;
+    g.beginPath(); g.arc(cx, cy, R * 1.28 + 3 * pulse, 0, TAU); g.stroke();
+  }
+  // Core.
+  const core = g.createRadialGradient(cx, cy, 0, cx, cy, R * 0.42);
+  core.addColorStop(0, `rgba(255,255,255,${(0.55 + 0.4 * lv).toFixed(3)})`); core.addColorStop(0.5, rgba(tint.b, 0.18 + 0.3 * lv)); core.addColorStop(1, rgba(tint.b, 0));
+  g.fillStyle = core; g.beginPath(); g.arc(cx, cy, R * 0.42, 0, TAU); g.fill();
+  o.drawn = true;
   frames++;
 }

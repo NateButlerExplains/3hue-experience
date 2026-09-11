@@ -5,8 +5,9 @@
 // focus returns to the button that opened it; a jump or a replay hands focus to the card's Next.
 // Opening it pauses the tour (pause reason "map"); closing it lifts that reason.
 //
-// Also here, shared with js/ask.js: modal(), the dialog shell (showModal plus a focus.js layer), and
-// toolButton(), the icon buttons the card's head row carries (Map, Ask).
+// Also here, shared with js/ask.js: modal(), the dialog shell (showModal plus a focus.js layer),
+// toolButton(), the icon buttons the card's head row carries (Voice, Map), and chapterRow(), a
+// chapter as a row (the map's list and Ask's Explore tab).
 import { getManifest, str } from './content.js?v=2026-09-10f';
 import { pushLayer, popLayer, dropLayer, topLayer } from './focus.js?v=2026-09-10f';
 
@@ -23,6 +24,8 @@ const ICONS = {
   ask: 'M4.5 5.5h15v10h-8l-4.5 3.5v-3.5H4.5z M9.5 9.2a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.7-.9 1.3 M12 14.6v.1',
   mic: 'M12 3.5a2.8 2.8 0 0 1 2.8 2.8v5.4a2.8 2.8 0 0 1-5.6 0V6.3A2.8 2.8 0 0 1 12 3.5Zm-6 8.2a6 6 0 0 0 12 0M12 17.7v3',
   close: 'M6 6l12 12M18 6 6 18',
+  minimise: 'M6 17.5h12',
+  play: 'M8 5.5v13l10.5-6.5z',
 };
 export function icon(name) {
   const s = document.createElementNS(SVG, 'svg');
@@ -124,24 +127,31 @@ function where(c) {
   return '';
 }
 
+// One chapter as a list item holding its row button: number, landmark, title, Now or Visited.
+export function chapterRow(c, i, onPick) {
+  const li = el('li');
+  const b = el('button', 'tour-map-row'); b.type = 'button'; b.dataset.chapter = c.id;
+  const n = el('span', 'n', String(i + 1)); n.setAttribute('aria-hidden', 'true');
+  const text = el('span', 'tour-map-text');
+  const at = where(c);
+  if (at) text.append(el('span', 'tour-map-where', at), el('span', 'sr', ' · '));
+  text.append(el('span', 'tour-map-title', c.title));
+  b.append(n, text);
+  const tag = c.now ? ['now', str('tourMapNow')] : c.visited ? ['visited', str('tourVisited')] : null;
+  if (tag) b.append(el('span', 'sr', ', '), el('span', `tour-tag ${tag[0]}`, tag[1]));
+  b.addEventListener('click', onPick);
+  li.append(b);
+  return li;
+}
+
 function render() {
   const { list } = build();
   let firstRow = null, nowRow = null;
   const rows = api.chapters().map((c, i) => {
-    const li = el('li');
-    const b = el('button', 'tour-map-row'); b.type = 'button'; b.dataset.chapter = c.id;
-    const n = el('span', 'n', String(i + 1)); n.setAttribute('aria-hidden', 'true');
-    const text = el('span', 'tour-map-text');
-    const at = where(c);
-    if (at) text.append(el('span', 'tour-map-where', at), el('span', 'sr', ' · '));
-    text.append(el('span', 'tour-map-title', c.title));
-    b.append(n, text);
-    const tag = c.now ? ['now', str('tourMapNow')] : c.visited ? ['visited', str('tourVisited')] : null;
-    if (tag) b.append(el('span', 'sr', ', '), el('span', `tour-tag ${tag[0]}`, tag[1]));
-    b.addEventListener('click', () => { closeMap({ restore: false }); api.jump(c.entry); });
+    const li = chapterRow(c, i, () => { closeMap({ restore: false }); api.jump(c.entry); });
+    const b = li.firstChild;
     firstRow ||= b;
     if (c.now) nowRow = b;
-    li.append(b);
     return li;
   });
   list.replaceChildren(...rows);

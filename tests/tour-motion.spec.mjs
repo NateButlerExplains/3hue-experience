@@ -121,6 +121,7 @@ test('T-17 only transform and opacity animate through the tour, its dialogs and 
   await press('#tour-ask-btn');
   await sample('ask open', 3);
   await page.keyboard.press('Escape');
+  await page.focus('#tour-next');   // Escape returned focus to Ask in the header
   await toLast(page);
   await pick(page, 'onward');
   await atNode(page, 'lens');

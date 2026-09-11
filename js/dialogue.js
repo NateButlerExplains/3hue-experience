@@ -1,4 +1,4 @@
-// The AiVRIC card: the guided tour's one surface (O10). A head row (the guide's canvas, name and
+// The guide card: the guided tour's one surface (O10, O12). A head row (the guide's canvas, name and
 // state, the chapter, End tour), a progress bar (aria-hidden), the caption with word spans, callout
 // tiles with their printed sources, the choice group and the Previous / Next bar. The card is built
 // once and updated in place, so #tour-next, which keeps focus through the tour, is never replaced.
@@ -33,8 +33,10 @@ export function buildCard(handlers) {
   card.setAttribute('aria-label', `${guideName()}, ${m.guide.title}`);
   card.replaceChildren();
 
+  const face = el('div', 'tour-face');
+  const orb = el('canvas', 'tour-orb'); orb.id = 'tour-guide'; orb.width = 220; orb.height = 220; orb.setAttribute('aria-hidden', 'true');
+  face.append(orb);
   const head = el('div', 'tour-head');
-  const orb = el('canvas', 'tour-orb'); orb.id = 'tour-guide'; orb.width = 88; orb.height = 88; orb.setAttribute('aria-hidden', 'true');
   const who = el('div', 'tour-who');
   const name = el('p', 'tour-name', guideName());
   const state = el('p', 'tour-state'); state.id = 'tour-state';
@@ -43,7 +45,7 @@ export function buildCard(handlers) {
   const end = el('button', 'btn outline tour-end'); end.type = 'button'; end.id = 'tour-end';
   const x = el('span', 'tour-x', '×'); x.setAttribute('aria-hidden', 'true');
   end.append(x, ` ${str('tourEnd')}`);
-  head.append(orb, who, chapter, end);
+  head.append(who, chapter, end);
 
   const progress = el('div', 'tour-progress'); progress.setAttribute('aria-hidden', 'true');
   const fill = el('span'); fill.id = 'tour-progress';
@@ -72,8 +74,8 @@ export function buildCard(handlers) {
   text.append(body);
   main.append(text, bar);
 
-  card.append(head, progress, main);
-  els = { state, chapter, fill, text, body, caption, src, callouts, choice, prompt, options, bar, prev, next, end, orb };
+  card.append(face, head, progress, main);
+  els = { name, state, chapter, fill, text, body, caption, src, callouts, choice, prompt, options, bar, prev, next, end, orb };
   next.addEventListener('click', () => on.next());
   prev.addEventListener('click', () => on.prev());
   end.addEventListener('click', () => on.end());
@@ -126,6 +128,16 @@ export function cardContains(node) { return !!node && card.contains(node); }
 export function nextButton() { return els?.next || null; }
 // For the modules that join the card later (the guide sphere, the voice controls, map and Ask).
 export function cardParts() { return els; }
+
+// Two guides (O12). The head row names whoever says the line on screen, and the card carries that
+// guide's id (data-guide: the sphere's tint); the card's accessible name follows the lead, the guide
+// the visitor chose, so it does not change from line to line.
+export function setSpeaker(id, name) {
+  if (!els) return;
+  if (els.name.textContent !== name) els.name.textContent = name;
+  if (card.dataset.guide !== id) card.dataset.guide = id || '';
+}
+export function setCardLabel(name) { card.setAttribute('aria-label', `${name}, ${getManifest().guide.title}`); }
 
 export function setHead({ state, chapter, progress }) {
   els.state.textContent = state;

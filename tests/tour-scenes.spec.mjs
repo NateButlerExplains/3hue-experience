@@ -220,7 +220,7 @@ const T08 = [
 // The camera aims above a card of --tour-h (js/tour.js reserve()); a longer line grows the card past
 // that reserve, over the frame's lower edge, only as far as its content needs (at most min(52vh,
 // 440 px)), so its sources are never cut; it still covers nothing the scene is showing.
-const reserveOf = (vh) => Math.min(240, Math.max(168, vh * 0.24)) + 16;
+const reserveOf = (vh) => Math.min(240, Math.max(176, vh * 0.24)) + 16;
 for (const [w, h] of [[1280, 720], [1440, 900], [1920, 1080]]) {
   test(`T-08 at ${w}x${h} the speaking card covers no door frame at rest, lit ring, kiosk, active pin or panel; the frame ends above the card's reserve and the card grows only to fit its content`, async ({ page }, testInfo) => {
     const log = [];

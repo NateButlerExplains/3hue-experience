@@ -211,6 +211,7 @@ To lift it, on Nate's say-so only: set `site.robots` to `index`, remove the meta
 
 ## Credits
 
+- Andrew Ramirez and 3HUE's own tour (`3HUE/3HUE-Website`, `experience/`, commit `797b153`): the guides' sphere, the Ask console and the two-guide hand-off (Avi and Huey), ported with his permission; see `docs/PROVENANCE.md`.
 - The level-up program: eight user-supplied Markdown documents preserved byte-for-byte in `docs/levelup/source/` with SHA-256 hashes in `docs/levelup/source-manifest.json`, the implementation/guardian loop in `docs/levelup/README.md`, and the phase reviews in `docs/levelup/reviews/`.
 - The AiVRIC experience (`/Users/nateb/3Hue/aivric-experience`, commit in `docs/PROVENANCE.md`): the stage, camera, panel, HUD, router, walk and share-stub patterns, the homography in `js/screens.js`, and `tools/stamp-version.py`.
 - `NateButlerExplains/3Hue-Market-Intel` (fork, commit in `docs/PROVENANCE.md`): the lobby plate and its derivatives, the logo, the lobby content and geometry, the research the door copy is drawn from.

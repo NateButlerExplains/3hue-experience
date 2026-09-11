@@ -56,14 +56,16 @@ const ASK = () => {
   const d = document.getElementById('tour-ask');
   const txt = (s) => d.querySelector(s)?.textContent ?? null;
   const a = (s) => { const e = d.querySelector(s); return e && { href: e.getAttribute('href'), target: e.getAttribute('target'), rel: e.getAttribute('rel'), aria: e.getAttribute('aria-label'), text: e.textContent }; };
+  // The conversation keeps earlier answers; the newest entry is the one on screen.
+  const last = d.querySelector('.ask-log > section:last-of-type') || d;
   return {
-    intro: txt('#tour-ask-intro'), answering: txt('#tour-ask-answering'),
-    lines: [...d.querySelectorAll('.ask-line')].map((p) => p.textContent), sources: [...d.querySelectorAll('.ask-src')].map((p) => p.textContent),
+    intro: txt('#tour-ask-intro'), answering: txt('#tour-ask-answering'), you: last.querySelector('.ask-you-t')?.textContent ?? null,
+    lines: [...last.querySelectorAll('.ask-line')].map((p) => p.textContent), sources: [...last.querySelectorAll('.ask-src')].map((p) => p.textContent),
     suggested: [...d.querySelectorAll('#tour-ask-suggested + .ask-chips .ask-chip')].map((b) => b.dataset.q),
     related: [...d.querySelectorAll('#tour-ask-related + .ask-chips .ask-chip')].map((b) => b.dataset.q),
     choose: [...d.querySelectorAll('#tour-ask-choose + .ask-chips .ask-chip')].map((b) => b.dataset.q),
     all: txt('.ask-all > summary'), none: txt('#tour-ask-none'), goto: txt('#tour-ask-goto'),
-    mail: a('#tour-ask-mail'), talk: a('.ask-talk'), live: txt('#tour-ask-live'), status: txt('#tour-ask-status'),
+    mail: a('#tour-ask-mail'), talk: a('.ask-foot-talk'), live: txt('#tour-ask-live'), status: txt('#tour-ask-status'),
     input: document.getElementById('tour-ask-q')?.value ?? null,
     mic: (() => { const b = document.getElementById('tour-ask-mic'); return b ? { hidden: b.hidden || getComputedStyle(b).display === 'none', pressed: b.getAttribute('aria-pressed'), name: b.textContent } : null; })(),
     note: (() => { const n = document.getElementById('tour-ask-mic-note'); return n && !n.hidden ? n.querySelector('.ask-mic-text')?.textContent : null; })(),
@@ -333,7 +335,8 @@ test.describe('T-12 Ask', () => {
     await page.waitForFunction((t) => document.getElementById('tour-ask-answering')?.textContent === t, fill(S.tourAskAnswering, { question: P.label }), { polling: 30 });
     await page.waitForFunction(() => document.getElementById('tour-ask-mic').getAttribute('aria-pressed') === 'false', null, { polling: 30 });
     a = await ask(page);
-    expect(a.input).toBe('how much does it cost');
+    expect(a.you, 'the transcript shows as the visitor\'s own words, and the field is ready for the next').toBe('how much does it cost');
+    expect(a.input).toBe('');
     expect((await tour(page)).pausedBy).not.toContain('mic');
     // Acknowledged for this page: the next press listens straight away; a blocked microphone says so.
     await page.click('#tour-ask-mic');
@@ -505,6 +508,9 @@ test.describe('T-13 the close', () => {
     await page.waitForFunction(() => document.activeElement?.id === 'tour-ask-answering', null, { polling: 30 });
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.getElementById('tour-ask').open, null, { polling: 30 });
+    // Focus went back to Ask in the header; the card's keys work from inside the card.
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe('tour-ask-btn');
+    await page.focus('#tour-next');
     await pick(page, 'summary');
     await page.waitForFunction(() => window.__tour.frame === 'summary', null, { polling: 30 });
     await page.waitForTimeout(300);
