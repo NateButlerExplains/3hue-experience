@@ -70,7 +70,7 @@ Placeholders for the specs the plan lists (each reads `window.__lobby` under `?d
 | `tools/gate-sheet.py` + RENDER-GATE.md | R-01 |
 | `tools/build-shares.js` (`media/share/cards.json`) | P5-D03 |
 | `tests/tour-manifest.spec.mjs` | T-01, T-02, T-03 |
-| `tests/voice-tool.spec.mjs`, `tests/secrets.spec.mjs` | T-02 |
+| `tests/voice-tool.spec.mjs`, `tests/voice-eleven.spec.mjs`, `tests/secrets.spec.mjs` | T-02 |
 | `tests/tour.spec.mjs` | T-04, T-05, T-06, T-11 |
 | `tests/tour-scenes.spec.mjs` | T-07, T-08 |
 | `tests/tour-routes.spec.mjs` | T-09, T-10, T-21 |
@@ -767,7 +767,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O10) | Pass (75 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-manifest.spec.mjs` · `tests/voice-tool.spec.mjs` · `tests/secrets.spec.mjs` · `npm run lint` |
+| new (O10) | Pass (75 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-manifest.spec.mjs` · `tests/voice-tool.spec.mjs` · `tests/voice-eleven.spec.mjs` · `tests/secrets.spec.mjs` · `npm run lint` |
 
 - The voice pipeline is checked without a key: hashes, SSML escaping, SDK-shaped word events (`tests/fixtures/voice/boundaries.json`, synthetic until the first real `--check`), the dry-run plan and cost, the ffmpeg encode, and a full render through a stand-in synthesiser. See `docs/VOICE.md`.
 

@@ -1,6 +1,9 @@
-// Audio for the voice build (O10): WAV in, loudness-normalised MP3 out, and the checks on it.
+// Audio for the voice build (O10, O13): WAV in, loudness-normalised MP3 out, and the checks on it.
 //
-// The speech service returns lossless WAV (24 kHz, 16-bit mono). ffmpeg measures its loudness,
+// Azure returns lossless WAV (24 kHz, 16-bit mono); ElevenLabs returns raw PCM (pcm_24000: 24 kHz,
+// 16-bit little-endian mono, no header), which pcmToWav() wraps in the same WAV. When a plan tier
+// refuses PCM, the ElevenLabs adapter asks for mp3_44100_128 instead and decodeToWav() turns it
+// into that WAV with ffmpeg (a lossy source, so the adapter says so). ffmpeg measures its loudness,
 // then applies the measured values in a single linear gain (loudnorm, two passes, I -18 LUFS,
 // TP -1.5 dBTP by default) and encodes one MP3 at 24 kHz mono 48 kbps with no tags, so the same
 // input always gives the same bytes. Silence is never trimmed, so word timings stay valid; the
@@ -69,6 +72,34 @@ export function makeWav(samples, sampleRate = 24000) {
   buf.write('data', 36, 'latin1'); buf.writeUInt32LE(n * 2, 40);
   for (let i = 0; i < n; i++) buf.writeInt16LE(Math.max(-32768, Math.min(32767, Math.round(samples[i] * 32767))), 44 + i * 2);
   return buf;
+}
+
+// Raw little-endian PCM (ElevenLabs pcm_24000) → a canonical 44-byte-header WAV around the same
+// bytes. A trailing odd byte (a half sample) is dropped so the data holds whole frames.
+export function pcmToWav(pcm, { sampleRate = 24000, channels = 1, bitsPerSample = 16 } = {}) {
+  const src = Buffer.isBuffer(pcm) ? pcm : Buffer.from(pcm ?? []);
+  const frame = (channels * bitsPerSample) / 8;
+  const bytes = src.length - (src.length % frame);
+  const buf = Buffer.alloc(44 + bytes);
+  buf.write('RIFF', 0, 'latin1'); buf.writeUInt32LE(36 + bytes, 4); buf.write('WAVE', 8, 'latin1');
+  buf.write('fmt ', 12, 'latin1'); buf.writeUInt32LE(16, 16); buf.writeUInt16LE(1, 20); buf.writeUInt16LE(channels, 22);
+  buf.writeUInt32LE(sampleRate, 24); buf.writeUInt32LE(sampleRate * frame, 28); buf.writeUInt16LE(frame, 32); buf.writeUInt16LE(bitsPerSample, 34);
+  buf.write('data', 36, 'latin1'); buf.writeUInt32LE(bytes, 40);
+  src.copy(buf, 44, 0, bytes);
+  return buf;
+}
+
+// Any audio ffmpeg reads (the MP3 fallback) → 16-bit mono WAV at `sampleRate`, as a Buffer.
+export async function decodeToWav(audio, { sampleRate = 24000, tmpDir } = {}) {
+  fs.mkdirSync(tmpDir, { recursive: true });
+  const stem = path.join(tmpDir, `decode.${process.pid}.${Math.random().toString(36).slice(2)}`);
+  try {
+    fs.writeFileSync(`${stem}.in`, audio);
+    await run(ffmpeg(), ['-hide_banner', '-nostats', '-y', '-i', `${stem}.in`, '-ar', String(sampleRate), '-ac', '1', '-c:a', 'pcm_s16le', '-map_metadata', '-1', '-fflags', '+bitexact', '-f', 'wav', `${stem}.wav`]);
+    return fs.readFileSync(`${stem}.wav`);
+  } finally {
+    for (const f of [`${stem}.in`, `${stem}.wav`]) fs.rmSync(f, { force: true });
+  }
 }
 
 // ---- ffmpeg ----

@@ -86,7 +86,10 @@ test.describe('tour manifest (no browser)', () => {
     expect(m.guide.guides.huey.voice).toMatchObject({ provider: 'elevenlabs', name: 'd9DA0yC1x1RCfpwZPDMM' });
     expect(isStr(m.guide.title)).toBe(true);
     expect(m.guide.disclosure, 'the guides say their voices are synthetic').toMatch(/synthetic/i);
-    expect(m.guide.voice).toEqual({ locale: 'en-US', rate: 0, required: m.guide.voice.required });
+    expect(m.guide.voice).toEqual({ locale: 'en-US', rate: 0, required: m.guide.voice.required, say: m.guide.voice.say });
+    // The pronunciation list (O13): whole-word terms to the plain-text alias both voices say.
+    expect(m.guide.voice.say).toMatchObject({ AiVRIC: 'av-RICK', '3HUE': 'three hue', 'SOC 2': 'sock two' });
+    for (const [k, v] of Object.entries(m.guide.voice.say)) expect(isStr(k) && isStr(v), k).toBe(true);
     expect(typeof m.guide.voice.required).toBe('boolean');
     if (!fs.existsSync(path.join(ROOT, m.tour.voiceBase, 'manifest.json'))) expect(m.guide.voice.required, 'no audio yet, so the voice cannot be required').toBe(false);
     // The tour and guide settings stay out of the visible-string checks; the guide's words do not.

@@ -2,17 +2,21 @@
 // its position map; word events to the documented timing file; the dry-run plan, cost and budget;
 // credentials; the MP3 header parser and the ffmpeg pipeline; a full render through a stand-in
 // synthesiser that the voice lint then passes; and the lint's drafting rule (guide.voice.required).
+// The Azure adapter stays an option (O13): the specs that hold it, the flat keys and the v1 voice
+// manifest to their contract run on the manifest in its single-guide Azure shape (AZ); the rest run
+// on the live two-guide manifest. ElevenLabs has its own spec, tests/voice-eleven.spec.mjs.
 // Every file a test writes goes under its own test-results output directory.
 import { test, expect } from '@playwright/test';
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, manifest as m, readJson } from './helpers.mjs';
+import { singleGuide } from './voice-fixture.mjs';
 import { speechHash, audioHash, canonical, hashLine } from '../tools/voice/hash.mjs';
 import { buildSsml, ssmlText, lexiconSpans, billableChars, timingJson, rateAttr } from '../tools/voice/ssml.mjs';
-import { voiceItems, voiceSettings, spokenLines } from '../tools/voice/items.mjs';
+import { voiceItems, guideVoices, spokenLines } from '../tools/voice/items.mjs';
 import { parseMp3, makeWav, processAudio, toolVersion, ffmpeg, probe } from '../tools/voice/audio.mjs';
-import { loadCredentials, readEnvFile, redact, describe as describeCreds, KEY, REGION } from '../tools/voice/env.mjs';
+import { loadCredentials, readEnvFile, redact, describe as describeCreds, KEY, REGION, ELEVEN_KEY, ELEVEN_KEY_ALT } from '../tools/voice/env.mjs';
 import { loadScript, planBuild, dryRun, parseArgs, render, writeVoiceManifest, prepare } from '../tools/voice/build.mjs';
 import { lintVoice, checkTiming } from '../tools/voice/lint.mjs';
 import { withRetries, pacer, SpeechError } from '../tools/voice/azure.mjs';
@@ -21,10 +25,13 @@ const FIXTURE = 'tests/fixtures/tour-min.json';
 const TINY = path.join(ROOT, 'tests/fixtures/voice/tiny.mp3');
 const ENC = { mp3: { sampleRate: 24000, bitrate: 48, channels: 1 }, loudness: { I: -18, TP: -1.5, LRA: 11 } };
 const clone = (x) => structuredClone(x);
+const AZ = singleGuide(m);
 const hasFfmpeg = !!(await toolVersion(ffmpeg()));
 const writeJson = (f, v) => { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v, null, 1)); return f; };
-// A child environment with no Azure credentials and a home with no ~/.env.
-const cleanEnv = (home, extra = {}) => { const e = { ...process.env, HOME: home, ...extra }; if (!(KEY in extra)) delete e[KEY]; if (!(REGION in extra)) delete e[REGION]; return e; };
+// A child environment with no speech credentials (Azure or ElevenLabs) and a home with no ~/.env.
+const cleanEnv = (home, extra = {}) => { const e = { ...process.env, HOME: home, ...extra }; for (const n of [KEY, REGION, ELEVEN_KEY, ELEVEN_KEY_ALT]) if (!(n in extra)) delete e[n]; return e; };
+// Every item hashed with its own guide's settings, by key.
+const hashed = async (t, mm) => { const { items } = await voiceItems(t, mm); const { byGuide, shared } = guideVoices(mm); return Object.fromEntries(items.map((i) => [i.key, prepare(i, i.guide ? byGuide[i.guide] : shared)])); };
 const tool = (args, env) => spawnSync(process.execPath, args, { cwd: ROOT, env, encoding: 'utf8' });
 
 // A stand-in for the speech service: a WAV with a tone burst per spoken word and word events
@@ -73,8 +80,7 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
 
   test('hashes: a line re-renders when the manifest field it quotes changes, and for nothing else', async () => {
     const t = readJson(FIXTURE);
-    const hashed = async (mm) => { const { items } = await voiceItems(t, mm); const s = voiceSettings(mm); return Object.fromEntries(items.map((i) => [i.key, prepare(i, s)])); };
-    const A = await hashed(m);
+    const A = await hashed(t, m);
     for (const it of Object.values(A)) expect(it.lineHash).toBe(await hashLine(it.text, it.say));
     // Edit the field one ref line quotes: exactly the lines whose words changed get a new hash.
     const target = Object.values(A).find((i) => typeof t.nodes[i.where.split('.')[1]]?.lines?.[+i.where.match(/\[(\d+)\]$/)[1]]?.ref === 'string' && !i.door);
@@ -85,20 +91,27 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
     for (const sgm of segs.slice(0, -1)) o = Array.isArray(o) && !/^\d+$/.test(sgm) ? o.find((x) => x.id === sgm) : o[sgm];
     const last = segs[segs.length - 1];
     o[last] = Array.isArray(o[last]) ? [...o[last], 'Edited.'] : typeof o[last] === 'string' ? `${o[last]} Edited.` : { ...o[last], text: `${o[last].text} Edited.` };
-    const B = await hashed(m2);
+    const B = await hashed(t, m2);
     const changed = Object.keys(A).filter((k) => A[k].hash !== B[k].hash);
     expect(changed).toContain(target.key);
     for (const k of Object.keys(A)) expect(A[k].hash === B[k].hash, k).toBe(A[k].text === B[k].text);
     // An edit no line quotes changes no hash.
     const m3 = clone(m); m3.guide.disclosure += ' Edited.'; m3.vocabulary.avoid = [...m3.vocabulary.avoid, 'zzz'];
-    const C = await hashed(m3);
+    const C = await hashed(t, m3);
     expect(Object.keys(A).filter((k) => A[k].hash !== C[k].hash)).toEqual([]);
-    // A voice change re-renders everything; an encoding change keeps the request (so it re-encodes from the cache).
-    const m4 = clone(m); m4.guide.voice.name = 'en-US-AndrewNeural';
-    const D = await hashed(m4);
-    for (const k of Object.keys(A)) { expect(D[k].hash).not.toBe(A[k].hash); expect(D[k].lineHash).toBe(A[k].lineHash); }
+    // One guide's voice, model, settings or seed re-renders that guide's lines and no other's.
+    for (const edit of [(v) => { v.name = 'another-voice-id'; }, (v) => { v.model = 'eleven_v3'; }, (v) => { v.settings = { ...v.settings, stability: 0.6 }; }, (v) => { v.seed = 8; }]) {
+      const m4 = clone(m); edit(m4.guide.guides.huey.voice);
+      const D = await hashed(t, m4);
+      for (const k of Object.keys(A)) { expect(D[k].hash !== A[k].hash, `${k}: ${edit}`).toBe(A[k].guide === 'huey'); expect(D[k].lineHash).toBe(A[k].lineHash); }
+    }
+    // In the single-guide Azure shape a voice change re-renders everything.
+    const Az = await hashed(t, AZ), m4a = clone(AZ); m4a.guide.voice.name = 'en-US-AndrewNeural';
+    const Da = await hashed(t, m4a);
+    for (const k of Object.keys(Az)) { expect(Da[k].hash).not.toBe(Az[k].hash); expect(Da[k].lineHash).toBe(Az[k].lineHash); }
+    // An encoding change keeps the request (so it re-encodes from the cache).
     const m5 = clone(m); m5.guide.voice.mp3 = { bitrate: 40 };
-    const E = await hashed(m5);
+    const E = await hashed(t, m5);
     for (const k of Object.keys(A)) { expect(E[k].hash).not.toBe(A[k].hash); expect(E[k].speechHash).toBe(A[k].speechHash); }
   });
 
@@ -186,7 +199,7 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
     expect(bad({ words: [[0.1, 0.2, 'One']] })).toMatch(/must be \[start, duration, word, charStart, charEnd\]/);
   });
 
-  test('spoken lines: node lines, Ask lines and answers; @ lines once per door; runtime tokens captions-only; the summary is not spoken', async () => {
+  test('spoken lines: node lines, Ask lines and answers; @ lines once per door (and per guide); runtime tokens captions-only; the summary is not spoken', async () => {
     const t = readJson(FIXTURE);
     const { items, skipped, problems } = await voiceItems(t, m);
     expect(problems).toEqual([]);
@@ -194,8 +207,10 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
     for (const id of summaryIds) expect(items.some((i) => i.id === id)).toBe(false);
     expect(spokenLines(t).length).toBe(Object.values(t.nodes).reduce((a, n) => a + n.lines.length, 0) + (t.ask?.intro ? 1 : 0) + (t.ask?.questions || []).reduce((a, q) => a + q.lines.length, 0));
     const at = items.filter((i) => i.id === 'lens-1');
-    expect(at.map((i) => i.key)).toEqual(m.doors.map((d) => `lens-1--${d.id}`));
+    expect(at.map((i) => i.key)).toEqual(Object.keys(m.guide.guides).flatMap((g) => m.doors.map((d) => `${g}/lens-1--${d.id}`)));
     expect(new Set(at.map((i) => i.text)).size).toBe(m.doors.length);
+    // The single-guide shape keeps the flat keys.
+    expect((await voiceItems(t, AZ)).items.filter((i) => i.id === 'lens-1').map((i) => i.key)).toEqual(m.doors.map((d) => `lens-1--${d.id}`));
     expect(new Set(items.map((i) => i.key)).size).toBe(items.length);
     if (t.ask?.intro) expect(items.find((i) => i.id === t.ask.intro.id).kind).toBe('ask');
     for (const q of t.ask?.questions || []) for (const l of q.lines) expect(items.find((i) => i.id === l.id).kind).toBe('faq');
@@ -207,9 +222,10 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
     expect(r2.skipped.map((s) => s.id)).toEqual(['runtime-line']);
   });
 
-  test('dry run: marks exactly the line whose words changed, a settings change, a missing file and an orphan', async ({}, testInfo) => {
+  test('dry run: marks exactly the line whose words changed, a settings change, a missing file and an orphan (Azure, one voice)', async ({}, testInfo) => {
     const out = testInfo.outputPath('voice'), cache = testInfo.outputPath('cache');
-    const ctx = await loadScript({ tour: FIXTURE, out, cache });
+    const azFile = writeJson(testInfo.outputPath('m-azure.json'), AZ);
+    const ctx = await loadScript({ manifest: azFile, tour: FIXTURE, out, cache });
     fs.mkdirSync(out, { recursive: true });
     const entries = {};
     for (const it of ctx.items) {
@@ -219,7 +235,7 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
     }
     writeVoiceManifest(out, ctx.settings, entries);
     const statuses = (res) => Object.fromEntries(res.plan.rows.map((r) => [r.key, r.status]));
-    const args = (...extra) => parseArgs(['--dry-run', '--tour', FIXTURE, '--out', out, '--cache', cache, ...extra]);
+    const args = (...extra) => parseArgs(['--dry-run', '--manifest', azFile, '--tour', FIXTURE, '--out', out, '--cache', cache, ...extra]);
 
     const clean = await dryRun(args());
     expect(new Set(Object.values(statuses(clean)))).toEqual(new Set(['up-to-date']));
@@ -240,11 +256,11 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
     expect(res2.summary.render).toMatchObject({ items: 1, requests: 1, chars: row.item.billable });
 
     // A settings change: every line, as a settings change, not a text change.
-    const m2 = clone(m); m2.guide.voice.rate = 5;
+    const m2 = clone(AZ); m2.guide.voice.rate = 5;
     const res3 = await dryRun({ ...args(), manifest: writeJson(testInfo.outputPath('m-rate.json'), m2) });
     expect(new Set(Object.values(statuses(res3)))).toEqual(new Set(['changed-settings']));
     // An encoding change with the raw audio cached costs nothing: re-encode only.
-    const m3 = clone(m); m3.guide.voice.mp3 = { bitrate: 40 };
+    const m3 = clone(AZ); m3.guide.voice.mp3 = { bitrate: 40 };
     fs.mkdirSync(cache, { recursive: true });
     for (const it of ctx.items) { fs.writeFileSync(path.join(cache, `${it.speechHash}.wav`), ''); fs.writeFileSync(path.join(cache, `${it.speechHash}.events.json`), '{}'); }
     const res4 = await dryRun({ ...args(), manifest: writeJson(testInfo.outputPath('m-40k.json'), m3) });
@@ -261,14 +277,14 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
 
     // The same through the command line, as JSON and as the printed plan.
     const env = cleanEnv(testInfo.outputPath('home'));
-    const cli = tool(['tools/voice/build.mjs', '--dry-run', '--tour', t2file, '--out', out, '--cache', cache, '--json'], env);
+    const cli = tool(['tools/voice/build.mjs', '--dry-run', '--manifest', azFile, '--tour', t2file, '--out', out, '--cache', cache, '--json'], env);
     expect(cli.status, cli.stderr).toBe(0);
     const j = JSON.parse(cli.stdout);
     expect(j.status['changed-text']).toBe(1);
     expect(j.status['missing-file']).toBe(1);
     expect(j.orphans).toEqual(['retired-line']);
     expect(j.rows.find((r) => r.key === edited)).toMatchObject({ status: 'changed-text', api: true });
-    const printed = tool(['tools/voice/build.mjs', '--dry-run', '--tour', t2file, '--out', out, '--cache', cache], env);
+    const printed = tool(['tools/voice/build.mjs', '--dry-run', '--manifest', azFile, '--tour', t2file, '--out', out, '--cache', cache], env);
     expect(printed.status).toBe(0);
     expect(printed.stdout).toMatch(new RegExp(`changed-text\\s+${edited}\\b`));
     expect(printed.stdout).toMatch(/orphan\s+retired-line/);
@@ -291,18 +307,25 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
     expect(r2.stdout).toMatch(/characters; split lines over 20/);
   });
 
-  test('dry run on content/tour.json needs no key and prints billable characters and the cost', async ({}, testInfo) => {
+  test('dry run on content/tour.json needs no key and prints billable characters and the cost, per guide', async ({}, testInfo) => {
     const r = tool(['tools/voice/build.mjs', '--dry-run'], cleanEnv(testInfo.outputPath('home')));
     expect(r.status, r.stdout + r.stderr).toBe(0);
     expect(r.stdout).toMatch(/Voice dry run: no key, no network\./);
-    expect(r.stdout).toMatch(/[\d,]+ billable characters, about (\$\d+\.\d\d|<\$0\.01) on S0 \(\$15 per 1M characters\)/);
+    for (const g of Object.keys(m.guide.guides)) expect(r.stdout).toMatch(new RegExp(`^  ${g}\\s+\\d+ files; to render \\d+ files, [\\d,]+ billable characters = [\\d,]+ credits`, 'm'));
+    expect(r.stdout).toMatch(/[\d,]+ billable characters, [\d,]+ ElevenLabs credits \([\d.]+% of the plan's 40,000 a month\)/);
     expect(r.stdout).toMatch(/Full render of every line: [\d,]+ billable characters/);
-    expect(r.stdout).toMatch(/Budget: OK/);
+    expect(r.stdout).toMatch(/Budget: OK .*per guide/);
+    // The same script on the Azure adapter prices it in dollars.
+    const az = tool(['tools/voice/build.mjs', '--dry-run', '--manifest', writeJson(testInfo.outputPath('m-azure.json'), AZ)], cleanEnv(testInfo.outputPath('home')));
+    expect(az.status, az.stdout + az.stderr).toBe(0);
+    expect(az.stdout).toMatch(/[\d,]+ billable characters, about (\$\d+\.\d\d|<\$0\.01) on S0 \(\$15 per 1M characters\)/);
   });
 
-  test('--check without credentials names each missing variable and exits non-zero, printing no value', async ({}, testInfo) => {
+  test('--check without credentials names each missing variable and exits non-zero, printing no value (Azure)', async ({}, testInfo) => {
     const home = testInfo.outputPath('home');
     fs.mkdirSync(home, { recursive: true });
+    const azFile = writeJson(testInfo.outputPath('m-azure.json'), AZ);
+    const tool = (args, env) => spawnSync(process.execPath, [...args, '--manifest', azFile], { cwd: ROOT, env, encoding: 'utf8' });
     const none = tool(['tools/voice/build.mjs', '--check'], cleanEnv(home));
     const all = none.stdout + none.stderr;
     expect(none.status, all).toBe(3);
@@ -384,7 +407,7 @@ test.describe('T-02 voice tooling and the voice lint (no browser)', () => {
   test('render: a stand-in synthesiser renders a small script that the lint passes; re-runs render only what changed', async ({}, testInfo) => {
     test.skip(!hasFfmpeg, 'ffmpeg is not installed');
     const out = testInfo.outputPath('voice'), cache = testInfo.outputPath('cache');
-    const mm = clone(m); mm.guide.voice.say = { '3HUE': 'three hue' };
+    const mm = clone(AZ); mm.guide.voice.say = { '3HUE': 'three hue' };
     const mfile = writeJson(testInfo.outputPath('m.json'), mm);
     const tour = {
       version: 1, start: 'a', chapters: [{ id: 'c', entry: 'a', title: '{str:legend}' }],

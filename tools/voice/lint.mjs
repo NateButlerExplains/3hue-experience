@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// The voice lint (O10): does media/voice/ match the script? Offline, no key, no ffmpeg (unless
+// The voice lint (O10, O13): does media/voice/ match the script? Offline, no key, no ffmpeg (unless
 // --deep). Part of `npm run lint`.
 //
 //   node tools/voice/lint.mjs [--manifest content/experience.json] [--tour <file>] [--voice-dir <dir>] [--deep]
@@ -9,17 +9,39 @@
 // once it is true they fail. Broken files fail either way: a manifest.json that disagrees with the
 // files, a timing file of the wrong shape or with words out of order or outside the text or the
 // audio, fewer than 90% of words timed, an MP3 that is not mono at the configured sample rate and
-// bitrate, a file or a total over budget, loudness off target (lines of 3 s or more). --deep
-// re-measures loudness with ffmpeg. Exits 1 on any error.
+// bitrate, a file or a guide's total over budget, loudness off target (lines of 3 s or more).
+// With two guides (manifest v2, media/voice/<guide>/<id>.*) it also warns when the guides' median
+// loudness is more than 1 LU apart, so the hand-off does not jump in level. --deep re-measures
+// loudness with ffmpeg. Exits 1 on any error.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadScript, readVoiceManifest, estimate, ROOT } from './build.mjs';
+import { loadScript, readVoiceManifest, listVoiceFiles, estimate, ROOT } from './build.mjs';
 import { parseMp3, measureLoudness } from './audio.mjs';
+import { creditsFor } from './elevenlabs.mjs';
 
 const isObj = (v) => !!v && typeof v === 'object' && !Array.isArray(v);
 const MIN_COVERAGE = 0.9;
+const MAX_LU_APART = 1;
 const rel = (p) => path.relative(ROOT, p) || '.';
+const median = (xs) => { const s = [...xs].sort((a, b) => a - b); const n = s.length; return n ? (n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2) : null; };
+
+// The guides' median loudness (lines of 3 s or more when a guide has any, since a word or two is
+// not a stable measure) → a warning when they are more than 1 LU apart, else null.
+export function loudnessSpread(entries) {
+  const by = new Map();
+  for (const [key, e] of entries) {
+    const g = e?.guide ?? (key.includes('/') ? key.split('/')[0] : null);
+    if (!g || !Number.isFinite(e?.lufs)) continue;
+    if (!by.has(g)) by.set(g, []);
+    by.get(g).push(e);
+  }
+  if (by.size < 2) return null;
+  const med = [...by].map(([g, es]) => { const long = es.filter((e) => e.duration >= 3); return [g, median((long.length ? long : es).map((e) => e.lufs))]; });
+  const vals = med.map(([, v]) => v);
+  const apart = Math.max(...vals) - Math.min(...vals);
+  return apart > MAX_LU_APART ? `the guides' median loudness is ${Math.round(apart * 10) / 10} LU apart (${med.map(([g, v]) => `${g} ${Math.round(v * 10) / 10} LUFS`).join(', ')}; at most ${MAX_LU_APART} LU), so the voice jumps in level at a hand-off; re-render the louder or quieter guide` : null;
+}
 
 // Problems with one timing file, [] when it is sound. `text` is the caption it must carry.
 export function checkTiming(json, { key, text = null } = {}) {
@@ -62,6 +84,7 @@ export async function lintVoice({ manifest = 'content/experience.json', tour = n
   const st = ctx.settings, dir = ctx.voiceDir, where = `${rel(dir)}/`;
   const gap = (msg) => (st.required ? errors : warnings).push(`${msg}${st.required ? '' : ' (guide.voice.required is false)'}`);
   const counts = { expected: ctx.items.length, current: 0, stale: 0, missing: 0, orphans: 0 };
+  const shape = ctx.guideIds.length ? 2 : 1;
 
   for (const p of ctx.problems) errors.push(`${ctx.tourFile}: ${p.where}: ${p.message}`);
   for (const s of ctx.skipped) warnings.push(`${ctx.tourFile}: ${s.where}: ${s.id} runs captions-only: ${s.reason}`);
@@ -70,36 +93,46 @@ export async function lintVoice({ manifest = 'content/experience.json', tour = n
     else if (it.chars > st.budget.warnChars) warnings.push(`${it.key}: ${it.chars} characters; a caption over ${st.budget.warnChars} is hard to read along with`);
   }
 
-  let names = [];
-  try { names = fs.readdirSync(dir).filter((f) => /\.(mp3|json)$/.test(f) && f !== 'manifest.json'); } catch { /* no directory yet */ }
-  const onDisk = new Set(names.map((f) => f.replace(/\.(mp3|json)$/, '')));
+  const onDisk = new Set(listVoiceFiles(dir).keys());
   const vm = readVoiceManifest(dir);
   if (!vm) {
     if (fs.existsSync(path.join(dir, 'manifest.json'))) errors.push(`${where}manifest.json is not valid JSON`);
     else {
       if (onDisk.size) errors.push(`${where} has ${onDisk.size} voice files but no manifest.json; run node tools/voice/build.mjs`);
       const chars = ctx.items.reduce((a, i) => a + i.billable, 0);
-      gap(`no ${where}manifest.json yet, so all ${ctx.items.length} voice files run captions-only (a full render is ${chars.toLocaleString('en-US')} billable characters, about $${estimate(chars, st).usd.toFixed(2)})`);
+      const az = ctx.items.filter((i) => i.provider === 'azure').reduce((a, i) => a + i.billable, 0);
+      const el = ctx.items.filter((i) => i.provider !== 'azure').reduce((a, i) => a + creditsFor(i.billable, i.settings.model), 0);
+      const cost = [az ? `about $${estimate(az, st).usd.toFixed(2)}` : null, el ? `${el.toLocaleString('en-US')} ElevenLabs credits` : null].filter(Boolean).join(' and ') || 'nothing to bill';
+      gap(`no ${where}manifest.json yet, so all ${ctx.items.length} voice files run captions-only (a full render is ${chars.toLocaleString('en-US')} billable characters, ${cost})`);
       counts.missing = ctx.items.length;
     }
     return { errors, warnings, counts, ctx };
   }
 
-  if (vm.v !== 1 || !isObj(vm.items)) { errors.push(`${where}manifest.json: v must be 1 and items an object`); return { errors, warnings, counts, ctx }; }
+  if (![1, 2].includes(vm.v) || !isObj(vm.items)) { errors.push(`${where}manifest.json: v must be 1 or 2 and items an object`); return { errors, warnings, counts, ctx }; }
+  if (vm.v === 2 && !isObj(vm.guides)) errors.push(`${where}manifest.json: v2 needs a guides map`);
+  if (vm.v !== shape) {
+    // Written for the other shape (one voice, or two guides): nothing in it can match the script.
+    gap(`${where}manifest.json is v${vm.v} (${vm.v === 2 ? 'per-guide folders' : 'one voice'}), but the script is voiced ${shape === 2 ? `by ${ctx.guideIds.join(' and ')}` : 'by one guide'}; every line runs captions-only until a render writes v${shape}`);
+    counts.missing = ctx.items.length;
+    return { errors, warnings, counts, ctx };
+  }
   const fmt = isObj(vm.format) ? vm.format : { sampleRate: st.mp3.sampleRate, bitrate: st.mp3.bitrate, channels: st.mp3.channels };
   const keys = Object.keys(vm.items).sort();
-  const sum = (f) => keys.reduce((a, k) => a + (Number(vm.items[k]?.[f]) || 0), 0);
+  const sum = (f, ks) => ks.reduce((a, k) => a + (Number(vm.items[k]?.[f]) || 0), 0);
+  const adds = (x, ks) => isObj(x) && x.items === ks.length && x.bytes === sum('bytes', ks) && x.chars === sum('chars', ks) && Math.abs((x.seconds ?? -1) - sum('duration', ks)) <= 0.01;
   const t = vm.totals || {};
-  if (t.items !== keys.length || t.bytes !== sum('bytes') || t.chars !== sum('chars') || Math.abs((t.seconds ?? -1) - sum('duration')) > 0.01) errors.push(`${where}manifest.json: totals do not add up to its items; re-run node tools/voice/build.mjs`);
+  if (!adds(t, keys) || (vm.v === 2 && Object.entries(t.guides || {}).some(([g, x]) => !adds(x, keys.filter((k) => vm.items[k]?.guide === g))))) errors.push(`${where}manifest.json: totals do not add up to its items; re-run node tools/voice/build.mjs`);
 
   const current = new Set(ctx.items.map((i) => i.key));
-  let total = 0;
+  const totals = new Map();
   for (const it of ctx.items) {
     const entry = vm.items[it.key];
     const mp3 = path.join(dir, `${it.key}.mp3`), jf = path.join(dir, `${it.key}.json`);
     if (!entry) { counts.missing++; gap(`${it.key} (${it.where}) has no audio yet; it runs captions-only`); continue; }
     const have = [fs.existsSync(mp3), fs.existsSync(jf)];
     if (!have[0] || !have[1]) { counts.missing++; errors.push(`${it.key}: manifest.json lists it but ${!have[0] ? `${it.key}.mp3` : `${it.key}.json`} is missing`); continue; }
+    if (vm.v === 2 && entry.guide !== it.guide) errors.push(`${it.key}: manifest.json files it under guide ${JSON.stringify(entry.guide ?? null)}, not ${it.guide}`);
     const fresh = entry.hash === it.hash;
     if (fresh) counts.current++;
     else { counts.stale++; gap(`${it.key} (${it.where}) is stale: its ${entry.lineHash !== it.lineHash ? 'words' : 'voice or encoding settings'} changed since the render; it runs captions-only until re-rendered`); }
@@ -111,7 +144,7 @@ export async function lintVoice({ manifest = 'content/experience.json', tour = n
       if (json.hash !== entry.hash) errors.push(`${it.key}.json has hash ${json.hash}, manifest.json has ${entry.hash}`);
     }
     const buf = fs.readFileSync(mp3);
-    total += buf.length;
+    totals.set(it.guide, (totals.get(it.guide) || 0) + buf.length);
     if (buf.length !== entry.bytes) errors.push(`${it.key}.mp3 is ${buf.length} bytes, manifest.json says ${entry.bytes}`);
     if (buf.length > st.budget.fileKB * 1000) errors.push(`${it.key}.mp3 is ${Math.round(buf.length / 100) / 10} KB, over the ${st.budget.fileKB} KB limit for one file`);
     const info = parseMp3(buf);
@@ -138,8 +171,14 @@ export async function lintVoice({ manifest = 'content/experience.json', tour = n
   counts.orphans = orphans.length;
   for (const k of orphans) gap(`${where}${k} belongs to no line in the script; the next render removes it`);
   for (const k of onDisk) if (current.has(k) && !vm.items[k]) gap(`${where}${k} is on disk but not in manifest.json`);
-  if (total > st.budget.totalMB * 1e6) errors.push(`${where}: ${(total / 1e6).toFixed(1)} MB of audio, over the ${st.budget.totalMB} MB limit`);
-  else if (total > st.budget.warnMB * 1e6) warnings.push(`${where}: ${(total / 1e6).toFixed(1)} MB of audio, past the ${st.budget.warnMB} MB warning line`);
+  // The size budget holds per guide: each guide's folder is one voice's worth of the tour.
+  for (const [g, total] of totals) {
+    const w = g ? `${where}${g}/` : where;
+    if (total > st.budget.totalMB * 1e6) errors.push(`${w}: ${(total / 1e6).toFixed(1)} MB of audio, over the ${st.budget.totalMB} MB limit${g ? ' for one guide' : ''}`);
+    else if (total > st.budget.warnMB * 1e6) warnings.push(`${w}: ${(total / 1e6).toFixed(1)} MB of audio, past the ${st.budget.warnMB} MB warning line`);
+  }
+  const spread = loudnessSpread(Object.entries(vm.items).filter(([k]) => current.has(k)));
+  if (spread) warnings.push(`${where}: ${spread}`);
   return { errors, warnings, counts, ctx };
 }
 

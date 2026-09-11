@@ -570,7 +570,18 @@
     "voice": {
       "locale": "en-US",
       "rate": 0,
-      "required": false
+      "required": false,
+      "say": {
+        "AiVRIC": "av-RICK",
+        "3HUE": "three hue",
+        "SOC 2": "sock two",
+        "vCISO": "vee-see-so",
+        "POA&M": "P O A and M",
+        "BOD": "board",
+        "TTX": "tabletop exercise",
+        "M365": "Microsoft three sixty-five",
+        "NIST CSF": "nist C S F"
+      }
     }
   },
   "share": {
