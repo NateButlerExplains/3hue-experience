@@ -13,7 +13,7 @@ import path from 'node:path';
 import { test, expect } from '@playwright/test';
 import { open, doorsShown, settled, manifest as m, ROOT, readJson, annotate, isReduced } from './helpers.mjs';
 import { FX, FIXTURE, tour, startTour, atNode, toLast, pick } from './tour-helpers.mjs';
-import { buildVoice, voiceFiles } from './voice-fixture.mjs';
+import { buildVoice, voiceFiles, leadKey } from './voice-fixture.mjs';
 import { voiceItems, usesDoor } from '../tools/voice/items.mjs';
 import { sceneOf, matches } from '../js/tourtext.js';
 
@@ -104,11 +104,11 @@ test('T-23 voice rendered before a rename is never played for a line the rename 
     const door = ['door', 'station'].includes(sc.kind) ? sc.door : null;
     const first = (n.lines || []).find((l) => matches(l.when, { answers: {}, visited: [n.chapter] }));
     if (!first) continue;
-    const key = usesDoor(first) ? (door ? `${first.id}--${door}` : null) : first.id;
+    const key = usesDoor(first) ? (door ? leadKey(`${first.id}--${door}`) : null) : leadKey(first.id);   // the lead says it
     if (key && changedKeys.has(key)) { target = { node: id, key, text: now.items.find((x) => x.key === key).text }; break; }
   }
   expect(target, 'a node opens on a line the rename changed').not.toBe(null);
-  const unchanged = now.items.find((x) => x.key === `${REAL.nodes[REAL.start].lines[0].id}`);
+  const unchanged = now.items.find((x) => x.key === leadKey(REAL.nodes[REAL.start].lines[0].id));
   expect(before.get(unchanged.key).lineHash, 'the first line of the tour does not name the door').toBe(unchanged.lineHash);
   // The voice files, rendered from the manifest as it was before the rename.
   const v = await buildVoice(`rename-${testInfo.project.name}-${testInfo.workerIndex}`, { tour: REAL, m });

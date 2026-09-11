@@ -1,5 +1,7 @@
-// T-14 and T-15: AiVRIC's voice (O10, js/voice.js) on the tour fixture, with voice files written
-// at test time by tests/voice-fixture.mjs so their hashes always match the copy under test.
+// T-14 and T-15: the guides' voices (O10, O12, O13, js/voice.js) on the tour fixture, with voice
+// files written at test time by tests/voice-fixture.mjs so their hashes always match the copy under
+// test. The manifest has two guides, so the voice manifest is v2 and each file sits in its guide's
+// folder; the lead (Avi) says every unpinned line, so every request here is under avi/.
 //   T-14 the simulated back end (?voice=sim&rate=N: the real fetches and checks, a clock instead
 //        of sound): nothing under the voice folder before the start; after it the voice manifest
 //        and each line's timing file with ?h=; lines move at the voice's pace (350 ms after a line
@@ -29,14 +31,17 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { open, doorsShown, settled, vp, manifest as m, S, fill, annotate, ROOT } from './helpers.mjs';
 import { FX, FIXTURE, TQ, tour, startTour, atNode, linesOf, chapterTitle, fillFx } from './tour-helpers.mjs';
-import { buildVoice, voiceFiles } from './voice-fixture.mjs';
+import { buildVoice, voiceFiles, leadKey } from './voice-fixture.mjs';
 import { fillTemplate } from '../js/tourtext.js';
 
 const STORE = '3hue-experience:voice';
 const vq = (base, { back = 'sim', rate = 3 } = {}) => `${TQ}&voice=${back}${back === 'sim' ? `&rate=${rate}` : ''}&voice-base=${base}`;
 const vs = (page) => page.evaluate(() => window.__tour.voiceState);
 const name = (testInfo, tag) => `${tag}-${testInfo.project.name}-${testInfo.workerIndex}`;
-const hashOf = (v, key) => v.items[key].hash;
+// A line's file in the lead's voice: "avi/<id>", its hash, and the request for it with ?h=.
+const LEAD = leadKey('');
+const hashOf = (v, id) => v.items[leadKey(id)].hash;
+const vf = (v, id, ext = 'json') => `${leadKey(id)}.${ext}?h=${hashOf(v, id)}`;
 
 // Page probes, installed before the page's own scripts: live-region announcements, the words the
 // caption lit (token index and text, in order), the voice's signals to the sphere, and every
@@ -91,7 +96,7 @@ test.describe('T-14 the voice sets the pace (simulated back end)', () => {
     // While the first line plays, the second (same node) is fetched ahead; nothing further is.
     await page.waitForFunction(() => window.__tour.voiceState.preloaded === 'arrive-2', null, { polling: 20 });
     const early = voiceFiles(reqs, v.base);
-    expect(early).toEqual(['manifest.json', `arrive-1.json?h=${hashOf(v, 'arrive-1')}`, `arrive-2.json?h=${hashOf(v, 'arrive-2')}`]);
+    expect(early).toEqual(['manifest.json', vf(v, 'arrive-1'), vf(v, 'arrive-2')]);
     // The voice moves the tour on without a key: the second line, then "Your call".
     await playing(page, 'arrive-2');
     expect((await tour(page)).line).toBe(1);
@@ -131,7 +136,7 @@ test.describe('T-14 the voice sets the pace (simulated back end)', () => {
     expect(await page.evaluate(() => document.activeElement?.id)).toBe('tour-next');
     const files = voiceFiles(reqs, v.base);
     expect(files.filter((f) => f === 'manifest.json'), 'the manifest is read once').toHaveLength(1);
-    for (const f of files) if (f !== 'manifest.json') expect(f, 'timing files only (no audio in the simulation), each with its hash').toMatch(/^[\w-]+\.json\?h=[0-9a-f]{12}$/);
+    for (const f of files) if (f !== 'manifest.json') expect(f, 'timing files only (no audio in the simulation), in the lead\'s folder, each with its hash').toMatch(new RegExp(`^${LEAD}[\\w-]+\\.json\\?h=[0-9a-f]{12}$`));
   });
 
   test('T-14 a line without usable audio runs captions for that line only and waits for Next: no entry, the script changed after the render, a 404 timing file, stale timing text', async ({ page }, testInfo) => {
@@ -153,7 +158,7 @@ test.describe('T-14 the voice sets the pace (simulated back end)', () => {
     const arrive = linesOf('arrive');
     expect(g.ann.at(-1)).toContain(arrive[1].text);
     expect(g.ann.at(-1)).toContain(fillFx(FX.nodes.arrive.choice.prompt));
-    expect(voiceFiles(reqs, v.base).some((f) => f.startsWith('arrive-2.')), 'nothing fetched for a line whose script changed').toBe(false);
+    expect(voiceFiles(reqs, v.base).some((f) => f.startsWith(`${LEAD}arrive-2.`)), 'nothing fetched for a line whose script changed').toBe(false);
     // wt-1 (404 timing), wt-2 (stale timing text) and wt-3 (no entry): each waits for Next and is read out once.
     await page.keyboard.press('ArrowRight');
     await page.waitForFunction(() => document.activeElement?.dataset?.option, null, { polling: 30 });
@@ -172,9 +177,9 @@ test.describe('T-14 the voice sets the pace (simulated back end)', () => {
     g = await got(page);
     const files = voiceFiles(reqs, v.base);
     annotate(testInfo, { files, ann: g.ann });
-    expect(files).toContain(`wt-1.json?h=${hashOf(v, 'wt-1')}`);
-    expect(files).toContain(`wt-2.json?h=${hashOf(v, 'wt-2')}`);
-    expect(files.some((f) => f.startsWith('wt-3.')), 'no entry, no request').toBe(false);
+    expect(files).toContain(vf(v, 'wt-1'));
+    expect(files).toContain(vf(v, 'wt-2'));
+    expect(files.some((f) => f.startsWith(`${LEAD}wt-3.`)), 'no entry, no request').toBe(false);
     for (const l of wt) expect(g.ann.filter((a) => a.includes(l.text)), `${l.id} read out once`).toHaveLength(1);
     expect(g.ann.some((a) => a.includes(linesOf('wt-proof')[0].text)), 'the voiced line after them is not read out').toBe(false);
   });
@@ -261,11 +266,11 @@ test.describe('T-14 the voice sets the pace (simulated back end)', () => {
     await page.waitForFunction(() => window.__tour.voiceState.asking, null, { polling: 20 });
     const held = await tour(page);
     expect(held.pausedBy).toEqual(['ask']);
-    await page.waitForFunction((f) => performance.getEntriesByType('resource').some((e) => e.name.includes(f)), `${REAL.ask.intro.id}.json?h=${hashOf(v, REAL.ask.intro.id)}`, { polling: 30 });
+    await page.waitForFunction((f) => performance.getEntriesByType('resource').some((e) => e.name.includes(f)), vf(v, REAL.ask.intro.id), { polling: 30 });
     // A typed question with audio: said, and not read out.
     const ask = async (q) => { await page.fill('#tour-ask-q', fillTemplate(q.q, m, {})); await page.keyboard.press('Enter'); await page.waitForFunction((t) => document.getElementById('tour-ask-answering')?.textContent.includes(t), fillTemplate(q.q, m, {}), { polling: 30 }); };
     await ask(said);
-    await page.waitForFunction((f) => performance.getEntriesByType('resource').some((e) => e.name.includes(f)), `${said.lines[0].id}.json?h=${hashOf(v, said.lines[0].id)}`, { polling: 30 });
+    await page.waitForFunction((f) => performance.getEntriesByType('resource').some((e) => e.name.includes(f)), vf(v, said.lines[0].id), { polling: 30 });
     await page.waitForFunction(() => window.__tour.voiceState.asking, null, { polling: 20 });
     await page.waitForTimeout(400);
     expect(await page.evaluate(() => document.getElementById('tour-ask-live').textContent), 'a voiced answer is not read out').toBe('');
@@ -273,14 +278,14 @@ test.describe('T-14 the voice sets the pace (simulated back end)', () => {
     await ask(unsaid);
     const first = fillTemplate(unsaid.lines[0].text ?? '', m, {});
     await page.waitForFunction((t) => document.getElementById('tour-ask-live').textContent.includes(t), first.slice(0, 40), { polling: 30 });
-    expect(voiceFiles(reqs, v.base).some((f) => f.startsWith(`${unsaid.lines[0].id}.`)), 'no entry, no request').toBe(false);
+    expect(voiceFiles(reqs, v.base).some((f) => f.startsWith(`${LEAD}${unsaid.lines[0].id}.`)), 'no entry, no request').toBe(false);
     // Closing Ask hushes it; the tour carries on from where it was held.
     await ask(said);
     await page.waitForFunction(() => window.__tour.voiceState.asking, null, { polling: 20 });
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.getElementById('tour-ask').open, null, { polling: 30 });
     const after = await tour(page);
-    annotate(testInfo, { held: held.pausedBy, after: after.pausedBy, files: voiceFiles(reqs, v.base).filter((f) => f.startsWith('ask-')) });
+    annotate(testInfo, { held: held.pausedBy, after: after.pausedBy, files: voiceFiles(reqs, v.base).filter((f) => f.startsWith(`${LEAD}ask-`)) });
     expect(after.voiceState.asking).toBe(false);
     expect(after.pausedBy).toEqual([]);
     expect(after.node).toBe(held.node);
@@ -450,6 +455,37 @@ test.describe('T-14 the voice sets the pace (simulated back end)', () => {
     expect((await tour(page)).line, 'Previous on a first line does nothing').toBe(0);
   });
 
+  test('T-14 a line\'s who picks its guide\'s folder (O12): who: huey is fetched from huey/, a guide with no audio gets captions, a line without who falls back from the lead to the guide who has it', async ({ page }, testInfo) => {
+    // arrive-2 has no Avi file here, as if pinned to Huey: without a who it must still find Huey's.
+    const v = await buildVoice(name(testInfo, 'who'), { tour: FX, drop: ['avi/arrive-2'] });
+    const reqs = [];
+    page.on('request', (r) => reqs.push(r.url()));
+    await open(page, { query: vq(v.base, { rate: 3 }) });
+    await doorsShown(page);
+    await startTour(page);
+    await playing(page, 'arrive-1');
+    await page.click('#tour-pause');
+    // The page's own copy of js/voice.js (the same module the tour uses), then speak() on Ask's element.
+    const said = await page.evaluate(async (lines) => {
+      const url = performance.getEntriesByType('resource').map((e) => e.name).find((n) => /\/js\/voice\.js(\?|$)/.test(n));
+      const voice = await import(url);
+      const out = [];
+      for (const l of lines) { const h = voice.speak(l, { channel: 'ask' }); out.push(await h.ready); voice.hushAsk(); }
+      return out;
+    }, [
+      { id: 'arrive-1', text: v.lines.find((l) => l.key === 'huey/arrive-1').text, who: 'huey' },
+      { id: 'arrive-1', text: v.lines.find((l) => l.key === 'huey/arrive-1').text, who: 'nobody' },
+      { id: 'arrive-2', text: v.lines.find((l) => l.key === 'huey/arrive-2').text },
+    ]);
+    const files = voiceFiles(reqs, v.base);
+    annotate(testInfo, { said, files });
+    expect(said).toEqual([{ voiced: true, reason: null }, { voiced: false, reason: 'no-audio' }, { voiced: true, reason: null }]);
+    expect(files).toContain(`huey/arrive-1.json?h=${v.items['huey/arrive-1'].hash}`);
+    expect(files).toContain(`huey/arrive-2.json?h=${v.items['huey/arrive-2'].hash}`);
+    expect(files.some((f) => f.startsWith('nobody/')), 'no guide, no request').toBe(false);
+    expect(files.some((f) => f.startsWith('avi/arrive-2.')), 'no Avi entry, no Avi request').toBe(false);
+  });
+
   test('T-14 Ask still speaks after the tab was hidden and came back: asking lifts the hidden tab\'s hold on Ask, while the tour stays held for Ask', async ({ page }, testInfo) => {
     const REAL = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/tour.json'), 'utf8'));
     const q = REAL.ask.questions.find((x) => x.id === 'aivric');
@@ -571,8 +607,8 @@ test.describe('T-15 the voice controls and the audio back end', () => {
     if (g.plays[0].active !== null) expect(g.plays[0].active, 'called with the click still active').toBe(true);
     expect(g.plays.some((p) => p.id === 'ask-audio' && p.src.startsWith('data:audio/mpeg')), 'Ask\'s element is unlocked too').toBe(true);
     // The first line from its ?h= URL, the second from the blob fetched while the first played.
-    expect(files).toEqual(expect.arrayContaining(['manifest.json', `arrive-1.json?h=${hashOf(v, 'arrive-1')}`, `arrive-1.mp3?h=${hashOf(v, 'arrive-1')}`, `arrive-2.json?h=${hashOf(v, 'arrive-2')}`, `arrive-2.mp3?h=${hashOf(v, 'arrive-2')}`]));
-    expect(files.filter((f) => f.startsWith('arrive-2.mp3')), 'the preloaded MP3 is fetched once').toHaveLength(1);
+    expect(files).toEqual(expect.arrayContaining(['manifest.json', vf(v, 'arrive-1'), vf(v, 'arrive-1', 'mp3'), vf(v, 'arrive-2'), vf(v, 'arrive-2', 'mp3')]));
+    expect(files.filter((f) => f.startsWith(`${LEAD}arrive-2.mp3`)), 'the preloaded MP3 is fetched once').toHaveLength(1);
     expect(a2.src).toBe('blob:');
     expect(handover, 'one second of audio, then the 350 ms gap').toBeGreaterThanOrEqual(1000);
     const lit1 = g.lit.filter((x) => x.line === 'arrive-1').map((x) => x.i);
@@ -587,7 +623,7 @@ test.describe('T-15 the voice controls and the audio back end', () => {
     await page.waitForFunction((txt) => window.__ann.some((a) => a.includes(txt)), wt1.text, { polling: 30, timeout: 15_000 });
     const t = await still(page, 900);
     expect([t.line, t.speaking, t.voice]).toEqual([0, false, true]);
-    expect(voiceFiles(reqs, v.base)).toContain(`wt-1.mp3?h=${hashOf(v, 'wt-1')}`);
+    expect(voiceFiles(reqs, v.base)).toContain(vf(v, 'wt-1', 'mp3'));
   });
 
   test('T-15 a refused play() while Pause has focus hands focus to the Voice toggle, the way back on', async ({ page }, testInfo) => {
@@ -626,8 +662,8 @@ test.describe('T-15 the voice controls and the audio back end', () => {
     const first = fillTemplate(q.lines[0].text, m, {});
     await page.waitForFunction((t) => document.getElementById('tour-ask-live').textContent.includes(t), first.slice(0, 40), { polling: 30, timeout: 10_000 });
     const files = voiceFiles(reqs, v.base);
-    annotate(testInfo, files.filter((f) => f.startsWith('ask-')));
-    expect(files, 'the answer\'s MP3 was asked for (and is missing)').toContain(`${keys[0]}.mp3?h=${hashOf(v, keys[0])}`);
+    annotate(testInfo, files.filter((f) => f.startsWith(`${LEAD}ask-`)));
+    expect(files, 'the answer\'s MP3 was asked for (and is missing)').toContain(vf(v, keys[0], 'mp3'));
     expect(await page.evaluate(() => document.getElementById('tour-ask-live').textContent)).toContain(fillTemplate(q.lines[1].text, m, {}));
   });
 

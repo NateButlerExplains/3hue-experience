@@ -1,6 +1,6 @@
-// AiVRIC's voice (O10): plays the lines rendered at build time (tools/voice, docs/VOICE.md) and
-// highlights each caption word from their timings. Nothing is synthesised in the browser and
-// nothing under media/voice/ is requested before the visitor starts the tour.
+// The guides' voices (O10, O12, O13): plays the lines rendered at build time (tools/voice,
+// docs/VOICE.md) and highlights each caption word from their timings. Nothing is synthesised in the
+// browser and nothing under media/voice/ is requested before the visitor starts the tour.
 //
 // Back ends (?voice=):
 //   audio  <audio id="tour-audio"> (and #ask-audio for Ask), plain media elements, no Web Audio.
@@ -13,7 +13,11 @@
 // Per line (the runtime contract in docs/VOICE.md):
 //   1. media/voice/manifest.json, fetched once with cache: 'no-cache' the first time a line is to
 //      be spoken (after the start gesture; never while muted).
-//   2. The entry items["<id>--<door>"], else items["<id>"]; none means captions for that line.
+//   2. The entry for the guide saying it (line.who: the pinned guide or the lead; without one, the
+//      manifest's lead, then any other guide, so a pinned line still finds its one voice):
+//      items["<who>/<id>--<door>"], else items["<who>/<id>"] (manifest v2, media/voice/<who>/…);
+//      for a v1 manifest (one voice) items["<id>--<door>"], else items["<id>"]. None means captions
+//      for that line.
 //   3. hashLine(caption, say) must equal the entry's lineHash, else the script changed after the
 //      render and the line runs captions-only, with nothing fetched.
 //   4. <key>.json?h=<hash>: a 404, a bad shape, or a `text` that is not the caption means captions
@@ -34,7 +38,7 @@
 // speak() → {ready: Promise<{voiced, reason}>, done: Promise<'done'|'cancelled'|'error'|'blocked'>}.
 // The guide's sphere hears the voice through lobby:voice events {type: play | word (strength) | stop}.
 import { getManifest, getParams, safeRelative } from './content.js?v=2026-09-10f';
-import { hashLine, tokens } from './tourtext.js?v=2026-09-10f';
+import { hashLine, tokens, guideId } from './tourtext.js?v=2026-09-10f';
 
 const STORE = '3hue-experience:voice';
 const LEAD = 0.05;          // s: a word lights this much before it is heard
@@ -50,7 +54,7 @@ const V = {
   manifest: null, loading: null,
   paused: { tour: false, ask: false },   // what js/tour.js holds each element for
   gesture: false,           // unlockVoice() ran since the last begin
-  pre: null,                // the one preloaded line: {line, text, door, p: Promise<{key, hash, json, url}|null>}
+  pre: null,                // the one preloaded line: {line, text, door, who, p: Promise<{key, hash, json, url}|null>}
   ch: { tour: null, ask: null },   // the playback in progress on each element
   spoken: 0,                // lines voiced this page (for the checks)
 };
@@ -127,12 +131,21 @@ function loadManifest() {
   return V.loading;
 }
 
-// line: {id, text, say, door} → {key, hash} or {reason} (no audio for it, or the text changed).
+// The keys a line may be filed under, most specific first (step 2 above).
+const GID = /^[a-z0-9-]+$/;
+function keysOf(line, vm) {
+  const own = (id) => (line.door ? [`${id}--${line.door}`, id] : [id]);
+  if (!isObj(vm.guides)) return own(line.id);
+  const ids = Object.keys(vm.guides).filter((g) => GID.test(g));
+  const who = typeof line.who === 'string' && GID.test(line.who) ? [line.who] : [guideId(getManifest(), null), ...ids].filter((g, i, a) => g && ids.includes(g) && a.indexOf(g) === i);
+  return who.flatMap((g) => own(`${g}/${line.id}`));
+}
+
+// line: {id, text, say, door, who} → {key, hash} or {reason} (no audio for it, or the text changed).
 async function locate(line) {
   const vm = await loadManifest();
   if (!vm) return { reason: 'unavailable' };
-  const keys = line.door ? [`${line.id}--${line.door}`, line.id] : [line.id];
-  const key = keys.find((k) => isObj(vm.items[k]));
+  const key = keysOf(line, vm).find((k) => isObj(vm.items[k]));
   if (!key) return { reason: 'no-audio' };
   const e = vm.items[key];
   let lh = null;
@@ -169,17 +182,17 @@ function preload(line) {
     return { key: at.key, hash: at.hash, json, url, used: false };
   })().catch(() => null);
   dropPreload();
-  V.pre = { line: line.id, text: line.text, door: line.door || null, p };
+  V.pre = { line: line.id, text: line.text, door: line.door || null, who: line.who || null, p };
 }
 function takePreload(line) {
   const p = V.pre;
-  if (!p || p.line !== line.id || p.text !== line.text || p.door !== (line.door || null)) return null;
+  if (!p || p.line !== line.id || p.text !== line.text || p.door !== (line.door || null) || p.who !== (line.who || null)) return null;
   V.pre = null;
   return p.p;
 }
 
 // ---- Speaking ----
-// line: {id, text, say, door}; opts: {channel: 'tour'|'ask', wait: Promise (the scene settling),
+// line: {id, text, say, door, who}; opts: {channel: 'tour'|'ask', wait: Promise (the scene settling),
 // next: the line after it in the same node, to preload}.
 export function speak(line, { channel = 'tour', wait = null, next = null } = {}) {
   cancel(channel);
@@ -344,10 +357,11 @@ function signal(type, strength) {
 }
 
 // ---- Ask: its own element, so an answer never loses the tour's place ----
-// lines: [{id, text, say}] in order. Resolves {voiced} once it knows whether the first line has
-// audio. onMiss(rest): called with the lines not heard, from the one that could not be said on
-// (the voice is off, a line has no usable audio, its MP3 would not load, play() was refused), so
-// the caller reads them out instead; never for an answer cut short by a newer one or by hushAsk().
+// lines: [{id, text, say, who}] in order (who: the lead). Resolves {voiced} once it knows whether
+// the first line has audio. onMiss(rest): called with the lines not heard, from the one that could
+// not be said on (the voice is off, a line has no usable audio, its MP3 would not load, play() was
+// refused), so the caller reads them out instead; never for an answer cut short by a newer one or
+// by hushAsk().
 let askRun = 0;
 export function speakAsk(lines, { onMiss = null } = {}) {
   hushAsk();
