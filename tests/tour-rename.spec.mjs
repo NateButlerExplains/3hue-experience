@@ -97,17 +97,17 @@ test('T-23 voice rendered before a rename is never played for a line the rename 
   expect(changed.length, 'the script names the renamed door in at least one spoken line').toBeGreaterThan(0);
   for (const x of changed) { expect(x.text).toContain(R.NEW); expect(before.get(x.key).text).toContain(R.OLD); }
   const changedKeys = new Set(changed.map((x) => x.key));
-  // A node whose first line (on a fresh deep link) is one the rename changed.
+  // The first node (on a fresh deep link) that reaches a line the rename changed, and where in it.
   let target = null;
   for (const [id, n] of Object.entries(REAL.nodes)) {
     const sc = sceneOf(n);
     const door = ['door', 'station'].includes(sc.kind) ? sc.door : null;
-    const first = (n.lines || []).find((l) => matches(l.when, { answers: {}, visited: [n.chapter] }));
-    if (!first) continue;
-    const key = usesDoor(first) ? (door ? leadKey(`${first.id}--${door}`) : null) : leadKey(first.id);   // the lead says it
-    if (key && changedKeys.has(key)) { target = { node: id, key, text: now.items.find((x) => x.key === key).text }; break; }
+    const shown = (n.lines || []).filter((l) => matches(l.when, { answers: {}, visited: [n.chapter] }));
+    const keyOf = (l) => (usesDoor(l) ? (door ? leadKey(`${l.id}--${door}`) : null) : leadKey(l.id));   // the lead says it
+    const at = shown.findIndex((l) => { const k = keyOf(l); return k && changedKeys.has(k); });
+    if (at >= 0) { const key = keyOf(shown[at]); target = { node: id, line: at, key, text: now.items.find((x) => x.key === key).text }; break; }
   }
-  expect(target, 'a node opens on a line the rename changed').not.toBe(null);
+  expect(target, 'a node reaches a line the rename changed').not.toBe(null);
   const unchanged = now.items.find((x) => x.key === leadKey(REAL.nodes[REAL.start].lines[0].id));
   expect(before.get(unchanged.key).lineHash, 'the first line of the tour does not name the door').toBe(unchanged.lineHash);
   // The voice files, rendered from the manifest as it was before the rename.
@@ -127,12 +127,18 @@ test('T-23 voice rendered before a rename is never played for a line the rename 
   await settled(page);
   await page.click('#tour-voice');
   await page.waitForFunction(() => window.__tour.voiceState.loaded && document.getElementById('tour-voice').getAttribute('aria-pressed') === 'true', null, { polling: 30 });
+  // On to the line the rename changed (the lines before it are voiced from the old render).
+  for (let i = 0; i < target.line; i++) {
+    await page.focus('#tour-next');
+    await page.keyboard.press('ArrowRight');
+    await page.waitForFunction((li) => window.__tour.line === li, i + 1, { polling: 30, timeout: 15_000 });
+  }
   await page.waitForTimeout(900);
   const t = await tour(page);
   const cap = await page.evaluate(() => document.querySelector('#tour-caption .sr')?.textContent);
   const files = voiceFiles(reqs, v.base);
   annotate(testInfo, { target, changed: changed.map((x) => x.key), files });
-  expect([t.node, t.line, t.speaking, t.voice]).toEqual([target.node, 0, false, true]);
+  expect([t.node, t.line, t.speaking, t.voice]).toEqual([target.node, target.line, false, true]);
   expect(cap).toBe(target.text);
   expect(files).toContain('manifest.json');
   expect(files.some((f) => f.startsWith(`${target.key}.`)), 'nothing is fetched for a line the rename changed').toBe(false);

@@ -173,9 +173,14 @@ test.describe('tour manifest (no browser)', () => {
     });
   }
 
-  test('T-01 the fixture covers every scene kind, cue kind, when, suggest, hideWhen, routes, @ and every action; the skeleton covers every scene kind', () => {
+  test('T-01 the fixture covers every scene kind, cue kind, when, suggest, hideWhen, routes, @ and every action; the real script uses the four v2 kinds', () => {
     const kinds = (t) => new Set(Object.values(t.nodes).map((n) => sceneOf(n).kind));
-    expect([...kinds(TOUR)].sort()).toEqual([...SCENES].sort());
+    // The script (v2, O14): the lobby and the round table rest, each room is a door scene whose own
+    // surfaces carry the writes (the station pins went with the pins), the tower is the path, and a
+    // hand-over keeps the scene it found. No station and no kiosk scene: the fixture below is what
+    // holds the engine to all six.
+    expect([...kinds(TOUR)].sort()).toEqual(['door', 'keep', 'path', 'rest']);
+    expect([...kinds(TOUR)].every((k) => SCENES.includes(k))).toBe(true);
     expect([...kinds(FIXTURE)].sort()).toEqual([...SCENES].sort());
     const nodes = Object.values(FIXTURE.nodes);
     const lines = nodes.flatMap((n) => n.lines);
@@ -305,10 +310,12 @@ test.describe('tour manifest (no browser)', () => {
   });
 
   for (const [file, t] of FILES) {
-    test(`T-03 ${file}: the arrival choice resolves to the O1 buyer labels in door order, each leading to its own door`, () => {
-      const arrive = t.nodes[t.start];
-      expect(sceneOf(arrive).kind).toBe('rest');
-      const opts = arrive.choice.options.slice(0, 3);
+    test(`T-03 ${file}: the door choice resolves to the O1 buyer labels in door order, each leading to its own door`, () => {
+      // The door choice waits wherever the script puts it: the start node in the fixture, the lobby
+      // in the real script (v2, O12: the arrival is the pick of who leads, and hands over to it).
+      const doorNode = Object.values(t.nodes).find((n) => n.choice?.remember === 'segment');
+      expect(sceneOf(doorNode).kind).toBe('rest');
+      const opts = doorNode.choice.options.slice(0, 3);
       expect(opts.map((o) => fillTemplate(o.label, m))).toEqual(O1);
       expect(opts.map((o) => fillTemplate(o.label, m))).toEqual(m.doors.map((d) => d.icp));
       expect(opts.map((o) => fillTemplate(o.sub, m))).toEqual(m.doors.map((d) => `${d.title} · ${d.promise}`));
@@ -321,6 +328,22 @@ test.describe('tour manifest (no browser)', () => {
       for (const { where, line } of allLines(t)) for (const ctx of DOOR_CTXS) expect(isStr(resolveLine(line, m, ctx)?.text) || /^\{(answer|chapters):/.test(line.text || ''), `${where} resolves for ${ctx.door}`).toBe(true);
     });
   }
+
+  test(`T-03 ${TOUR_FILE}: the tour opens on the pick of who leads, and every hand-over carries on to the door choice`, () => {
+    const arrive = TOUR.nodes[TOUR.start];
+    expect(arrive.choice.remember).toBe('lead');
+    const guides = Object.keys(m.guide.guides);
+    expect(arrive.choice.options.map((o) => optionValue(o)).sort()).toEqual([...guides].sort());
+    // Each option hands over in its own node, and both hand-overs lead to the one door choice.
+    const [doorNodeId] = Object.entries(TOUR.nodes).find(([, n]) => n.choice?.remember === 'segment');
+    for (const o of arrive.choice.options) {
+      const handoff = TOUR.nodes[o.next];
+      expect(handoff, `${o.id} hands over in a node`).toBeTruthy();
+      expect(handoff.next, `${o.id} carries on to ${doorNodeId}`).toBe(doorNodeId);
+      // The hand-over is spoken by both guides: the one leaving and the one taking over.
+      expect(new Set(handoff.lines.map((l) => l.who))).toEqual(new Set(guides));
+    }
+  });
 
   test('T-03 refs resolve with the source and status printed beside them; tokens fill from the manifest; @ follows the door', () => {
     const [wt, gc, sr] = m.doors;

@@ -190,7 +190,8 @@ test.describe('T-12 Ask', () => {
     let a = await ask(page);
     const intro = resolveLine(REAL.ask.intro, m, ctx0(REAL)).text;
     expect(a.intro).toBe(intro);
-    expect(a.suggested).toEqual(REAL.ask.questions.slice(0, 4).map((q) => q.id));
+    // The step's own suggestions (O12): the node's `ask` list, in its order.
+    expect(a.suggested).toEqual(REAL.nodes[REAL.start].ask);
     expect(a.all).toBe(fill(S.tourAskAll, { count: REAL.ask.questions.length }));
     // A typed question: the approved answer, named, with its sources.
     const typed = 'how much does it cost';
@@ -248,11 +249,11 @@ test.describe('T-12 Ask', () => {
     await atNode(page, 'arrive');
     await page.click('#tour-ask-btn');
     await page.waitForFunction(() => document.activeElement?.id === 'tour-ask-q', null, { polling: 30 });
-    await page.fill('#tour-ask-q', 'who are you');
+    await page.fill('#tour-ask-q', 'what about risk');
     await page.keyboard.press('Enter');
     await page.waitForFunction(() => !!document.getElementById('tour-ask-choose'), null, { polling: 30 });
     let a = await ask(page);
-    const near = M('who are you');
+    const near = M('what about risk');
     expect(near.kind).toBe('choose');
     expect(a.choose).toEqual(near.ids);
     expect(await page.textContent('#tour-ask-choose')).toBe(S.tourAskChoose);
@@ -423,7 +424,9 @@ test.describe('T-13 the close', () => {
     // A visitor who chose Regulated operators and saw only that room (restored from the tour's
     // session key, as a reload or deep link restores it): the summary's `when` lines hold back the
     // other two rooms and the questions never answered.
-    const seen = { node: 'close', answers: { segment: 'stay-ready', door: 'stay-ready' }, chosen: { segment: m.doors.find((d) => d.id === 'stay-ready').icp }, visited: ['arrival', 'door-stay-ready'], door: 'stay-ready' };
+    const SR = m.doors.find((d) => d.id === 'stay-ready');
+    const trigger = fillTemplate(REAL.nodes.sr.choice.options[0].label, m, ctx0(REAL));
+    const seen = { node: 'close', answers: { lead: m.guide.lead, segment: 'stay-ready', door: 'stay-ready', 'trigger-stay-ready': REAL.nodes.sr.choice.options[0].id }, chosen: { segment: SR.icp, 'trigger-stay-ready': trigger }, visited: ['arrival', 'lobby', 'door-stay-ready'], door: 'stay-ready' };
     await page.addInitScript(([k, v]) => { try { if (!sessionStorage.getItem(k)) sessionStorage.setItem(k, v); } catch { /* storage blocked */ } }, [KEY, JSON.stringify(seen)]);
     await open(page, { query: RQ, hash: '#/tour/close' });
     await atNode(page, 'close');
@@ -442,13 +445,20 @@ test.describe('T-13 the close', () => {
     expect(subject).toBe(fillTemplate(REAL.summary.subject, m, ctx));
     expect(body.length).toBeLessThanOrEqual(1800);
     expect(body).toContain(m.site.bookingUrl);
+    // Each room the visitor entered is named by its title and promise (the summary quotes no figure,
+    // so nothing in the draft needs a printed source).
+    const roomLine = (d) => `${d.title}: ${d.promise}`;
     for (const d of m.doors) {
-      if (d.id === 'stay-ready') { expect(body, 'the room entered is listed').toContain(d.stat.text); expect(body).toContain(d.stat.source); }
-      else expect(body, `${d.id} was never entered`).not.toContain(d.stat.text);
+      if (d.id === 'stay-ready') expect(body, 'the room entered is listed').toContain(roomLine(d));
+      else expect(body, `${d.id} was never entered`).not.toContain(roomLine(d));
     }
-    expect(body, 'the segment the visitor chose').toContain(seen.chosen.segment);
-    // Lines whose `when` names an answer never given (pressure, lens, today) do not appear.
-    const held = REAL.summary.lines.filter((l) => l.when && !matchesWhen(l.when, ctx)).map((l) => resolveLine(l, m, ctx)?.text).filter(Boolean);
+    expect(body, 'the answer the visitor gave in that room').toContain(trigger);
+    // Lines whose `when` names an answer never given (another room, another trigger) do not appear.
+    // A held line whose words are all inside a line that is shown (the same label with its runtime
+    // answer empty) proves nothing, so only the lines that carry something of their own are checked.
+    const shown = REAL.summary.lines.filter((l) => matchesWhen(l.when, ctx)).map((l) => resolveLine(l, m, ctx)?.text).filter(Boolean);
+    const held = REAL.summary.lines.filter((l) => l.when && !matchesWhen(l.when, ctx)).map((l) => resolveLine(l, m, ctx)?.text)
+      .filter((t) => t && !shown.some((s) => s.includes(t)));
     expect(held.length).toBeGreaterThan(0);
     for (const t of held) expect(body).not.toContain(t);
   });
@@ -459,8 +469,8 @@ test.describe('T-13 the close', () => {
     // its triggers are absent.
     const D = (id) => m.doors.find((d) => d.id === id);
     const optLabel = (node, id) => fillTemplate(REAL.nodes[node].choice.options.find((o) => o.id === id).label, m, ctx0(REAL));
-    const chosen = { segment: D('win-trust').icp, 'pressure-win-trust': optLabel('win-trust', 'deal'), 'pressure-gain-control': optLabel('gain-control', 'reporting') };
-    const seen = { node: 'close', answers: { segment: 'win-trust', door: 'gain-control', 'pressure-win-trust': 'deal', 'pressure-gain-control': 'reporting' }, chosen, visited: ['arrival', 'door-win-trust', 'door-gain-control', 'path'], door: 'gain-control' };
+    const chosen = { segment: D('win-trust').icp, 'trigger-win-trust': optLabel('wt', 'deal'), 'trigger-gain-control': optLabel('gc', 'reporting') };
+    const seen = { node: 'close', answers: { lead: m.guide.lead, segment: 'win-trust', door: 'gain-control', 'trigger-win-trust': 'deal', 'trigger-gain-control': 'reporting' }, chosen, visited: ['arrival', 'lobby', 'door-win-trust', 'door-gain-control', 'path'], door: 'gain-control' };
     await page.addInitScript(([k, v]) => { try { if (!sessionStorage.getItem(k)) sessionStorage.setItem(k, v); } catch { /* storage blocked */ } }, [KEY, JSON.stringify(seen)]);
     await open(page, { query: RQ, hash: '#/tour/close' });
     await atNode(page, 'close');
@@ -473,14 +483,15 @@ test.describe('T-13 the close', () => {
     const line = (id) => fillTemplate(REAL.summary.lines.find((l) => l.id === id).text, m, ctx);
     const at = (t) => body.indexOf(t);
     annotate(testInfo, { body: body.slice(0, 900) });
-    const order = [line('sum-win-trust'), D('win-trust').stat.text, line('sum-win-trust-pressure'), line('sum-gain-control'), D('gain-control').stat.text, line('sum-gain-control-pressure')];
+    // Per room: the room, the answer given in it, and the start that answer leads to.
+    const order = [line('sum-wt'), line('sum-wt-trigger'), line('sum-wt-deal'), line('sum-gc'), line('sum-gc-trigger'), line('sum-gc-reporting')];
     for (const t of order) expect(at(t), `in the summary: ${t}`).toBeGreaterThanOrEqual(0);
     expect(order.map(at), 'each answer follows its own room').toEqual([...order.map(at)].sort((a, b) => a - b));
-    expect(line('sum-win-trust-pressure')).toContain(chosen['pressure-win-trust']);
-    expect(line('sum-gain-control-pressure')).toContain(chosen['pressure-gain-control']);
-    expect(body, 'the room never entered is not listed').not.toContain(D('stay-ready').stat.text);
-    expect(body.split(chosen['pressure-win-trust']).length - 1, 'each answer once').toBe(1);
-    expect(body.split(chosen['pressure-gain-control']).length - 1).toBe(1);
+    expect(line('sum-wt-trigger')).toContain(chosen['trigger-win-trust']);
+    expect(line('sum-gc-trigger')).toContain(chosen['trigger-gain-control']);
+    expect(body, 'the room never entered is not listed').not.toContain(`${D('stay-ready').title}: ${D('stay-ready').promise}`);
+    expect(body.split(chosen['trigger-win-trust']).length - 1, 'each answer once').toBe(1);
+    expect(body.split(chosen['trigger-gain-control']).length - 1).toBe(1);
   });
 
   test('T-13 nothing leaves the page: through the tour, the map, Ask (typed and picked) and the summary, every request is a same-origin GET; no cookies; localStorage stays empty; sessionStorage holds only the tour\'s key', async ({ page, context, baseURL }, testInfo) => {
@@ -492,8 +503,12 @@ test.describe('T-13 the close', () => {
     await page.click('#walk-btn');
     await atNode(page, REAL.start);
     await page.waitForFunction(() => document.activeElement?.id === 'tour-next', null, { polling: 30 });
+    // The arrival picks who leads (O12); the hand-over carries on to the lobby's door choice.
+    await pick(page, m.guide.lead);
+    await cont(page);
+    await atNode(page, 'lobby');
     await pick(page, 'stay-ready');
-    await page.waitForFunction(() => window.__tour.node !== 'arrive', null, { polling: 30 });
+    await page.waitForFunction(() => window.__tour.node === 'sr', null, { polling: 30 });
     await settled(page);
     await page.click('#tour-map-btn');
     await page.waitForFunction(() => document.getElementById('tour-map').open, null, { polling: 30 });
@@ -508,9 +523,14 @@ test.describe('T-13 the close', () => {
     await page.waitForFunction(() => document.activeElement?.id === 'tour-ask-answering', null, { polling: 30 });
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.getElementById('tour-ask').open, null, { polling: 30 });
-    // Focus went back to Ask in the header; the card's keys work from inside the card.
+    // Focus went back to Ask in the header (the browser hands it back as the dialog closes, and the
+    // layer places it again on the next tick: both land before the card is used again).
+    await page.waitForFunction(() => document.activeElement?.id === 'tour-ask-btn', null, { polling: 30 });
+    await page.waitForTimeout(250);
     expect(await page.evaluate(() => document.activeElement?.id)).toBe('tour-ask-btn');
+    // The card's keys work from inside the card.
     await page.focus('#tour-next');
+    await page.waitForFunction(() => document.activeElement?.id === 'tour-next', null, { polling: 30 });
     await pick(page, 'summary');
     await page.waitForFunction(() => window.__tour.frame === 'summary', null, { polling: 30 });
     await page.waitForTimeout(300);

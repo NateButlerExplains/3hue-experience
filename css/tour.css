@@ -14,21 +14,30 @@
    scrolls instead. */
 
 /* The station the tour is narrating (rooms.js setActivePin): an instant state change, no motion. */
-.room-pins .room-pin.is-active .ring { border-color: #fff; background: rgba(37, 181, 214, .45); box-shadow: 0 0 0 4px rgba(6, 18, 31, .35), 0 0 26px rgba(37, 181, 214, .9); }
-.room-pins .room-pin.is-active .chip { background: var(--cyan); color: var(--navy-deep); border-color: transparent; }
+.room-pins .room-pin.is-active .ring { border-color: #fff; background: rgb(var(--guide-rgb) / .45); box-shadow: 0 0 0 4px rgba(6, 18, 31, .35), 0 0 26px rgb(var(--guide-rgb) / .9); }
+.room-pins .room-pin.is-active .chip { background: var(--guide); color: var(--navy-deep); border-color: transparent; }
 .room-pins .room-pin.is-active .chip::before { background: var(--navy-deep); }
 
 /* Two guides (O12). The sphere's colours per guide (js/guide.js reads them as "r g b" from the
    canvas, which carries its guide in data-guide): Avi the owner's blue, Huey his teal, both with the
    gold nodes. The tour's accent follows the lead (body[data-lead], set by js/tour.js): our cyan
    while Avi leads, teal while Huey does. The swap is instant (nothing here transitions a colour). */
-:root { --orb-a: 31 182 255; --orb-b: 255 214 58; --orb-c: 210 240 255; --orb: 150px; --guide: var(--cyan); --guide-ink: var(--cyan-ink); --guide-rgb: 37 181 214; }
+:root { --orb-a: 31 182 255; --orb-b: 255 214 58; --orb-c: 210 240 255; --orb: 150px; --guide: var(--cyan); --guide-ink: var(--cyan-ink); --guide-rgb: 37 181 214; --guide-lift: #3cc3e1; }
 [data-guide="huey"] { --orb-a: 46 229 157; --orb-c: 215 255 240; }
-body[data-lead="huey"] { --guide: #2ee59d; --guide-ink: #7ff0c2; --guide-rgb: 46 229 157; }
+body[data-lead="huey"] { --guide: #2ee59d; --guide-ink: #7ff0c2; --guide-rgb: 46 229 157; --guide-lift: #5aeeb4; }
 @media (max-width: 1199px) { :root { --orb: 112px; } }
 
+/* Every accent the tour paints is the lead's, so the card, its dialogs and the narrated pin turn
+   together with the sphere: the solid --guide for a filled button or chip, --guide-ink for small
+   type on the card's dark ground, and rgb(var(--guide-rgb) / a) for a rule, a tint or a glow.
+   The lobby's own buttons keep the site's cyan, so only .tour and .tour-dialog are re-pointed here.
+   Both leads carry navy type on the accent (7.8:1 on Avi's cyan, 11.5:1 on Huey's green) and
+   --guide-lift is the hover, lighter again, so neither state drops under 4.5:1. */
+.tour .btn.primary, .tour-dialog .btn.primary { background: var(--guide); border-color: var(--guide); color: var(--navy-deep); }
+.tour .btn.primary:hover, .tour-dialog .btn.primary:hover { background: var(--guide-lift); border-color: var(--guide-lift); }
+
 :root { --tour-h: clamp(176px, 24vh, 240px); }
-.tour { position: fixed; z-index: 36; left: 16px; bottom: 16px; width: min(1040px, calc(100vw - 32px)); max-height: min(52vh, 440px); display: grid; grid-template-columns: var(--orb) minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); column-gap: 16px; padding: 10px 14px 12px; border-radius: 16px; background: #0b1727; border: 1px solid rgba(82, 204, 227, .22); box-shadow: 0 18px 48px rgba(0, 0, 0, .5); color: var(--ink); }
+.tour { position: fixed; z-index: 36; left: 16px; bottom: 16px; width: min(1040px, calc(100vw - 32px)); max-height: min(52vh, 440px); display: grid; grid-template-columns: var(--orb) minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); column-gap: 16px; padding: 10px 14px 12px; border-radius: 16px; background: #0b1727; border: 1px solid rgb(var(--guide-rgb) / .28); box-shadow: 0 18px 48px rgba(0, 0, 0, .5); color: var(--ink); }
 .tour-head { flex: none; display: flex; align-items: center; gap: 12px; min-height: 44px; }
 /* The face column: the speaking guide's sphere (js/guide.js; a still frame under reduced motion),
    at the owner's size, beside everything else in the card. */
@@ -67,7 +76,7 @@ body[data-lead="huey"] { --guide: #2ee59d; --guide-ink: #7ff0c2; --guide-rgb: 46
 .tour-opt { position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; min-height: 44px; margin: 0; padding: 8px 12px 8px 42px; border-radius: var(--radius); border: 1px solid rgba(255, 255, 255, .2); background: rgba(255, 255, 255, .04); color: var(--ink); font: inherit; text-align: left; text-decoration: none; cursor: pointer; animation: tour-in 240ms var(--ease) both; }
 .tour-opt:hover { border-color: #fff; }
 .tour-opt:focus-visible { outline: none; box-shadow: var(--focus); }
-.tour-opt .n { position: absolute; left: 10px; top: 50%; margin-top: -11px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgba(82, 204, 227, .75); font: 700 12px/1 var(--body); color: #fff; }
+.tour-opt .n { position: absolute; left: 10px; top: 50%; margin-top: -11px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgb(var(--guide-rgb) / .8); font: 700 12px/1 var(--body); color: #fff; }
 .tour-opt-label { font-size: 14px; font-weight: 600; line-height: 1.3; color: #fff; }
 .tour-opt-sub { font-size: 13px; line-height: 1.3; color: var(--ink-3); }
 .tour-tag { margin-top: 2px; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: .04em; }
@@ -141,7 +150,7 @@ body[data-lead="huey"] { --guide: #2ee59d; --guide-ink: #7ff0c2; --guide-rgb: 46
 
 /* Tour map and Ask: native modal dialogs over a dimmed page. The body scrolls; head and foot stay.
    Composed layouts: a sheet from the bottom, below the header; short ones scroll as a whole. */
-.tour-dialog { width: min(640px, calc(100vw - 32px)); max-width: none; max-height: min(84vh, 760px); margin: auto; padding: 0; border: 1px solid rgba(82, 204, 227, .28); border-radius: 16px; background: #0b1727; color: var(--ink); box-shadow: 0 24px 64px rgba(0, 0, 0, .6); overflow: hidden; }
+.tour-dialog { width: min(640px, calc(100vw - 32px)); max-width: none; max-height: min(84vh, 760px); margin: auto; padding: 0; border: 1px solid rgb(var(--guide-rgb) / .32); border-radius: 16px; background: #0b1727; color: var(--ink); box-shadow: 0 24px 64px rgba(0, 0, 0, .6); overflow: hidden; }
 .tour-dialog[open] { display: flex; flex-direction: column; animation: tour-dlg-in 220ms var(--ease) both; }
 .tour-dialog::backdrop { background: rgba(3, 9, 16, .66); }
 @keyframes tour-dlg-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
@@ -156,7 +165,7 @@ body[data-lead="huey"] { --guide: #2ee59d; --guide-ink: #7ff0c2; --guide-rgb: 46
 .tour-map-row { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; margin: 0; padding: 8px 12px; border-radius: var(--radius); border: 1px solid rgba(255, 255, 255, .16); background: rgba(255, 255, 255, .04); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
 .tour-map-row:hover { border-color: #fff; }
 .tour-map-row:focus-visible { outline: none; box-shadow: var(--focus); }
-.tour-map-row .n { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(82, 204, 227, .75); font: 700 12px/1 var(--body); color: #fff; }
+.tour-map-row .n { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgb(var(--guide-rgb) / .8); font: 700 12px/1 var(--body); color: #fff; }
 .tour-map-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .tour-map-where { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--guide-ink); }
 .tour-map-title { font-size: 15px; font-weight: 600; line-height: 1.3; color: #fff; }
@@ -169,7 +178,7 @@ body[data-lead="huey"] { --guide: #2ee59d; --guide-ink: #7ff0c2; --guide-rgb: 46
 .ask-input:focus-visible { outline: none; box-shadow: var(--focus); border-color: #fff; }
 .ask-mic { flex: none; width: 44px; padding: 0; }
 .ask-mic.on { background: var(--guide); border-color: var(--guide); color: var(--navy-deep); }
-.ask-mic-note { margin-top: 10px; padding: 12px; border-radius: var(--radius); border: 1px solid rgba(82, 204, 227, .35); background: rgb(var(--guide-rgb) / .08); }
+.ask-mic-note { margin-top: 10px; padding: 12px; border-radius: var(--radius); border: 1px solid rgb(var(--guide-rgb) / .4); background: rgb(var(--guide-rgb) / .08); }
 .ask-mic-text { margin: 0 0 10px; font-size: 14px; line-height: 1.45; color: #fff; }
 .ask-mic-bar { display: flex; flex-wrap: wrap; gap: 8px; }
 .ask-status { margin: 8px 0 0; font-size: 13px; color: var(--guide-ink); }

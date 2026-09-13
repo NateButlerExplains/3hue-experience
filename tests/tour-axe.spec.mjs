@@ -3,7 +3,7 @@
 // close and its summary, with the Tour map open, with Ask open (its first view with every question
 // shown, an answer, and the microphone's disclosure). The engine states run on the fixture; Ask
 // runs on the real content/tour.json, and so do the real script's longest lines at 1280x720 (an
-// opening line citing the room's statistic, a proof line, the kiosk and its Representative data
+// opening line citing the room's statistic, a proof line, and the tower with its Where to start
 // tile), with the voice off and on (the synthetic-voice disclosure shown): 0 violations, and every
 // printed source, tile and the disclosure whole inside the card. Results go to
 // tests/results/axe-tour-<state>-<w>x<h>[-<project>].json.
@@ -67,7 +67,7 @@ const CUT = () => {
   return { out, over: b.scrollHeight > b.clientHeight + 1, region: b.getAttribute('tabindex') === '0' && b.getAttribute('role') === 'region', note: !!n && !n.hidden };
 };
 for (const voice of [false, true]) {
-  for (const node of ['gain-control-why', 'stay-ready-proof', 'kiosk']) {
+  for (const node of ['gc', 'sr-proof', 'path']) {
     test(`T-18 axe WCAG 2.1 AA and nothing cut off: the real script at ${node}, 1280x720, voice ${voice ? 'on' : 'off'}`, async ({ page }, testInfo) => {
       let q = 'debug=1&tour=1';
       if (voice) { const v = await buildVoice(`axe-real-${node}-${testInfo.project.name}-${testInfo.workerIndex}`, { tour: REAL }); q += `&voice=sim&rate=0.05&voice-base=${v.base}`; }

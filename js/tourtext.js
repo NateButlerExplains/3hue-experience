@@ -14,14 +14,14 @@
 //   {door:<id|@>.<path>}  {stage:<id|where-to-start>}  {str:<key>}  {ref:<path>}
 //   {guide}  {guide:<field>}  {guide:<id>}  {guide:<id>.<field>}  {url:booking|site|logo}
 //   {offer:<id>}  {program:<id>}
+// and two that only the runtime can fill: {answer:<key>} (the chosen label, else the stored value)
+// and {chapters:visited} (visited chapter titles).
 // Two guides (O12): {guide} and {guide:<field>} are whoever speaks the line (ctx.guide: the line's
 // `who`, else the lead), {guide:<id>} names one guide. A field a guide does not carry falls back to
 // the shared guide block (guide.title). {offer:<id>} is a quote-builder name (offers.<id>.name, O15)
 // and {program:<id>} a program name (programs.<id>.name).
-// and two that only the runtime can fill: {answer:<key>} (the chosen label, else the stored value)
-// and {chapters:visited} (visited chapter titles). A static token that does not resolve stays
-// visible as written so a typo shows on screen (content.js fmt does the same); a runtime token with
-// nothing to show is empty.
+// A static token that does not resolve stays visible as written so a typo shows on screen
+// (content.js fmt does the same); a runtime token with nothing to show is empty.
 //
 // Conditions (a line's `when`, an option's `suggest` and `hideWhen`, a branch's `when`):
 //   {answers:{key:[values]}, visited:[chapterIds], notVisited:[chapterIds]}

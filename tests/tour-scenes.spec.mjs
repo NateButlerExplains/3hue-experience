@@ -301,7 +301,7 @@ for (const [w, h] of [[1280, 720], [320, 568]]) {
       }
     }
     annotate(testInfo, seen);
-    expect(seen.map((x) => x.line), 'the opening line that cites the room\'s statistic is among them').toContain('gc-why-1');
-    expect(seen.find((x) => x.line === 'gc-why-1').shown).toContain(m.doors.find((d) => d.id === 'gain-control').stat.source);
+    expect(seen.map((x) => x.line), 'the opening line that cites the room\'s statistic is among them').toContain('gc-2');
+    expect(seen.find((x) => x.line === 'gc-2').shown).toContain(m.doors.find((d) => d.id === 'gain-control').stat.source);
   });
 }
