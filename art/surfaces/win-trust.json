@@ -1,0 +1,122 @@
+{
+  "image": "art/rooms/win-trust/candidate-01.master-2560.png",
+  "width": 2560,
+  "height": 1440,
+  "convention": "Continuous image px on the 2560x1440 master (same pixels as media/rooms/win-trust-2560.*); pixel (i,j) covers [i,i+1) x [j,j+1). Quads are TL, TR, BR, BL.",
+  "method": "Pass A numeric: per-scanline strongest luminance step (parabolic sub-pixel) between surface and surround, least-squares line per edge with sigma clipping of occluded samples, corners = line intersections. Pass B visual: 3x nearest-neighbour crops with a 20 px grid and 5 px ticks, read by eye before Pass A; corners that disagreed by more than 2 px were re-read at 8x with a 1 px grid and the cause is given in notes (passBFirstRead keeps the original read). quad = mean of passA and passB; maxDiffPx = largest corner distance between them. Panel edges = lit area bounded by the black mullions and the dark frame lines above and below the glass. Occluders = objects in front of the surface, from a not-glass / not-screen mask inside each quad (merged within 2 px) or traced at 3x.",
+  "surfaces": {
+    "wt-panel-1": {
+      "quad": [[574.6,291.0],[731.0,291.0],[730.8,717.0],[575.2,716.9]],
+      "passA": [[575.1,291.1],[730.9,291.0],[730.9,716.9],[575.2,716.9]],
+      "passB": [[574,291],[731,291],[730.7,717.0],[575.2,717.0]],
+      "maxDiffPx": 1.15,
+      "occluders": [[[575.0,561.0],[575.0,589.5],[580.0,599.5],[583.0,603.5],[604.0,605.5],[608.0,610.0],[613.0,610.0],[613.0,603.5],[611.0,597.5],[620.0,595.5],[620.0,591.5],[614.0,585.5],[628.0,583.5],[628.0,579.5],[617.0,571.5],[617.0,567.5],[598.0,563.5],[598.0,561.0]],[[575.0,615.0],[575.0,633.5],[579.0,639.5],[587.0,641.5],[589.0,647.0],[594.0,647.0],[591.0,627.5],[580.0,615.0]],[[649.0,628.0],[624.0,630.5],[621.0,632.5],[621.0,636.5],[626.0,642.5],[623.0,644.5],[605.0,646.5],[603.0,648.5],[603.0,650.5],[612.0,654.5],[617.0,660.5],[595.0,662.5],[593.0,666.5],[593.0,670.5],[607.0,672.5],[605.0,676.5],[611.0,678.5],[601.0,686.5],[601.0,690.5],[624.0,692.5],[629.0,694.5],[628.0,710.5],[631.0,717.0],[670.0,717.0],[673.0,710.5],[673.0,700.5],[692.0,698.5],[691.0,684.5],[689.0,682.5],[705.0,680.5],[705.0,676.5],[699.0,668.5],[691.0,666.5],[692.0,664.5],[697.0,662.5],[696.0,656.5],[687.0,654.5],[689.0,650.5],[694.0,646.5],[694.0,642.5],[678.0,640.5],[677.0,634.5],[660.0,632.5],[660.0,630.5],[655.0,628.0]],[[706.0,701.0],[706.0,705.5],[718.0,717.0],[731.0,717.0],[731.0,701.0]]],
+      "usable": true,
+      "notes": "Leftmost frosted panel, fully in frame (not cropped). Lit glass between the dark column/jamb (x~571-575) and mullion 1-2; ~25 px narrower than panels 3-5 (156 vs ~181 px); the 3 px lit sliver at x 567-570 is the column edge, excluded. Occluded: floor-plant leaves over the left edge (y~561-647), credenza plant over the bottom (x~593-705, y~628-717), bowl over the bottom-right corner (x>=706, y>=701) - BR corner is behind the bowl (edge-line intersection). Clear area ~x 580-725, y 296-555. Pass B first read took the credenza-lip highlight (y~719-720) as the bottom edge (2.9 px off); bottom re-read at 8x = 717.0.",
+      "passBFirstRead": [[574,291],[731,291],[730.7,718],[573.3,719]],
+      "firstReadMaxDiffPx": 2.89
+    },
+    "wt-panel-2": {
+      "quad": [[735.1,291.0],[901.5,291.0],[900.9,717.1],[735.5,717.0]],
+      "passA": [[735.9,291.0],[901.3,291.0],[900.8,717.2],[736.3,717.0]],
+      "passB": [[734.3,291],[901.7,291],[901.0,717.0],[734.7,717.0]],
+      "maxDiffPx": 1.63,
+      "occluders": [[[735.0,701.0],[735.0,717.0],[764.0,717.0],[777.0,705.5],[777.0,701.0]]],
+      "usable": true,
+      "notes": "Lit glass between mullions at x~735 and x~901. Credenza bowl covers the bottom-left corner (x~735-777, y~701-717); BL corner is behind the bowl (edge-line intersection). Head-of-table chair back tops out at y~719, just below the bottom edge (not occluding). Left edge wobbles ~0.4 px rms in the render; first-read Pass B sat 1.6 px left of it (within tolerance).",
+      "passBFirstRead": [[734.3,291],[901.7,291],[901,717.3],[734.7,718]],
+      "firstReadMaxDiffPx": 1.93
+    },
+    "wt-panel-3": {
+      "quad": [[905.8,291.0],[1085.9,290.6],[1085.9,716.9],[906.4,717.0]],
+      "passA": [[906.4,291.1],[1085.5,290.7],[1085.7,716.8],[906.5,717.1]],
+      "passB": [[905.3,291],[1086.3,290.5],[1086.0,717.0],[906.3,717.0]],
+      "maxDiffPx": 1.1,
+      "occluders": [[[906.0,291.0],[907.0,320.0],[915.0,320.0],[918.0,315.5],[918.0,291.0]]],
+      "usable": true,
+      "notes": "Lit glass x~906-1086. Pendant rod (x 908-915, warm white) hangs in front of the top-left, tip at y~318 (occluder recorded with a 2 px margin); the TL corner itself is visible just left of the rod. Bottom re-read at 8x (first read 2.2 px low).",
+      "passBFirstRead": [[905.3,291],[1086.3,290.5],[1085.7,719],[905.7,717.3]],
+      "firstReadMaxDiffPx": 2.18
+    },
+    "wt-panel-4": {
+      "quad": [[1090.2,290.7],[1271.2,290.5],[1272.1,716.9],[1090.5,717.0]],
+      "passA": [[1090.8,290.9],[1271.2,290.8],[1272.2,716.9],[1090.5,716.9]],
+      "passB": [[1089.7,290.5],[1271.3,290.3],[1272.0,717.0],[1090.5,717.0]],
+      "maxDiffPx": 1.18,
+      "occluders": [],
+      "usable": true,
+      "notes": "Lit glass x~1090-1272; no occluders - the cleanest panel. Right edge includes the 3 px lit side face of mullion 4-5 (x~1269-1271) and wobbles about 1 px in the render (1270.8-1272.0), fitted as a straight line. Bottom re-read at 8x (first read 2.2 px low).",
+      "passBFirstRead": [[1089.7,290.5],[1271.3,290.3],[1271.3,718.7],[1089.7,719]],
+      "firstReadMaxDiffPx": 2.22
+    },
+    "wt-panel-5": {
+      "quad": [[1275.0,290.6],[1458.0,290.4],[1457.9,716.9],[1275.3,716.9]],
+      "passA": [[1275.4,290.8],[1458.0,290.7],[1457.8,716.7],[1275.3,716.7]],
+      "passB": [[1274.7,290.3],[1458.0,290.0],[1458.0,717.0],[1275.4,717.0]],
+      "maxDiffPx": 0.86,
+      "occluders": [[[1364.0,641.0],[1363.0,661.5],[1365.0,717.0],[1458.0,717.0],[1458.0,641.0]]],
+      "usable": true,
+      "notes": "Lit glass x~1275-1458. Right edge = start of black mullion at x 1458; it includes the 4-5 px lit side face of mullion 5-6 (x~1453-1457), the glass itself ends at x~1453. Desk monitor covers the bottom-right (x~1363-1458, y~641-717); BR corner is behind the monitor (edge-line intersection). Pass B first read put the right edge inside the side face and the bottom on the credenza lip (2.9 px off); re-read at 8x.",
+      "passBFirstRead": [[1274.7,290.3],[1455.7,290],[1455.7,718.7],[1275,718.7]],
+      "firstReadMaxDiffPx": 2.86
+    },
+    "wt-panel-6": {
+      "quad": [[1460.8,290.3],[1580.4,291.2],[1580.7,716.5],[1460.9,716.4]],
+      "passA": [[1461.0,290.7],[1580.5,291.4],[1580.6,716.5],[1461.0,716.3]],
+      "passB": [[1460.7,290],[1580.3,291],[1580.7,716.5],[1460.7,716.5]],
+      "maxDiffPx": 0.74,
+      "occluders": [[[1488.0,641.0],[1461.0,643.5],[1461.0,716.0],[1512.0,716.0],[1511.0,659.5],[1509.0,641.0]],[[1536.0,681.0],[1536.0,683.5],[1524.0,689.5],[1521.0,695.5],[1517.0,697.5],[1518.0,701.5],[1526.0,705.5],[1524.0,707.5],[1525.0,716.0],[1554.0,716.0],[1554.0,705.5],[1560.0,701.5],[1560.0,697.5],[1558.0,693.5],[1552.0,689.5],[1552.0,687.5],[1542.0,683.5],[1541.0,681.0]]],
+      "usable": true,
+      "notes": "Rightmost panel: ~62 px narrower than panels 3-5 (120 px) and ends hard where the dark right-wall return starts at x~1581 - reads as cut off by the wall return (or ending at the corner). Monitor covers the bottom-left (x~1461-1512, y~641-716; BL corner behind it); desk plant covers the bottom-right (x~1517-1560, y~681-716). Top edge tilts 0.7 px across (soffit shading). Clear above y~640; best for a short line.",
+      "passBFirstRead": [[1460.7,290],[1580.3,291],[1580.3,718],[1460.7,718]],
+      "firstReadMaxDiffPx": 1.69
+    },
+    "wt-monitor": {
+      "quad": [[1364.9,643.1],[1508.4,643.1],[1509.7,718.4],[1366.3,718.7]],
+      "passA": [[1364.9,643.2],[1508.3,643.2],[1510.4,718.4],[1366.6,718.5]],
+      "passB": [[1365,643],[1508.5,643],[1509,718.5],[1366,719]],
+      "maxDiffPx": 1.42,
+      "occluders": [[[1404,722],[1407,717.8],[1505,717.8],[1508,722],[1508,745],[1404,745]]],
+      "usable": true,
+      "notes": "Dark screen + bezel (indistinguishable) against the lit glass of panels 5-6; ~144 x 75 px. Left and right edges lean ~0.025 px/px in the render (fitted as found). Bottom edge = where the screen meets the desk-chair back's top highlight (y~718.5); the chair back (occluder) hides any lower bezel, and on the left the screen bottom merges with the dark desk. Mullion 5-6 meets its top edge at x~1458-1461.",
+      "firstReadMaxDiffPx": 1.42
+    },
+    "wt-binders": {
+      "quad": [[666.6,787.0],[1061.9,786.5],[1163.8,879.9],[541.4,881.0]],
+      "passA": [[666.4,787.0],[1062.1,786.6],[1164.1,880.0],[541.7,881.0]],
+      "passB": [[666.7,787],[1061.7,786.4],[1163.5,879.7],[541.2,881]],
+      "maxDiffPx": 0.64,
+      "occluders": [[[808,829],[817,818],[868,818],[868,799],[876,799],[877,769],[884,769],[885,799],[899,799],[899,818],[940,818],[947,829],[947,861],[808,861]]],
+      "usable": true,
+      "notes": "Region for a glow + label anchor, not a writing surface. Corners = outer corners of the four corner folders: TL top-left of the far-left folder's cover, TR top-right of the far-right folder's cover, BR bottom-right of the near-right folder's base, BL bottom-left of the near-left folder's base; the sides follow the table's perspective. Encloses all six place folders (the middle-row outer corners sit on the side edges) and the document tray. The head-seat folder (x~839-920, y~778-784) and the pen-stand tip (y~769) sit just above the top edge. Occluder: tray + pen stand, which stand above the table plane. Label anchor = points['wt-binders-label'] (top-edge midpoint, clear of the tray).",
+      "firstReadMaxDiffPx": 0.64
+    },
+    "wt-niche": {
+      "quad": [[1749.9,390.8],[1894.1,339.9],[1894.2,797.0],[1749.8,774.9]],
+      "passA": [[1749.3,390.9],[1894.7,339.5],[1894.9,797.7],[1749.0,775.1]],
+      "passB": [[1750.5,390.7],[1893.5,340.3],[1893.5,796.3],[1750.5,774.7]],
+      "maxDiffPx": 1.99,
+      "occluders": [[[1809.0,736.0],[1810.0,727.0],[1812.0,725.5],[1885.5,725.5],[1885.5,748.0],[1879.0,760.0],[1866.0,775.0],[1864.0,776.0],[1832.0,775.0],[1826.0,774.0],[1815.0,758.0],[1811.0,750.0]]],
+      "usable": true,
+      "notes": "Lit walnut niche on the right wall, in perspective (right-wall VP ~(991, 659), see vanishingPoints). Quad = outer boundary of the niche's dark frame against the cladding: left = walnut to black reveal (x~1749.5), right = frame face to dark wall (x~1894.5), top = upper edge of the black top seam, bottom = lower edge of the black bottom seam. The lit opening sits 2-7 px inside this outline. Interior is not one plane (far side wall, back strip, LED ceiling, floor): use for glow/label; any text belongs on the wall plane. Occluder: black bowl on the niche floor. BR corner re-checked at 8x (1895.0, 797.2).",
+      "firstReadMaxDiffPx": 1.99
+    }
+  },
+  "points": {
+    "wt-panel-1-centre": [652.9,504.5],
+    "wt-panel-2-centre": [818.2,504.7],
+    "wt-panel-3-centre": [996.0,504.2],
+    "wt-panel-4-centre": [1181.0,503.4],
+    "wt-panel-5-centre": [1366.5,503.9],
+    "wt-panel-6-centre": [1520.8,503.4],
+    "wt-monitor-centre": [1437.5,680.8],
+    "wt-binders-centre": [860.1,823.1],
+    "wt-niche-centre": [1815.7,576.1],
+    "wt-binders-label": [864.2,786.8],
+    "wt-pendant-tip": [911.5,318.0]
+  },
+  "vanishingPoints": {
+    "right-wall": [990.8,658.7],
+    "note": "Meet of the niche frame top and bottom seam lines (right-wall horizontals); the back wall with the panels is frontal (panel edges vertical/horizontal to <0.01 px/px)."
+  }
+}
