@@ -313,14 +313,22 @@ test.describe('tour manifest (no browser)', () => {
     test(`T-03 ${file}: the door choice resolves to the O1 buyer labels in door order, each leading to its own door`, () => {
       // The door choice waits wherever the script puts it: the start node in the fixture, the lobby
       // in the real script (v2, O12: the arrival is the pick of who leads, and hands over to it).
-      const doorNode = Object.values(t.nodes).find((n) => n.choice?.remember === 'segment');
+      const doorNode = Object.values(t.nodes).find((n) => ['segment', 'situation'].includes(n.choice?.remember));
       expect(sceneOf(doorNode).kind).toBe('rest');
       const opts = doorNode.choice.options.slice(0, 3);
-      expect(opts.map((o) => fillTemplate(o.label, m))).toEqual(O1);
-      expect(opts.map((o) => fillTemplate(o.label, m))).toEqual(m.doors.map((d) => d.icp));
+      if (doorNode.choice.remember === 'segment') {
+        // The fixture still asks which door you are, so each option is a buyer label.
+        expect(opts.map((o) => fillTemplate(o.label, m))).toEqual(O1);
+        expect(opts.map((o) => fillTemplate(o.label, m))).toEqual(m.doors.map((d) => d.icp));
+      } else {
+        // The real script asks what someone is being asked for, so the label is the situation and the
+        // audience is never named to the visitor.
+        expect(opts.map((o) => fillTemplate(o.label, m))).not.toEqual(m.doors.map((d) => d.icp));
+      }
       expect(opts.map((o) => fillTemplate(o.sub, m))).toEqual(m.doors.map((d) => `${d.title} · ${d.promise}`));
       expect(opts.map((o) => sceneOf(t.nodes[o.next]))).toEqual(m.doors.map((d) => ({ kind: 'door', door: d.id })));
-      expect(opts.map((o) => optionValue(o))).toEqual(DOORS);
+      // The fixture stores a door id; the real script stores the situation the visitor named.
+      expect(opts.map((o) => optionValue(o))).toEqual(doorNode.choice.remember === 'segment' ? DOORS : ['prove', 'own', 'run']);
       // No name is typed anywhere: every template filled for every door keeps no unresolved token.
       for (const [where, tpl] of allTemplates(t)) {
         for (const tk of templateTokens(tpl)) expect(tk.runtime || DOOR_CTXS.every((ctx) => fillTemplate(tk.raw, m, ctx) !== tk.raw), `${where}: ${tk.raw}`).toBe(true);
@@ -335,7 +343,7 @@ test.describe('tour manifest (no browser)', () => {
     const guides = Object.keys(m.guide.guides);
     expect(arrive.choice.options.map((o) => optionValue(o)).sort()).toEqual([...guides].sort());
     // Each option hands over in its own node, and both hand-overs lead to the one door choice.
-    const [doorNodeId] = Object.entries(TOUR.nodes).find(([, n]) => n.choice?.remember === 'segment');
+    const [doorNodeId] = Object.entries(TOUR.nodes).find(([, n]) => ['segment', 'situation'].includes(n.choice?.remember));
     for (const o of arrive.choice.options) {
       const handoff = TOUR.nodes[o.next];
       expect(handoff, `${o.id} hands over in a node`).toBeTruthy();

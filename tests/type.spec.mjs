@@ -6,6 +6,9 @@
 import { test, expect } from '@playwright/test';
 import { open, panelOpen, doorsShown, manifest as m, S, DOORS, doorById, doorH2, fill, vp, annotate, r1 } from './helpers.mjs';
 import { learnMoreProblem } from '../tools/check-manifest.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { ROOT } from './helpers.mjs';
 
 const STATES = [
   { id: 'lobby', hash: '#/experience' },
@@ -153,7 +156,18 @@ test('O15 each door panel lists its ready-made bundles (hidden when it has none)
     expect(r.programs).toEqual(want.programs);
     expect(r.inServices, 'bundles and programs sit under Services on this path').toBe(true);
   }
-  expect(DOORS.some((id) => doorById(id).packages.length === 0), 'a door with no packages exercises the hidden list').toBe(true);
+  // Under the corrected shelf every door carries a package, so no live door exercises the hidden
+  // branch. Drive it from a throwaway manifest rather than lose the coverage: `?manifest=` takes any
+  // repo-relative path (js/content.js:22), and tests/results is untracked.
+  const hidden = 'tests/results/no-packages.json';
+  const stripped = JSON.parse(JSON.stringify(m));
+  stripped.doors.find((d) => d.id === DOORS[0]).packages = [];
+  fs.mkdirSync(path.join(ROOT, 'tests', 'results'), { recursive: true });
+  fs.writeFileSync(path.join(ROOT, hidden), JSON.stringify(stripped));
+  await open(page, { hash: `#/door/${DOORS[0]}`, query: `manifest=${hidden}` });
+  await panelOpen(page);
+  const none = await page.evaluate(() => document.getElementById('panel-packages')?.textContent.trim() ?? null);
+  expect(none, 'a door with no packages hides the bundles list').toBeNull();
   annotate(testInfo, log);
 });
 

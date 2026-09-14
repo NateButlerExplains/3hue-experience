@@ -28,7 +28,15 @@ const MP3 = path.join(ROOT, 'tests/fixtures/voice/one-second.mp3');
 const clone = (x) => structuredClone(x);
 const hasFfmpeg = !!(await toolVersion(ffmpeg()));
 const writeJson = (f, v) => { fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, JSON.stringify(v, null, 1)); return f; };
-const cleanEnv = (home, extra = {}) => { const e = { ...process.env, HOME: home, ...extra }; for (const n of [KEY, REGION, ELEVEN_KEY, ELEVEN_KEY_ALT]) if (!(n in extra)) delete e[n]; return e; };
+// A throwaway home, so the run never reads the developer's own ~/.env. os.homedir() prefers
+// USERPROFILE on Windows and HOME elsewhere, and falls back to HOMEDRIVE+HOMEPATH, so all of them
+// have to point at the temporary directory or the test passes or fails by whose machine it is on.
+const cleanEnv = (home, extra = {}) => {
+  const e = { ...process.env, HOME: home, USERPROFILE: home, ...extra };
+  delete e.HOMEDRIVE; delete e.HOMEPATH;
+  for (const n of [KEY, REGION, ELEVEN_KEY, ELEVEN_KEY_ALT]) if (!(n in extra)) delete e[n];
+  return e;
+};
 const SECRET = 'sk_test_0123456789abcdef0123456789abcdef01234567';   // a stand-in key, never a real one
 const noWait = { pace: async () => {}, sleep: async () => {} };
 

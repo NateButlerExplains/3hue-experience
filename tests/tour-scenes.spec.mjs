@@ -195,7 +195,9 @@ test.describe('T-07 scenes', () => {
     expect(s.z).toBeCloseTo(g.layout.dolly.zoom, 5);
     expect(s.room).toBe(1);
     expect(s.current).toEqual(['gain-control']);
-    expect((await card(page)).caption).toBe(m.doors.find((d) => d.id === 'gain-control').decision);
+    // `decision` is a sourced object on the doors that have been re-sourced, a plain string on the rest.
+    const decision = m.doors.find((d) => d.id === 'gain-control').decision;
+    expect((await card(page)).caption).toBe(typeof decision === 'string' ? decision : decision.text);
   });
 
   test('T-07 with ?rooms=0: a door and a station node dolly to the door with no room, no pins and no surfaces', async ({ page }) => {
@@ -301,7 +303,9 @@ for (const [w, h] of [[1280, 720], [320, 568]]) {
       }
     }
     annotate(testInfo, seen);
-    expect(seen.map((x) => x.line), 'the opening line that cites the room\'s statistic is among them').toContain('gc-2');
-    expect(seen.find((x) => x.line === 'gc-2').shown).toContain(m.doors.find((d) => d.id === 'gain-control').stat.source);
+    // Stay Ready is the room whose opening beat cites a statistic: `sr-stat` refs doors.stay-ready.stat
+    // and puts the same figure on the glass as a card, so the printed source has to travel with it.
+    expect(seen.map((x) => x.line), 'the opening line that cites the room\'s statistic is among them').toContain('sr-stat');
+    expect(seen.find((x) => x.line === 'sr-stat').shown).toContain(m.doors.find((d) => d.id === 'stay-ready').stat.source);
   });
 }

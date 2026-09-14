@@ -426,7 +426,8 @@ test.describe('T-13 the close', () => {
     // other two rooms and the questions never answered.
     const SR = m.doors.find((d) => d.id === 'stay-ready');
     const trigger = fillTemplate(REAL.nodes.sr.choice.options[0].label, m, ctx0(REAL));
-    const seen = { node: 'close', answers: { lead: m.guide.lead, segment: 'stay-ready', door: 'stay-ready', 'trigger-stay-ready': REAL.nodes.sr.choice.options[0].id }, chosen: { segment: SR.icp, 'trigger-stay-ready': trigger }, visited: ['arrival', 'lobby', 'door-stay-ready'], door: 'stay-ready' };
+    const situation = fillTemplate(REAL.nodes['arrive-question'].choice.options[2].label, m, ctx0(REAL));
+    const seen = { node: 'close', answers: { lead: m.guide.lead, situation: 'run', door: 'stay-ready', 'trigger-stay-ready': REAL.nodes.sr.choice.options[0].id }, chosen: { situation, 'trigger-stay-ready': trigger }, visited: ['arrival', 'lobby', 'door-stay-ready'], door: 'stay-ready' };
     await page.addInitScript(([k, v]) => { try { if (!sessionStorage.getItem(k)) sessionStorage.setItem(k, v); } catch { /* storage blocked */ } }, [KEY, JSON.stringify(seen)]);
     await open(page, { query: RQ, hash: '#/tour/close' });
     await atNode(page, 'close');
@@ -452,7 +453,10 @@ test.describe('T-13 the close', () => {
       if (d.id === 'stay-ready') expect(body, 'the room entered is listed').toContain(roomLine(d));
       else expect(body, `${d.id} was never entered`).not.toContain(roomLine(d));
     }
-    expect(body, 'the answer the visitor gave in that room').toContain(trigger);
+    // The summary names the answer once, at the door, and then the start that answer leads to;
+    // it no longer repeats the trigger label inside each room's block.
+    expect(body, 'the answer the visitor gave at the door').toContain(situation);
+    expect(body, "the start that visitor's trigger leads to").toContain(fillTemplate(REAL.summary.lines.find((l) => l.id === 'sum-sr-exam').text, m, ctx));
     // Lines whose `when` names an answer never given (another room, another trigger) do not appear.
     // A held line whose words are all inside a line that is shown (the same label with its runtime
     // answer empty) proves nothing, so only the lines that carry something of their own are checked.
@@ -469,8 +473,8 @@ test.describe('T-13 the close', () => {
     // its triggers are absent.
     const D = (id) => m.doors.find((d) => d.id === id);
     const optLabel = (node, id) => fillTemplate(REAL.nodes[node].choice.options.find((o) => o.id === id).label, m, ctx0(REAL));
-    const chosen = { segment: D('win-trust').icp, 'trigger-win-trust': optLabel('wt', 'deal'), 'trigger-gain-control': optLabel('gc', 'reporting') };
-    const seen = { node: 'close', answers: { lead: m.guide.lead, segment: 'win-trust', door: 'gain-control', 'trigger-win-trust': 'deal', 'trigger-gain-control': 'reporting' }, chosen, visited: ['arrival', 'lobby', 'door-win-trust', 'door-gain-control', 'path'], door: 'gain-control' };
+    const chosen = { situation: optLabel('arrive-question', 'own'), 'trigger-win-trust': optLabel('wt', 'deal'), 'trigger-gain-control': optLabel('gc', 'vendors') };
+    const seen = { node: 'close', answers: { lead: m.guide.lead, situation: 'own', door: 'gain-control', 'trigger-win-trust': 'deal', 'trigger-gain-control': 'vendors' }, chosen, visited: ['arrival', 'lobby', 'door-win-trust', 'door-gain-control', 'path'], door: 'gain-control' };
     await page.addInitScript(([k, v]) => { try { if (!sessionStorage.getItem(k)) sessionStorage.setItem(k, v); } catch { /* storage blocked */ } }, [KEY, JSON.stringify(seen)]);
     await open(page, { query: RQ, hash: '#/tour/close' });
     await atNode(page, 'close');
@@ -484,14 +488,15 @@ test.describe('T-13 the close', () => {
     const at = (t) => body.indexOf(t);
     annotate(testInfo, { body: body.slice(0, 900) });
     // Per room: the room, the answer given in it, and the start that answer leads to.
-    const order = [line('sum-wt'), line('sum-wt-trigger'), line('sum-wt-deal'), line('sum-gc'), line('sum-gc-trigger'), line('sum-gc-reporting')];
+    // Per room: the room, then the start the answer given in that room leads to. The answer itself
+    // is named once at the door (sum-situation), not repeated per room.
+    const order = [line('sum-wt'), line('sum-wt-deal'), line('sum-gc'), line('sum-gc-vendors')];
     for (const t of order) expect(at(t), `in the summary: ${t}`).toBeGreaterThanOrEqual(0);
     expect(order.map(at), 'each answer follows its own room').toEqual([...order.map(at)].sort((a, b) => a - b));
-    expect(line('sum-wt-trigger')).toContain(chosen['trigger-win-trust']);
-    expect(line('sum-gc-trigger')).toContain(chosen['trigger-gain-control']);
+    expect(body, 'the door answer is named once').toContain(chosen.situation);
     expect(body, 'the room never entered is not listed').not.toContain(`${D('stay-ready').title}: ${D('stay-ready').promise}`);
-    expect(body.split(chosen['trigger-win-trust']).length - 1, 'each answer once').toBe(1);
-    expect(body.split(chosen['trigger-gain-control']).length - 1).toBe(1);
+    expect(body.split(chosen.situation).length - 1, 'the door answer appears once').toBe(1);
+    for (const id of ['sum-wt-deal', 'sum-gc-vendors']) expect(body.split(line(id)).length - 1, `${id} appears once`).toBe(1);
   });
 
   test('T-13 nothing leaves the page: through the tour, the map, Ask (typed and picked) and the summary, every request is a same-origin GET; no cookies; localStorage stays empty; sessionStorage holds only the tour\'s key', async ({ page, context, baseURL }, testInfo) => {
@@ -503,11 +508,11 @@ test.describe('T-13 the close', () => {
     await page.click('#walk-btn');
     await atNode(page, REAL.start);
     await page.waitForFunction(() => document.activeElement?.id === 'tour-next', null, { polling: 30 });
-    // The arrival picks who leads (O12); the hand-over carries on to the lobby's door choice.
+    // The arrival picks who leads (O12); the hand-over carries on to the one question at arrival.
     await pick(page, m.guide.lead);
     await cont(page);
-    await atNode(page, 'lobby');
-    await pick(page, 'stay-ready');
+    await atNode(page, 'arrive-question');
+    await pick(page, 'run');
     await page.waitForFunction(() => window.__tour.node === 'sr', null, { polling: 30 });
     await settled(page);
     await page.click('#tour-map-btn');

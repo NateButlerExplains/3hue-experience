@@ -39,23 +39,23 @@ const PLAN = {
   'win-trust': {
     deal: { trigger: 0, lead: 'soc-2-readiness', alt: 'iso-27001-readiness', then: ['managed-isp'] },
     evidence: { trigger: 1, lead: 'initial-risk-assessment', with: ['rfp-response'], then: ['managed-isp'] },
-    ai: { trigger: 2, lead: 'ai-governance-advisory', with: ['initial-risk-assessment'], then: ['managed-isp'] },
+    scope: { trigger: 2, lead: 'isms-scope-soa-development', alt: 'iso-27001-readiness', with: ['system-security-privacy-plan-sspp-development'], then: ['managed-isp'] },
     early: { trigger: null, lead: 'initial-risk-assessment' },
   },
   'gain-control': {
-    acquisition: { trigger: 0, lead: 'initial-risk-assessment', then: ['managed-rmp'] },
-    reporting: { trigger: 1, lead: 'bod-reporting', with: ['risk-committee-update'], then: ['managed-rmp'] },
-    control: { trigger: 2, lead: 'managed-rmp', with: ['managed-vcp', 'vciso'] },
-    early: { trigger: null, lead: 'initial-risk-assessment' },
+    crossing: { trigger: 0, lead: 'privacy-leadership-launch', with: ['data-mapping-data-inventory', 'regulator-liaison-dsar-escalation-support'] },
+    ai: { trigger: 1, lead: 'ai-governance-advisory', with: ['security-architecture-reviews', 'secure-sdlc-program-development', 'vulnerability-management-program-development'], then: ['security-engineering'] },
+    vendors: { trigger: 2, lead: 'managed-vcp', with: ['asset-governance-program-development', 'audit-support'], then: ['vcp-additional-vendor-monitoring-5-vendor-block'] },
+    early: { trigger: null, lead: 'data-mapping-data-inventory' },
   },
   'stay-ready': {
     exam: { trigger: 0, lead: 'controls-gap-assessment', with: ['risk-register-poam'], then: ['managed-rmp'] },
     incident: { trigger: 1, lead: 'ir-fast-start', with: ['bcp-development'], live: 'incident-command', then: ['managed-cirp', 'mxdr-complete'] },
-    crossing: { trigger: 2, lead: 'privacy-leadership-launch', with: ['ai-governance-advisory'] },
+    detect: { trigger: 2, lead: 'mxdr-complete', alt: 'mxdr-starter' },
     early: { trigger: null, lead: 'controls-gap-assessment' },
   },
 };
-const RINGS = { 'win-trust': { deal: ['assess', 'strengthen'], evidence: ['assess'], ai: ['strengthen'] }, 'gain-control': { acquisition: ['assess'], reporting: ['advance'], control: ['operate'] }, 'stay-ready': { exam: ['operate'], incident: ['strengthen'], crossing: ['strengthen'] } };
+const RINGS = { 'win-trust': { deal: ['assess', 'strengthen'], evidence: ['assess'], scope: ['strengthen'] }, 'gain-control': { crossing: ['assess', 'operate'], ai: ['strengthen'], vendors: ['operate'] }, 'stay-ready': { exam: ['operate'], incident: ['strengthen'], detect: ['operate'] } };
 
 test.describe('quote builder names (O15, no browser)', () => {
   test('content/builder-names.json is names only, pinned to the 2026-09-09 capture', () => {
@@ -94,7 +94,10 @@ test.describe('quote builder names (O15, no browser)', () => {
 
   test('every family, example, offer and program name is on the list, filed in its Builder category, and not a draft', () => {
     for (const d of m.doors) {
-      expect(d.serviceFamilies).toHaveLength(4);
+      // Three or four (tools/check-manifest.js:175): under the corrected shelf Win Trust and Gain
+      // Control hold three distinctive families each, Stay Ready four.
+      expect(d.serviceFamilies.length, `${d.id} lists three or four service families`).toBeGreaterThanOrEqual(3);
+      expect(d.serviceFamilies.length, `${d.id} lists three or four service families`).toBeLessThanOrEqual(4);
       for (const f of d.serviceFamilies) {
         expect(CATEGORIES.has(f.name), `${d.id}: family "${f.name}" is a Builder category`).toBe(true);
         expect(DRAFT.has(f.name)).toBe(false);
@@ -171,7 +174,9 @@ test.describe('quote builder names (O15, no browser)', () => {
         expect(typeof s.source === 'string' && s.source.length > 0).toBe(true);
       }
     }
-    expect(m.doors.find((d) => d.id === 'gain-control').packages, 'Gain Control has no package; its panel hides the list').toEqual([]);
+    // Under the corrected shelf every door carries at least one package: Gain Control gained
+    // Privacy Leadership Launch, so no door exercises the panel's hidden-list state any more.
+    for (const d of m.doors) expect(d.packages.length, `${d.id} carries at least one package`).toBeGreaterThan(0);
   });
 
   test('the overlaps hold: never SOC 2 with ISO 27001, no standalone risk assessment beside either, VCP base first, Fast Start is not live command', () => {
@@ -237,16 +242,16 @@ test.describe('quote builder names (O15, no browser)', () => {
       ['a standalone risk assessment beside SOC 2', (x) => { wt(x).starts.deal.with = ['initial-risk-assessment']; }, /no standalone Initial Risk Assessment beside/],
       ['an item bought twice through a package', (x) => { sr(x).starts.incident.with = ['ir-playbook']; }, /IR Playbook Development would be bought twice/],
       ['the 5-vendor block before the VCP base', (x) => { x.programs.vcp.run.reverse(); }, /needs Managed Vendor Compliance Program \(VCP\) before it/],
-      ['the 5-vendor block without the base', (x) => { gc(x).starts.control.with = ['vcp-additional-vendor-monitoring-5-vendor-block']; }, /needs Managed Vendor Compliance Program \(VCP\) before it/],
+      ['the 5-vendor block without the base', (x) => { const s = gc(x).starts.vendors; s.lead = 'asset-governance-program-development'; s.with = ['vcp-additional-vendor-monitoring-5-vendor-block']; delete s.then; }, /needs Managed Vendor Compliance Program \(VCP\) before it/],
       ['Fast Start as live incident command', (x) => { sr(x).starts.incident.live = 'ir-fast-start'; }, /live incident command is Incident Command & Emergency Response Leadership/],
       ['Fast Start with no live command named', (x) => { delete sr(x).starts.incident.live; }, /Incident Response Fast Start is not live incident command/],
       ['live command inside Fast Start', (x) => { x.offers['ir-fast-start'].contains.push('incident-command'); }, /carries standing incident command/],
-      ['a start the door does not list', (x) => { gc(x).starts.acquisition.lead = 'soc-2-readiness'; }, /is in none of gain-control's service families, packages or programs/],
-      ['a runs-as the door does not run', (x) => { gc(x).starts.acquisition.then = ['managed-cirp']; }, /neither a package of gain-control nor run by one of its programs/],
+      ['a start the door does not list', (x) => { gc(x).starts.crossing.lead = 'soc-2-readiness'; }, /is in none of gain-control's service families, packages or programs/],
+      ['a runs-as the door does not run', (x) => { gc(x).starts.vendors.then = ['managed-cirp']; }, /neither a package of gain-control nor run by one of its programs/],
       ['a program in a start that is not the door\'s', (x) => { wt(x).starts.evidence.with = ['vciso']; }, /program vciso is not in win-trust\.programs/],
-      ['a trigger with no start', (x) => { delete wt(x).starts.ai; }, /no start for trigger 2/],
+      ['a trigger with no start', (x) => { delete wt(x).starts.scope; }, /no start for trigger 2/],
       ['no early start', (x) => { delete gc(x).starts.early; }, /no early start/],
-      ['a trigger started twice', (x) => { sr(x).starts.crossing.trigger = 1; }, /trigger 1 already starts at/],
+      ['a trigger started twice', (x) => { sr(x).starts.detect.trigger = 1; }, /trigger 1 already starts at/],
       ['an early start with a trigger', (x) => { sr(x).starts.early.trigger = 0; }, /the early start answers no trigger/],
       ['a ring with an unknown stage', (x) => { sr(x).starts.exam.ring = ['audit']; }, /unknown stage audit/],
       ['a start with no ring', (x) => { sr(x).starts.exam.ring = []; }, /name the stage the tower lights/],
@@ -274,11 +279,17 @@ test.describe('quote builder names (O15, no browser)', () => {
       if (!errors.some((e) => re.test(e))) missed.push(`${name}: expected ${re}, got ${JSON.stringify(errors)}`);
     }
     expect(missed).toEqual([]);
-    // Allowed: a door with no packages, and the exactly-four-families rule still stands.
-    const none = clone(m); wt(none).packages = []; wt(none).starts.deal = { ...wt(none).starts.deal, lead: 'initial-risk-assessment' }; delete wt(none).starts.deal.alt;
+    // Allowed: a door with no packages. Emptying them un-lists every package id the door's starts
+    // name, so `deal` and `scope` both lose the readiness package they fall back to.
+    const none = clone(m);
+    wt(none).packages = [];
+    wt(none).starts.deal = { ...wt(none).starts.deal, lead: 'initial-risk-assessment' };
+    delete wt(none).starts.deal.alt;
+    delete wt(none).starts.scope.alt;
     expect(lintManifest(none, g).errors).toEqual([]);
-    const three = clone(m); wt(three).serviceFamilies.pop();
-    expect(lintManifest(three, g).errors.some((e) => /exactly four service families/.test(e))).toBe(true);
+    // Three or four families is the rule now (tools/check-manifest.js:175); two is still refused.
+    const two = clone(m); wt(two).serviceFamilies.pop();
+    expect(lintManifest(two, g).errors.some((e) => /three or four service families/.test(e))).toBe(true);
   });
 
   test('the tour lint refuses a Builder name typed into the script instead of a token', () => {

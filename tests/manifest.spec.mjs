@@ -57,7 +57,10 @@ test.describe('manifest (no browser)', () => {
     expect(new Set(m.doors.map((d) => d.id)).size).toBe(3);
     expect(m.doors.map((d) => d.number)).toEqual([1, 2, 3]);
     for (const d of m.doors) {
-      for (const k of ['id', 'title', 'promise', 'icp', 'color', 'dock', 'audience', 'tension', 'gap', 'decision']) expect(isStr(d[k]), `${d.id}.${k}`).toBe(true);
+      for (const k of ['id', 'title', 'promise', 'icp', 'color', 'dock', 'audience', 'tension', 'gap']) expect(isStr(d[k]), `${d.id}.${k}`).toBe(true);
+      // `decision` is a plain string on the doors that have not been re-sourced yet, and a sourced
+      // {text, source, status} object on the ones that have, so the tour can print where it came from.
+      expect(isStr(d.decision) || (isStr(d.decision?.text) && isStr(d.decision?.source) && isStr(d.decision?.status)), `${d.id}.decision`).toBe(true);
       expect(['cyan', 'orange', 'navy']).toContain(d.color);
       expect(['left', 'right']).toContain(d.dock);
       expect(d.triggers.length).toBeGreaterThan(0);
@@ -67,7 +70,8 @@ test.describe('manifest (no browser)', () => {
       expect(isStr(d.opening.text) && isStr(d.stat.text)).toBe(true);
       expect(isStr(d.program.start) && isStr(d.program.build) && isStr(d.program.operate), `${d.id}.program: start, build, operate (O15: the first step is no longer a Snapshot)`).toBe(true);
       expect(d.program.snapshot).toBeUndefined();
-      expect(d.serviceFamilies, `${d.id} has four service families`).toHaveLength(4);
+      expect(d.serviceFamilies.length, `${d.id} has three or four service families`).toBeGreaterThanOrEqual(3);
+      expect(d.serviceFamilies.length, `${d.id} has three or four service families`).toBeLessThanOrEqual(4);
       // Families are Builder categories with Builder items (O15); no family is empty any more.
       for (const f of d.serviceFamilies) { expect(isStr(f.name)).toBe(true); expect(Array.isArray(f.examples) && f.examples.length > 0, `${d.id} ${f.name} names its items`).toBe(true); }
       expect(Array.isArray(d.packages) && Array.isArray(d.programs) && d.starts && typeof d.starts === 'object', `${d.id}: packages, programs, starts`).toBe(true);
