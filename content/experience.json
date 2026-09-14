@@ -232,7 +232,7 @@
       "triggers": [
         "An enterprise deal or renewal is blocked by assurance requirements.",
         "A customer, insurer, or investor is asking for evidence you cannot assemble quickly.",
-        "AI adoption is creating new customer questions about ownership and control."
+        "A certification audit is booked with no written scope."
       ],
       "tension": "The business is ready to grow, but proof is scattered across policies, systems, and people.",
       "gap": "The gap is between having good intentions and being able to show repeatable evidence when the buyer asks.",
@@ -281,22 +281,14 @@
             "ISMS Scope & SoA Development",
             "System Security & Privacy Plan (SSPP) Development"
           ]
-        },
-        {
-          "name": "Privacy Management & Data Protection",
-          "examples": [
-            "AI Governance & Privacy Advisory",
-            "Privacy Program Maturity & Risk Assessment",
-            "ISO 27701 PIMS Readiness & Implementation"
-          ]
         }
       ],
-      "packages": ["soc-2-readiness", "iso-27001-readiness", "iso-27701-readiness"],
+      "packages": ["soc-2-readiness", "iso-27001-readiness", "iso-27701-readiness", "pci-dss-readiness"],
       "programs": ["isp", "rmp"],
       "starts": {
         "deal": { "trigger": 0, "lead": "soc-2-readiness", "alt": "iso-27001-readiness", "then": ["managed-isp"], "ring": ["assess", "strengthen"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
         "evidence": { "trigger": 1, "lead": "initial-risk-assessment", "with": ["rfp-response"], "then": ["managed-isp"], "ring": ["assess"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
-        "ai": { "trigger": 2, "lead": "ai-governance-advisory", "with": ["initial-risk-assessment"], "then": ["managed-isp"], "ring": ["strengthen"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
+        "scope": { "trigger": 2, "lead": "isms-scope-soa-development", "alt": "iso-27001-readiness", "with": ["system-security-privacy-plan-sspp-development"], "then": ["managed-isp"], "ring": ["strengthen"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
         "early": { "trigger": null, "lead": "initial-risk-assessment", "ring": [], "source": "3HUE service catalog, September 2026; The Forcing Function §05, who to decline", "status": "proposed" }
       },
       "proof": [
@@ -342,17 +334,21 @@
       "dock": "right",
       "audience": "For ownership and operating teams that need shared visibility, leverage, and governance across multiple companies.",
       "triggers": [
-        "A new platform acquisition or portfolio review needs a common view.",
-        "Board, lender, or investor reporting is inconsistent across holdings.",
-        "The portfolio needs more control without adding a full internal team."
+        "Privacy rules now reach across the whole business.",
+        "Nobody owns how AI touches your data.",
+        "Other people's systems hold your data."
       ],
       "tension": "Important risk and technology decisions are being made company by company without a shared operating picture.",
       "gap": "The gap is between local activity and portfolio-level oversight that can guide investment, sequencing, and accountability.",
-      "decision": "Create a repeatable governance rhythm that gives leaders visibility without slowing operators down.",
+      "decision": {
+        "text": "Make what you already own visible, owned, and looked at on a rhythm.",
+        "source": "3HUE service catalog, September 2026",
+        "status": "proposed"
+      },
       "maturityEmphasis": [
         "assess",
-        "operate",
-        "advance"
+        "strengthen",
+        "operate"
       ],
       "opening": {
         "text": "Your bigger competitors run cyber diligence on 81% of deals. You run it on 29%.",
@@ -371,19 +367,12 @@
       },
       "serviceFamilies": [
         {
-          "name": "Risk Assessment & Risk Management",
+          "name": "Privacy Management & Data Protection",
           "examples": [
-            "Initial Risk Assessment",
-            "Annual Risk Assessment Update",
-            "Risk Committee Posture Update",
-            "Manage Risk Register & POA&M"
-          ]
-        },
-        {
-          "name": "Managed GRC Programs",
-          "examples": [
-            "Managed Risk Management Program",
-            "Managed Information Security & Privacy Management"
+            "Data Mapping & Data Inventory",
+            "Data Protection Impact Assessment (DPIA)",
+            "AI Governance & Privacy Advisory",
+            "Regulator Liaison & DSAR Escalation Support"
           ]
         },
         {
@@ -395,20 +384,21 @@
           ]
         },
         {
-          "name": "Information Security Program & Governance",
+          "name": "Security Engineering & Architecture",
           "examples": [
-            "BOD / Investor Performance Reporting",
-            "Security Data Analytics & Reporting Development"
+            "Security Architecture Reviews",
+            "Secure SDLC Program Development",
+            "Vulnerability Management Program Development"
           ]
         }
       ],
-      "packages": [],
-      "programs": ["rmp", "vcp", "vciso"],
+      "packages": ["privacy-leadership-launch"],
+      "programs": ["vcp", "sea"],
       "starts": {
-        "acquisition": { "trigger": 0, "lead": "initial-risk-assessment", "then": ["managed-rmp"], "ring": ["assess"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
-        "reporting": { "trigger": 1, "lead": "bod-reporting", "with": ["risk-committee-update"], "then": ["managed-rmp"], "ring": ["advance"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
-        "control": { "trigger": 2, "lead": "managed-rmp", "with": ["managed-vcp", "vciso"], "ring": ["operate"], "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events", "status": "proposed" },
-        "early": { "trigger": null, "lead": "initial-risk-assessment", "ring": [], "source": "3HUE service catalog, September 2026; The Forcing Function §05, who to decline", "status": "proposed" }
+        "crossing": { "trigger": 0, "lead": "privacy-leadership-launch", "with": ["data-mapping-data-inventory", "regulator-liaison-dsar-escalation-support"], "ring": ["assess", "operate"], "source": "3HUE service catalog, September 2026", "status": "proposed" },
+        "ai": { "trigger": 1, "lead": "ai-governance-advisory", "with": ["security-architecture-reviews", "secure-sdlc-program-development", "vulnerability-management-program-development"], "then": ["security-engineering"], "ring": ["strengthen"], "source": "3HUE service catalog, September 2026", "status": "proposed" },
+        "vendors": { "trigger": 2, "lead": "managed-vcp", "with": ["asset-governance-program-development", "audit-support"], "then": ["vcp-additional-vendor-monitoring-5-vendor-block"], "ring": ["operate"], "source": "3HUE service catalog, September 2026", "status": "proposed" },
+        "early": { "trigger": null, "lead": "data-mapping-data-inventory", "ring": [], "source": "3HUE service catalog, September 2026", "status": "proposed" }
       },
       "proof": [
         {
@@ -418,11 +408,11 @@
         }
       ],
       "program": {
-        "start": "A diligence-grade assessment per acquisition.",
-        "build": "One control set applied across every operating company, isolated per entity.",
-        "operate": "Quarterly board- and investment-committee-ready reporting, with the fund seeing one view.",
+        "start": "A map of what you hold: the data, the vendors and the systems.",
+        "build": "One control set, applied the same way wherever it lands.",
+        "operate": "Quarterly reporting in one format, with one view across everything you own.",
         "source": "The Forcing Function \u00a702, What 3HUE sells them",
-        "status": "approved-copy"
+        "status": "proposed"
       },
       "stations": [
         "urgency",
@@ -455,7 +445,7 @@
       "triggers": [
         "An examiner request, audit finding, or remediation deadline is active.",
         "An incident or continuity concern exposes a readiness gap.",
-        "Regulatory, privacy, or AI adoption pressure is crossing operational boundaries."
+        "Security tooling is generating alerts that nobody is reading."
       ],
       "tension": "The organization cannot afford to discover ownership or evidence gaps during an examination or incident.",
       "gap": "The gap is between documented plans and an operating model that stays ready when conditions change.",
@@ -508,21 +498,21 @@
           ]
         },
         {
-          "name": "Privacy Management & Data Protection",
+          "name": "Managed Detection & Response (MDR / MXDR)",
           "examples": [
-            "Managed Privacy Program",
-            "Data Protection Impact Assessment (DPIA)",
-            "Regulator Liaison & DSAR Escalation Support",
-            "AI Governance & Privacy Advisory"
+            "Managed Detection & Response — Complete",
+            "MXDR Starter",
+            "MXDR — SIEM Add-on",
+            "Managed Security Controls Validation for Endpoints"
           ]
         }
       ],
-      "packages": ["ir-fast-start", "privacy-leadership-launch", "mxdr-complete", "pci-dss-readiness"],
+      "packages": ["ir-fast-start", "mxdr-complete"],
       "programs": ["rmp", "cirp", "soc"],
       "starts": {
         "exam": { "trigger": 0, "lead": "controls-gap-assessment", "with": ["risk-register-poam"], "then": ["managed-rmp"], "ring": ["operate"], "source": "3HUE service catalog, September 2026; The Forcing Function \u00a704, trigger events", "status": "proposed" },
         "incident": { "trigger": 1, "lead": "ir-fast-start", "with": ["bcp-development"], "live": "incident-command", "then": ["managed-cirp", "mxdr-complete"], "ring": ["strengthen"], "source": "3HUE service catalog, September 2026; The Forcing Function \u00a704, trigger events", "status": "proposed" },
-        "crossing": { "trigger": 2, "lead": "privacy-leadership-launch", "with": ["ai-governance-advisory"], "ring": ["strengthen"], "source": "3HUE service catalog, September 2026; The Forcing Function \u00a704, trigger events", "status": "proposed" },
+        "detect": { "trigger": 2, "lead": "mxdr-complete", "alt": "mxdr-starter", "ring": ["operate"], "source": "3HUE service catalog, September 2026; The Forcing Function \u00a704, trigger events", "status": "proposed" },
         "early": { "trigger": null, "lead": "controls-gap-assessment", "ring": [], "source": "3HUE service catalog, September 2026; The Forcing Function \u00a705, who to decline", "status": "proposed" }
       },
       "proof": [

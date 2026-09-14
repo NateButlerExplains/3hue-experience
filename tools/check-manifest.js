@@ -172,7 +172,10 @@ export function lintManifest(m, g, b = builderNames(), { root = ROOT } = {}) {
   for (const d of m.doors || []) {
     needSource(d.opening, `${d.id}.opening`); needSource(d.stat, `${d.id}.stat`); needSource(d.statSecondary, `${d.id}.statSecondary`); needSource(d.program, `${d.id}.program`);
     for (const [i, pr] of (d.proof || []).entries()) if (!pr.basis || !pr.status) err(`${d.id}.proof[${i}] needs basis and status`);
-    if ((d.serviceFamilies || []).length !== 4) err(`${d.id} must list exactly four service families`);
+    // Three or four: the corrected shelf leaves Win Trust and Gain Control with three distinctive
+    // families each, Stay Ready with four. Fewer than three is a door with no shelf to speak of.
+    const fams = (d.serviceFamilies || []).length;
+    if (fams < 3 || fams > 4) err(`${d.id} must list three or four service families, not ${fams}`);
     if (!['left', 'right'].includes(d.dock)) err(`${d.id}.dock must be left or right`);
     for (const s of d.maturityEmphasis || []) if (!m.stages.find((x) => x.id === s)) err(`${d.id} emphasises unknown stage ${s}`);
     if (!g.doorways?.[d.id]) err(`geometry has no doorway for ${d.id}`);
@@ -798,6 +801,23 @@ export function lintTour(t, m, { root = ROOT, file = 'content/tour.json', geomet
       // The visitor's pick of who leads (O12): every option stores a guide id.
       if (!gIds.length) err(p, 'remember "lead" picks a guide, but guide.guides is not set');
       else for (const [i, o] of (Array.isArray(c.options) ? c.options : []).entries()) if (!gIds.includes(String(optionValue(o)))) err(`${p}.options[${i}]`, `a lead option stores a guide id (${gIds.join(', ')}), not ${JSON.stringify(optionValue(o))}`);
+    }
+    // A door's trigger choice (C2): every option must store a key that door's own `starts` defines.
+    // The `when` rules above check a condition's values against the choice; this checks the choice
+    // against the manifest, so a stored trigger always resolves to a first step on the tower and in
+    // the summary. Without it, renaming a start leaves the buttons pointing at nothing and the lint
+    // stays green.
+    const trigger = /^trigger-(.+)$/.exec(typeof c.remember === 'string' ? c.remember : '');
+    if (trigger) {
+      const door = (m.doors || []).find((d) => d.id === trigger[1]);
+      if (!door) err(p, `remember ${JSON.stringify(c.remember)} names no door in the manifest`);
+      else {
+        const starts = Object.keys(door.starts || {});
+        for (const [i, o] of (Array.isArray(c.options) ? c.options : []).entries()) {
+          const v = String(optionValue(o));
+          if (!starts.includes(v)) err(`${p}.options[${i}]`, `${JSON.stringify(v)} is not a start of ${door.id} (${starts.join(', ')}), so nothing would name this visitor's first step`);
+        }
+      }
     }
     const opts = Array.isArray(c.options) ? c.options : [];
     if (!opts.length) err(p, 'a choice needs options');

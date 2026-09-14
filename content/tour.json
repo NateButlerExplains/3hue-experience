@@ -6,7 +6,7 @@
     {
       "id": "arrival",
       "entry": "arrive",
-      "title": "Your guides",
+      "title": "Your guides, and one question",
       "landmark": "lobby"
     },
     {
@@ -57,16 +57,16 @@
         {
           "id": "arrive-1",
           "who": "avi",
-          "text": "Welcome to the 3HUE lobby. I'm {guide:avi}, one of your two guides.",
-          "source": "Tour script, arrival (after 3HUE's own tour at 3hue.net/experience)",
+          "text": "Welcome to the 3HUE lobby. I'm {guide:avi}. You'll leave with one clear first step, whichever door you take.",
+          "source": "Tour script, arrival (after 3HUE\u2019s own tour at 3hue.net/experience)",
           "status": "proposed"
         },
         {
           "id": "arrive-2",
           "who": "avi",
-          "text": "We won't tour a building. We'll tour your situation, and the door that fits it.",
-          "source": "Tour script, linking line",
-          "status": "proposed"
+          "text": "3HUE builds and operates security, compliance and AI governance programs for organizations that have to prove their controls work \u2014 and have no one inside to run them.",
+          "source": "The Message Stack \u00a709, boilerplate",
+          "status": "approved-copy"
         },
         {
           "id": "arrive-3",
@@ -78,40 +78,40 @@
         {
           "id": "arrive-4",
           "who": "huey",
-          "text": "Hi. Glad you're here.",
+          "text": "Hi. We only say what 3HUE can back up, and you can ask either of us where it came from.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
         {
           "id": "arrive-5",
           "who": "avi",
-          "text": "One of us leads, and the other stays close. You choose.",
+          "text": "One of us leads and the other stays close. Pick whichever voice you'd rather hear.",
           "source": "Tour script, linking line",
           "status": "proposed"
         }
       ],
       "choice": {
         "id": "lead",
-        "prompt": "Would you like {guide:huey} to lead?",
+        "prompt": "Who leads?",
         "remember": "lead",
         "options": [
           {
-            "id": "huey",
-            "label": "Yes, {guide:huey} leads",
-            "next": "handoff-huey"
+            "id": "avi",
+            "label": "{guide:avi} leads",
+            "next": "handoff-avi"
           },
           {
-            "id": "avi",
-            "label": "Stay with {guide:avi}",
-            "next": "handoff-avi"
+            "id": "huey",
+            "label": "{guide:huey} leads",
+            "next": "handoff-huey"
           }
         ]
       },
       "ask": [
-        "guides",
-        "what-is-3hue",
-        "where-to-start",
-        "privacy"
+        "different",
+        "proof",
+        "privacy",
+        "early"
       ]
     },
     "handoff-huey": {
@@ -121,23 +121,90 @@
         {
           "id": "handoff-huey-1",
           "who": "avi",
-          "text": "{guide:huey} is all yours. I'll see you at the round table.",
+          "text": "{guide:huey} has you from here. I'll be back when you reach the end.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
         {
           "id": "handoff-huey-2",
           "who": "huey",
-          "text": "Thanks, {guide:avi}. Let's find your door.",
+          "text": "Thanks, {guide:avi}. One question, and I'll know where to take you.",
           "source": "Tour script, linking line",
           "status": "proposed"
         }
       ],
-      "next": "lobby",
+      "next": "arrive-question",
       "ask": [
         "guides",
+        "different",
+        "proof",
+        "privacy"
+      ]
+    },
+    "arrive-question": {
+      "chapter": "arrival",
+      "scene": "rest",
+      "lines": [
+        {
+          "id": "arrive-q1",
+          "text": "Almost everyone here has the same thing happening. Someone with leverage has asked them to prove something, with a date on it.",
+          "source": "The Forcing Function, cover",
+          "status": "adapted"
+        },
+        {
+          "id": "arrive-q2",
+          "text": "What changes is what that person wants to see. That's the difference between {door:win-trust.title}, {door:gain-control.title} and {door:stay-ready.title}.",
+          "source": "Lobby manifest: door titles",
+          "status": "derived"
+        },
+        {
+          "id": "arrive-shared",
+          "text": "One step is shared. Any of the three can begin in the same place: the {offer:initial-risk-assessment}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed"
+        },
+        {
+          "id": "arrive-q3",
+          "text": "Answer for the week you're actually having. Nothing locks, and you can walk another door later.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        }
+      ],
+      "choice": {
+        "id": "situation",
+        "prompt": "What are they asking you for?",
+        "remember": "situation",
+        "options": [
+          {
+            "id": "prove",
+            "label": "They want a report or a certificate",
+            "sub": "{door:win-trust.title} \u00b7 {door:win-trust.promise}",
+            "next": "wt"
+          },
+          {
+            "id": "own",
+            "label": "They're asking about our data and our vendors",
+            "sub": "{door:gain-control.title} \u00b7 {door:gain-control.promise}",
+            "next": "gc"
+          },
+          {
+            "id": "run",
+            "label": "They want to see it running, not just written down",
+            "sub": "{door:stay-ready.title} \u00b7 {door:stay-ready.promise}",
+            "next": "sr"
+          },
+          {
+            "id": "browse",
+            "label": "I'd rather see all three",
+            "sub": "All three rooms, then where to start",
+            "next": "lobby"
+          }
+        ]
+      },
+      "ask": [
         "what-is-3hue",
-        "where-to-start",
+        "early",
+        "timeline",
         "privacy"
       ]
     },
@@ -148,23 +215,23 @@
         {
           "id": "handoff-avi-1",
           "who": "huey",
-          "text": "I'll be at the round table when you're done.",
+          "text": "{guide:avi} has you from here. I'll be back when you reach the end.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
         {
           "id": "handoff-avi-2",
           "who": "avi",
-          "text": "Then let's find your door.",
+          "text": "Thanks, {guide:huey}. One question, and I'll know where to take you.",
           "source": "Tour script, linking line",
           "status": "proposed"
         }
       ],
-      "next": "lobby",
+      "next": "arrive-question",
       "ask": [
         "guides",
-        "what-is-3hue",
-        "where-to-start",
+        "different",
+        "proof",
         "privacy"
       ]
     },
@@ -174,74 +241,159 @@
       "lines": [
         {
           "id": "lobby-1",
-          "text": "Each door is a different moment: someone with leverage has asked you to prove something.",
-          "source": "The Forcing Function, cover; §02, the three segments",
-          "status": "adapted"
+          "text": "Three doors from here. Each one is a kind of work, not a kind of company.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
         },
         {
           "id": "lobby-2",
-          "text": "{door:win-trust.title} is for {door:win-trust.icp}.",
-          "source": "Lobby manifest: door titles and buyer labels",
-          "status": "derived",
+          "text": "{door:win-trust.title} is the proving work: the evidence exists in pieces, and a buyer wants it assembled.",
+          "source": "Lobby manifest: doors[].tension and doors[].gap",
+          "status": "adapted"
+        },
+        {
+          "id": "lobby-3",
+          "text": "{door:gain-control.title} is the owning work: one operating picture, instead of decisions made company by company.",
+          "source": "Lobby manifest: doors[].tension and doors[].gap",
+          "status": "adapted"
+        },
+        {
+          "id": "lobby-4",
+          "text": "{door:stay-ready.title} is the running work: ownership and evidence that hold on an ordinary day, not just at the audit.",
+          "source": "Lobby manifest: doors[].tension and doors[].gap",
+          "status": "adapted"
+        },
+        {
+          "id": "lobby-yours-prove",
+          "when": {
+            "answers": {
+              "situation": [
+                "prove"
+              ]
+            }
+          },
+          "text": "From what you told me, I'd open {door:win-trust.title} first.",
+          "source": "Tour script, routing line",
+          "status": "proposed",
           "cue": {
             "door": "win-trust"
           }
         },
         {
-          "id": "lobby-3",
-          "text": "{door:gain-control.title}, for {door:gain-control.icp}.",
-          "source": "Lobby manifest: door titles and buyer labels",
-          "status": "derived",
+          "id": "lobby-yours-own",
+          "when": {
+            "answers": {
+              "situation": [
+                "own"
+              ]
+            }
+          },
+          "text": "From what you told me, I'd open {door:gain-control.title} first.",
+          "source": "Tour script, routing line",
+          "status": "proposed",
           "cue": {
             "door": "gain-control"
           }
         },
         {
-          "id": "lobby-4",
-          "text": "{door:stay-ready.title}, for {door:stay-ready.icp}.",
-          "source": "Lobby manifest: door titles and buyer labels",
-          "status": "derived",
+          "id": "lobby-yours-run",
+          "when": {
+            "answers": {
+              "situation": [
+                "run"
+              ]
+            }
+          },
+          "text": "From what you told me, I'd open {door:stay-ready.title} first.",
+          "source": "Tour script, routing line",
+          "status": "proposed",
           "cue": {
             "door": "stay-ready"
           }
+        },
+        {
+          "id": "lobby-browse",
+          "when": {
+            "answers": {
+              "situation": [
+                "browse"
+              ]
+            }
+          },
+          "text": "You asked for the whole floor. One stop in each room, then where you\u2019d start.",
+          "source": "Tour script, routing line",
+          "status": "proposed"
+        },
+        {
+          "id": "lobby-6",
+          "text": "Take them in any order. You can come back for the ones you skip.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
         }
       ],
       "choice": {
-        "id": "segment",
-        "prompt": "Which door is yours?",
-        "remember": "segment",
+        "id": "door-first",
+        "prompt": "Which one do we open first?",
         "options": [
           {
             "id": "win-trust",
-            "label": "{door:win-trust.icp}",
-            "sub": "{door:win-trust.title} · {door:win-trust.promise}",
-            "next": "wt"
+            "label": "{door:win-trust.title}",
+            "sub": "Prove it to whoever is asking",
+            "next": "wt",
+            "suggest": {
+              "answers": {
+                "situation": [
+                  "prove"
+                ]
+              }
+            }
           },
           {
             "id": "gain-control",
-            "label": "{door:gain-control.icp}",
-            "sub": "{door:gain-control.title} · {door:gain-control.promise}",
-            "next": "gc"
+            "label": "{door:gain-control.title}",
+            "sub": "Own it across everything you carry",
+            "next": "gc",
+            "suggest": {
+              "answers": {
+                "situation": [
+                  "own"
+                ]
+              }
+            }
           },
           {
             "id": "stay-ready",
-            "label": "{door:stay-ready.icp}",
-            "sub": "{door:stay-ready.title} · {door:stay-ready.promise}",
-            "next": "sr"
+            "label": "{door:stay-ready.title}",
+            "sub": "Run it, and keep it running",
+            "next": "sr",
+            "suggest": {
+              "answers": {
+                "situation": [
+                  "run"
+                ]
+              }
+            }
           },
           {
-            "id": "all",
+            "id": "everything",
             "label": "Show me everything",
             "sub": "One stop in each room, then where to start",
-            "next": "all-wt"
+            "next": "all-wt",
+            "suggest": {
+              "answers": {
+                "situation": [
+                  "browse"
+                ]
+              }
+            }
           }
         ]
       },
       "ask": [
-        "guides",
-        "where-to-start",
-        "what-is-3hue",
-        "privacy"
+        "frameworks",
+        "packages",
+        "different",
+        "early"
       ]
     },
     "lobby-again": {
@@ -251,40 +403,153 @@
       "lines": [
         {
           "id": "again-1",
-          "text": "Three doors, one path. Pick the next one.",
-          "source": "Lobby manifest: strings.legend",
-          "status": "derived"
+          "text": "Back in the lobby. The tour keeps what you've seen, so nothing needs repeating.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        },
+        {
+          "id": "again-none",
+          "when": {
+            "notVisited": [
+              "door-win-trust",
+              "door-gain-control",
+              "door-stay-ready"
+            ]
+          },
+          "text": "You haven't opened a door yet. Any of the three can be first.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        },
+        {
+          "id": "again-some",
+          "when": [
+            {
+              "visited": [
+                "door-win-trust"
+              ],
+              "notVisited": [
+                "door-gain-control"
+              ]
+            },
+            {
+              "visited": [
+                "door-gain-control"
+              ],
+              "notVisited": [
+                "door-stay-ready"
+              ]
+            },
+            {
+              "visited": [
+                "door-stay-ready"
+              ],
+              "notVisited": [
+                "door-win-trust"
+              ]
+            }
+          ],
+          "text": "Opening another door isn't a correction. It's another kind of work.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        },
+        {
+          "id": "again-all-tower",
+          "when": {
+            "visited": [
+              "door-win-trust",
+              "door-gain-control",
+              "door-stay-ready"
+            ],
+            "notVisited": [
+              "path"
+            ]
+          },
+          "text": "All three walked. What's left is the tower: your first step, and what follows.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        },
+        {
+          "id": "again-all-seen",
+          "when": {
+            "visited": [
+              "door-win-trust",
+              "door-gain-control",
+              "door-stay-ready",
+              "path"
+            ]
+          },
+          "text": "All three walked, and you've seen where you'd start. The tower's still there if you want another look.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
         }
       ],
       "choice": {
         "id": "another",
-        "prompt": "Which door next?",
+        "prompt": "Where to now?",
         "options": [
           {
             "id": "win-trust",
-            "label": "{door:win-trust.icp}",
-            "sub": "{door:win-trust.title} · {door:win-trust.promise}",
-            "next": "wt"
+            "label": "{door:win-trust.title}",
+            "sub": "The proving work",
+            "next": "wt",
+            "hideWhen": {
+              "visited": [
+                "door-win-trust"
+              ]
+            }
           },
           {
             "id": "gain-control",
-            "label": "{door:gain-control.icp}",
-            "sub": "{door:gain-control.title} · {door:gain-control.promise}",
-            "next": "gc"
+            "label": "{door:gain-control.title}",
+            "sub": "The owning work",
+            "next": "gc",
+            "hideWhen": {
+              "visited": [
+                "door-gain-control"
+              ]
+            }
           },
           {
             "id": "stay-ready",
-            "label": "{door:stay-ready.icp}",
-            "sub": "{door:stay-ready.title} · {door:stay-ready.promise}",
-            "next": "sr"
+            "label": "{door:stay-ready.title}",
+            "sub": "The running work",
+            "next": "sr",
+            "hideWhen": {
+              "visited": [
+                "door-stay-ready"
+              ]
+            }
+          },
+          {
+            "id": "path",
+            "label": "Show me where I'd start",
+            "sub": "The tower: your first step, and what follows",
+            "next": "path",
+            "hideWhen": {
+              "notVisited": [
+                "door-win-trust",
+                "door-gain-control",
+                "door-stay-ready"
+              ]
+            },
+            "suggest": {
+              "visited": [
+                "door-win-trust",
+                "door-gain-control",
+                "door-stay-ready"
+              ],
+              "notVisited": [
+                "path"
+              ]
+            }
           }
         ]
       },
       "ask": [
-        "guides",
-        "where-to-start",
-        "what-is-3hue",
-        "privacy"
+        "packages",
+        "after",
+        "different",
+        "proof"
       ]
     },
     "wt": {
@@ -295,10 +560,53 @@
       },
       "lines": [
         {
+          "id": "wt-ack",
+          "when": {
+            "answers": {
+              "situation": [
+                "prove"
+              ]
+            }
+          },
+          "text": "They want a report or a certificate. That's this room.",
+          "source": "Tour script, routing line",
+          "status": "proposed"
+        },
+        {
           "id": "wt-1",
-          "text": "This room is for software teams whose next deal depends on proof they can't produce yet.",
-          "source": "The Forcing Function §02, the three segments",
-          "status": "adapted"
+          "text": "This room holds three things: where you stand, how you run security, and what your scope covers.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
+          "cue": {
+            "surface": "wt-panel-1"
+          },
+          "write": {
+            "wt-panel-1": {
+              "kind": "sign",
+              "lines": [
+                "Where you stand"
+              ],
+              "at": "stand"
+            },
+            "wt-panel-2": {
+              "kind": "sign",
+              "lines": [
+                "How you run"
+              ],
+              "at": "run"
+            },
+            "wt-panel-3": {
+              "kind": "sign",
+              "lines": [
+                "What your scope covers"
+              ],
+              "at": "scope"
+            },
+            "wt-binders": {
+              "kind": "glow",
+              "lines": []
+            }
+          }
         },
         {
           "id": "wt-2",
@@ -316,15 +624,35 @@
           }
         },
         {
+          "id": "wt-standards",
+          "text": "If your buyer named a standard, the readiness package for it is on the shelf.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "cue": {
+            "surface": "wt-panel-4"
+          },
+          "write": {
+            "wt-panel-4": {
+              "kind": "list",
+              "lines": [
+                "{offer:soc-2-readiness}",
+                "{offer:iso-27001-readiness}",
+                "{offer:iso-27701-readiness}",
+                "{offer:pci-dss-readiness}"
+              ]
+            }
+          }
+        },
+        {
           "id": "wt-3",
-          "text": "Tell me what's pressing, and the room will show you.",
+          "text": "Tell me what\u2019s on your desk, and the room will show you the first step.",
           "source": "Tour script, linking line",
           "status": "proposed"
         }
       ],
       "choice": {
         "id": "wt-trigger",
-        "prompt": "What's pressing right now?",
+        "prompt": "What's on your desk right now?",
         "remember": "trigger-win-trust",
         "options": [
           {
@@ -338,7 +666,7 @@
             "next": "wt-moment"
           },
           {
-            "id": "ai",
+            "id": "scope",
             "label": "{door:win-trust.triggers.2}",
             "next": "wt-moment"
           },
@@ -351,10 +679,10 @@
         ]
       },
       "ask": [
+        "frameworks",
+        "packages",
         "auditor",
-        "guarantee",
-        "platform",
-        "ai"
+        "guarantee"
       ]
     },
     "wt-moment": {
@@ -374,7 +702,7 @@
             }
           },
           "text": "Then a deal is waiting on a report you don't have, and procurement has put a date on it.",
-          "source": "The Forcing Function §02, the three segments; §03",
+          "source": "The Forcing Function \u00a703",
           "status": "adapted",
           "cue": {
             "surface": "wt-panel-3"
@@ -401,7 +729,7 @@
             "wt-panel-4": {
               "kind": "sign",
               "lines": [
-                "Readiness letter, dated"
+                "PCI attestation?"
               ]
             },
             "wt-panel-5": {
@@ -428,7 +756,7 @@
             }
           },
           "text": "Then someone with leverage wants evidence, in their format, on their timetable.",
-          "source": "The Message Stack §01, core narrative",
+          "source": "The Message Stack \u00a701, core narrative",
           "status": "adapted",
           "cue": {
             "surface": "wt-panel-3"
@@ -473,12 +801,87 @@
           }
         },
         {
+          "id": "wt-scope-m1",
+          "when": {
+            "answers": {
+              "trigger-win-trust": [
+                "scope"
+              ]
+            }
+          },
+          "text": "Then the audit has a date, and nobody has written down what it covers.",
+          "source": "Tour script, linking line",
+          "status": "proposed",
+          "cue": {
+            "surface": "wt-panel-3"
+          },
+          "write": {
+            "wt-panel-1": {
+              "kind": "sign",
+              "lines": [
+                "Audit booked"
+              ]
+            },
+            "wt-panel-2": {
+              "kind": "sign",
+              "lines": [
+                "What's in scope?"
+              ]
+            },
+            "wt-panel-3": {
+              "kind": "sign",
+              "lines": [
+                "What's out?"
+              ]
+            },
+            "wt-panel-4": null,
+            "wt-panel-5": {
+              "kind": "sign",
+              "lines": [
+                "Owner?"
+              ]
+            },
+            "wt-panel-6": {
+              "kind": "sign",
+              "lines": [
+                "Evidence?"
+              ]
+            }
+          }
+        },
+        {
+          "id": "wt-scope-m2",
+          "when": {
+            "answers": {
+              "trigger-win-trust": [
+                "scope"
+              ]
+            }
+          },
+          "text": "Scope decides how much you have to prove, and how long the audit takes.",
+          "source": "Tour script, linking line",
+          "status": "proposed",
+          "cue": {
+            "surface": "wt-panel-4"
+          },
+          "write": {
+            "wt-panel-4": {
+              "kind": "sign",
+              "lines": [
+                "Statement of Applicability?"
+              ],
+              "at": "prove"
+            }
+          }
+        },
+        {
           "id": "wt-m-stat",
           "when": {
             "answers": {
               "trigger-win-trust": [
                 "deal",
-                "evidence"
+                "evidence",
+                "scope"
               ]
             }
           },
@@ -497,77 +900,6 @@
           }
         },
         {
-          "id": "wt-ai-m1",
-          "when": {
-            "answers": {
-              "trigger-win-trust": [
-                "ai"
-              ]
-            }
-          },
-          "text": "Then your customers are asking four things about your AI.",
-          "source": "Tour script, linking line",
-          "status": "proposed",
-          "cue": {
-            "surface": "wt-panel-3"
-          }
-        },
-        {
-          "id": "wt-ai-m2",
-          "when": {
-            "answers": {
-              "trigger-win-trust": [
-                "ai"
-              ]
-            }
-          },
-          "text": "What can it access? What can it change? Who approved it? And what proves it stayed inside?",
-          "source": "The Forcing Function §04, trigger events",
-          "status": "adapted",
-          "write": {
-            "wt-panel-1": {
-              "kind": "sign",
-              "lines": [
-                "What can it access?"
-              ],
-              "at": "access"
-            },
-            "wt-panel-2": {
-              "kind": "sign",
-              "lines": [
-                "What can it change?"
-              ],
-              "at": "change"
-            },
-            "wt-panel-3": {
-              "kind": "sign",
-              "lines": [
-                "Who approved it?"
-              ],
-              "at": "approved"
-            },
-            "wt-panel-4": {
-              "kind": "sign",
-              "lines": [
-                "What proves it stayed inside?"
-              ],
-              "at": "proves"
-            },
-            "wt-panel-5": {
-              "kind": "sign",
-              "lines": [
-                "Owner?"
-              ]
-            },
-            "wt-panel-6": {
-              "kind": "sign",
-              "lines": [
-                "Evidence?"
-              ]
-            }
-          }
-        },
-        {
           "id": "wt-early-m1",
           "when": {
             "answers": {
@@ -577,36 +909,37 @@
             }
           },
           "text": "Then you may be early, and 3HUE would rather tell you that than sell you something.",
-          "source": "The Ship List §06, discovery script; The Forcing Function §05, who to decline",
+          "source": "The Ship List \u00a706, discovery script; The Forcing Function \u00a705, who to decline",
           "status": "adapted",
+          "cue": {
+            "surface": "wt-panel-2"
+          },
           "write": {
+            "wt-panel-1": {
+              "kind": "sign",
+              "lines": [
+                "No date yet"
+              ]
+            },
             "wt-panel-2": {
               "kind": "sign",
               "lines": [
-                "No date yet"
+                "Nobody asking"
               ]
             },
-            "wt-panel-3": {
-              "kind": "sign",
-              "lines": [
-                "No date yet"
-              ]
-            },
-            "wt-panel-4": {
-              "kind": "sign",
-              "lines": [
-                "No date yet"
-              ]
-            }
+            "wt-panel-3": null,
+            "wt-panel-4": null,
+            "wt-panel-5": null,
+            "wt-panel-6": null
           }
         }
       ],
       "next": "wt-change",
       "ask": [
+        "frameworks",
         "auditor",
         "guarantee",
-        "platform",
-        "ai"
+        "timeline"
       ]
     },
     "wt-change": {
@@ -623,7 +956,7 @@
               "trigger-win-trust": [
                 "deal",
                 "evidence",
-                "ai"
+                "scope"
               ]
             }
           },
@@ -634,6 +967,11 @@
             "surface": "wt-panel-2"
           },
           "write": {
+            "wt-panel-1": null,
+            "wt-panel-4": null,
+            "wt-panel-5": null,
+            "wt-panel-6": null,
+            "wt-monitor": null,
             "wt-panel-2": {
               "kind": "status",
               "lines": [
@@ -655,25 +993,25 @@
               "trigger-win-trust": [
                 "deal",
                 "evidence",
-                "ai"
+                "scope"
               ]
             }
           },
-          "text": "After: every answer has an owner, with the evidence attached.",
-          "source": "The Message Stack §08, words we use",
+          "text": "Afterwards, every answer has an owner, and the evidence sits with it.",
+          "source": "The Message Stack \u00a708, words we use",
           "status": "adapted",
           "write": {
             "wt-panel-2": {
               "kind": "status",
               "lines": [
-                "Owned ✓"
+                "Owned \u2713"
               ],
               "at": "owner"
             },
             "wt-panel-3": {
               "kind": "status",
               "lines": [
-                "Evidence attached ✓"
+                "Evidence attached \u2713"
               ],
               "at": "evidence"
             }
@@ -686,13 +1024,22 @@
               "trigger-win-trust": [
                 "deal",
                 "evidence",
-                "ai"
+                "scope"
               ]
             }
           },
           "text": "The frameworks are public. What's missing is someone to run them.",
-          "source": "The Message Stack §01, core narrative",
-          "status": "adapted"
+          "source": "The Message Stack \u00a701, core narrative",
+          "status": "adapted",
+          "cue": {
+            "surface": "wt-binders"
+          },
+          "write": {
+            "wt-binders": {
+              "kind": "glow",
+              "lines": []
+            }
+          }
         },
         {
           "id": "wt-ch-4",
@@ -701,7 +1048,7 @@
               "trigger-win-trust": [
                 "deal",
                 "evidence",
-                "ai"
+                "scope"
               ]
             }
           },
@@ -714,8 +1061,12 @@
           ],
           "write": {
             "wt-monitor": {
-              "kind": "glow",
-              "lines": []
+              "kind": "card",
+              "lines": [
+                {
+                  "ref": "doors.win-trust.statSecondary"
+                }
+              ]
             }
           }
         },
@@ -728,17 +1079,43 @@
               ]
             }
           },
-          "text": "Here the trigger is usually a deal, a renewal or an insurer with a date.",
-          "source": "The Forcing Function §05, who to decline",
-          "status": "adapted"
+          "text": "The ask usually arrives as a deal, a renewal, or an insurer with a date.",
+          "source": "The Forcing Function \u00a705, who to decline",
+          "status": "adapted",
+          "cue": {
+            "surface": "wt-panel-1"
+          },
+          "write": {
+            "wt-panel-1": {
+              "kind": "sign",
+              "lines": [
+                "A deal"
+              ],
+              "at": "deal"
+            },
+            "wt-panel-2": {
+              "kind": "sign",
+              "lines": [
+                "A renewal"
+              ],
+              "at": "renewal"
+            },
+            "wt-panel-3": {
+              "kind": "sign",
+              "lines": [
+                "An insurer, with a date"
+              ],
+              "at": "insurer"
+            }
+          }
         }
       ],
       "next": "wt-receive",
       "ask": [
-        "auditor",
-        "guarantee",
+        "frameworks",
+        "hire",
         "platform",
-        "ai"
+        "different"
       ]
     },
     "wt-receive": {
@@ -757,28 +1134,22 @@
               ]
             }
           },
-          "text": "For a blocked deal, the start is one package: {offer:soc-2-readiness}, or {offer:iso-27001-readiness} if your buyer named ISO.",
+          "text": "For a blocked deal the start is one package, chosen by the standard your buyer named.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
-            "surface": "wt-panel-3"
+            "surface": "wt-monitor"
           },
           "write": {
+            "wt-panel-1": null,
+            "wt-panel-2": null,
+            "wt-panel-3": null,
+            "wt-panel-4": null,
+            "wt-panel-5": null,
+            "wt-panel-6": null,
             "wt-monitor": {
               "kind": "glow",
               "lines": []
-            },
-            "wt-panel-3": {
-              "kind": "sign",
-              "lines": [
-                "{offer:soc-2-readiness}"
-              ]
-            },
-            "wt-panel-4": {
-              "kind": "sign",
-              "lines": [
-                "{offer:iso-27001-readiness}"
-              ]
             }
           }
         },
@@ -791,7 +1162,7 @@
               ]
             }
           },
-          "text": "{offer:soc-2-readiness} covers the risk assessment, the policies, an incident response plan and audit support.",
+          "text": "Most often that's {offer:soc-2-readiness}. One package, and the evidence your buyer asks for comes with it.",
           "source": "3HUE service catalog, September 2026",
           "status": "adapted",
           "cue": {
@@ -802,13 +1173,69 @@
               "kind": "glow",
               "lines": []
             },
-            "wt-panel-4": {
+            "wt-panel-3": {
+              "kind": "sign",
+              "lines": [
+                "{offer:soc-2-readiness}"
+              ]
+            },
+            "wt-panel-1": {
               "kind": "list",
               "lines": [
-                "Risk register",
-                "Policies",
-                "Incident response plan",
-                "Audit support"
+                "Where you stand",
+                "What's written down",
+                "What you'd do in an incident"
+              ]
+            }
+          }
+        },
+        {
+          "id": "wt-deal-r3",
+          "when": {
+            "answers": {
+              "trigger-win-trust": [
+                "deal"
+              ]
+            }
+          },
+          "text": "Named ISO instead? {offer:iso-27001-readiness}. Privacy? {offer:iso-27701-readiness}. Card data? {offer:pci-dss-readiness}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "cue": {
+            "surface": "wt-panel-5"
+          },
+          "write": {
+            "wt-panel-5": {
+              "kind": "list",
+              "lines": [
+                "Instead, if they named:",
+                "{offer:iso-27001-readiness}",
+                "{offer:iso-27701-readiness}",
+                "{offer:pci-dss-readiness}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "wt-deal-r4",
+          "when": {
+            "answers": {
+              "trigger-win-trust": [
+                "deal"
+              ]
+            }
+          },
+          "text": "Take one, not two. Two of them overlap, and you would pay for the overlap twice.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
+          "cue": {
+            "surface": "wt-panel-2"
+          },
+          "write": {
+            "wt-panel-2": {
+              "kind": "sign",
+              "lines": [
+                "One, not two"
               ]
             }
           }
@@ -822,34 +1249,38 @@
               ]
             }
           },
-          "text": "Here the start is the {offer:initial-risk-assessment}: where you stand, with a risk register, an executive readout and a prioritized roadmap.",
+          "text": "Here the start is the {offer:initial-risk-assessment}: where you stand, what to fix, and in what order.",
           "source": "3HUE service catalog, September 2026",
           "status": "adapted",
           "cue": {
             "surface": "wt-panel-3"
           },
           "write": {
-            "wt-monitor": {
-              "kind": "glow",
-              "lines": []
-            },
+            "wt-panel-1": null,
+            "wt-panel-2": null,
             "wt-panel-3": {
               "kind": "sign",
               "lines": [
                 "{offer:initial-risk-assessment}"
               ]
             },
-            "wt-binders": {
-              "kind": "glow",
-              "lines": []
-            },
             "wt-panel-4": {
               "kind": "list",
               "lines": [
-                "Risk register",
-                "Executive readout",
-                "Prioritized roadmap"
+                "Where you stand",
+                "What to fix",
+                "In what order"
               ]
+            },
+            "wt-panel-5": null,
+            "wt-panel-6": null,
+            "wt-monitor": {
+              "kind": "glow",
+              "lines": []
+            },
+            "wt-binders": {
+              "kind": "glow",
+              "lines": []
             }
           }
         },
@@ -878,45 +1309,57 @@
           }
         },
         {
-          "id": "wt-ai-r1",
+          "id": "wt-scope-r1",
           "when": {
             "answers": {
               "trigger-win-trust": [
-                "ai"
+                "scope"
               ]
             }
           },
-          "text": "Here the start is {offer:ai-governance-advisory}, built around those four questions.",
+          "text": "Here the start is {offer:isms-scope-soa-development}: the boundary written down, with a reason for every control.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
             "surface": "wt-panel-3"
           },
           "write": {
-            "wt-monitor": {
-              "kind": "glow",
-              "lines": []
-            },
+            "wt-panel-1": null,
+            "wt-panel-2": null,
             "wt-panel-3": {
               "kind": "sign",
               "lines": [
-                "{offer:ai-governance-advisory}"
+                "{offer:isms-scope-soa-development}"
               ]
+            },
+            "wt-panel-4": {
+              "kind": "list",
+              "lines": [
+                "What's in scope",
+                "What's out, and why",
+                "Which controls apply"
+              ]
+            },
+            "wt-panel-5": null,
+            "wt-panel-6": null,
+            "wt-monitor": {
+              "kind": "glow",
+              "lines": []
             }
           }
         },
         {
-          "id": "wt-ai-r2",
+          "id": "wt-scope-r2",
           "when": {
             "answers": {
               "trigger-win-trust": [
-                "ai"
+                "scope"
               ]
             }
           },
-          "text": "You'd get an acceptable-use policy, an AI risk register, and a named owner for each decision.",
-          "source": "3hue.net, AI governance",
-          "status": "adapted",
+          "text": "If the auditor wants the system described, there\u2019s a document for that: {offer:system-security-privacy-plan-sspp-development}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
           "cue": {
             "surface": "wt-binders"
           },
@@ -925,28 +1368,38 @@
               "kind": "glow",
               "lines": []
             },
-            "wt-panel-4": {
-              "kind": "list",
+            "wt-panel-5": {
+              "kind": "sign",
               "lines": [
-                "Acceptable-use policy",
-                "AI risk register",
-                "Decision owners"
+                "{offer:system-security-privacy-plan-sspp-development}"
               ]
             }
           }
         },
         {
-          "id": "wt-ai-r3",
+          "id": "wt-scope-r3",
           "when": {
             "answers": {
               "trigger-win-trust": [
-                "ai"
+                "scope"
               ]
             }
           },
-          "text": "No baseline yet? The {offer:initial-risk-assessment} comes first.",
+          "text": "If the audit is certification itself, take {offer:iso-27001-readiness} instead \u2014 it carries the scope work.",
           "source": "3HUE service catalog, September 2026",
-          "status": "proposed"
+          "status": "derived",
+          "cue": {
+            "surface": "wt-panel-6"
+          },
+          "write": {
+            "wt-panel-6": {
+              "kind": "sign",
+              "lines": [
+                "Instead:",
+                "{offer:iso-27001-readiness}"
+              ]
+            }
+          }
         },
         {
           "id": "wt-r-run",
@@ -955,11 +1408,11 @@
               "trigger-win-trust": [
                 "deal",
                 "evidence",
-                "ai"
+                "scope"
               ]
             }
           },
-          "text": "Then the {program:isp} keeps it running: policies, standards and clear owners.",
+          "text": "Then it has to stay true. That\u2019s what {program:isp} is for.",
           "source": "3hue.net, ISG managed programs; 3HUE service catalog, September 2026",
           "status": "adapted",
           "cue": {
@@ -969,7 +1422,8 @@
             "wt-niche": {
               "kind": "sign",
               "lines": [
-                "Then: {offer:managed-isp}"
+                "Then:",
+                "{program:isp}"
               ]
             }
           }
@@ -981,7 +1435,7 @@
               "trigger-win-trust": [
                 "deal",
                 "evidence",
-                "ai"
+                "scope"
               ]
             }
           },
@@ -1003,6 +1457,8 @@
             "surface": "wt-panel-3"
           },
           "write": {
+            "wt-panel-1": null,
+            "wt-panel-2": null,
             "wt-monitor": {
               "kind": "glow",
               "lines": []
@@ -1041,10 +1497,10 @@
             "doors.win-trust.proof.0"
           ],
           "write": {
-            "wt-monitor": {
-              "kind": "glow",
-              "lines": []
-            },
+            "wt-panel-4": null,
+            "wt-panel-5": null,
+            "wt-panel-6": null,
+            "wt-niche": null,
             "wt-panel-1": {
               "kind": "sign",
               "lines": [
@@ -1062,28 +1518,48 @@
               "lines": [
                 "Multi-entity Type II"
               ]
+            },
+            "wt-monitor": {
+              "kind": "glow",
+              "lines": []
             }
           }
         },
         {
           "id": "wt-p2",
-          "text": "It started where many teams start: a risk and control posture assessment, then readiness for SOC 2.",
+          "text": "It started where many teams start: an assessment of where they stood, then {offer:soc-2-readiness}.",
           "source": "Transit Technologies, published customer story",
-          "status": "adapted"
+          "status": "adapted",
+          "cue": {
+            "surface": "wt-binders"
+          },
+          "write": {
+            "wt-binders": {
+              "kind": "glow",
+              "lines": []
+            },
+            "wt-panel-4": {
+              "kind": "list",
+              "lines": [
+                "Where they stood",
+                "Then {offer:soc-2-readiness}"
+              ]
+            }
+          }
         },
         {
           "id": "wt-p3",
           "text": "You get the report because your buyer needs it, and a program because you need it.",
-          "source": "The Message Stack §06, objection handling",
+          "source": "The Message Stack \u00a706, objection handling",
           "status": "adapted"
         }
       ],
       "next": "wt-next",
       "ask": [
         "proof",
-        "auditor",
+        "theater",
         "guarantee",
-        "theater"
+        "big-firm"
       ]
     },
     "wt-next": {
@@ -1103,7 +1579,7 @@
             }
           },
           "text": "Your next step is a conversation about that deal: the date, the scope, and what you don't have to do.",
-          "source": "The Forcing Function §01, the fit model; §02, the three segments",
+          "source": "The Forcing Function \u00a701, the fit model",
           "status": "adapted"
         },
         {
@@ -1120,15 +1596,15 @@
           "status": "proposed"
         },
         {
-          "id": "wt-ai-n",
+          "id": "wt-scope-n",
           "when": {
             "answers": {
               "trigger-win-trust": [
-                "ai"
+                "scope"
               ]
             }
           },
-          "text": "Your next step: list the AI uses your customers ask about. The team scopes from there.",
+          "text": "Your next step: bring the audit date, and the scope you think you have.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
@@ -1142,7 +1618,7 @@
             }
           },
           "text": "Take a summary with you, and come back when someone asks.",
-          "source": "The Message Stack §07, battlecards",
+          "source": "The Message Stack \u00a707, battlecards",
           "status": "adapted"
         },
         {
@@ -1152,6 +1628,14 @@
             "surface": "wt-niche"
           },
           "write": {
+            "wt-panel-1": null,
+            "wt-panel-2": null,
+            "wt-panel-3": null,
+            "wt-panel-4": null,
+            "wt-panel-5": null,
+            "wt-panel-6": null,
+            "wt-monitor": null,
+            "wt-binders": null,
             "wt-niche": {
               "kind": "sign",
               "lines": [
@@ -1185,6 +1669,7 @@
           },
           {
             "id": "talk",
+            "label": "{str:talk}",
             "action": "talk"
           }
         ]
@@ -1193,7 +1678,7 @@
         "quote",
         "where-to-start",
         "pricing",
-        "ai"
+        "after"
       ]
     },
     "gc": {
@@ -1202,79 +1687,106 @@
         "kind": "door",
         "door": "gain-control"
       },
+      "write": {
+        "gc-wall": null,
+        "gc-amber-left": null,
+        "gc-amber-right": null,
+        "gc-model": null,
+        "gc-console": null
+      },
       "lines": [
         {
-          "id": "gc-1",
-          "text": "This room is for sponsors and family offices carrying cyber risk across companies with no common standard.",
-          "source": "The Forcing Function §02, the three segments",
-          "status": "adapted"
+          "id": "gc-ack",
+          "when": {
+            "answers": {
+              "situation": [
+                "own"
+              ]
+            }
+          },
+          "text": "They're asking about your data and your vendors. That's this room.",
+          "source": "Tour script, routing line",
+          "status": "proposed"
         },
         {
-          "id": "gc-2",
-          "ref": "doors.gain-control.opening",
+          "id": "gc-1",
+          "text": "{door:gain-control.title} is about the things you already own: your data, your vendors, and how your systems get built.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
           "cue": {
             "surface": "gc-wall"
           },
-          "callout": [
-            "doors.gain-control.stat"
-          ],
           "write": {
             "gc-wall": {
-              "kind": "card",
+              "kind": "list",
               "lines": [
-                {
-                  "ref": "doors.gain-control.stat"
-                }
+                "Your data",
+                "Your vendors",
+                "How it gets built"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-2",
+          "text": "For a while one person holds all of it in their head. Then there is more of it than one person can hold.",
+          "source": "The Forcing Function \u00a703",
+          "status": "adapted",
+          "cue": {
+            "surface": "gc-amber-left"
+          },
+          "write": {
+            "gc-amber-left": {
+              "kind": "status",
+              "lines": [
+                "One person holds it"
               ]
             }
           }
         },
         {
           "id": "gc-3",
-          "text": "That gap isn't a philosophy difference. It's a staffing one.",
-          "source": "The Forcing Function §06, approved opening lines",
-          "status": "adapted"
-        },
-        {
-          "id": "gc-4",
-          "text": "Tell me what's pressing, and the room will show you.",
+          "text": "Tell me which part is loudest, and we'll finish on the one step you would take first.",
           "source": "Tour script, linking line",
           "status": "proposed"
         }
       ],
       "choice": {
         "id": "gc-trigger",
-        "prompt": "What's pressing right now?",
+        "prompt": "Which part is loudest right now?",
         "remember": "trigger-gain-control",
         "options": [
           {
-            "id": "acquisition",
+            "id": "crossing",
             "label": "{door:gain-control.triggers.0}",
+            "sub": "Privacy rules, across the whole business",
             "next": "gc-moment"
           },
           {
-            "id": "reporting",
+            "id": "ai",
             "label": "{door:gain-control.triggers.1}",
+            "sub": "Who approves what AI touches",
             "next": "gc-moment"
           },
           {
-            "id": "control",
+            "id": "vendors",
             "label": "{door:gain-control.triggers.2}",
+            "sub": "Other people's systems hold your data",
             "next": "gc-moment"
           },
           {
             "id": "early",
             "label": "Nobody's asking yet",
-            "sub": "No acquisition, exit or lender condition on the table",
+            "sub": "No rule, customer or vendor question on the table",
             "next": "gc-moment"
           }
         ]
       },
       "ask": [
-        "private-equity",
-        "vciso",
         "vendor",
-        "rmp"
+        "ai",
+        "msp",
+        "packages"
       ]
     },
     "gc-moment": {
@@ -1283,47 +1795,22 @@
         "kind": "door",
         "door": "gain-control"
       },
+      "write": {
+        "gc-wall": null,
+        "gc-amber-left": null,
+        "gc-amber-right": null
+      },
       "lines": [
         {
-          "id": "gc-acq-m1",
+          "id": "gc-cross-m1",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "acquisition"
+                "crossing"
               ]
             }
           },
-          "text": "Then a new company is coming in, and there's no common way to look at it.",
-          "source": "The Forcing Function §04, trigger events",
-          "status": "adapted",
-          "cue": {
-            "surface": "gc-amber-left"
-          },
-          "write": {
-            "gc-amber-left": {
-              "kind": "sign",
-              "lines": [
-                "New platform acquisition"
-              ]
-            },
-            "gc-amber-right": {
-              "kind": "sign",
-              "lines": [
-                "Which standard?"
-              ]
-            }
-          }
-        },
-        {
-          "id": "gc-rep-m1",
-          "when": {
-            "answers": {
-              "trigger-gain-control": [
-                "reporting"
-              ]
-            }
-          },
-          "text": "Then every company reports its own way, and the board can't compare them.",
+          "text": "Then a rule that used to belong to one team is suddenly everybody's problem.",
           "source": "Tour script, linking line",
           "status": "proposed",
           "cue": {
@@ -1331,45 +1818,126 @@
           },
           "write": {
             "gc-amber-left": {
-              "kind": "sign",
+              "kind": "status",
               "lines": [
-                "Board: no common view"
-              ]
-            },
-            "gc-amber-right": {
-              "kind": "sign",
-              "lines": [
-                "Lender: asking"
+                "Whose rule is it?"
               ]
             }
           }
         },
         {
-          "id": "gc-ctl-m1",
+          "id": "gc-cross-m2",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "control"
+                "crossing"
               ]
             }
           },
-          "text": "Then you need oversight across companies, without hiring a CISO for each one.",
-          "source": "The Forcing Function §03",
+          "text": "And the first honest question is where that data lives. Nobody has one answer.",
+          "source": "Tour script, linking line",
+          "status": "proposed",
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "Where does it live?",
+                "Who answers for it?",
+                "Since when?"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-ai-m1",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "ai"
+              ]
+            }
+          },
+          "text": "Then a tool nobody approved is reading things nobody listed.",
+          "source": "3hue.net, AI governance",
           "status": "adapted",
           "cue": {
             "surface": "gc-amber-left"
           },
           "write": {
             "gc-amber-left": {
-              "kind": "sign",
+              "kind": "status",
               "lines": [
-                "A CISO per company?"
+                "Who approved it?"
               ]
-            },
-            "gc-amber-right": {
-              "kind": "sign",
+            }
+          }
+        },
+        {
+          "id": "gc-ai-m2",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "ai"
+              ]
+            }
+          },
+          "text": "Your customer's next question will not be whether you use AI. It will be who checks it.",
+          "source": "3hue.net, AI governance",
+          "status": "adapted",
+          "write": {
+            "gc-wall": {
+              "kind": "list",
               "lines": [
-                "No new headcount"
+                "Which tools?",
+                "What can they touch?",
+                "Who checks them?"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-ven-m1",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "vendors"
+              ]
+            }
+          },
+          "text": "Then a good part of your risk sits in other people's systems, and you take their word for it.",
+          "source": "3hue.net, ISG managed programs",
+          "status": "adapted",
+          "cue": {
+            "surface": "gc-amber-left"
+          },
+          "write": {
+            "gc-amber-left": {
+              "kind": "status",
+              "lines": [
+                "Their systems, your name"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-ven-m2",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "vendors"
+              ]
+            }
+          },
+          "text": "And when your own customer asks who you rely on, that list has to be real and current.",
+          "source": "Tour script, linking line",
+          "status": "proposed",
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "Who do you rely on?",
+                "What do they hold?",
+                "Who checked?"
               ]
             }
           }
@@ -1383,17 +1951,30 @@
               ]
             }
           },
-          "text": "Then you may be early. For a fund, the trigger is usually an acquisition, an exit or a lender's conditions.",
-          "source": "The Forcing Function §02, the three segments; §05, who to decline",
-          "status": "adapted"
+          "text": "Then this room can wait. The ask here usually comes from a rule, a customer, or your own auditor.",
+          "source": "The Forcing Function \u00a705, who to decline",
+          "status": "adapted",
+          "cue": {
+            "surface": "gc-wall"
+          },
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "A rule",
+                "A customer",
+                "Your own auditor"
+              ]
+            }
+          }
         }
       ],
       "next": "gc-change",
       "ask": [
-        "private-equity",
-        "vciso",
         "vendor",
-        "rmp"
+        "ai",
+        "early",
+        "msp"
       ]
     },
     "gc-change": {
@@ -1402,19 +1983,23 @@
         "kind": "door",
         "door": "gain-control"
       },
+      "write": {
+        "gc-wall": null,
+        "gc-amber-right": null
+      },
       "lines": [
         {
           "id": "gc-ch-1",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "acquisition",
-                "reporting",
-                "control"
+                "crossing",
+                "ai",
+                "vendors"
               ]
             }
           },
-          "text": "Today every company is assessed its own way, if at all.",
+          "text": "Today the picture is a diagram someone drew once, plus whatever the longest-serving person remembers.",
           "source": "Tour script, linking line",
           "status": "proposed",
           "cue": {
@@ -1424,7 +2009,7 @@
             "gc-amber-left": {
               "kind": "status",
               "lines": [
-                "Company by company"
+                "Drawn once, remembered since"
               ]
             }
           }
@@ -1434,9 +2019,9 @@
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "acquisition",
-                "reporting",
-                "control"
+                "crossing",
+                "ai",
+                "vendors"
               ]
             }
           },
@@ -1445,15 +2030,15 @@
             "surface": "gc-model"
           },
           "write": {
-            "gc-amber-left": {
-              "kind": "status",
-              "lines": [
-                "One control set ✓"
-              ]
-            },
             "gc-model": {
               "kind": "glow",
               "lines": []
+            },
+            "gc-amber-right": {
+              "kind": "status",
+              "lines": [
+                "One control set, wherever it lands"
+              ]
             }
           }
         },
@@ -1462,29 +2047,67 @@
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "acquisition",
-                "reporting",
-                "control"
+                "crossing",
+                "ai",
+                "vendors"
               ]
             }
           },
-          "ref": "doors.gain-control.statSecondary",
-          "cue": {
-            "surface": "gc-wall"
-          },
-          "callout": [
-            "doors.gain-control.statSecondary"
-          ],
+          "text": "And where two things have to be kept apart, they stay apart.",
+          "source": "The Forcing Function \u00a702, What 3HUE sells them",
+          "status": "adapted",
           "write": {
-            "gc-wall": {
-              "kind": "card",
+            "gc-amber-right": {
+              "kind": "list",
               "lines": [
-                {
-                  "ref": "doors.gain-control.statSecondary"
-                }
+                "One control set, wherever it lands",
+                "Kept apart where it must be"
               ]
             }
           }
+        },
+        {
+          "id": "gc-ch-4",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "crossing",
+                "ai",
+                "vendors"
+              ]
+            }
+          },
+          "text": "After: everything you own has a name against it, and a date when someone last looked.",
+          "source": "The Message Stack \u00a708, words we use",
+          "status": "adapted",
+          "cue": {
+            "surface": "gc-wall"
+          },
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "Named owner \u2713",
+                "Last looked at \u2713"
+              ]
+            },
+            "gc-amber-left": null
+          }
+        },
+        {
+          "id": "gc-ch-5",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "crossing",
+                "ai",
+                "vendors"
+              ]
+            }
+          },
+          "text": "The hard part was never the standard. It was that nobody was given it to hold.",
+          "source": "The Forcing Function \u00a706, approved opening lines",
+          "status": "adapted"
         },
         {
           "id": "gc-early-c1",
@@ -1495,7 +2118,7 @@
               ]
             }
           },
-          "text": "When it comes, the start is the {offer:initial-risk-assessment}, one per company.",
+          "text": "When it does come, the first move is small: {offer:data-mapping-data-inventory}, so you know what you hold.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
@@ -1505,7 +2128,7 @@
             "gc-wall": {
               "kind": "sign",
               "lines": [
-                "{offer:initial-risk-assessment}"
+                "{offer:data-mapping-data-inventory}"
               ]
             }
           }
@@ -1513,10 +2136,10 @@
       ],
       "next": "gc-receive",
       "ask": [
-        "private-equity",
-        "vciso",
         "vendor",
-        "rmp"
+        "ai",
+        "different",
+        "timeline"
       ]
     },
     "gc-receive": {
@@ -1525,72 +2148,24 @@
         "kind": "door",
         "door": "gain-control"
       },
+      "write": {
+        "gc-wall": null,
+        "gc-amber-left": null,
+        "gc-amber-right": null,
+        "gc-model": null,
+        "gc-console": null
+      },
       "lines": [
         {
-          "id": "gc-acq-r1",
+          "id": "gc-cross-r1",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "acquisition"
+                "crossing"
               ]
             }
           },
-          "text": "The start is the {offer:initial-risk-assessment}, one per company, on the same framework every time.",
-          "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events",
-          "status": "adapted",
-          "cue": {
-            "surface": "gc-wall"
-          },
-          "write": {
-            "gc-wall": {
-              "kind": "sign",
-              "lines": [
-                "{offer:initial-risk-assessment}",
-                "One per company"
-              ]
-            }
-          }
-        },
-        {
-          "id": "gc-acq-r2",
-          "when": {
-            "answers": {
-              "trigger-gain-control": [
-                "acquisition"
-              ]
-            }
-          },
-          "text": "You get a risk register per company, rolled up into one for the fund.",
-          "source": "3hue.net, private equity and family offices",
-          "status": "adapted",
-          "cue": {
-            "surface": "gc-amber-left"
-          },
-          "write": {
-            "gc-amber-left": {
-              "kind": "sign",
-              "lines": [
-                "Risk register per company"
-              ]
-            },
-            "gc-amber-right": {
-              "kind": "sign",
-              "lines": [
-                "One roll-up for the fund"
-              ]
-            }
-          }
-        },
-        {
-          "id": "gc-rep-r1",
-          "when": {
-            "answers": {
-              "trigger-gain-control": [
-                "reporting"
-              ]
-            }
-          },
-          "text": "The start is {offer:bod-reporting}: one format your board and investors can read.",
+          "text": "For privacy, the start is one package: {offer:privacy-leadership-launch}.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
@@ -1600,139 +2175,342 @@
             "gc-wall": {
               "kind": "sign",
               "lines": [
-                "{offer:bod-reporting}"
+                "{offer:privacy-leadership-launch}"
               ]
             }
           }
         },
         {
-          "id": "gc-rep-r2",
+          "id": "gc-cross-r2",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "reporting"
+                "crossing"
               ]
             }
           },
-          "text": "And a {offer:risk-committee-update} when the risk committee needs its own view.",
+          "text": "It sets the baseline, puts a named privacy lead in the chair, and keeps the program running.",
           "source": "3HUE service catalog, September 2026",
-          "status": "proposed",
-          "cue": {
-            "surface": "gc-amber-left"
-          },
+          "status": "adapted",
           "write": {
             "gc-amber-left": {
-              "kind": "sign",
+              "kind": "list",
               "lines": [
-                "{offer:risk-committee-update}"
+                "A baseline",
+                "A named privacy lead",
+                "Someone running it"
               ]
-            },
+            }
+          }
+        },
+        {
+          "id": "gc-cross-r3",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "crossing"
+              ]
+            }
+          },
+          "text": "If a customer or an auditor has named a privacy certificate, that track runs through {door:win-trust.title}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
+          "write": {
             "gc-amber-right": {
               "kind": "sign",
               "lines": [
-                "{offer:security-analytics}"
+                "Certificate track:",
+                "{door:win-trust.title}"
               ]
             }
           }
         },
         {
-          "id": "gc-ctl-r1",
+          "id": "gc-cross-r4",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "control"
+                "crossing"
               ]
             }
           },
-          "text": "The start is the {offer:managed-rmp}, with a virtual CISO alongside if you need one.",
-          "source": "3HUE service catalog, September 2026; 3hue.net, private equity and family offices",
+          "text": "Either way, someone has to draw the map: {offer:data-mapping-data-inventory}.",
+          "source": "3HUE service catalog, September 2026",
           "status": "proposed",
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "{offer:privacy-leadership-launch}",
+                "{offer:data-mapping-data-inventory}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-cross-r5",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "crossing"
+              ]
+            }
+          },
+          "text": "And when a regulator writes, there's {offer:regulator-liaison-dsar-escalation-support}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "{offer:privacy-leadership-launch}",
+                "{offer:data-mapping-data-inventory}",
+                "{offer:regulator-liaison-dsar-escalation-support}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-ai-r1",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "ai"
+              ]
+            }
+          },
+          "text": "For AI, the start is {offer:ai-governance-advisory}: who approves it, what it may touch, who reviews it.",
+          "source": "3hue.net, AI governance; 3HUE service catalog, September 2026",
+          "status": "adapted",
           "cue": {
-            "surface": "gc-console"
+            "surface": "gc-wall"
           },
           "write": {
+            "gc-wall": {
+              "kind": "sign",
+              "lines": [
+                "{offer:ai-governance-advisory}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-ai-r2",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "ai"
+              ]
+            }
+          },
+          "text": "{offer:security-architecture-reviews} put eyes on the design before it ships.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "{offer:ai-governance-advisory}",
+                "{offer:security-architecture-reviews}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-ai-r3",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "ai"
+              ]
+            }
+          },
+          "text": "{offer:secure-sdlc-program-development} makes that the normal way to build, not a favour.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "{offer:ai-governance-advisory}",
+                "{offer:security-architecture-reviews}",
+                "{offer:secure-sdlc-program-development}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-ai-r4",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "ai"
+              ]
+            }
+          },
+          "text": "And {offer:vulnerability-management-program-development} settles what gets fixed, who fixes it, and what waits.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "adapted",
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "{offer:ai-governance-advisory}",
+                "{offer:security-architecture-reviews}",
+                "{offer:secure-sdlc-program-development}",
+                "{offer:vulnerability-management-program-development}"
+              ]
+            },
+            "gc-amber-left": {
+              "kind": "list",
+              "lines": [
+                "What gets fixed",
+                "Who fixes it",
+                "What waits"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-ai-r5",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "ai"
+              ]
+            }
+          },
+          "text": "Then it runs as {program:sea}, so the work carries on after the reviews stop.",
+          "source": "3hue.net, ISG managed programs; 3HUE service catalog, September 2026",
+          "status": "proposed",
+          "write": {
+            "gc-amber-right": {
+              "kind": "sign",
+              "lines": [
+                "Then:",
+                "{program:sea}"
+              ]
+            },
             "gc-console": {
               "kind": "glow",
               "lines": []
-            },
-            "gc-wall": {
-              "kind": "sign",
-              "lines": [
-                "{offer:managed-rmp}"
-              ]
             }
           }
         },
         {
-          "id": "gc-ctl-r2",
+          "id": "gc-ven-r1",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "control"
+                "vendors"
               ]
             }
           },
-          "text": "And the {offer:managed-vcp} keeps third-party risk in the same view.",
+          "text": "For vendors, the start is the {program:vcp}.",
           "source": "3hue.net, ISG managed programs; 3HUE service catalog, September 2026",
           "status": "adapted",
           "cue": {
-            "surface": "gc-amber-right"
+            "surface": "gc-wall"
           },
           "write": {
-            "gc-amber-right": {
+            "gc-wall": {
               "kind": "sign",
               "lines": [
-                "{offer:managed-vcp}"
+                "{program:vcp}"
               ]
             }
           }
         },
         {
-          "id": "gc-ctl-r3",
+          "id": "gc-ven-r2",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "control"
+                "vendors"
               ]
             }
           },
-          "text": "A virtual CISO is executive security leadership that sits with your team and owns the board conversation.",
+          "text": "It keeps one list: who you rely on, what they hold, when each was last checked.",
           "source": "3hue.net, ISG managed programs",
           "status": "adapted",
           "write": {
             "gc-amber-left": {
-              "kind": "sign",
+              "kind": "list",
               "lines": [
-                "Virtual CISO"
+                "Who you rely on \u2713",
+                "What they hold \u2713",
+                "Last checked \u2713"
               ]
             }
           }
         },
         {
-          "id": "gc-r-run",
+          "id": "gc-ven-r3",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "acquisition",
-                "reporting"
+                "vendors"
               ]
             }
           },
-          "text": "Behind it, the {program:rmp} runs continuously: risks identified, prioritized and tracked to closure.",
-          "source": "3hue.net, ISG managed programs",
-          "status": "adapted",
-          "cue": {
-            "surface": "gc-console"
-          },
+          "text": "It widens a block of vendors at a time, as your list grows.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
           "write": {
+            "gc-amber-right": {
+              "kind": "sign",
+              "lines": [
+                "Then:",
+                "a block at a time"
+              ]
+            },
             "gc-console": {
               "kind": "glow",
               "lines": []
-            },
+            }
+          }
+        },
+        {
+          "id": "gc-ven-r4",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "vendors"
+              ]
+            }
+          },
+          "text": "Before any of that, you need the list of what you own: {offer:asset-governance-program-development}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "write": {
             "gc-wall": {
-              "kind": "sign",
+              "kind": "list",
               "lines": [
-                "Then: {offer:managed-rmp}"
+                "{offer:asset-governance-program-development}",
+                "{program:vcp}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "gc-ven-r5",
+          "when": {
+            "answers": {
+              "trigger-gain-control": [
+                "vendors"
+              ]
+            }
+          },
+          "text": "And when their auditor turns up, or yours, you have {offer:audit-support}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "write": {
+            "gc-wall": {
+              "kind": "list",
+              "lines": [
+                "{offer:asset-governance-program-development}",
+                "{program:vcp}",
+                "{offer:audit-support}"
               ]
             }
           }
@@ -1742,17 +2520,19 @@
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "acquisition",
-                "reporting",
-                "control"
+                "crossing",
+                "ai",
+                "vendors"
               ]
             }
           },
           "ref": "doors.gain-control.program.operate",
           "write": {
-            "gc-model": {
-              "kind": "glow",
-              "lines": []
+            "gc-amber-right": {
+              "kind": "status",
+              "lines": [
+                "One format, one view"
+              ]
             }
           }
         },
@@ -1765,17 +2545,28 @@
               ]
             }
           },
-          "text": "The same first step works whichever company comes first.",
+          "text": "Whichever part gets loud first, the map is the same first step.",
           "source": "Tour script, linking line",
-          "status": "proposed"
+          "status": "proposed",
+          "cue": {
+            "surface": "gc-wall"
+          },
+          "write": {
+            "gc-wall": {
+              "kind": "sign",
+              "lines": [
+                "{offer:data-mapping-data-inventory}"
+              ]
+            }
+          }
         }
       ],
       "next": "gc-proof",
       "ask": [
-        "private-equity",
-        "vciso",
+        "packages",
         "vendor",
-        "packages"
+        "ai",
+        "pricing"
       ]
     },
     "gc-proof": {
@@ -1784,12 +2575,18 @@
         "kind": "door",
         "door": "gain-control"
       },
+      "write": {
+        "gc-wall": null,
+        "gc-amber-left": null,
+        "gc-amber-right": null,
+        "gc-console": null
+      },
       "lines": [
         {
           "id": "gc-p1",
           "ref": "doors.gain-control.proof.0",
           "cue": {
-            "surface": "gc-wall"
+            "surface": "gc-model"
           },
           "callout": [
             "doors.gain-control.proof.0"
@@ -1803,43 +2600,40 @@
                 }
               ]
             },
-            "gc-amber-left": {
-              "kind": "sign",
-              "lines": [
-                "A large North American bank"
-              ]
+            "gc-model": {
+              "kind": "glow",
+              "lines": []
             }
           }
         },
         {
           "id": "gc-p2",
-          "ref": "doors.win-trust.proof.0",
-          "callout": [
-            "doors.win-trust.proof.0"
-          ],
+          "text": "One framework, applied the same way every time. That is what makes a count like that possible.",
+          "source": "A large North American bank, published customer story",
+          "status": "derived",
           "write": {
             "gc-amber-right": {
               "kind": "sign",
               "lines": [
-                "Transit Technologies",
-                "Multi-entity Type II"
+                "One framework",
+                "Every time"
               ]
             }
           }
         },
         {
           "id": "gc-p3",
-          "text": "The point is repeatability: the same reason not to hire a different consultant for every company.",
-          "source": "The Forcing Function §02, the three segments",
+          "text": "It is the reason not to hire a different consultant for every corner of what you own.",
+          "source": "The Message Stack \u00a706, objection handling",
           "status": "adapted"
         }
       ],
       "next": "gc-next",
       "ask": [
         "proof",
-        "private-equity",
-        "vendor",
-        "different"
+        "different",
+        "big-firm",
+        "theater"
       ]
     },
     "gc-next": {
@@ -1848,43 +2642,50 @@
         "kind": "door",
         "door": "gain-control"
       },
+      "write": {
+        "gc-wall": null,
+        "gc-amber-left": null,
+        "gc-amber-right": null,
+        "gc-model": null,
+        "gc-console": null
+      },
       "lines": [
         {
-          "id": "gc-acq-n",
+          "id": "gc-cross-n",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "acquisition"
+                "crossing"
               ]
             }
           },
-          "text": "Your next step: bring the next acquisition. The team scopes the first assessment and the standard behind it.",
+          "text": "Your next step: bring the list of places personal data lives. Incomplete is normal.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
         {
-          "id": "gc-rep-n",
+          "id": "gc-ai-n",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "reporting"
+                "ai"
               ]
             }
           },
-          "text": "Your next step: bring last quarter's board pack, and the team scopes one format from it.",
+          "text": "Your next step: bring the list of AI tools in use, including the ones nobody approved.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
         {
-          "id": "gc-ctl-n",
+          "id": "gc-ven-n",
           "when": {
             "answers": {
               "trigger-gain-control": [
-                "control"
+                "vendors"
               ]
             }
           },
-          "text": "Your next step: a conversation about which companies come first, and who leads.",
+          "text": "Your next step: bring your vendor list, and mark the ones that hold your data.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
@@ -1897,8 +2698,8 @@
               ]
             }
           },
-          "text": "Take a summary with you, and come back when the next deal starts.",
-          "source": "The Message Stack §07, battlecards",
+          "text": "Take a summary with you, and come back when someone starts asking.",
+          "source": "The Message Stack \u00a707, battlecards",
           "status": "adapted"
         },
         {
@@ -1941,6 +2742,7 @@
           },
           {
             "id": "talk",
+            "label": "{str:talk}",
             "action": "talk"
           }
         ]
@@ -1949,7 +2751,7 @@
         "quote",
         "where-to-start",
         "pricing",
-        "private-equity"
+        "vendor"
       ]
     },
     "sr": {
@@ -1958,12 +2760,29 @@
         "kind": "door",
         "door": "stay-ready"
       },
+      "write": {
+        "sr-monitor-1": null,
+        "sr-monitor-2": null,
+        "sr-monitor-3": null,
+        "sr-panel-1": null,
+        "sr-panel-2": null,
+        "sr-panel-3": null,
+        "sr-rack": null,
+        "sr-clock": null
+      },
       "lines": [
         {
-          "id": "sr-1",
-          "text": "This room is for banks, credit unions, lenders and operators with governance on paper and an examiner in the building.",
-          "source": "The Forcing Function, cover; §02, the three segments",
-          "status": "adapted"
+          "id": "sr-ack",
+          "when": {
+            "answers": {
+              "situation": [
+                "run"
+              ]
+            }
+          },
+          "text": "They want to see it running, not just written down. That's this room.",
+          "source": "Tour script, routing line",
+          "status": "proposed"
         },
         {
           "id": "sr-2",
@@ -1975,7 +2794,7 @@
             "sr-monitor-1": {
               "kind": "status",
               "lines": [
-                "December ✓"
+                "December \u2713"
               ]
             },
             "sr-monitor-2": {
@@ -1989,46 +2808,112 @@
               "lines": [
                 "Today ?"
               ]
+            },
+            "sr-clock": {
+              "kind": "status",
+              "lines": [
+                "Since the last check"
+              ]
             }
           }
         },
         {
-          "id": "sr-3",
-          "text": "Here we can speak in the examiner's language from the first sentence.",
-          "source": "The Message Stack §04, the message by segment",
+          "id": "sr-holds",
+          "text": "This room is what has to hold up when something happens, or when somebody checks.",
+          "source": "The Message Stack \u00a701, core narrative",
           "status": "adapted"
         },
         {
-          "id": "sr-4",
-          "text": "Tell me what's pressing, and the room will show you.",
+          "id": "sr-shelf",
+          "text": "Response. Continuity. Detection. And the programs that keep risk and findings current between checks.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
+          "cue": {
+            "surface": "sr-rack"
+          },
+          "write": {
+            "sr-panel-1": {
+              "kind": "sign",
+              "lines": [
+                "Response"
+              ],
+              "at": "Response"
+            },
+            "sr-panel-2": {
+              "kind": "sign",
+              "lines": [
+                "Continuity"
+              ],
+              "at": "Continuity"
+            },
+            "sr-panel-3": {
+              "kind": "sign",
+              "lines": [
+                "Detection"
+              ],
+              "at": "Detection"
+            },
+            "sr-rack": {
+              "kind": "glow",
+              "lines": [],
+              "at": "programs"
+            }
+          }
+        },
+        {
+          "id": "sr-stat",
+          "ref": "doors.stay-ready.stat",
+          "cue": {
+            "surface": "sr-monitor-3"
+          },
+          "callout": [
+            "doors.stay-ready.stat"
+          ],
+          "write": {
+            "sr-monitor-3": {
+              "kind": "card",
+              "lines": [
+                {
+                  "ref": "doors.stay-ready.stat"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "sr-ask",
+          "text": "Say what's in front of you, and the room will show you the rest.",
           "source": "Tour script, linking line",
           "status": "proposed"
         }
       ],
       "choice": {
         "id": "sr-trigger",
-        "prompt": "What's pressing right now?",
+        "prompt": "What's in front of you?",
         "remember": "trigger-stay-ready",
         "options": [
           {
             "id": "exam",
-            "label": "{door:stay-ready.triggers.0}",
+            "label": "A finding with a date on it",
+            "sub": "Open, and someone is waiting",
             "next": "sr-moment"
           },
           {
             "id": "incident",
-            "label": "{door:stay-ready.triggers.1}",
+            "label": "An incident, or a near miss",
+            "sub": "Response, and what has to keep working",
             "next": "sr-moment"
           },
           {
-            "id": "crossing",
-            "label": "{door:stay-ready.triggers.2}",
+            "id": "detect",
+            "label": "Alerts nobody is reading",
+            "sub": "Detection and response, run for you",
             "next": "sr-moment"
           },
           {
             "id": "early",
             "label": "Nobody's asking yet",
-            "sub": "No finding, deadline or mandate on the calendar",
+            "sub": "No finding, no date, nobody waiting",
             "next": "sr-moment"
           }
         ]
@@ -2036,8 +2921,8 @@
       "ask": [
         "exam-findings",
         "incident",
-        "live-incident",
-        "remediation-owner"
+        "mdr",
+        "live-incident"
       ]
     },
     "sr-moment": {
@@ -2050,7 +2935,7 @@
         "sr-monitor-1": {
           "kind": "status",
           "lines": [
-            "December ✓"
+            "December \u2713"
           ]
         },
         "sr-monitor-2": {
@@ -2064,7 +2949,17 @@
           "lines": [
             "Today ?"
           ]
-        }
+        },
+        "sr-clock": {
+          "kind": "status",
+          "lines": [
+            "Since the last check"
+          ]
+        },
+        "sr-panel-1": null,
+        "sr-panel-2": null,
+        "sr-panel-3": null,
+        "sr-rack": null
       },
       "lines": [
         {
@@ -2077,7 +2972,7 @@
             }
           },
           "text": "Then there's a finding, a letter and a date.",
-          "source": "The Forcing Function §02, the three segments",
+          "source": "The Forcing Function \u00a704, trigger events",
           "status": "adapted",
           "cue": {
             "surface": "sr-panel-2"
@@ -2100,11 +2995,17 @@
               "lines": [
                 "Examiner's letter"
               ]
+            },
+            "sr-clock": {
+              "kind": "status",
+              "lines": [
+                "Time to the date"
+              ]
             }
           }
         },
         {
-          "id": "sr-m-stat",
+          "id": "sr-exam-m2",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2112,17 +3013,18 @@
               ]
             }
           },
-          "ref": "doors.stay-ready.stat",
+          "text": "And the finding is about what was running, not about what was written down.",
+          "source": "The Message Stack \u00a708, words we use",
+          "status": "adapted",
           "cue": {
             "surface": "sr-monitor-3"
           },
-          "callout": [
-            "doors.stay-ready.stat"
-          ],
           "write": {
             "sr-monitor-3": {
-              "kind": "glow",
-              "lines": []
+              "kind": "status",
+              "lines": [
+                "What's running?"
+              ]
             }
           }
         },
@@ -2162,19 +3064,50 @@
                 "Who gets told?"
               ],
               "at": "told"
+            },
+            "sr-clock": {
+              "kind": "status",
+              "lines": [
+                "Hour one."
+              ]
             }
           }
         },
         {
-          "id": "sr-cross-m1",
+          "id": "sr-inc-m2",
           "when": {
             "answers": {
               "trigger-stay-ready": [
-                "crossing"
+                "incident"
               ]
             }
           },
-          "text": "Then a new obligation is landing on teams that don't own it yet.",
+          "text": "And the day after: what has to keep working while you fix it.",
+          "source": "Tour script, linking line",
+          "status": "proposed",
+          "cue": {
+            "surface": "sr-rack"
+          },
+          "write": {
+            "sr-rack": {
+              "kind": "sign",
+              "lines": [
+                "What still has to run"
+              ],
+              "at": "working"
+            }
+          }
+        },
+        {
+          "id": "sr-det-m1",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "detect"
+              ]
+            }
+          },
+          "text": "Then the alerts are already arriving. Nobody's job is to read them.",
           "source": "Tour script, linking line",
           "status": "proposed",
           "cue": {
@@ -2184,25 +3117,50 @@
             "sr-panel-1": {
               "kind": "sign",
               "lines": [
-                "Privacy obligation"
-              ]
+                "Alerts arriving"
+              ],
+              "at": "alerts"
             },
             "sr-panel-2": {
               "kind": "sign",
               "lines": [
-                "AI in production"
-              ]
+                "Read by whom?"
+              ],
+              "at": "read"
             },
-            "sr-panel-3": {
-              "kind": "sign",
+            "sr-clock": {
+              "kind": "status",
               "lines": [
-                "Owner?"
+                "Alert to answer"
               ]
             }
           }
         },
         {
-          "id": "sr-early-m1",
+          "id": "sr-det-m2",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "detect"
+              ]
+            }
+          },
+          "text": "The tools are usually already bought. What's missing is someone to run them.",
+          "source": "The Message Stack \u00a701, core narrative",
+          "status": "adapted",
+          "cue": {
+            "surface": "sr-rack"
+          },
+          "write": {
+            "sr-rack": {
+              "kind": "glow",
+              "lines": [],
+              "at": "run"
+            }
+          }
+        },
+        {
+          "id": "sr-early-m2",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2210,17 +3168,41 @@
               ]
             }
           },
-          "text": "Then you may be early. Here the trigger is usually an exam finding, a remediation clock or a board mandate.",
-          "source": "The Forcing Function §05, who to decline",
+          "text": "Then you may be early, and 3HUE would rather say so than sell you something.",
+          "source": "The Forcing Function \u00a705, who to decline",
+          "status": "adapted",
+          "cue": {
+            "surface": "sr-monitor-2"
+          },
+          "write": {
+            "sr-monitor-2": {
+              "kind": "status",
+              "lines": [
+                "No date yet"
+              ]
+            }
+          }
+        },
+        {
+          "id": "sr-early-m3",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "early"
+              ]
+            }
+          },
+          "text": "Most of this room gets bought after a scare, or after a plan has to be used.",
+          "source": "The Forcing Function \u00a705, who to decline",
           "status": "adapted"
         }
       ],
       "next": "sr-change",
       "ask": [
-        "exam-findings",
         "incident",
         "live-incident",
-        "remediation-owner"
+        "mdr",
+        "exam-findings"
       ]
     },
     "sr-change": {
@@ -2233,7 +3215,7 @@
         "sr-monitor-1": {
           "kind": "status",
           "lines": [
-            "December ✓"
+            "December \u2713"
           ]
         },
         "sr-monitor-2": {
@@ -2247,7 +3229,17 @@
           "lines": [
             "Today ?"
           ]
-        }
+        },
+        "sr-clock": {
+          "kind": "status",
+          "lines": [
+            "Since the last check"
+          ]
+        },
+        "sr-panel-1": null,
+        "sr-panel-2": null,
+        "sr-panel-3": null,
+        "sr-rack": null
       },
       "lines": [
         {
@@ -2257,40 +3249,63 @@
               "trigger-stay-ready": [
                 "exam",
                 "incident",
-                "crossing"
+                "detect"
               ]
             }
           },
           "text": "Deployed is not operating. The gap between the two is where audits and incidents happen.",
-          "source": "The Message Stack §01, core narrative; §08, words we use",
+          "source": "The Message Stack \u00a701, core narrative; \u00a708, words we use",
           "status": "adapted",
           "cue": {
             "surface": "sr-panel-2"
           },
           "write": {
+            "sr-panel-1": {
+              "kind": "status",
+              "lines": [
+                "Deployed \u2713"
+              ],
+              "at": "Deployed"
+            },
             "sr-panel-2": {
               "kind": "status",
               "lines": [
-                "A plan on paper"
-              ]
+                "Operating?"
+              ],
+              "at": "operating"
             }
           }
         },
         {
-          "id": "sr-ch-2",
+          "id": "sr-ch-mfa",
           "when": {
             "answers": {
               "trigger-stay-ready": [
                 "exam",
                 "incident",
-                "crossing"
+                "detect"
               ]
             }
           },
-          "ref": "doors.stay-ready.statSecondary",
+          "text": "Most small businesses have turned MFA on. Only about half require it everywhere.",
+          "source": "National Cybersecurity Alliance with CISA, 2026",
+          "status": "adapted",
+          "cue": {
+            "surface": "sr-monitor-3"
+          },
           "callout": [
             "doors.stay-ready.statSecondary"
-          ]
+          ],
+          "write": {
+            "sr-monitor-3": {
+              "kind": "card",
+              "lines": [
+                {
+                  "ref": "doors.stay-ready.statSecondary"
+                }
+              ]
+            }
+          }
         },
         {
           "id": "sr-ch-3",
@@ -2299,40 +3314,53 @@
               "trigger-stay-ready": [
                 "exam",
                 "incident",
-                "crossing"
+                "detect"
               ]
             }
           },
           "ref": "doors.stay-ready.program.operate",
           "cue": {
-            "surface": "sr-monitor-2"
+            "surface": "sr-panel-2"
           },
           "write": {
             "sr-panel-1": {
               "kind": "status",
               "lines": [
-                "Operated ✓"
+                "Operated \u2713"
               ]
             },
             "sr-panel-2": {
               "kind": "status",
               "lines": [
-                "Monitored ✓"
-              ]
-            },
-            "sr-panel-3": {
-              "kind": "status",
-              "lines": [
-                "Closed, and kept closed ✓"
+                "Monitored \u2713"
               ]
             },
             "sr-monitor-2": {
               "kind": "status",
               "lines": [
-                "March ✓"
+                "March \u2713"
+              ]
+            },
+            "sr-clock": {
+              "kind": "status",
+              "lines": [
+                "No gap"
               ]
             }
           }
+        },
+        {
+          "id": "sr-exam-c1",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "exam"
+              ]
+            }
+          },
+          "text": "After: the finding closes on its date, and stays closed after it.",
+          "source": "3hue.net, ISG managed programs",
+          "status": "adapted"
         },
         {
           "id": "sr-inc-c1",
@@ -2348,7 +3376,20 @@
           "status": "adapted"
         },
         {
-          "id": "sr-early-c1",
+          "id": "sr-det-c1",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "detect"
+              ]
+            }
+          },
+          "text": "After: someone outside your team reads what the tools are saying, and answers it.",
+          "source": "3hue.net, continuous risk management",
+          "status": "adapted"
+        },
+        {
+          "id": "sr-early-c2",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2356,17 +3397,41 @@
               ]
             }
           },
-          "text": "When it comes, the start is a {offer:controls-gap-assessment}, so you know what's actually running.",
+          "text": "Before a date exists, the useful thing is knowing what your controls are actually doing.",
+          "source": "The Message Stack \u00a708, words we use",
+          "status": "adapted",
+          "cue": {
+            "surface": "sr-monitor-3"
+          },
+          "write": {
+            "sr-monitor-3": {
+              "kind": "status",
+              "lines": [
+                "What's running?"
+              ]
+            }
+          }
+        },
+        {
+          "id": "sr-early-c3",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "early"
+              ]
+            }
+          },
+          "text": "Then run the bad day on paper, before you have to run it for real.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
-            "surface": "sr-monitor-2"
+            "surface": "sr-panel-2"
           },
           "write": {
-            "sr-monitor-2": {
+            "sr-panel-2": {
               "kind": "sign",
               "lines": [
-                "{offer:controls-gap-assessment}"
+                "{offer:ir-ttx}"
               ]
             }
           }
@@ -2374,10 +3439,10 @@
       ],
       "next": "sr-receive",
       "ask": [
-        "exam-findings",
+        "remediation-owner",
+        "mdr",
         "incident",
-        "live-incident",
-        "remediation-owner"
+        "early"
       ]
     },
     "sr-receive": {
@@ -2386,9 +3451,19 @@
         "kind": "door",
         "door": "stay-ready"
       },
+      "write": {
+        "sr-monitor-1": null,
+        "sr-monitor-2": null,
+        "sr-monitor-3": null,
+        "sr-panel-1": null,
+        "sr-panel-2": null,
+        "sr-panel-3": null,
+        "sr-rack": null,
+        "sr-clock": null
+      },
       "lines": [
         {
-          "id": "sr-exam-r1",
+          "id": "sr-exam-start",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2396,7 +3471,7 @@
               ]
             }
           },
-          "text": "The start is a {offer:controls-gap-assessment}: sampling what's actually running, mapped to the frameworks your examiner uses.",
+          "text": "The start is a {offer:controls-gap-assessment}, sampling the controls the finding is about.",
           "source": "3HUE service catalog, September 2026",
           "status": "adapted",
           "cue": {
@@ -2408,29 +3483,11 @@
               "lines": [
                 "{offer:controls-gap-assessment}"
               ]
-            },
-            "sr-panel-1": {
-              "kind": "sign",
-              "lines": [
-                "NIST CSF · 800-53/171"
-              ]
-            },
-            "sr-panel-2": {
-              "kind": "sign",
-              "lines": [
-                "ISO 27001 · COBIT"
-              ]
-            },
-            "sr-panel-3": {
-              "kind": "sign",
-              "lines": [
-                "FFIEC · SOC 2"
-              ]
             }
           }
         },
         {
-          "id": "sr-exam-r2",
+          "id": "sr-exam-owner",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2438,23 +3495,29 @@
               ]
             }
           },
-          "text": "Then, under {offer:risk-register-poam}, every finding gets an owner and a date, and stays tracked until it closes.",
-          "source": "3HUE service catalog, September 2026; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
+          "text": "After that, every finding gets an owner and a date, tracked under {offer:risk-register-poam}.",
+          "source": "3HUE service catalog, September 2026",
           "status": "adapted",
           "cue": {
-            "surface": "sr-monitor-2"
+            "surface": "sr-panel-1"
           },
           "write": {
-            "sr-monitor-2": {
+            "sr-panel-1": {
               "kind": "sign",
               "lines": [
                 "{offer:risk-register-poam}"
               ]
+            },
+            "sr-monitor-2": {
+              "kind": "status",
+              "lines": [
+                "Owner and date"
+              ]
             }
           }
         },
         {
-          "id": "sr-exam-r3",
+          "id": "sr-exam-managed",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2462,44 +3525,23 @@
               ]
             }
           },
-          "text": "Where a fix is technical, 3HUE's engineers close it and record it against the finding.",
-          "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
+          "text": "The {program:rmp} keeps the risk work moving between exams.",
+          "source": "3hue.net, ISG managed programs",
           "status": "adapted",
           "cue": {
-            "surface": "sr-monitor-3"
+            "surface": "sr-rack"
           },
-          "write": {
-            "sr-monitor-3": {
-              "kind": "sign",
-              "lines": [
-                "{offer:security-engineering}"
-              ]
-            }
-          }
-        },
-        {
-          "id": "sr-exam-r4",
-          "when": {
-            "answers": {
-              "trigger-stay-ready": [
-                "exam"
-              ]
-            }
-          },
-          "text": "The {program:rmp} keeps the register live between exams.",
-          "source": "3hue.net, ISG managed programs; 3HUE service catalog, September 2026",
-          "status": "adapted",
           "write": {
             "sr-rack": {
               "kind": "sign",
               "lines": [
-                "Then: {offer:managed-rmp}"
+                "Then: {program:rmp}"
               ]
             }
           }
         },
         {
-          "id": "sr-inc-r1",
+          "id": "sr-inc-fast",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2507,13 +3549,19 @@
               ]
             }
           },
-          "text": "The start is {offer:ir-fast-start}: a response plan, playbooks, a tabletop exercise and standing incident command.",
+          "text": "The start is {offer:ir-fast-start}: a plan, playbooks, and a rehearsal before you need one.",
           "source": "3HUE service catalog, September 2026",
           "status": "adapted",
           "cue": {
-            "surface": "sr-monitor-2"
+            "surface": "sr-panel-1"
           },
           "write": {
+            "sr-panel-1": {
+              "kind": "sign",
+              "lines": [
+                "{offer:ir-fast-start}"
+              ]
+            },
             "sr-monitor-1": {
               "kind": "sign",
               "lines": [
@@ -2531,17 +3579,11 @@
               "lines": [
                 "{offer:ir-ttx}"
               ]
-            },
-            "sr-panel-1": {
-              "kind": "sign",
-              "lines": [
-                "{offer:ir-fast-start}"
-              ]
             }
           }
         },
         {
-          "id": "sr-inc-r2",
+          "id": "sr-inc-bcp",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2549,9 +3591,12 @@
               ]
             }
           },
-          "text": "For continuity, {offer:bcp-development} sits beside it.",
+          "text": "And for the day after, {offer:bcp-development}: what has to keep working while you fix the rest.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
+          "cue": {
+            "surface": "sr-panel-2"
+          },
           "write": {
             "sr-panel-2": {
               "kind": "sign",
@@ -2572,7 +3617,44 @@
           },
           "text": "If an incident is live right now, don't wait for a package. Talk to the team today.",
           "source": "Tour script, linking line",
-          "status": "proposed"
+          "status": "proposed",
+          "cue": {
+            "surface": "sr-clock"
+          },
+          "write": {
+            "sr-clock": {
+              "kind": "status",
+              "lines": [
+                "Now"
+              ],
+              "at": "now"
+            }
+          }
+        },
+        {
+          "id": "sr-inc-live",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "incident"
+              ]
+            }
+          },
+          "text": "A live one is a different thing you buy: {offer:incident-command}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "cue": {
+            "surface": "sr-panel-3"
+          },
+          "write": {
+            "sr-panel-3": {
+              "kind": "sign",
+              "lines": [
+                "Not in the package",
+                "{offer:incident-command}"
+              ]
+            }
+          }
         },
         {
           "id": "sr-inc-r4",
@@ -2584,19 +3666,22 @@
             }
           },
           "text": "The {program:cirp} keeps it current: clear roles, escalation paths, and lessons fed back into the risk register.",
-          "source": "3hue.net, Cyber-Incident Response Program; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
+          "source": "3hue.net, Cyber-Incident Response Program; 3HUE, Inside 3HUE tour",
           "status": "adapted",
+          "cue": {
+            "surface": "sr-rack"
+          },
           "write": {
-            "sr-panel-3": {
+            "sr-rack": {
               "kind": "sign",
               "lines": [
-                "Then: {offer:managed-cirp}"
+                "Then: {program:cirp}"
               ]
             }
           }
         },
         {
-          "id": "sr-inc-r5",
+          "id": "sr-inc-mxdr",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2604,8 +3689,8 @@
               ]
             }
           },
-          "text": "And {offer:mxdr-complete} adds managed detection and response.",
-          "source": "3hue.net, continuous risk management; 3HUE service catalog, September 2026",
+          "text": "And if nobody is reading the alerts either, {offer:mxdr-complete} is the other side of this room.",
+          "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
             "surface": "sr-rack"
@@ -2614,70 +3699,125 @@
             "sr-rack": {
               "kind": "sign",
               "lines": [
-                "{offer:mxdr-complete}"
+                "Then: {program:cirp}",
+                "Also: {offer:mxdr-complete}"
               ]
             }
           }
         },
         {
-          "id": "sr-cross-r1",
+          "id": "sr-det-r1",
           "when": {
             "answers": {
               "trigger-stay-ready": [
-                "crossing"
+                "detect"
               ]
             }
           },
-          "text": "For privacy, the start is {offer:privacy-leadership-launch}: a maturity baseline, then fractional privacy leadership and a managed program to run it.",
-          "source": "3HUE service catalog, September 2026",
+          "text": "The start is {offer:mxdr-complete}: monitoring, detection and response, run across the systems you already have.",
+          "source": "3hue.net, continuous risk management; 3HUE service catalog, September 2026",
           "status": "adapted",
           "cue": {
-            "surface": "sr-monitor-2"
+            "surface": "sr-panel-1"
           },
           "write": {
+            "sr-panel-1": {
+              "kind": "sign",
+              "lines": [
+                "{offer:mxdr-complete}"
+              ]
+            },
             "sr-monitor-1": {
               "kind": "sign",
               "lines": [
-                "{offer:privacy-maturity}"
+                "{offer:mxdr-starter}"
               ]
             },
             "sr-monitor-2": {
               "kind": "sign",
               "lines": [
-                "{offer:cpo-service}"
+                "{offer:mxdr-siem-add-on}"
               ]
             },
             "sr-monitor-3": {
               "kind": "sign",
               "lines": [
-                "{offer:managed-privacy}"
+                "{offer:managed-security-controls-validation-for-endpoints}"
               ]
             }
           }
         },
         {
-          "id": "sr-cross-r2",
+          "id": "sr-det-tier",
           "when": {
             "answers": {
               "trigger-stay-ready": [
-                "crossing"
+                "detect"
               ]
             }
           },
-          "text": "For AI, {offer:ai-governance-advisory}, built around four questions: access, change, approval and proof.",
-          "source": "3HUE service catalog, September 2026; The Forcing Function §04, trigger events",
+          "text": "{offer:mxdr-starter} is the first tier inside it, if that's where you need to begin.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
+          "cue": {
+            "surface": "sr-monitor-1"
+          }
+        },
+        {
+          "id": "sr-det-r2",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "detect"
+              ]
+            }
+          },
+          "text": "What it covers is scoped with you. So is who gets called when something fires.",
+          "source": "3HUE service catalog, September 2026",
           "status": "proposed",
+          "cue": {
+            "surface": "sr-panel-2"
+          },
           "write": {
             "sr-panel-2": {
               "kind": "sign",
               "lines": [
-                "{offer:ai-governance-advisory}"
+                "Scoped with you"
+              ]
+            },
+            "sr-rack": {
+              "kind": "glow",
+              "lines": [],
+              "at": "scoped"
+            }
+          }
+        },
+        {
+          "id": "sr-det-r3",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "detect"
+              ]
+            }
+          },
+          "text": "And if the plan for the bad night isn't written, {offer:ir-fast-start} is the other side.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "cue": {
+            "surface": "sr-panel-3"
+          },
+          "write": {
+            "sr-panel-3": {
+              "kind": "sign",
+              "lines": [
+                "{offer:ir-fast-start}"
               ]
             }
           }
         },
         {
-          "id": "sr-early-r1",
+          "id": "sr-early-r2",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2685,17 +3825,59 @@
               ]
             }
           },
-          "text": "A gap check on what is actually running beats a new policy binder.",
-          "source": "The Message Stack §08, words we use",
-          "status": "adapted"
+          "text": "So the start here is a {offer:controls-gap-assessment}: what your controls are actually doing.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "adapted",
+          "cue": {
+            "surface": "sr-monitor-1"
+          },
+          "write": {
+            "sr-monitor-1": {
+              "kind": "sign",
+              "lines": [
+                "{offer:controls-gap-assessment}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "sr-early-ttx",
+          "when": {
+            "answers": {
+              "trigger-stay-ready": [
+                "early"
+              ]
+            }
+          },
+          "text": "And a day spent rehearsing what you'd do beats another binder on a shelf.",
+          "source": "The Message Stack \u00a708, words we use",
+          "status": "adapted",
+          "cue": {
+            "surface": "sr-monitor-2"
+          },
+          "write": {
+            "sr-monitor-2": {
+              "kind": "sign",
+              "lines": [
+                "{offer:ir-ttx}"
+              ]
+            },
+            "sr-panel-2": {
+              "kind": "sign",
+              "lines": [
+                "Test it",
+                "before you need it"
+              ]
+            }
+          }
         }
       ],
       "next": "sr-proof",
       "ask": [
-        "exam-findings",
-        "incident",
         "packages",
-        "frameworks"
+        "mdr",
+        "live-incident",
+        "pricing"
       ]
     },
     "sr-proof": {
@@ -2708,7 +3890,7 @@
         "sr-monitor-1": {
           "kind": "status",
           "lines": [
-            "December ✓"
+            "December \u2713"
           ]
         },
         "sr-monitor-2": {
@@ -2722,14 +3904,19 @@
           "lines": [
             "Today ?"
           ]
-        }
+        },
+        "sr-panel-1": null,
+        "sr-panel-2": null,
+        "sr-panel-3": null,
+        "sr-rack": null,
+        "sr-clock": null
       },
       "lines": [
         {
           "id": "sr-p1",
           "ref": "doors.stay-ready.proof.0",
           "cue": {
-            "surface": "sr-panel-2"
+            "surface": "sr-panel-1"
           },
           "callout": [
             "doors.stay-ready.proof.0"
@@ -2756,33 +3943,10 @@
           }
         },
         {
-          "id": "sr-p2",
-          "text": "Here the buyer is a peer, so the practitioner's own record matters more than any case study.",
-          "source": "The Forcing Function §02, the three segments",
+          "id": "sr-p4",
+          "text": "Findings like those don't close because someone advised on them. Someone closed them.",
+          "source": "The Message Stack \u00a701, core narrative",
           "status": "adapted"
-        },
-        {
-          "id": "sr-p3",
-          "when": {
-            "answers": {
-              "trigger-stay-ready": [
-                "exam"
-              ]
-            }
-          },
-          "ref": "doors.gain-control.proof.0",
-          "cue": {
-            "surface": "sr-monitor-2"
-          },
-          "callout": [
-            "doors.gain-control.proof.0"
-          ],
-          "write": {
-            "sr-monitor-2": {
-              "kind": "glow",
-              "lines": []
-            }
-          }
         }
       ],
       "next": "sr-next",
@@ -2799,9 +3963,19 @@
         "kind": "door",
         "door": "stay-ready"
       },
+      "write": {
+        "sr-monitor-1": null,
+        "sr-monitor-2": null,
+        "sr-monitor-3": null,
+        "sr-panel-1": null,
+        "sr-panel-2": null,
+        "sr-panel-3": null,
+        "sr-rack": null,
+        "sr-clock": null
+      },
       "lines": [
         {
-          "id": "sr-exam-n",
+          "id": "sr-exam-next",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2809,8 +3983,8 @@
               ]
             }
           },
-          "text": "Your next step: bring the finding and its date. The team scopes the remediation in the examiner's language.",
-          "source": "The Forcing Function §04, trigger events",
+          "text": "Your next step: bring the finding, its date, and who owns it today.",
+          "source": "The Forcing Function \u00a704, trigger events",
           "status": "adapted"
         },
         {
@@ -2827,20 +4001,20 @@
           "status": "proposed"
         },
         {
-          "id": "sr-cross-n",
+          "id": "sr-det-n",
           "when": {
             "answers": {
               "trigger-stay-ready": [
-                "crossing"
+                "detect"
               ]
             }
           },
-          "text": "Your next step: name the obligation and who it lands on. The team scopes from there.",
+          "text": "Your next step: bring the list of tools you already pay for.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
         {
-          "id": "sr-early-n",
+          "id": "sr-early-next",
           "when": {
             "answers": {
               "trigger-stay-ready": [
@@ -2848,18 +4022,18 @@
               ]
             }
           },
-          "text": "Take a summary with you, and come back when the next exam is on the calendar.",
-          "source": "The Message Stack §07, battlecards",
+          "text": "Take a summary with you, and come back when something puts a date on it.",
+          "source": "The Message Stack \u00a707, battlecards",
           "status": "adapted"
         },
         {
           "id": "sr-decision",
           "ref": "doors.stay-ready.decision",
           "cue": {
-            "surface": "sr-panel-2"
+            "surface": "sr-panel-3"
           },
           "write": {
-            "sr-panel-2": {
+            "sr-panel-3": {
               "kind": "sign",
               "lines": [
                 "{ref:doors.stay-ready.decision}"
@@ -2892,6 +4066,7 @@
           },
           {
             "id": "talk",
+            "label": "{str:talk}",
             "action": "talk"
           }
         ]
@@ -2920,46 +4095,76 @@
           "id": "all-wt-2",
           "ref": "doors.win-trust.opening",
           "cue": {
-            "surface": "wt-panel-3"
+            "surface": "wt-panel-1"
           },
           "write": {
             "wt-panel-1": {
               "kind": "sign",
               "lines": [
-                "SOC 2 Type II report?"
+                "Where you stand"
               ]
             },
             "wt-panel-2": {
               "kind": "sign",
               "lines": [
-                "Customer questionnaire"
+                "How you run"
               ]
             },
             "wt-panel-3": {
               "kind": "sign",
               "lines": [
-                "Who approved the AI?"
+                "What your scope covers"
+              ]
+            },
+            "wt-binders": {
+              "kind": "glow",
+              "lines": []
+            },
+            "wt-niche": {
+              "kind": "sign",
+              "lines": [
+                "{ref:doors.win-trust.promise}"
               ]
             }
           }
         },
         {
           "id": "all-wt-3",
-          "text": "Most teams here start with {offer:soc-2-readiness} or the {offer:initial-risk-assessment}.",
+          "text": "So this room holds the proof: readiness for whichever standard your buyer names.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
-            "surface": "wt-panel-3"
+            "surface": "wt-panel-4"
           },
           "write": {
             "wt-monitor": {
               "kind": "glow",
               "lines": []
             },
-            "wt-panel-3": {
+            "wt-panel-4": {
               "kind": "list",
               "lines": [
                 "{offer:soc-2-readiness}",
+                "{offer:iso-27001-readiness}",
+                "{offer:iso-27701-readiness}",
+                "{offer:pci-dss-readiness}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "all-wt-4",
+          "text": "You've asked to see everything, so start with the one that finds out where you stand: the {offer:initial-risk-assessment}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
+          "cue": {
+            "surface": "wt-panel-3"
+          },
+          "write": {
+            "wt-panel-4": null,
+            "wt-panel-3": {
+              "kind": "sign",
+              "lines": [
                 "{offer:initial-risk-assessment}"
               ]
             }
@@ -2968,10 +4173,10 @@
       ],
       "next": "all-gc",
       "ask": [
+        "frameworks",
+        "packages",
         "auditor",
-        "guarantee",
-        "platform",
-        "ai"
+        "guarantee"
       ]
     },
     "all-gc": {
@@ -2980,55 +4185,77 @@
         "kind": "door",
         "door": "gain-control"
       },
+      "write": {
+        "gc-wall": null,
+        "gc-amber-left": null,
+        "gc-amber-right": null,
+        "gc-model": null,
+        "gc-console": null
+      },
       "lines": [
         {
           "id": "all-gc-1",
-          "ref": "doors.gain-control.opening",
+          "text": "{door:gain-control.title} holds what you already own: your data, your vendors, and how your systems get built.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
           "cue": {
             "surface": "gc-wall"
           },
-          "callout": [
-            "doors.gain-control.stat"
-          ],
           "write": {
             "gc-wall": {
-              "kind": "card",
+              "kind": "list",
               "lines": [
-                {
-                  "ref": "doors.gain-control.stat"
-                }
+                "Your data",
+                "Your vendors",
+                "How it gets built"
               ]
             }
           }
         },
         {
           "id": "all-gc-2",
-          "text": "Here many companies get one standard, starting with the {offer:initial-risk-assessment}, one per company.",
-          "source": "The Forcing Function §02, the three segments; 3HUE service catalog, September 2026",
+          "text": "The first step here is small: {offer:data-mapping-data-inventory}. You cannot govern what you have not listed.",
+          "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
-            "surface": "gc-model"
+            "surface": "gc-amber-left"
           },
           "write": {
+            "gc-amber-left": {
+              "kind": "sign",
+              "lines": [
+                "First step:",
+                "{offer:data-mapping-data-inventory}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "all-gc-3",
+          "text": "After that it forks: {offer:privacy-leadership-launch} for privacy, the {program:vcp} for vendors.",
+          "source": "3hue.net, ISG managed programs; 3HUE service catalog, September 2026",
+          "status": "proposed",
+          "write": {
+            "gc-amber-right": {
+              "kind": "sign",
+              "lines": [
+                "{offer:privacy-leadership-launch}",
+                "{program:vcp}"
+              ]
+            },
             "gc-model": {
               "kind": "glow",
               "lines": []
-            },
-            "gc-amber-left": {
-              "kind": "status",
-              "lines": [
-                "One control set ✓"
-              ]
             }
           }
         }
       ],
       "next": "all-sr",
       "ask": [
-        "private-equity",
-        "vciso",
         "vendor",
-        "rmp"
+        "ai",
+        "packages",
+        "msp"
       ]
     },
     "all-sr": {
@@ -3041,7 +4268,7 @@
         "sr-monitor-1": {
           "kind": "status",
           "lines": [
-            "December ✓"
+            "December \u2713"
           ]
         },
         "sr-monitor-2": {
@@ -3055,7 +4282,17 @@
           "lines": [
             "Today ?"
           ]
-        }
+        },
+        "sr-clock": {
+          "kind": "status",
+          "lines": [
+            "Since the last check"
+          ]
+        },
+        "sr-panel-1": null,
+        "sr-panel-2": null,
+        "sr-panel-3": null,
+        "sr-rack": null
       },
       "lines": [
         {
@@ -3066,9 +4303,43 @@
           }
         },
         {
-          "id": "all-sr-2",
-          "text": "Here the start is a {offer:controls-gap-assessment}, in the examiner's language.",
-          "source": "3HUE service catalog, September 2026; The Message Stack §04, the message by segment",
+          "id": "all-sr-3",
+          "text": "Behind this door: response, continuity, detection, and the programs that run them.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "derived",
+          "cue": {
+            "surface": "sr-rack"
+          },
+          "write": {
+            "sr-panel-1": {
+              "kind": "sign",
+              "lines": [
+                "Response"
+              ]
+            },
+            "sr-panel-2": {
+              "kind": "sign",
+              "lines": [
+                "Continuity"
+              ]
+            },
+            "sr-panel-3": {
+              "kind": "sign",
+              "lines": [
+                "Detection"
+              ]
+            },
+            "sr-rack": {
+              "kind": "glow",
+              "lines": [],
+              "at": "programs"
+            }
+          }
+        },
+        {
+          "id": "all-sr-4",
+          "text": "The start depends on the date. With nothing forcing it, it's a {offer:controls-gap-assessment}.",
+          "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
             "surface": "sr-monitor-1"
@@ -3081,14 +4352,67 @@
               ]
             }
           }
+        },
+        {
+          "id": "all-sr-5",
+          "text": "With a plan missing, {offer:ir-fast-start}. With alerts nobody reads, {offer:mxdr-complete}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed",
+          "cue": {
+            "surface": "sr-monitor-3"
+          },
+          "write": {
+            "sr-monitor-2": {
+              "kind": "sign",
+              "lines": [
+                "{offer:ir-fast-start}"
+              ]
+            },
+            "sr-monitor-3": {
+              "kind": "sign",
+              "lines": [
+                "{offer:mxdr-complete}"
+              ]
+            }
+          }
         }
       ],
-      "next": "path-all",
+      "choice": {
+        "id": "all-sr-start",
+        "prompt": "Three doors walked. Which one is yours?",
+        "remember": "yours",
+        "options": [
+          {
+            "id": "win-trust",
+            "label": "{door:win-trust.title}",
+            "sub": "{door:win-trust.promise}",
+            "next": "path-all"
+          },
+          {
+            "id": "gain-control",
+            "label": "{door:gain-control.title}",
+            "sub": "{door:gain-control.promise}",
+            "next": "path-all"
+          },
+          {
+            "id": "stay-ready",
+            "label": "{door:stay-ready.title}",
+            "sub": "{door:stay-ready.promise}",
+            "next": "path-all"
+          },
+          {
+            "id": "none",
+            "label": "Not sure yet",
+            "sub": "Show me all three first steps",
+            "next": "path-all"
+          }
+        ]
+      },
       "ask": [
-        "exam-findings",
         "incident",
-        "live-incident",
-        "remediation-owner"
+        "mdr",
+        "exam-findings",
+        "packages"
       ]
     },
     "path": {
@@ -3099,19 +4423,19 @@
       "lines": [
         {
           "id": "path-1",
-          "text": "This is the path all three doors share: {stage:assess}, {stage:strengthen}, {stage:operate} and {stage:advance}.",
+          "text": "This is the tower: {stage:assess}, {stage:strengthen}, {stage:operate} and {stage:advance}. Four stages, one route.",
           "source": "Lobby manifest: stages",
-          "status": "derived",
-          "cue": {
-            "stage": "assess"
-          }
+          "status": "derived"
         },
         {
           "id": "path-2",
-          "ref": "path.whereToStart",
-          "callout": [
-            "path.whereToStart"
-          ]
+          "ref": "path.whereToStart"
+        },
+        {
+          "id": "path-arc",
+          "text": "Whatever you buy here, the shape is the same: {ref:arc.0} it, {ref:arc.1} it, {ref:arc.2} it.",
+          "source": "Lobby manifest: the three steps",
+          "status": "derived"
         },
         {
           "id": "start-wt-deal",
@@ -3125,7 +4449,7 @@
               ]
             }
           },
-          "text": "For you, it starts on {stage:assess} and carries into {stage:strengthen}: {offer:soc-2-readiness}. Then the {offer:managed-isp} keeps it running.",
+          "text": "For you, it starts on {stage:assess} and carries into {stage:strengthen}: {offer:soc-2-readiness}.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
@@ -3152,18 +4476,18 @@
           }
         },
         {
-          "id": "start-wt-ai",
+          "id": "start-wt-scope",
           "when": {
             "answers": {
               "door": [
                 "win-trust"
               ],
               "trigger-win-trust": [
-                "ai"
+                "scope"
               ]
             }
           },
-          "text": "For you, it starts on {stage:strengthen}: {offer:ai-governance-advisory}. Then the {offer:managed-isp} keeps it running.",
+          "text": "For you, it starts on {stage:strengthen}: {offer:isms-scope-soa-development}, so the audit has a written boundary.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
@@ -3187,18 +4511,18 @@
           "status": "proposed"
         },
         {
-          "id": "start-gc-acquisition",
+          "id": "start-gc-crossing",
           "when": {
             "answers": {
               "door": [
                 "gain-control"
               ],
               "trigger-gain-control": [
-                "acquisition"
+                "crossing"
               ]
             }
           },
-          "text": "For you, it starts on {stage:assess}: the {offer:initial-risk-assessment}, one per company. Then the {offer:managed-rmp} keeps the portfolio in one view.",
+          "text": "For you, it starts on {stage:assess} and runs on {stage:operate}: {offer:privacy-leadership-launch}, built on {offer:data-mapping-data-inventory}.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
@@ -3206,37 +4530,37 @@
           }
         },
         {
-          "id": "start-gc-reporting",
+          "id": "start-gc-ai",
           "when": {
             "answers": {
               "door": [
                 "gain-control"
               ],
               "trigger-gain-control": [
-                "reporting"
+                "ai"
               ]
             }
           },
-          "text": "For you, it starts on {stage:advance}: {offer:bod-reporting}, with a {offer:risk-committee-update} when the committee needs its own view.",
+          "text": "For you, it starts on {stage:strengthen}: {offer:ai-governance-advisory}, with {offer:security-architecture-reviews} on what the models touch.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
-            "stage": "advance"
+            "stage": "strengthen"
           }
         },
         {
-          "id": "start-gc-control",
+          "id": "start-gc-vendors",
           "when": {
             "answers": {
               "door": [
                 "gain-control"
               ],
               "trigger-gain-control": [
-                "control"
+                "vendors"
               ]
             }
           },
-          "text": "For you, it starts on {stage:operate}: the {offer:managed-rmp}, with the {offer:managed-vcp} alongside.",
+          "text": "For you, it starts on {stage:operate}: the {program:vcp}, with {offer:asset-governance-program-development} behind it.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
@@ -3255,7 +4579,7 @@
               ]
             }
           },
-          "text": "For you, there's no start yet. When the next deal comes, it's usually the {offer:initial-risk-assessment}, one per company.",
+          "text": "For you, there's no start yet. When someone asks about your data, it's usually {offer:data-mapping-data-inventory}.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed"
         },
@@ -3271,7 +4595,7 @@
               ]
             }
           },
-          "text": "For you, it starts on {stage:operate}: a {offer:controls-gap-assessment} on what's running, then, under {offer:risk-register-poam}, every finding is tracked until it closes.",
+          "text": "For you, it starts on {stage:operate}: a {offer:controls-gap-assessment}, with {offer:risk-register-poam} to carry the findings.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
@@ -3290,7 +4614,7 @@
               ]
             }
           },
-          "text": "For you, it starts on {stage:strengthen}: {offer:ir-fast-start}, with {offer:bcp-development} beside it. Then the {offer:managed-cirp} keeps it current.",
+          "text": "For you, it starts on {stage:strengthen}: {offer:ir-fast-start}, with {offer:bcp-development} beside it.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
@@ -3298,22 +4622,22 @@
           }
         },
         {
-          "id": "start-sr-crossing",
+          "id": "start-sr-detect",
           "when": {
             "answers": {
               "door": [
                 "stay-ready"
               ],
               "trigger-stay-ready": [
-                "crossing"
+                "detect"
               ]
             }
           },
-          "text": "For you, it starts on {stage:strengthen}: {offer:privacy-leadership-launch}, with {offer:ai-governance-advisory} for the AI side.",
+          "text": "For you, it starts on {stage:operate}: {offer:mxdr-complete}, so somebody is reading what the tools say.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
-            "stage": "strengthen"
+            "stage": "operate"
           }
         },
         {
@@ -3333,10 +4657,31 @@
           "status": "proposed"
         },
         {
+          "id": "start-open",
+          "when": {
+            "notVisited": [
+              "door-win-trust",
+              "door-gain-control",
+              "door-stay-ready"
+            ]
+          },
+          "text": "No door is picked yet. When one is, it usually opens with the {offer:initial-risk-assessment}.",
+          "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026",
+          "status": "adapted",
+          "cue": {
+            "stage": "assess"
+          }
+        },
+        {
           "id": "path-price",
           "text": "There's no list price here. Pricing follows scope and commitment, and the team scopes it with you.",
           "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
-          "status": "adapted"
+          "status": "adapted",
+          "when": {
+            "notVisited": [
+              "close"
+            ]
+          }
         }
       ],
       "choice": {
@@ -3347,18 +4692,18 @@
           {
             "id": "none",
             "label": "Nothing formal yet",
-            "sub": "No program, or no recent end-to-end look",
+            "sub": "Nothing written down, or nothing recent",
             "next": "start-baseline"
           },
           {
             "id": "review",
-            "label": "Yes, and it needs a fresh look",
-            "sub": "Written down, not reviewed lately",
+            "label": "It's due a fresh look",
+            "sub": "Written down, not looked at lately",
             "next": "start-review"
           },
           {
             "id": "running",
-            "label": "Yes, and it's running",
+            "label": "It's running",
             "sub": "Owned, operated, evidenced",
             "next": "start-running"
           }
@@ -3379,6 +4724,12 @@
       },
       "lines": [
         {
+          "id": "baseline-open",
+          "text": "Then the order matters, and the first thing is a baseline.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        },
+        {
           "id": "baseline-1",
           "when": [
             {
@@ -3388,7 +4739,8 @@
                 ],
                 "trigger-win-trust": [
                   "deal",
-                  "evidence"
+                  "evidence",
+                  "early"
                 ]
               }
             },
@@ -3398,23 +4750,13 @@
                   "gain-control"
                 ],
                 "trigger-gain-control": [
-                  "acquisition",
-                  "early"
-                ]
-              }
-            },
-            {
-              "answers": {
-                "door": [
-                  "win-trust"
-                ],
-                "trigger-win-trust": [
+                  "crossing",
                   "early"
                 ]
               }
             }
           ],
-          "text": "Then that start already includes your baseline.",
+          "text": "Then nothing goes in front of it. The baseline is part of that first step.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed"
         },
@@ -3427,7 +4769,7 @@
                   "win-trust"
                 ],
                 "trigger-win-trust": [
-                  "ai"
+                  "scope"
                 ]
               }
             },
@@ -3437,8 +4779,8 @@
                   "gain-control"
                 ],
                 "trigger-gain-control": [
-                  "reporting",
-                  "control"
+                  "ai",
+                  "vendors"
                 ]
               }
             },
@@ -3446,27 +4788,24 @@
               "answers": {
                 "door": [
                   "stay-ready"
+                ],
+                "trigger-stay-ready": [
+                  "exam",
+                  "incident",
+                  "detect",
+                  "early"
                 ]
               }
-            }
-          ],
-          "text": "Then the {offer:initial-risk-assessment} comes first, so there's a baseline to build on.",
-          "source": "3HUE service catalog, September 2026; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
-          "status": "adapted",
-          "cue": {
-            "stage": "assess"
-          }
-        },
-        {
-          "id": "baseline-3",
-          "when": {
-            "answers": {
-              "segment": [
-                "all"
+            },
+            {
+              "notVisited": [
+                "door-win-trust",
+                "door-gain-control",
+                "door-stay-ready"
               ]
             }
-          },
-          "text": "Then the {offer:initial-risk-assessment} comes first, so every door has a baseline to build on.",
+          ],
+          "text": "The {offer:initial-risk-assessment} comes first, so there's a baseline to build on.",
           "source": "3HUE service catalog, September 2026; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
           "status": "adapted"
         }
@@ -3475,8 +4814,8 @@
       "ask": [
         "prepare",
         "after",
-        "pricing",
-        "quote"
+        "timeline",
+        "pricing"
       ]
     },
     "start-review": {
@@ -3498,6 +4837,12 @@
             "answers": {
               "door": [
                 "win-trust"
+              ],
+              "trigger-win-trust": [
+                "deal",
+                "evidence",
+                "scope",
+                "early"
               ]
             }
           },
@@ -3511,10 +4856,16 @@
             "answers": {
               "door": [
                 "gain-control"
+              ],
+              "trigger-gain-control": [
+                "crossing",
+                "ai",
+                "vendors",
+                "early"
               ]
             }
           },
-          "text": "For you: {offer:rmp-review} and the {offer:annual-risk-update}.",
+          "text": "For you: {offer:security-architecture-reviews}, and a {offer:data-protection-impact-assessment-dpia} where the data moves.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed"
         },
@@ -3524,10 +4875,29 @@
             "answers": {
               "door": [
                 "stay-ready"
+              ],
+              "trigger-stay-ready": [
+                "exam",
+                "incident",
+                "detect",
+                "early"
               ]
             }
           },
           "text": "For you: {offer:cirp-review} and {offer:bcp-review}.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed"
+        },
+        {
+          "id": "review-any",
+          "when": {
+            "notVisited": [
+              "door-win-trust",
+              "door-gain-control",
+              "door-stay-ready"
+            ]
+          },
+          "text": "For you: the {offer:annual-risk-update}, then whichever review fits the door you pick.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed"
         }
@@ -3536,27 +4906,42 @@
       "ask": [
         "after",
         "prepare",
-        "pricing",
-        "quote"
+        "remediation-owner",
+        "pricing"
       ]
     },
     "start-running": {
       "chapter": "path",
-      "scene": "keep",
+      "scene": {
+        "kind": "path",
+        "stage": "operate"
+      },
       "lines": [
         {
           "id": "running-1",
-          "text": "Then the start stands, and the team scopes it around what you already run.",
+          "text": "Then the work is scoped around what you already run.",
           "source": "Tour script, linking line",
           "status": "proposed"
+        },
+        {
+          "id": "running-2",
+          "text": "3HUE joins what's running rather than replacing it.",
+          "source": "The Message Stack \u00a706, objection handling; \u00a707, battlecards",
+          "status": "adapted"
+        },
+        {
+          "id": "running-3",
+          "text": "If you want it operated rather than advised, that's a managed program.",
+          "source": "Lobby manifest: pillars",
+          "status": "derived"
         }
       ],
       "next": "close",
       "ask": [
         "after",
-        "pricing",
-        "quote",
-        "msp"
+        "msp",
+        "platform",
+        "aivric"
       ]
     },
     "path-all": {
@@ -3569,21 +4954,21 @@
           "id": "path-all-1",
           "text": "Three doors, three first steps, one path: {stage:assess}, {stage:strengthen}, {stage:operate} and {stage:advance}.",
           "source": "Lobby manifest: stages",
-          "status": "derived",
-          "cue": {
-            "stage": "assess"
-          }
+          "status": "derived"
         },
         {
           "id": "path-all-2",
-          "ref": "path.whereToStart",
-          "callout": [
-            "path.whereToStart"
-          ]
+          "ref": "path.whereToStart"
+        },
+        {
+          "id": "path-all-arc",
+          "text": "Whatever you buy here, the shape is the same: {ref:arc.0} it, {ref:arc.1} it, {ref:arc.2} it.",
+          "source": "Lobby manifest: the three steps",
+          "status": "derived"
         },
         {
           "id": "path-all-wt",
-          "text": "{door:win-trust.title} usually starts with {offer:soc-2-readiness} or the {offer:initial-risk-assessment}.",
+          "text": "{door:win-trust.title} usually starts with {offer:soc-2-readiness}, or the {offer:initial-risk-assessment} if no framework is named yet.",
           "source": "3HUE service catalog, September 2026",
           "status": "proposed",
           "cue": {
@@ -3592,29 +4977,62 @@
         },
         {
           "id": "path-all-gc",
-          "text": "{door:gain-control.title}, with the {offer:initial-risk-assessment}, one per company.",
+          "text": "{door:gain-control.title} starts with {offer:data-mapping-data-inventory}: what you hold, and where it goes.",
           "source": "3HUE service catalog, September 2026",
-          "status": "proposed",
-          "cue": {
-            "stage": "assess"
-          }
+          "status": "proposed"
         },
         {
           "id": "path-all-sr",
-          "text": "{door:stay-ready.title}, with a {offer:controls-gap-assessment} on what is running.",
+          "text": "{door:stay-ready.title} starts with a {offer:controls-gap-assessment} on what is already running.",
           "source": "3HUE service catalog, September 2026",
-          "status": "proposed",
-          "cue": {
-            "stage": "operate"
+          "status": "proposed"
+        },
+        {
+          "id": "path-all-yours",
+          "when": {
+            "answers": {
+              "yours": [
+                "win-trust",
+                "gain-control",
+                "stay-ready"
+              ]
+            }
+          },
+          "text": "You named {answer:yours}. That door's first step is the one to take with you.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        },
+        {
+          "id": "path-all-none",
+          "when": {
+            "answers": {
+              "yours": [
+                "none"
+              ]
+            }
+          },
+          "text": "You didn't name one, and you don't have to. Without a door, the first step is usually the {offer:initial-risk-assessment}.",
+          "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026",
+          "status": "adapted"
+        },
+        {
+          "id": "path-all-price",
+          "text": "There's no list price here. Pricing follows scope and commitment, and the team scopes it with you.",
+          "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
+          "status": "adapted",
+          "when": {
+            "notVisited": [
+              "close"
+            ]
           }
         }
       ],
       "next": "close",
       "ask": [
-        "pricing",
-        "quote",
+        "where-to-start",
         "prepare",
-        "after"
+        "after",
+        "pricing"
       ]
     },
     "close": {
@@ -3623,6 +5041,7 @@
       "lines": [
         {
           "id": "close-back-huey",
+          "who": "huey",
           "when": {
             "answers": {
               "lead": [
@@ -3630,13 +5049,13 @@
               ]
             }
           },
-          "who": "huey",
           "text": "Welcome back.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
         {
           "id": "close-back-avi",
+          "who": "avi",
           "when": {
             "answers": {
               "lead": [
@@ -3644,13 +5063,69 @@
               ]
             }
           },
-          "who": "avi",
           "text": "Welcome back.",
           "source": "Tour script, linking line",
           "status": "proposed"
         },
         {
+          "id": "close-1-all",
+          "when": {
+            "answers": {
+              "yours": [
+                "win-trust",
+                "gain-control",
+                "stay-ready"
+              ]
+            }
+          },
+          "text": "You've seen all three, and you named the one that's yours.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        },
+        {
+          "id": "close-1-none",
+          "when": {
+            "answers": {
+              "yours": [
+                "none"
+              ]
+            }
+          },
+          "text": "You've seen all three. All three begin in the same place.",
+          "source": "3HUE service catalog, September 2026",
+          "status": "proposed"
+        },
+        {
           "id": "close-1",
+          "when": [
+            {
+              "answers": {
+                "trigger-win-trust": [
+                  "deal",
+                  "evidence",
+                  "scope"
+                ]
+              }
+            },
+            {
+              "answers": {
+                "trigger-gain-control": [
+                  "crossing",
+                  "ai",
+                  "vendors"
+                ]
+              }
+            },
+            {
+              "answers": {
+                "trigger-stay-ready": [
+                  "exam",
+                  "incident",
+                  "detect"
+                ]
+              }
+            }
+          ],
           "text": "That's your door, and where you'd start.",
           "source": "Tour script, linking line",
           "status": "proposed"
@@ -3662,8 +5137,44 @@
           "status": "proposed"
         },
         {
+          "id": "close-person",
+          "text": "Some of this needs a person, not a program. If that's you, say so when you talk to us.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        },
+        {
           "id": "close-3",
+          "when": [
+            {
+              "notVisited": [
+                "door-win-trust"
+              ]
+            },
+            {
+              "notVisited": [
+                "door-gain-control"
+              ]
+            },
+            {
+              "notVisited": [
+                "door-stay-ready"
+              ]
+            }
+          ],
           "text": "You can talk to the team, take the summary, walk another door, or ask us anything. Nothing leaves this browser unless you send it.",
+          "source": "Tour script, linking line",
+          "status": "proposed"
+        },
+        {
+          "id": "close-3-all",
+          "when": {
+            "visited": [
+              "door-win-trust",
+              "door-gain-control",
+              "door-stay-ready"
+            ]
+          },
+          "text": "You can talk to the team, take the summary, or ask us anything. Nothing leaves this browser unless you send it.",
           "source": "Tour script, linking line",
           "status": "proposed"
         }
@@ -3674,6 +5185,7 @@
         "options": [
           {
             "id": "talk",
+            "label": "{str:talk}",
             "action": "talk",
             "suggest": {
               "answers": {
@@ -3707,8 +5219,8 @@
       },
       "ask": [
         "quote",
+        "hire",
         "proof",
-        "different",
         "privacy"
       ]
     }
@@ -3737,9 +5249,15 @@
         "lines": [
           {
             "id": "ask-what-1",
-            "text": "3HUE builds and operates security, compliance and AI governance programs for organizations that have to prove their controls work — and have no one inside to run them.",
-            "source": "The Message Stack §09, boilerplate",
+            "text": "3HUE builds and operates security, compliance and AI governance programs for organizations that have to prove their controls work \u2014 and have no one inside to run them.",
+            "source": "The Message Stack \u00a709, boilerplate",
             "status": "approved-copy"
+          },
+          {
+            "id": "ask-what-3",
+            "text": "People call when someone with leverage asks for proof: a customer, an auditor, a regulator, an investor. Usually with a date.",
+            "source": "The Forcing Function \u00a701, the fit model; \u00a704, trigger events",
+            "status": "adapted"
           }
         ]
       },
@@ -3793,13 +5311,13 @@
           {
             "id": "ask-different-1",
             "text": "Two things. 3HUE runs the program instead of handing you a plan, and the same advisor who scopes the work delivers it.",
-            "source": "The Message Stack §03, three pillars; §05, claims library",
+            "source": "The Message Stack \u00a703, three pillars; \u00a705, claims library",
             "status": "adapted"
           },
           {
             "id": "ask-different-2",
             "text": "3HUE doesn't sell technology. It sells outcomes: a program someone runs, and can prove.",
-            "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience); The Forcing Function §02, the three segments",
+            "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience); The Forcing Function \u00a702, the three segments",
             "status": "adapted"
           }
         ]
@@ -3886,13 +5404,13 @@
           {
             "id": "ask-after-1",
             "text": "Then {ref:arc.1} and {ref:arc.2}. The findings become a prioritized plan with named owners, and if you want 3HUE to run the program, it does.",
-            "source": "The lobby's three steps; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); The Ship List §03, landing page copy",
+            "source": "The lobby's three steps; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); The Ship List \u00a703, landing page copy",
             "status": "adapted"
           },
           {
             "id": "ask-after-2",
             "text": "If you'd rather take the plan and run it yourself, that works too, and you'll have something an internal hire can inherit rather than start over.",
-            "source": "The Ship List §03, landing page copy",
+            "source": "The Ship List \u00a703, landing page copy",
             "status": "adapted"
           }
         ]
@@ -3943,7 +5461,13 @@
         "lines": [
           {
             "id": "ask-priority-1",
-            "text": "By business impact, not only technical severity. The {program:rmp} scores each risk against your risk appetite and your obligations, and records it in the risk register.",
+            "text": "By business impact, not only technical severity.",
+            "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
+            "status": "adapted"
+          },
+          {
+            "id": "ask-priority-2",
+            "text": "The {program:rmp} scores each risk against your risk appetite and your obligations, and records it in the risk register.",
             "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
             "status": "adapted"
           }
@@ -4154,15 +5678,21 @@
         "lines": [
           {
             "id": "ask-hire-1",
-            "text": "Eventually you should. At your size, a full-time hire would be under-used for the first year.",
-            "source": "The Message Stack §06, objection handling",
+            "text": "Eventually you probably should. The question is whether there is a full-time job there yet, or a program that has to exist now.",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
           },
           {
             "id": "ask-hire-2",
             "text": "3HUE runs the program now and builds it so that hire inherits something rather than starting over.",
-            "source": "The Message Stack §06, objection handling",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
+          },
+          {
+            "id": "ask-hire-3",
+            "text": "And if what you want is a person rather than a program, say that to the team.",
+            "source": "Tour script, linking line",
+            "status": "proposed"
           }
         ]
       },
@@ -4185,15 +5715,21 @@
         "lines": [
           {
             "id": "ask-frameworks-1",
-            "text": "It depends on who is asking you to prove it. For a bank, a credit union or a lender, 3HUE works in the frameworks the examiner already uses.",
-            "source": "The Forcing Function §02, the three segments; The Message Stack §04, the message by segment",
+            "text": "It depends on who is asking you to prove it. If an examiner is asking, 3HUE works in the frameworks the exam already uses.",
+            "source": "3hue.net, framework library; The Forcing Function \u00a704, trigger events",
             "status": "adapted"
           },
           {
             "id": "ask-frameworks-2",
-            "text": "For a software company selling into enterprise, the usual ask is SOC 2 or ISO 27001, and there is a package for each: {offer:soc-2-readiness} and {offer:iso-27001-readiness}.",
-            "source": "The Forcing Function §02, the three segments; 3HUE service catalog, September 2026",
+            "text": "If an enterprise buyer is asking, it's usually SOC 2 or ISO 27001.",
+            "source": "3hue.net, framework library; The Forcing Function \u00a704, trigger events",
             "status": "adapted"
+          },
+          {
+            "id": "ask-frameworks-3",
+            "text": "You'd take {offer:soc-2-readiness} or {offer:iso-27001-readiness}, not both \u2014 whichever your buyer named.",
+            "source": "3HUE service catalog, September 2026",
+            "status": "proposed"
           }
         ]
       },
@@ -4215,8 +5751,14 @@
         "lines": [
           {
             "id": "ask-timeline-1",
-            "text": "It depends on the obligation and the date on it. The first step is scoped to that date, and the plan you get back says how long the rest takes.",
-            "source": "The Ship List §03, landing page copy",
+            "text": "It depends on the obligation and the date on it.",
+            "source": "The Ship List \u00a703, landing page copy",
+            "status": "adapted"
+          },
+          {
+            "id": "ask-timeline-2",
+            "text": "The first step is scoped to that date, and the plan you get back says how long the rest takes.",
+            "source": "The Ship List \u00a703, landing page copy",
             "status": "adapted"
           }
         ]
@@ -4246,7 +5788,7 @@
           {
             "id": "ask-price-2",
             "text": "Price it against the deal, exam or exit that's waiting on it, not against a tool subscription. For a figure, talk to the team.",
-            "source": "The Message Stack §06, objection handling; The Forcing Function §01, the fit model",
+            "source": "The Message Stack \u00a706, objection handling; The Forcing Function \u00a701, the fit model",
             "status": "adapted"
           }
         ]
@@ -4286,13 +5828,25 @@
         "lines": [
           {
             "id": "ask-packages-1",
-            "text": "A package bundles the first steps for one obligation. {offer:soc-2-readiness} covers a risk assessment, policies, an incident response plan and audit support.",
+            "text": "A package bundles the first steps for one obligation. {offer:soc-2-readiness} runs from the {offer:initial-risk-assessment} to the auditor's walkthroughs.",
             "source": "3HUE service catalog, September 2026",
             "status": "adapted"
           },
           {
             "id": "ask-packages-2",
-            "text": "For privacy there is {offer:privacy-leadership-launch}, and for incidents {offer:ir-fast-start}.",
+            "text": "Take {offer:soc-2-readiness} or {offer:iso-27001-readiness}, one or the other, whichever your buyer named. Both sit behind {door:win-trust.title}.",
+            "source": "3HUE service catalog, September 2026",
+            "status": "adapted"
+          },
+          {
+            "id": "ask-packages-3",
+            "text": "{offer:iso-27701-readiness} and {offer:pci-dss-readiness} sit there too.",
+            "source": "3HUE service catalog, September 2026",
+            "status": "adapted"
+          },
+          {
+            "id": "ask-packages-4",
+            "text": "{offer:privacy-leadership-launch} is behind {door:gain-control.title}. {offer:ir-fast-start} and {offer:mxdr-complete} are behind {door:stay-ready.title}.",
             "source": "3HUE service catalog, September 2026",
             "status": "adapted"
           }
@@ -4336,13 +5890,13 @@
           {
             "id": "ask-msp-1",
             "text": "Ask them three questions: which framework are we assessed against, who signs off on risk acceptance, and what happens when an auditor challenges a control?",
-            "source": "The Message Stack §06, objection handling",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
           },
           {
             "id": "ask-msp-2",
             "text": "If the answers are good, you're in fine shape. If they're vague, that's the gap 3HUE fills, alongside your MSP, not instead of it.",
-            "source": "The Message Stack §06, objection handling; §07, battlecards",
+            "source": "The Message Stack \u00a706, objection handling; \u00a707, battlecards",
             "status": "adapted"
           }
         ]
@@ -4363,13 +5917,13 @@
           {
             "id": "ask-platform-1",
             "text": "Keep it. A platform tells you what's wrong. The question is who fixes it, who answers the questionnaire, and who negotiates scope with the auditor.",
-            "source": "The Message Stack §06, objection handling",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
           },
           {
             "id": "ask-platform-2",
             "text": "That's the job 3HUE does, on top of the tool you already bought.",
-            "source": "The Message Stack §06, objection handling",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
           }
         ]
@@ -4390,8 +5944,14 @@
         "lines": [
           {
             "id": "ask-grc-1",
-            "text": "On your platform. 3HUE can deploy it in your Microsoft 365 tenant, or configure and maintain the enterprise GRC platform you already have.",
-            "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
+            "text": "On your platform, not 3HUE's. {offer:m365-modern-grc-system-deployment-maintenance} stands it up in the tenant you already have.",
+            "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026",
+            "status": "adapted"
+          },
+          {
+            "id": "ask-grc-3",
+            "text": "If you already run an enterprise GRC platform, 3HUE configures and maintains that instead.",
+            "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026",
             "status": "adapted"
           }
         ]
@@ -4412,13 +5972,13 @@
           {
             "id": "ask-aivric-1",
             "text": "AiVRIC is the platform 3HUE's managed programs run on, so the evidence stays current between audits instead of being assembled before each one.",
-            "source": "The Message Stack §09, boilerplate; §01, core narrative",
+            "source": "The Message Stack \u00a709, boilerplate; \u00a701, core narrative",
             "status": "adapted"
           },
           {
             "id": "ask-aivric-2",
             "text": "The module available today is CloudSignals+RiskOps. Everything else is in development.",
-            "source": "The Message Stack §05, claims library; 3HUE Brand Sheet §06, naming conventions",
+            "source": "The Message Stack \u00a705, claims library; 3HUE Brand Sheet \u00a706, naming conventions",
             "status": "adapted"
           }
         ]
@@ -4438,13 +5998,13 @@
           {
             "id": "ask-theater-1",
             "text": "Mostly, yes. A certificate says controls existed during a window.",
-            "source": "The Message Stack §06, objection handling",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
           },
           {
             "id": "ask-theater-2",
             "text": "That's why 3HUE sells the operating layer, not the certificate: you get the report because your buyer needs it, and a program because you need it.",
-            "source": "The Message Stack §06, objection handling",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
           }
         ]
@@ -4464,13 +6024,19 @@
           {
             "id": "ask-guarantee-1",
             "text": "No, and be careful with anyone who says otherwise.",
-            "source": "The Ship List §03, landing page copy",
+            "source": "The Ship List \u00a703, landing page copy",
             "status": "adapted"
           },
           {
             "id": "ask-guarantee-2",
-            "text": "What 3HUE can do is tell you before you start whether you'll pass, scope the work to what the standard actually requires, and manage the auditor so there are no surprises.",
-            "source": "The Message Stack §06, objection handling",
+            "text": "What 3HUE can do is tell you before you start whether you'll pass.",
+            "source": "The Message Stack \u00a706, objection handling",
+            "status": "adapted"
+          },
+          {
+            "id": "ask-guarantee-3",
+            "text": "Then scope the work to what the standard actually requires, and manage the auditor so there are no surprises.",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
           }
         ]
@@ -4491,13 +6057,13 @@
           {
             "id": "ask-big-firm-1",
             "text": "Here, the person in the room is the person doing the work, and the scope stays where it was set.",
-            "source": "The Message Stack §06, objection handling",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
           },
           {
             "id": "ask-big-firm-2",
             "text": "And when the report is delivered, 3HUE is still running the program. Continuity is usually the difference that matters.",
-            "source": "The Message Stack §06, objection handling",
+            "source": "The Message Stack \u00a706, objection handling",
             "status": "adapted"
           }
         ]
@@ -4520,7 +6086,7 @@
           {
             "id": "ask-ai-1",
             "text": "With four questions: what can it access, what can it change, who approved it, and what proves it stayed inside.",
-            "source": "The Forcing Function §04, trigger events",
+            "source": "The Forcing Function \u00a704, trigger events",
             "status": "adapted"
           },
           {
@@ -4550,7 +6116,7 @@
           {
             "id": "ask-pe-1",
             "text": "Yes. For a fund, the first step is the {offer:initial-risk-assessment}, one per company, on the same framework every time.",
-            "source": "The Forcing Function §02, the three segments; 3HUE service catalog, September 2026",
+            "source": "The Forcing Function \u00a702, the three segments; 3HUE service catalog, September 2026",
             "status": "proposed"
           },
           {
@@ -4673,13 +6239,13 @@
           {
             "id": "ask-early-1",
             "text": "Maybe not yet. The trigger is usually a customer, an insurer, an investor or a regulator asking for proof, with a date.",
-            "source": "The Message Stack §07, battlecards; The Forcing Function §05, who to decline",
+            "source": "The Message Stack \u00a707, battlecards; The Forcing Function \u00a705, who to decline",
             "status": "adapted"
           },
           {
             "id": "ask-early-2",
             "text": "If nobody has asked, you may be early, and 3HUE would rather tell you that than sell you something.",
-            "source": "The Ship List §06, discovery script",
+            "source": "The Ship List \u00a706, discovery script",
             "status": "adapted"
           }
         ]
@@ -4687,12 +6253,40 @@
     ]
   },
   "summary": {
-    "subject": "Your tour of the 3HUE lobby",
+    "subject": "Your 3HUE tour, and where you'd start",
     "lines": [
       {
         "id": "sum-intro",
         "text": "Your tour of the 3HUE lobby with {guide}. This summary was built in your browser.",
         "source": "Tour script, linking line",
+        "status": "proposed"
+      },
+      {
+        "id": "sum-what",
+        "text": "3HUE builds and operates security, compliance and AI governance programs for organizations that have to prove their controls work \u2014 and have no one inside to run them.",
+        "source": "The Message Stack \u00a709, boilerplate",
+        "status": "approved-copy"
+      },
+      {
+        "id": "sum-situation",
+        "when": {
+          "answers": {
+            "situation": [
+              "prove",
+              "own",
+              "run",
+              "browse"
+            ]
+          }
+        },
+        "text": "What you told us at the door: {answer:situation}",
+        "source": "The visitor's answer at arrival",
+        "status": "derived"
+      },
+      {
+        "id": "sum-front",
+        "text": "One step is shared. Any of the three can begin in the same place: the {offer:initial-risk-assessment}.",
+        "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
       {
@@ -4707,25 +6301,6 @@
         "status": "derived"
       },
       {
-        "id": "sum-wt-trigger",
-        "when": {
-          "visited": [
-            "door-win-trust"
-          ],
-          "answers": {
-            "trigger-win-trust": [
-              "deal",
-              "evidence",
-              "ai",
-              "early"
-            ]
-          }
-        },
-        "text": "What's pressing: {answer:trigger-win-trust}",
-        "source": "The visitor's answer in this room, labelled from the lobby manifest",
-        "status": "derived"
-      },
-      {
         "id": "sum-wt-deal",
         "when": {
           "visited": [
@@ -4737,7 +6312,7 @@
             ]
           }
         },
-        "text": "Where you'd start: {offer:soc-2-readiness} (or {offer:iso-27001-readiness}). Then the {offer:managed-isp}.",
+        "text": "Where you'd start: {offer:soc-2-readiness}, or {offer:iso-27001-readiness} if your buyer names ISO. {program:isp} keeps it current.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
@@ -4753,39 +6328,23 @@
             ]
           }
         },
-        "text": "Where you'd start: the {offer:initial-risk-assessment}, with {offer:rfp-response}. Then the {offer:managed-isp}.",
+        "text": "Where you'd start: the {offer:initial-risk-assessment}, with {offer:rfp-response} for the questionnaire already in your inbox. {program:isp} keeps it current.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
       {
-        "id": "sum-wt-ai",
+        "id": "sum-wt-scope",
         "when": {
           "visited": [
             "door-win-trust"
           ],
           "answers": {
             "trigger-win-trust": [
-              "ai"
+              "scope"
             ]
           }
         },
-        "text": "Where you'd start: {offer:ai-governance-advisory}. Then the {offer:managed-isp}.",
-        "source": "3HUE service catalog, September 2026",
-        "status": "proposed"
-      },
-      {
-        "id": "sum-wt-early",
-        "when": {
-          "visited": [
-            "door-win-trust"
-          ],
-          "answers": {
-            "trigger-win-trust": [
-              "early"
-            ]
-          }
-        },
-        "text": "When someone asks: the {offer:initial-risk-assessment}.",
+        "text": "Where you'd start: {offer:isms-scope-soa-development}, so the audit has a written boundary before it begins. {program:isp} keeps it current.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
@@ -4801,85 +6360,50 @@
         "status": "derived"
       },
       {
-        "id": "sum-gc-trigger",
+        "id": "sum-gc-crossing",
         "when": {
           "visited": [
             "door-gain-control"
           ],
           "answers": {
             "trigger-gain-control": [
-              "acquisition",
-              "reporting",
-              "control",
-              "early"
+              "crossing"
             ]
           }
         },
-        "text": "What's pressing: {answer:trigger-gain-control}",
-        "source": "The visitor's answer in this room, labelled from the lobby manifest",
-        "status": "derived"
-      },
-      {
-        "id": "sum-gc-acquisition",
-        "when": {
-          "visited": [
-            "door-gain-control"
-          ],
-          "answers": {
-            "trigger-gain-control": [
-              "acquisition"
-            ]
-          }
-        },
-        "text": "Where you'd start: the {offer:initial-risk-assessment}, one per company. Then the {offer:managed-rmp}.",
+        "text": "Where you'd start: {offer:privacy-leadership-launch}, beginning with {offer:data-mapping-data-inventory} so you know what you hold and where.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
       {
-        "id": "sum-gc-reporting",
+        "id": "sum-gc-ai",
         "when": {
           "visited": [
             "door-gain-control"
           ],
           "answers": {
             "trigger-gain-control": [
-              "reporting"
+              "ai"
             ]
           }
         },
-        "text": "Where you'd start: {offer:bod-reporting}, with a {offer:risk-committee-update}.",
+        "text": "Where you'd start: {offer:ai-governance-advisory}, with {offer:security-architecture-reviews} on the build side. {program:sea} carries the engineering work.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
       {
-        "id": "sum-gc-control",
+        "id": "sum-gc-vendors",
         "when": {
           "visited": [
             "door-gain-control"
           ],
           "answers": {
             "trigger-gain-control": [
-              "control"
+              "vendors"
             ]
           }
         },
-        "text": "Where you'd start: the {offer:managed-rmp}, with the {offer:managed-vcp}.",
-        "source": "3HUE service catalog, September 2026",
-        "status": "proposed"
-      },
-      {
-        "id": "sum-gc-early",
-        "when": {
-          "visited": [
-            "door-gain-control"
-          ],
-          "answers": {
-            "trigger-gain-control": [
-              "early"
-            ]
-          }
-        },
-        "text": "When the next deal comes: the {offer:initial-risk-assessment}, one per company.",
+        "text": "Where you'd start: {program:vcp}, after {offer:asset-governance-program-development} names what you own. {offer:audit-support} covers the auditor, theirs or yours.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
@@ -4895,25 +6419,6 @@
         "status": "derived"
       },
       {
-        "id": "sum-sr-trigger",
-        "when": {
-          "visited": [
-            "door-stay-ready"
-          ],
-          "answers": {
-            "trigger-stay-ready": [
-              "exam",
-              "incident",
-              "crossing",
-              "early"
-            ]
-          }
-        },
-        "text": "What's pressing: {answer:trigger-stay-ready}",
-        "source": "The visitor's answer in this room, labelled from the lobby manifest",
-        "status": "derived"
-      },
-      {
         "id": "sum-sr-exam",
         "when": {
           "visited": [
@@ -4925,7 +6430,7 @@
             ]
           }
         },
-        "text": "Where you'd start: a {offer:controls-gap-assessment}, then {offer:risk-register-poam}.",
+        "text": "Where you'd start: a {offer:controls-gap-assessment}, then {offer:risk-register-poam} until every finding closes. {program:rmp} keeps it that way.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
@@ -4941,41 +6446,127 @@
             ]
           }
         },
-        "text": "Where you'd start: {offer:ir-fast-start}, with {offer:bcp-development}. Then the {offer:managed-cirp}.",
+        "text": "Where you'd start: {offer:ir-fast-start}, with {offer:bcp-development} beside it. {program:cirp} keeps it rehearsed afterwards.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
       {
-        "id": "sum-sr-crossing",
+        "id": "sum-sr-detect",
         "when": {
           "visited": [
             "door-stay-ready"
           ],
           "answers": {
             "trigger-stay-ready": [
-              "crossing"
+              "detect"
             ]
           }
         },
-        "text": "Where you'd start: {offer:privacy-leadership-launch}, with {offer:ai-governance-advisory}.",
+        "text": "Where you'd start: {offer:mxdr-complete}, or {offer:mxdr-starter} if you want the smaller footprint first.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
       },
       {
-        "id": "sum-sr-early",
+        "id": "sum-all-wt",
         "when": {
-          "visited": [
-            "door-stay-ready"
-          ],
           "answers": {
-            "trigger-stay-ready": [
-              "early"
+            "yours": [
+              "win-trust"
             ]
           }
         },
-        "text": "When the next exam is on the calendar: a {offer:controls-gap-assessment}.",
+        "text": "You named {door:win-trust.title}. Inside that door, the first step is the {offer:initial-risk-assessment}.",
         "source": "3HUE service catalog, September 2026",
         "status": "proposed"
+      },
+      {
+        "id": "sum-all-gc",
+        "when": {
+          "answers": {
+            "yours": [
+              "gain-control"
+            ]
+          }
+        },
+        "text": "You named {door:gain-control.title}. Inside that door, the first step is {offer:data-mapping-data-inventory}.",
+        "source": "3HUE service catalog, September 2026",
+        "status": "proposed"
+      },
+      {
+        "id": "sum-all-sr",
+        "when": {
+          "answers": {
+            "yours": [
+              "stay-ready"
+            ]
+          }
+        },
+        "text": "You named {door:stay-ready.title}. Inside that door, the first step is a {offer:controls-gap-assessment}.",
+        "source": "3HUE service catalog, September 2026",
+        "status": "proposed"
+      },
+      {
+        "id": "sum-all-none",
+        "when": {
+          "answers": {
+            "yours": [
+              "none"
+            ]
+          }
+        },
+        "text": "You didn't name a door, and you don't have to. Without one, the first step is usually the {offer:initial-risk-assessment}.",
+        "source": "3HUE service catalog, September 2026",
+        "status": "proposed"
+      },
+      {
+        "id": "sum-early",
+        "when": [
+          {
+            "answers": {
+              "trigger-win-trust": [
+                "early"
+              ]
+            }
+          },
+          {
+            "answers": {
+              "trigger-gain-control": [
+                "early"
+              ]
+            }
+          },
+          {
+            "answers": {
+              "trigger-stay-ready": [
+                "early"
+              ]
+            }
+          }
+        ],
+        "text": "You said nobody is asking yet. The shared first step above is the one to take before they do.",
+        "source": "3HUE service catalog, September 2026; The Forcing Function \u00a705, who to decline",
+        "status": "proposed"
+      },
+      {
+        "id": "sum-program",
+        "when": {
+          "answers": {
+            "program": [
+              "none",
+              "review",
+              "running"
+            ]
+          }
+        },
+        "text": "Program in place today: {answer:program}",
+        "source": "The visitor's answer on the maturity path",
+        "status": "derived"
+      },
+      {
+        "id": "sum-price",
+        "text": "There's no list price here. Pricing follows scope and commitment, and the team scopes it with you.",
+        "source": "3HUE, Inside 3HUE tour, Ask (3hue.net/experience)",
+        "status": "adapted"
       },
       {
         "id": "sum-talk",

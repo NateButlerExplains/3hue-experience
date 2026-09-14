@@ -10,53 +10,81 @@ The tour stays off (`tour.gate` is “pending”) until Nate and the owner sign 
 
 "Every path starts with a Snapshot" was approved copy, but the quote builder has no Snapshot item. Each door and trigger now names its own first step, the program that runs after it, and the tower ring it lights, all with the builder's exact names (O15). The approved fields that change are listed in `docs/copy-sheet-builder.md`. These tour lines carry the pairings:
 
-- **wt-deal-r1**: For a blocked deal, the start is one package: SOC 2 Readiness, or ISO 27001 Certification Readiness if your buyer named ISO.
-- **wt-deal-r2**: SOC 2 Readiness covers the risk assessment, the policies, an incident response plan and audit support.
-- **wt-ev-r1**: Here the start is the Initial Risk Assessment: where you stand, with a risk register, an executive readout and a prioritized roadmap.
+- **arrive-shared**: One step is shared. Any of the three can begin in the same place: the Initial Risk Assessment.
+- **wt-1**: This room holds three things: where you stand, how you run security, and what your scope covers.
+- **wt-standards**: If your buyer named a standard, the readiness package for it is on the shelf.
+- **wt-deal-r1**: For a blocked deal the start is one package, chosen by the standard your buyer named.
+- **wt-deal-r2**: Most often that's SOC 2 Readiness. One package, and the evidence your buyer asks for comes with it.
+- **wt-deal-r3**: Named ISO instead? ISO 27001 Certification Readiness. Privacy? ISO 27701 Privacy Readiness. Card data? PCI-DSS Readiness.
+- **wt-deal-r4**: Take one, not two. Two of them overlap, and you would pay for the overlap twice.
+- **wt-ev-r1**: Here the start is the Initial Risk Assessment: where you stand, what to fix, and in what order.
 - **wt-ev-r2**: And for the questionnaire already in your inbox, there's RFP Response Services: someone who owns the answers.
-- **wt-ai-r1**: Here the start is AI Governance & Privacy Advisory, built around those four questions.
-- **wt-ai-r3**: No baseline yet? The Initial Risk Assessment comes first.
-- **wt-r-run**: Then the Managed Information Security & Privacy Management keeps it running: policies, standards and clear owners.
+- **wt-scope-r1**: Here the start is ISMS Scope & SoA Development: the boundary written down, with a reason for every control.
+- **wt-scope-r2**: If the auditor wants the system described, there’s a document for that: System Security & Privacy Plan (SSPP) Development.
+- **wt-scope-r3**: If the audit is certification itself, take ISO 27001 Certification Readiness instead — it carries the scope work.
+- **wt-r-run**: Then it has to stay true. That’s what Managed Information Security & Privacy Management is for.
 - **wt-early-r1**: When the ask comes, the usual first step is the Initial Risk Assessment, so you know where you stand.
-- **gc-early-c1**: When it comes, the start is the Initial Risk Assessment, one per company.
-- **gc-acq-r1**: The start is the Initial Risk Assessment, one per company, on the same framework every time.
-- **gc-rep-r1**: The start is BOD / Investor Performance Reporting: one format your board and investors can read.
-- **gc-rep-r2**: And a Risk Committee Posture Update when the risk committee needs its own view.
-- **gc-ctl-r1**: The start is the Managed Risk Management Program, with a virtual CISO alongside if you need one.
-- **gc-ctl-r2**: And the Managed Vendor Compliance Program (VCP) keeps third-party risk in the same view.
-- **sr-early-c1**: When it comes, the start is a Periodic Controls Gap Assessment, so you know what's actually running.
-- **sr-exam-r1**: The start is a Periodic Controls Gap Assessment: sampling what's actually running, mapped to the frameworks your examiner uses.
-- **sr-exam-r2**: Then, under Manage Risk Register & POA&M, every finding gets an owner and a date, and stays tracked until it closes.
-- **sr-exam-r4**: The Managed Risk Management Program keeps the register live between exams.
-- **sr-inc-r1**: The start is Incident Response Fast Start: a response plan, playbooks, a tabletop exercise and standing incident command.
-- **sr-inc-r2**: For continuity, Business Continuity Plan Development sits beside it.
-- **sr-inc-r5**: And MXDR Complete Protection adds managed detection and response.
-- **sr-cross-r1**: For privacy, the start is Privacy Leadership Launch: a maturity baseline, then fractional privacy leadership and a managed program to run it.
-- **sr-cross-r2**: For AI, AI Governance & Privacy Advisory, built around four questions: access, change, approval and proof.
-- **all-wt-3**: Most teams here start with SOC 2 Readiness or the Initial Risk Assessment.
-- **all-gc-2**: Here many companies get one standard, starting with the Initial Risk Assessment, one per company.
-- **all-sr-2**: Here the start is a Periodic Controls Gap Assessment, in the examiner's language.
-- **start-wt-deal**: For you, it starts on Assess and carries into Strengthen: SOC 2 Readiness. Then the Managed Information Security & Privacy Management keeps it running.
+- **gc-1**: Gain Control is about the things you already own: your data, your vendors, and how your systems get built.
+- **gc-early-c1**: When it does come, the first move is small: Data Mapping & Data Inventory, so you know what you hold.
+- **gc-cross-r1**: For privacy, the start is one package: Privacy Leadership Launch.
+- **gc-cross-r2**: It sets the baseline, puts a named privacy lead in the chair, and keeps the program running.
+- **gc-cross-r3**: If a customer or an auditor has named a privacy certificate, that track runs through Win Trust.
+- **gc-cross-r4**: Either way, someone has to draw the map: Data Mapping & Data Inventory.
+- **gc-cross-r5**: And when a regulator writes, there's Regulator Liaison & DSAR Escalation Support.
+- **gc-ai-r1**: For AI, the start is AI Governance & Privacy Advisory: who approves it, what it may touch, who reviews it.
+- **gc-ai-r2**: Security Architecture Reviews put eyes on the design before it ships.
+- **gc-ai-r3**: Secure SDLC Program Development makes that the normal way to build, not a favour.
+- **gc-ai-r4**: And Vulnerability Management Program Development settles what gets fixed, who fixes it, and what waits.
+- **gc-ai-r5**: Then it runs as Security Engineering Services, so the work carries on after the reviews stop.
+- **gc-ven-r1**: For vendors, the start is the Managed Vendor Compliance Program (VCP).
+- **gc-ven-r3**: It widens a block of vendors at a time, as your list grows.
+- **gc-ven-r4**: Before any of that, you need the list of what you own: Asset Governance Program Development.
+- **gc-ven-r5**: And when their auditor turns up, or yours, you have Audit Support & Liaison Services.
+- **sr-shelf**: Response. Continuity. Detection. And the programs that keep risk and findings current between checks.
+- **sr-early-c3**: Then run the bad day on paper, before you have to run it for real.
+- **sr-exam-start**: The start is a Periodic Controls Gap Assessment, sampling the controls the finding is about.
+- **sr-exam-owner**: After that, every finding gets an owner and a date, tracked under Manage Risk Register & POA&M.
+- **sr-inc-fast**: The start is Incident Response Fast Start: a plan, playbooks, and a rehearsal before you need one.
+- **sr-inc-bcp**: And for the day after, Business Continuity Plan Development: what has to keep working while you fix the rest.
+- **sr-inc-live**: A live one is a different thing you buy: Incident Command & Emergency Response Leadership.
+- **sr-inc-mxdr**: And if nobody is reading the alerts either, MXDR Complete Protection is the other side of this room.
+- **sr-det-r1**: The start is MXDR Complete Protection: monitoring, detection and response, run across the systems you already have.
+- **sr-det-tier**: MXDR Starter is the first tier inside it, if that's where you need to begin.
+- **sr-det-r2**: What it covers is scoped with you. So is who gets called when something fires.
+- **sr-det-r3**: And if the plan for the bad night isn't written, Incident Response Fast Start is the other side.
+- **sr-early-r2**: So the start here is a Periodic Controls Gap Assessment: what your controls are actually doing.
+- **all-wt-3**: So this room holds the proof: readiness for whichever standard your buyer names.
+- **all-wt-4**: You've asked to see everything, so start with the one that finds out where you stand: the Initial Risk Assessment.
+- **all-gc-1**: Gain Control holds what you already own: your data, your vendors, and how your systems get built.
+- **all-gc-2**: The first step here is small: Data Mapping & Data Inventory. You cannot govern what you have not listed.
+- **all-gc-3**: After that it forks: Privacy Leadership Launch for privacy, the Managed Vendor Compliance Program (VCP) for vendors.
+- **all-sr-3**: Behind this door: response, continuity, detection, and the programs that run them.
+- **all-sr-4**: The start depends on the date. With nothing forcing it, it's a Periodic Controls Gap Assessment.
+- **all-sr-5**: With a plan missing, Incident Response Fast Start. With alerts nobody reads, MXDR Complete Protection.
+- **start-wt-deal**: For you, it starts on Assess and carries into Strengthen: SOC 2 Readiness.
 - **start-wt-evidence**: For you, it starts on Assess: the Initial Risk Assessment, with RFP Response Services for the questionnaire in hand.
-- **start-wt-ai**: For you, it starts on Strengthen: AI Governance & Privacy Advisory. Then the Managed Information Security & Privacy Management keeps it running.
+- **start-wt-scope**: For you, it starts on Strengthen: ISMS Scope & SoA Development, so the audit has a written boundary.
 - **start-wt-early**: For you, there's no start yet. When someone asks, it's usually the Initial Risk Assessment.
-- **start-gc-acquisition**: For you, it starts on Assess: the Initial Risk Assessment, one per company. Then the Managed Risk Management Program keeps the portfolio in one view.
-- **start-gc-reporting**: For you, it starts on Advance: BOD / Investor Performance Reporting, with a Risk Committee Posture Update when the committee needs its own view.
-- **start-gc-control**: For you, it starts on Operate: the Managed Risk Management Program, with the Managed Vendor Compliance Program (VCP) alongside.
-- **start-gc-early**: For you, there's no start yet. When the next deal comes, it's usually the Initial Risk Assessment, one per company.
-- **start-sr-exam**: For you, it starts on Operate: a Periodic Controls Gap Assessment on what's running, then, under Manage Risk Register & POA&M, every finding is tracked until it closes.
-- **start-sr-incident**: For you, it starts on Strengthen: Incident Response Fast Start, with Business Continuity Plan Development beside it. Then the Managed Cyber-Incident Response Program keeps it current.
-- **start-sr-crossing**: For you, it starts on Strengthen: Privacy Leadership Launch, with AI Governance & Privacy Advisory for the AI side.
+- **start-gc-crossing**: For you, it starts on Assess and runs on Operate: Privacy Leadership Launch, built on Data Mapping & Data Inventory.
+- **start-gc-ai**: For you, it starts on Strengthen: AI Governance & Privacy Advisory, with Security Architecture Reviews on what the models touch.
+- **start-gc-vendors**: For you, it starts on Operate: the Managed Vendor Compliance Program (VCP), with Asset Governance Program Development behind it.
+- **start-gc-early**: For you, there's no start yet. When someone asks about your data, it's usually Data Mapping & Data Inventory.
+- **start-sr-exam**: For you, it starts on Operate: a Periodic Controls Gap Assessment, with Manage Risk Register & POA&M to carry the findings.
+- **start-sr-incident**: For you, it starts on Strengthen: Incident Response Fast Start, with Business Continuity Plan Development beside it.
+- **start-sr-detect**: For you, it starts on Operate: MXDR Complete Protection, so somebody is reading what the tools say.
 - **start-sr-early**: For you, there's no start yet. When the next exam is on the calendar, it's usually a Periodic Controls Gap Assessment.
-- **baseline-1**: Then that start already includes your baseline.
-- **baseline-2**: Then the Initial Risk Assessment comes first, so there's a baseline to build on.
-- **baseline-3**: Then the Initial Risk Assessment comes first, so every door has a baseline to build on.
+- **start-open**: No door is picked yet. When one is, it usually opens with the Initial Risk Assessment.
+- **baseline-1**: Then nothing goes in front of it. The baseline is part of that first step.
+- **baseline-2**: The Initial Risk Assessment comes first, so there's a baseline to build on.
 - **review-wt**: For you: IS Program CONOPS Review & Update and SoA Review & Update.
-- **review-gc**: For you: RMP CONOPS Review & Update and the Annual Risk Assessment Update.
+- **review-gc**: For you: Security Architecture Reviews, and a Data Protection Impact Assessment (DPIA) where the data moves.
 - **review-sr**: For you: CIRP Review & Update and BCP Review & Updates.
-- **path-all-wt**: Win Trust usually starts with SOC 2 Readiness or the Initial Risk Assessment.
-- **path-all-gc**: Gain Control, with the Initial Risk Assessment, one per company.
-- **path-all-sr**: Stay Ready, with a Periodic Controls Gap Assessment on what is running.
+- **review-any**: For you: the Annual Risk Assessment Update, then whichever review fits the door you pick.
+- **path-all-wt**: Win Trust usually starts with SOC 2 Readiness, or the Initial Risk Assessment if no framework is named yet.
+- **path-all-gc**: Gain Control starts with Data Mapping & Data Inventory: what you hold, and where it goes.
+- **path-all-sr**: Stay Ready starts with a Periodic Controls Gap Assessment on what is already running.
+- **path-all-none**: You didn't name one, and you don't have to. Without a door, the first step is usually the Initial Risk Assessment.
+- **close-1-none**: You've seen all three. All three begin in the same place.
 
 **Decide:** publish these pairings as written, change them, or drop a name and end the line at the step.
 
@@ -64,24 +92,28 @@ The tour stays off (`tour.gate` is “pending”) until Nate and the owner sign 
 
 Inside each room the guides describe the programs that fit (the Information Security, Risk Management, Cyber-Incident Response and Vendor Compliance programs, a virtual CISO, engineering fixes), adapted from 3HUE's public pages and the owner's own tour. Hours, the 15-minute notification figure, the named SOC partner, "up to 60% less audit prep", "under 6 months", "as low as 50%", the maturity scorecard and the threat statistics are left out: none has a source our claims rules accept.
 
-- **wt-ai-r2**: You'd get an acceptable-use policy, an AI risk register, and a named owner for each decision.
-- **wt-r-run**: Then the Managed Information Security & Privacy Management keeps it running: policies, standards and clear owners.
-- **gc-acq-r2**: You get a risk register per company, rolled up into one for the fund.
-- **gc-ctl-r1**: The start is the Managed Risk Management Program, with a virtual CISO alongside if you need one.
-- **gc-ctl-r2**: And the Managed Vendor Compliance Program (VCP) keeps third-party risk in the same view.
-- **gc-ctl-r3**: A virtual CISO is executive security leadership that sits with your team and owns the board conversation.
-- **gc-r-run**: Behind it, the Managed Risk Management Program runs continuously: risks identified, prioritized and tracked to closure.
+- **wt-r-run**: Then it has to stay true. That’s what Managed Information Security & Privacy Management is for.
+- **gc-ai-m1**: Then a tool nobody approved is reading things nobody listed.
+- **gc-ai-m2**: Your customer's next question will not be whether you use AI. It will be who checks it.
+- **gc-ven-m1**: Then a good part of your risk sits in other people's systems, and you take their word for it.
+- **gc-ai-r1**: For AI, the start is AI Governance & Privacy Advisory: who approves it, what it may touch, who reviews it.
+- **gc-ai-r5**: Then it runs as Security Engineering Services, so the work carries on after the reviews stop.
+- **gc-ven-r1**: For vendors, the start is the Managed Vendor Compliance Program (VCP).
+- **gc-ven-r2**: It keeps one list: who you rely on, what they hold, when each was last checked.
 - **sr-inc-m1**: Then the question is who does what, in what order, and who gets told.
+- **sr-exam-c1**: After: the finding closes on its date, and stays closed after it.
 - **sr-inc-c1**: After: the first real incident isn't the first rehearsal.
-- **sr-exam-r2**: Then, under Manage Risk Register & POA&M, every finding gets an owner and a date, and stays tracked until it closes.
-- **sr-exam-r3**: Where a fix is technical, 3HUE's engineers close it and record it against the finding.
-- **sr-exam-r4**: The Managed Risk Management Program keeps the register live between exams.
+- **sr-det-c1**: After: someone outside your team reads what the tools are saying, and answers it.
+- **sr-exam-managed**: The Managed Risk Management Program keeps the risk work moving between exams.
 - **sr-inc-r4**: The Managed Cyber-Incident Response Program keeps it current: clear roles, escalation paths, and lessons fed back into the risk register.
-- **sr-inc-r5**: And MXDR Complete Protection adds managed detection and response.
+- **sr-det-r1**: The start is MXDR Complete Protection: monitoring, detection and response, run across the systems you already have.
+- **all-gc-3**: After that it forks: Privacy Leadership Launch for privacy, the Managed Vendor Compliance Program (VCP) for vendors.
+- **start-open**: No door is picked yet. When one is, it usually opens with the Initial Risk Assessment.
 - **path-price**: There's no list price here. Pricing follows scope and commitment, and the team scopes it with you.
-- **baseline-2**: Then the Initial Risk Assessment comes first, so there's a baseline to build on.
-- **baseline-3**: Then the Initial Risk Assessment comes first, so every door has a baseline to build on.
+- **baseline-2**: The Initial Risk Assessment comes first, so there's a baseline to build on.
 - **review-1**: Then start by reviewing what you have.
+- **path-all-none**: You didn't name one, and you don't have to. Without a door, the first step is usually the Initial Risk Assessment.
+- **path-all-price**: There's no list price here. Pricing follows scope and commitment, and the team scopes it with you.
 - **ask-different-2**: 3HUE doesn't sell technology. It sells outcomes: a program someone runs, and can prove.
 - **ask-start-2**: With no program yet, it is usually the Initial Risk Assessment. With one in place, a review of what you have. With an exam coming, a Periodic Controls Gap Assessment.
 - **ask-start-3**: It begins with a conversation with the team about the obligation in front of you.
@@ -90,7 +122,8 @@ Inside each room the guides describe the programs that fit (the Information Secu
 - **ask-after-1**: Then Build and Operate. The findings become a prioritized plan with named owners, and if you want 3HUE to run the program, it does.
 - **ask-owner-1**: Accountability stays with you: each gap gets a named owner in the plan of actions and milestones.
 - **ask-owner-2**: 3HUE does the heavy lifting. The managed programs track and drive the actions, and 3HUE's engineers can make fixes directly.
-- **ask-priority-1**: By business impact, not only technical severity. The Managed Risk Management Program scores each risk against your risk appetite and your obligations, and records it in the risk register.
+- **ask-priority-1**: By business impact, not only technical severity.
+- **ask-priority-2**: The Managed Risk Management Program scores each risk against your risk appetite and your obligations, and records it in the risk register.
 - **ask-rmp-1**: It sets up a risk function that identifies, prioritizes and reduces security risk continuously, with a risk register, assessments and remediation tracking.
 - **ask-rmp-2**: It keeps you ready for regulatory reviews and partner due diligence. It's quoted as the Managed Risk Management Program.
 - **ask-vendor-1**: The Managed Vendor Compliance Program (VCP) holds vendor practices to your risk tolerance, your contracts and your regulators' expectations.
@@ -101,9 +134,12 @@ Inside each room the guides describe the programs that fit (the Information Secu
 - **ask-vciso-1**: Executive security leadership that works with your team: it shapes strategy, drives decisions, oversees compliance and owns the board conversation.
 - **ask-vciso-2**: How much you use is your call: none, CISO Support to build your own capability, or a fractional CISO alongside your team.
 - **ask-haveciso-1**: That's common. The managed programs run alongside your own leadership, and a virtual CISO can mentor an incumbent or take the overflow.
+- **ask-frameworks-1**: It depends on who is asking you to prove it. If an examiner is asking, 3HUE works in the frameworks the exam already uses.
+- **ask-frameworks-2**: If an enterprise buyer is asking, it's usually SOC 2 or ISO 27001.
 - **ask-price-1**: 3HUE doesn't publish list prices. Pricing follows scope and commitment.
 - **ask-auditor-1**: No. 3HUE prepares you for the auditor and coordinates the walkthroughs. The audit firm issues the report.
-- **ask-grc-1**: On your platform. 3HUE can deploy it in your Microsoft 365 tenant, or configure and maintain the enterprise GRC platform you already have.
+- **ask-grc-1**: On your platform, not 3HUE's. M365 Modern GRC System Deployment & Maintenance stands it up in the tenant you already have.
+- **ask-grc-3**: If you already run an enterprise GRC platform, 3HUE configures and maintains that instead.
 
 **Decide:** approve these descriptions, or strike lines by id.
 
@@ -118,22 +154,21 @@ As in the first sheet: the new lines draw on sections written for 3HUE's sellers
 | Section | What it is | Lines drawing on it |
 |---|---|---|
 | Brand Sheet §06 | verbal identity and naming conventions | `avi/ask-aivric-2` |
-| The Forcing Function §01 | the fit model, written to score prospects | `avi/wt-deal-n`, `avi/ask-price-2` |
-| The Forcing Function §02 | the three segments: descriptions, triggers, who is in the room, what 3HUE sells them | `avi/lobby-1`, `avi/wt-1`, `avi/wt-deal-m1`, `avi/wt-deal-n`, `avi/gc-1`, `avi/gc-early-m1`, `avi/gc-p3`, `avi/sr-1`, `avi/sr-exam-m1`, `avi/sr-p2`, `avi/all-gc-2`, `avi/ask-different-2`, `avi/ask-frameworks-1`, `avi/ask-frameworks-2`, `avi/ask-pe-1` |
-| The Forcing Function §03 | the buying committee: what each role says, fears and converts on | `avi/wt-deal-m1`, `avi/gc-ctl-m1` |
-| The Forcing Function §04 | trigger events and the opening move for each | `avi/wt-ai-m2`, `avi/gc-acq-m1`, `avi/gc-acq-r1`, `avi/sr-cross-r2`, `avi/sr-exam-n`, `avi/ask-ai-1` |
-| The Forcing Function §05 | who to decline | `avi/wt-early-m1`, `avi/wt-early-c1`, `avi/gc-early-m1`, `avi/sr-early-m1`, `avi/ask-early-1` |
-| The Forcing Function §06 | what to say to each (the approved opening lines already on the site come from here) | `avi/gc-3` |
-| The Forcing Function cover | segment descriptions on the cover | `avi/lobby-1`, `avi/sr-1` |
-| The Message Stack §01 | the core narrative | `avi/wt-ev-m1`, `avi/wt-ch-3`, `avi/sr-ch-1`, `avi/ask-aivric-1` |
+| The Forcing Function §01 | the fit model, written to score prospects | `avi/wt-deal-n`, `avi/ask-what-3`, `avi/ask-price-2` |
+| The Forcing Function §02 | the three segments: descriptions, triggers, who is in the room, what 3HUE sells them | `avi/gc-ch-3`, `avi/ask-different-2`, `avi/ask-pe-1` |
+| The Forcing Function §03 | the buying committee: what each role says, fears and converts on | `avi/wt-deal-m1`, `avi/gc-2` |
+| The Forcing Function §04 | trigger events and the opening move for each | `avi/sr-exam-m1`, `avi/sr-exam-next`, `avi/ask-what-3`, `avi/ask-frameworks-1`, `avi/ask-frameworks-2`, `avi/ask-ai-1` |
+| The Forcing Function §05 | who to decline | `avi/wt-early-m1`, `avi/wt-early-c1`, `avi/gc-early-m1`, `avi/sr-early-m2`, `avi/sr-early-m3`, `avi/ask-early-1` |
+| The Forcing Function §06 | what to say to each (the approved opening lines already on the site come from here) | `avi/gc-ch-5` |
+| The Forcing Function cover | segment descriptions on the cover | `avi/arrive-q1` |
+| The Message Stack §01 | the core narrative | `avi/wt-ev-m1`, `avi/wt-ch-3`, `avi/sr-holds`, `avi/sr-det-m2`, `avi/sr-ch-1`, `avi/sr-p4`, `avi/ask-aivric-1` |
 | The Message Stack §03 | the three pillars | `avi/ask-different-1` |
-| The Message Stack §04 | the message by segment | `avi/sr-3`, `avi/all-sr-2`, `avi/ask-frameworks-1` |
 | The Message Stack §05 | the claims library | `avi/ask-different-1`, `avi/ask-aivric-2` |
-| The Message Stack §06 | objection handling: the sales moves | `avi/wt-p3`, `avi/ask-hire-1`, `avi/ask-hire-2`, `avi/ask-price-2`, `avi/ask-msp-1`, `avi/ask-msp-2`, `avi/ask-platform-1`, `avi/ask-platform-2`, `avi/ask-theater-1`, `avi/ask-theater-2`, `avi/ask-guarantee-2`, `avi/ask-big-firm-1`, `avi/ask-big-firm-2` |
-| The Message Stack §07 | battlecards | `avi/wt-early-n`, `avi/gc-early-n`, `avi/sr-early-n`, `avi/ask-msp-2`, `avi/ask-early-1` |
-| The Message Stack §08 | words we use, words we avoid | `avi/wt-ch-2`, `avi/sr-ch-1`, `avi/sr-early-r1` |
-| The Message Stack §09 | approved boilerplate | `avi/ask-what-1`, `avi/ask-aivric-1` |
-| The Ship List §03 | landing page copy, written to publish | `avi/ask-after-1`, `avi/ask-after-2`, `avi/ask-timeline-1`, `avi/ask-guarantee-1` |
+| The Message Stack §06 | objection handling: the sales moves | `avi/wt-p3`, `avi/gc-p3`, `avi/running-2`, `avi/ask-hire-1`, `avi/ask-hire-2`, `avi/ask-price-2`, `avi/ask-msp-1`, `avi/ask-msp-2`, `avi/ask-platform-1`, `avi/ask-platform-2`, `avi/ask-theater-1`, `avi/ask-theater-2`, `avi/ask-guarantee-2`, `avi/ask-guarantee-3`, `avi/ask-big-firm-1`, `avi/ask-big-firm-2` |
+| The Message Stack §07 | battlecards | `avi/wt-early-n`, `avi/gc-early-n`, `avi/sr-early-next`, `avi/running-2`, `avi/ask-msp-2`, `avi/ask-early-1` |
+| The Message Stack §08 | words we use, words we avoid | `avi/wt-ch-2`, `avi/gc-ch-4`, `avi/sr-exam-m2`, `avi/sr-ch-1`, `avi/sr-early-c2`, `avi/sr-early-ttx` |
+| The Message Stack §09 | approved boilerplate | `avi/arrive-2`, `avi/ask-what-1`, `avi/ask-aivric-1` |
+| The Ship List §03 | landing page copy, written to publish | `avi/ask-after-1`, `avi/ask-after-2`, `avi/ask-timeline-1`, `avi/ask-timeline-2`, `avi/ask-guarantee-1` |
 | The Ship List §06 | the discovery script | `avi/wt-early-m1`, `avi/ask-early-2` |
 
 **Decide:** approve all of it; approve it except the lines you strike by id; or have the tour rewritten from public material only.
@@ -144,20 +179,20 @@ Still left out: the claims library does not list it, so the AI trigger's lines c
 
 ## At a glance
 
-- **Script:** 32 nodes and 150 spoken lines. Ask has 35 questions, answered in 69 spoken lines. The summary has 20 lines, which are not spoken.
-- **Characters:** 24,860 spoken in the tour, and 16,282 spoken in Ask. That makes 41,142 to render as voice, in 427 files. Prompts, labels, titles, questions and the summary add 7,873, for **49,015 characters in all**.
-- **Line statuses:** adapted 99, approved-copy 16, derived 14, none 3, proposed 96, substantiated 6, verified 5. Every adapted, proposed or derived text line needs sign-off. Ref lines quote manifest fields already on the site; the one approved-copy text line is boilerplate used word for word.
-- **Longest line:** `avi/ask-frameworks-2`, at 31 words. The lint warns above 35.
-- **Lint:** 0 errors and 1 warning (voice: no media/voice/manifest.json yet, so all 219 spoken lines run captions-only (node tools/voice/lint.mjs has the per-file count) (guide.voice.required is false)).
+- **Script:** 33 nodes and 206 spoken lines. Ask has 35 questions, answered in 78 spoken lines. The summary has 24 lines, which are not spoken.
+- **Characters:** 33,923 spoken in the tour, and 17,232 spoken in Ask. That makes 51,001 to render as voice, in 555 files. Prompts, labels, titles, questions and the summary add 11,254, for **62,409 characters in all**.
+- **Line statuses:** adapted 119, approved-copy 12, derived 25, none 2, proposed 143, substantiated 4, verified 3. Every adapted, proposed or derived text line needs sign-off. Ref lines quote manifest fields already on the site; the 2 approved-copy text lines are boilerplate used word for word.
+- **Longest line:** `avi/ask-start-2`, at 30 words. The lint warns above 35.
+- **Lint:** 0 errors and 1 warning (voice: no media/voice/manifest.json yet, so all 284 spoken lines run captions-only (node tools/voice/lint.mjs has the per-file count) (guide.voice.required is false)).
 
 **How long a visit takes** (spoken lines only; choices and pauses add time):
 
 | Path | Lines | Words | At 150 words a minute | At the voice's pace |
 |---|---|---|---|---|
-| SaaS & AI vendor, a blocked deal, Huey leads | 38 | 499 | 3.3 min | 3.2 min |
-| Portfolio owner, a new acquisition, Avi leads | 38 | 468 | 3.1 min | 3.0 min |
-| Regulated operator, an open exam finding | 38 | 489 | 3.3 min | 3.2 min |
-| Show me everything, nothing formal yet | 27 | 296 | 2.0 min | 1.9 min |
+| SaaS & AI vendor, a blocked deal, Huey leads | 11 | 184 | 1.2 min | 1.1 min |
+| Portfolio owner, a new acquisition, Avi leads | 11 | 184 | 1.2 min | 1.1 min |
+| Regulated operator, an open exam finding | 11 | 184 | 1.2 min | 1.1 min |
+| Show me everything, nothing formal yet | 11 | 184 | 1.2 min | 1.1 min |
 
 ## How to read this sheet
 
@@ -176,62 +211,88 @@ Still left out: the claims library does not list it, so the AI trigger's lines c
 
 ## The tour, node by node
 
-### Chapter: Your guides
+### Chapter: Your guides, and one question
 
 <small>`arrival` · landmark: lobby · title is new copy · entry `arrive`</small>
 
 #### `arrive`: the lobby at rest
 
-<small>Ask suggests: `guides`, `what-is-3hue`, `where-to-start`, `privacy`</small>
+<small>Ask suggests: `different`, `proof`, `privacy`, `early`</small>
 
 - **arrive-1** · spoken by Avi · proposed · **needs sign-off**  
-  Welcome to the 3HUE lobby. I'm Avi, one of your two guides.  
-  <small>Source: Tour script, arrival (after 3HUE's own tour at 3hue.net/experience)</small>
-- **arrive-2** · spoken by Avi · proposed · **needs sign-off**  
-  We won't tour a building. We'll tour your situation, and the door that fits it.  
-  <small>Source: Tour script, linking line</small>
+  Welcome to the 3HUE lobby. I'm Avi. You'll leave with one clear first step, whichever door you take.  
+  <small>Source: Tour script, arrival (after 3HUE’s own tour at 3hue.net/experience) · hash `bb6f1a49a7716550`</small>
+- **arrive-2** · spoken by Avi · approved-copy · verbatim approved boilerplate, new placement  
+  3HUE builds and operates security, compliance and AI governance programs for organizations that have to prove their controls work — and have no one inside to run them.  
+  <small>Source: The Message Stack §09, boilerplate · hash `121eda83bb7b53e4`</small>
 - **arrive-3** · spoken by Avi · proposed · **needs sign-off**  
   This is Huey.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: Tour script, linking line · hash `c04c58058aa92255`</small>
 - **arrive-4** · spoken by Huey · proposed · **needs sign-off**  
-  Hi. Glad you're here.  
-  <small>Source: Tour script, linking line</small>
+  Hi. We only say what 3HUE can back up, and you can ask either of us where it came from.  
+  <small>Source: Tour script, linking line · hash `8a63d079a59f48f9`</small>
 - **arrive-5** · spoken by Avi · proposed · **needs sign-off**  
-  One of us leads, and the other stays close. You choose.  
-  <small>Source: Tour script, linking line</small>
+  One of us leads and the other stays close. Pick whichever voice you'd rather hear.  
+  <small>Source: Tour script, linking line · hash `18a5e677ea94e806`</small>
 
-**Choice:** “Would you like Huey to lead?” (new copy), remembered as `lead`
+**Choice:** “Who leads?” (new copy), remembered as `lead`
 
 | # | Option | Sub-label | Copy | Goes to | Suggested when | Hidden when |
 |---|---|---|---|---|---|---|
-| 1 | Yes, Huey leads |  | new | `handoff-huey` |  |  |
-| 2 | Stay with Avi |  | new | `handoff-avi` |  |  |
+| 1 | Avi leads |  | new | `handoff-avi` |  |  |
+| 2 | Huey leads |  | new | `handoff-huey` |  |  |
 
 #### `handoff-huey`: scene unchanged
 
-<small>Ask suggests: `guides`, `what-is-3hue`, `where-to-start`, `privacy`</small>
+<small>Ask suggests: `guides`, `different`, `proof`, `privacy`</small>
 
 - **handoff-huey-1** · spoken by Avi · proposed · **needs sign-off**  
-  Huey is all yours. I'll see you at the round table.  
-  <small>Source: Tour script, linking line</small>
+  Huey has you from here. I'll be back when you reach the end.  
+  <small>Source: Tour script, linking line · hash `6d76fa727b355ca4`</small>
 - **handoff-huey-2** · spoken by Huey · proposed · **needs sign-off**  
-  Thanks, Avi. Let's find your door.  
-  <small>Source: Tour script, linking line</small>
+  Thanks, Avi. One question, and I'll know where to take you.  
+  <small>Source: Tour script, linking line · hash `02dbd0d87d064e67`</small>
 
-Then: `lobby`.
+Then: `arrive-question`.
+
+#### `arrive-question`: the lobby at rest
+
+<small>Ask suggests: `what-is-3hue`, `early`, `timeline`, `privacy`</small>
+
+- **arrive-q1** · spoken by the lead · adapted · **needs sign-off**  
+  Almost everyone here has the same thing happening. Someone with leverage has asked them to prove something, with a date on it.  
+  <small>Source: The Forcing Function, cover · hash `d1318d196d4a1d0e`</small>
+- **arrive-q2** · spoken by the lead · derived · **needs sign-off**  
+  What changes is what that person wants to see. That's the difference between Win Trust, Gain Control and Stay Ready.  
+  <small>Source: Lobby manifest: door titles · hash `407c65c17e1a308a`</small>
+- **arrive-shared** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  One step is shared. Any of the three can begin in the same place: the Initial Risk Assessment.  
+  <small>Source: 3HUE service catalog, September 2026 · hash `ea9132b3cb4b3dcb`</small>
+- **arrive-q3** · spoken by the lead · proposed · **needs sign-off**  
+  Answer for the week you're actually having. Nothing locks, and you can walk another door later.  
+  <small>Source: Tour script, linking line · hash `191baea17bd90307`</small>
+
+**Choice:** “What are they asking you for?” (new copy), remembered as `situation`
+
+| # | Option | Sub-label | Copy | Goes to | Suggested when | Hidden when |
+|---|---|---|---|---|---|---|
+| 1 | They want a report or a certificate | Win Trust · Prove you are ready. | new | `wt` |  |  |
+| 2 | They're asking about our data and our vendors | Gain Control · See and govern what matters. | new | `gc` |  |  |
+| 3 | They want to see it running, not just written down | Stay Ready · Operate defensibly. | new | `sr` |  |  |
+| 4 | I'd rather see all three | All three rooms, then where to start | new | `lobby` |  |  |
 
 #### `handoff-avi`: scene unchanged
 
-<small>Ask suggests: `guides`, `what-is-3hue`, `where-to-start`, `privacy`</small>
+<small>Ask suggests: `guides`, `different`, `proof`, `privacy`</small>
 
 - **handoff-avi-1** · spoken by Huey · proposed · **needs sign-off**  
-  I'll be at the round table when you're done.  
-  <small>Source: Tour script, linking line</small>
+  Avi has you from here. I'll be back when you reach the end.  
+  <small>Source: Tour script, linking line · hash `311740d90fa61a95`</small>
 - **handoff-avi-2** · spoken by Avi · proposed · **needs sign-off**  
-  Then let's find your door.  
-  <small>Source: Tour script, linking line</small>
+  Thanks, Huey. One question, and I'll know where to take you.  
+  <small>Source: Tour script, linking line · hash `639278132cbed8ed`</small>
 
-Then: `lobby`.
+Then: `arrive-question`.
 
 ### Chapter: Three doors, one path
 
@@ -239,45 +300,73 @@ Then: `lobby`.
 
 #### `lobby`: the lobby at rest
 
-<small>Ask suggests: `guides`, `where-to-start`, `what-is-3hue`, `privacy`</small>
+<small>Ask suggests: `frameworks`, `packages`, `different`, `early`</small>
 
-- **lobby-1** · spoken by the lead · adapted · **needs sign-off**  
-  Each door is a different moment: someone with leverage has asked you to prove something.  
-  <small>Source: The Forcing Function, cover; §02, the three segments</small>
-- **lobby-2** · spoken by the lead · derived · **needs sign-off**  
-  Win Trust is for SaaS & AI vendors.  
-  <small>Source: Lobby manifest: door titles and buyer labels · points at the Win Trust door</small>
-- **lobby-3** · spoken by the lead · derived · **needs sign-off**  
-  Gain Control, for Portfolio owners.  
-  <small>Source: Lobby manifest: door titles and buyer labels · points at the Gain Control door</small>
-- **lobby-4** · spoken by the lead · derived · **needs sign-off**  
-  Stay Ready, for Regulated operators.  
-  <small>Source: Lobby manifest: door titles and buyer labels · points at the Stay Ready door</small>
+- **lobby-1** · spoken by the lead · proposed · **needs sign-off**  
+  Three doors from here. Each one is a kind of work, not a kind of company.  
+  <small>Source: Tour script, linking line · hash `46f2328827297b7c`</small>
+- **lobby-2** · spoken by the lead · adapted · **needs sign-off**  
+  Win Trust is the proving work: the evidence exists in pieces, and a buyer wants it assembled.  
+  <small>Source: Lobby manifest: doors[].tension and doors[].gap · hash `b38857349e19d85f`</small>
+- **lobby-3** · spoken by the lead · adapted · **needs sign-off**  
+  Gain Control is the owning work: one operating picture, instead of decisions made company by company.  
+  <small>Source: Lobby manifest: doors[].tension and doors[].gap · hash `0396ce78b6e962e7`</small>
+- **lobby-4** · spoken by the lead · adapted · **needs sign-off**  
+  Stay Ready is the running work: ownership and evidence that hold on an ordinary day, not just at the audit.  
+  <small>Source: Lobby manifest: doors[].tension and doors[].gap · hash `808c0cca67c67f5a`</small>
+- **lobby-yours-prove** · spoken by the lead · proposed · **needs sign-off**  
+  From what you told me, I'd open Win Trust first.  
+  <small>Source: Tour script, routing line · shown only when situation is “They want a report or a certificate” · points at the Win Trust door · hash `f508350659a0deb4`</small>
+- **lobby-yours-own** · spoken by the lead · proposed · **needs sign-off**  
+  From what you told me, I'd open Gain Control first.  
+  <small>Source: Tour script, routing line · shown only when situation is “They're asking about our data and our vendors” · points at the Gain Control door · hash `2cf16bca01adf0b5`</small>
+- **lobby-yours-run** · spoken by the lead · proposed · **needs sign-off**  
+  From what you told me, I'd open Stay Ready first.  
+  <small>Source: Tour script, routing line · shown only when situation is “They want to see it running, not just written down” · points at the Stay Ready door · hash `e71f32dc60f971d6`</small>
+- **lobby-browse** · spoken by the lead · proposed · **needs sign-off**  
+  You asked for the whole floor. One stop in each room, then where you’d start.  
+  <small>Source: Tour script, routing line · shown only when situation is “I'd rather see all three” · hash `cfa00c59969e4101`</small>
+- **lobby-6** · spoken by the lead · proposed · **needs sign-off**  
+  Take them in any order. You can come back for the ones you skip.  
+  <small>Source: Tour script, linking line · hash `c5f1ce38980713c0`</small>
 
-**Choice:** “Which door is yours?” (new copy), remembered as `segment`
+**Choice:** “Which one do we open first?” (new copy)
 
 | # | Option | Sub-label | Copy | Goes to | Suggested when | Hidden when |
 |---|---|---|---|---|---|---|
-| 1 | SaaS & AI vendors | Win Trust · Prove you are ready. | manifest | `wt` |  |  |
-| 2 | Portfolio owners | Gain Control · See and govern what matters. | manifest | `gc` |  |  |
-| 3 | Regulated operators | Stay Ready · Operate defensibly. | manifest | `sr` |  |  |
-| 4 | Show me everything | One stop in each room, then where to start | new | `all-wt` |  |  |
+| 1 | Win Trust | Prove it to whoever is asking | new | `wt` | situation is “They want a report or a certificate” |  |
+| 2 | Gain Control | Own it across everything you carry | new | `gc` | situation is “They're asking about our data and our vendors” |  |
+| 3 | Stay Ready | Run it, and keep it running | new | `sr` | situation is “They want to see it running, not just written down” |  |
+| 4 | Show me everything | One stop in each room, then where to start | new | `all-wt` | situation is “I'd rather see all three” |  |
 
 #### `lobby-again`: the lobby at rest
 
-<small>Ask suggests: `guides`, `where-to-start`, `what-is-3hue`, `privacy`</small>
+<small>Ask suggests: `packages`, `after`, `different`, `proof`</small>
 
-- **again-1** · spoken by the lead · derived · **needs sign-off**  
-  Three doors, one path. Pick the next one.  
-  <small>Source: Lobby manifest: strings.legend</small>
+- **again-1** · spoken by the lead · proposed · **needs sign-off**  
+  Back in the lobby. The tour keeps what you've seen, so nothing needs repeating.  
+  <small>Source: Tour script, linking line · hash `f1e6facde9a0f09c`</small>
+- **again-none** · spoken by the lead · proposed · **needs sign-off**  
+  You haven't opened a door yet. Any of the three can be first.  
+  <small>Source: Tour script, linking line · shown only when Win Trust, Gain Control and Stay Ready not yet visited · hash `a1d61da01b7a213e`</small>
+- **again-some** · spoken by the lead · proposed · **needs sign-off**  
+  Opening another door isn't a correction. It's another kind of work.  
+  <small>Source: Tour script, linking line · shown only when Win Trust visited, and Gain Control not yet visited; or Gain Control visited, and Stay Ready not yet visited; or Stay Ready visited, and Win Trust not yet visited · hash `5fa9bc252a261aa4`</small>
+- **again-all-tower** · spoken by the lead · proposed · **needs sign-off**  
+  All three walked. What's left is the tower: your first step, and what follows.  
+  <small>Source: Tour script, linking line · shown only when Win Trust, Gain Control and Stay Ready all visited, and The maturity path not yet visited · hash `39f825bbbe4b6c51`</small>
+- **again-all-seen** · spoken by the lead · proposed · **needs sign-off**  
+  All three walked, and you've seen where you'd start. The tower's still there if you want another look.  
+  <small>Source: Tour script, linking line · shown only when Win Trust, Gain Control, Stay Ready and The maturity path all visited · hash `f0e8fa8bbcbecf72`</small>
 
-**Choice:** “Which door next?” (new copy)
+**Choice:** “Where to now?” (new copy)
 
 | # | Option | Sub-label | Copy | Goes to | Suggested when | Hidden when |
 |---|---|---|---|---|---|---|
-| 1 | SaaS & AI vendors | Win Trust · Prove you are ready. | manifest | `wt` |  |  |
-| 2 | Portfolio owners | Gain Control · See and govern what matters. | manifest | `gc` |  |  |
-| 3 | Regulated operators | Stay Ready · Operate defensibly. | manifest | `sr` |  |  |
+| 1 | Win Trust | The proving work | new | `wt` |  | Win Trust visited |
+| 2 | Gain Control | The owning work | new | `gc` |  | Gain Control visited |
+| 3 | Stay Ready | The running work | new | `sr` |  | Stay Ready visited |
+| 4 | Show me where I'd start | The tower: your first step, and what follows | new | `path` | Win Trust, Gain Control and Stay Ready all visited, and The maturity path not yet visited | Win Trust, Gain Control and Stay Ready not yet visited |
 
 ### Chapter: Win Trust
 
@@ -285,71 +374,77 @@ Then: `lobby`.
 
 #### `wt`: dolly to the Win Trust door; the room opens
 
-<small>Ask suggests: `auditor`, `guarantee`, `platform`, `ai`</small>
+<small>Ask suggests: `frameworks`, `packages`, `auditor`, `guarantee`</small>
 
-- **wt-1** · spoken by the lead · adapted · **needs sign-off**  
-  This room is for software teams whose next deal depends on proof they can't produce yet.  
-  <small>Source: The Forcing Function §02, the three segments</small>
+- **wt-ack** · spoken by the lead · proposed · **needs sign-off**  
+  They want a report or a certificate. That's this room.  
+  <small>Source: Tour script, routing line · shown only when situation is “They want a report or a certificate” · hash `29b9b55f91ded4cf`</small>
+- **wt-1** · spoken by the lead · derived · **needs sign-off**  
+  This room holds three things: where you stand, how you run security, and what your scope covers.  
+  <small>Source: 3HUE service catalog, September 2026 · frames wt-panel-1 · on wt-panel-1: Where you stand [on the word “stand”] · on wt-panel-2: How you run [on the word “run”] · on wt-panel-3: What your scope covers [on the word “scope”] · on wt-binders: (lights up) · hash `6cb4c5a43c0e5e4c`</small>
 - **wt-2** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
   Your buyer isn't asking whether you're secure. They're asking whether you can prove it by Friday.  
-  <small>Source: The Forcing Function §06, approved opening line · ref `doors.win-trust.opening` · frames wt-niche · on wt-niche: Prove you are ready.</small>
+  <small>Source: The Forcing Function §06, approved opening line · ref `doors.win-trust.opening` · frames wt-niche · on wt-niche: Prove you are ready. · hash `acf700940bab6c75`</small>
+- **wt-standards** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  If your buyer named a standard, the readiness package for it is on the shelf.  
+  <small>Source: 3HUE service catalog, September 2026 · frames wt-panel-4 · on wt-panel-4: SOC 2 Readiness / ISO 27001 Certification Readiness / ISO 27701 Privacy Readiness / PCI-DSS Readiness · hash `2ec3abe083269632`</small>
 - **wt-3** · spoken by the lead · proposed · **needs sign-off**  
-  Tell me what's pressing, and the room will show you.  
-  <small>Source: Tour script, linking line</small>
+  Tell me what’s on your desk, and the room will show you the first step.  
+  <small>Source: Tour script, linking line · hash `e8ce7ac90417bbd9`</small>
 
-**Choice:** “What's pressing right now?” (new copy), remembered as `trigger-win-trust`
+**Choice:** “What's on your desk right now?” (new copy), remembered as `trigger-win-trust`
 
 | # | Option | Sub-label | Copy | Goes to | Suggested when | Hidden when |
 |---|---|---|---|---|---|---|
 | 1 | An enterprise deal or renewal is blocked by assurance requirements. |  | manifest | `wt-moment` |  |  |
 | 2 | A customer, insurer, or investor is asking for evidence you cannot assemble quickly. |  | manifest | `wt-moment` |  |  |
-| 3 | AI adoption is creating new customer questions about ownership and control. |  | manifest | `wt-moment` |  |  |
+| 3 | A certification audit is booked with no written scope. |  | manifest | `wt-moment` |  |  |
 | 4 | Nobody's asking yet | No deal, renewal or insurer on the clock | new | `wt-moment` |  |  |
 
 #### `wt-moment`: dolly to the Win Trust door; the room opens
 
-<small>Ask suggests: `auditor`, `guarantee`, `platform`, `ai`</small>
+<small>Ask suggests: `frameworks`, `auditor`, `guarantee`, `timeline`</small>
 
 - **wt-deal-m1** · spoken by the lead · adapted · **needs sign-off**  
   Then a deal is waiting on a report you don't have, and procurement has put a date on it.  
-  <small>Source: The Forcing Function §02, the three segments; §03 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-panel-3 · on wt-panel-1: SOC 2 Type II report? · on wt-panel-2: ISO 27001 certificate? · on wt-panel-3: Security questionnaire · on wt-panel-4: Readiness letter, dated · on wt-panel-5: Renewal on hold · on wt-panel-6: Due Friday</small>
+  <small>Source: The Forcing Function §03 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-panel-3 · on wt-panel-1: SOC 2 Type II report? · on wt-panel-2: ISO 27001 certificate? · on wt-panel-3: Security questionnaire · on wt-panel-4: PCI attestation? · on wt-panel-5: Renewal on hold · on wt-panel-6: Due Friday · hash `6ae74480715c5a6e`</small>
 - **wt-ev-m1** · spoken by the lead · adapted · **needs sign-off**  
   Then someone with leverage wants evidence, in their format, on their timetable.  
-  <small>Source: The Message Stack §01, core narrative · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · frames wt-panel-3 · on wt-panel-1: Customer questionnaire · on wt-panel-2: Insurer's control form · on wt-panel-3: Investor diligence · on wt-panel-4: Policies? · on wt-panel-5: Risk register? · on wt-panel-6: Who owns this?</small>
+  <small>Source: The Message Stack §01, core narrative · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · frames wt-panel-3 · on wt-panel-1: Customer questionnaire · on wt-panel-2: Insurer's control form · on wt-panel-3: Investor diligence · on wt-panel-4: Policies? · on wt-panel-5: Risk register? · on wt-panel-6: Who owns this? · hash `32d1c5a1ee344c46`</small>
+- **wt-scope-m1** · spoken by the lead · proposed · **needs sign-off**  
+  Then the audit has a date, and nobody has written down what it covers.  
+  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “A certification audit is booked with no written scope.” · frames wt-panel-3 · on wt-panel-1: Audit booked · on wt-panel-2: What's in scope? · on wt-panel-3: What's out? · on wt-panel-4: (cleared) · on wt-panel-5: Owner? · on wt-panel-6: Evidence? · hash `b95138a601bbc91d`</small>
+- **wt-scope-m2** · spoken by the lead · proposed · **needs sign-off**  
+  Scope decides how much you have to prove, and how long the audit takes.  
+  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “A certification audit is booked with no written scope.” · frames wt-panel-4 · on wt-panel-4: Statement of Applicability? [on the word “prove”] · hash `98f406994fca9ff4`</small>
 - **wt-m-stat** · spoken by the lead · verified · manifest field, on the site since 7fa92e4  
   61% were required to hold a certification to win or renew a contract.  
-  <small>Source: Secureframe, 2026 Cybersecurity & Compliance Benchmark · ref `doors.win-trust.stat` · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · frames wt-monitor · on wt-monitor: (lights up) · callout tile: “61% were required to hold a certification to win or renew a contract.” (Secureframe, 2026 Cybersecurity & Compliance Benchmark)</small>
-- **wt-ai-m1** · spoken by the lead · proposed · **needs sign-off**  
-  Then your customers are asking four things about your AI.  
-  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “AI adoption is creating new customer questions about ownership and control.” · frames wt-panel-3</small>
-- **wt-ai-m2** · spoken by the lead · adapted · **needs sign-off**  
-  What can it access? What can it change? Who approved it? And what proves it stayed inside?  
-  <small>Source: The Forcing Function §04, trigger events · shown only when trigger-win-trust is “AI adoption is creating new customer questions about ownership and control.” · on wt-panel-1: What can it access? [on the word “access”] · on wt-panel-2: What can it change? [on the word “change”] · on wt-panel-3: Who approved it? [on the word “approved”] · on wt-panel-4: What proves it stayed inside? [on the word “proves”] · on wt-panel-5: Owner? · on wt-panel-6: Evidence?</small>
+  <small>Source: Secureframe, 2026 Cybersecurity & Compliance Benchmark · ref `doors.win-trust.stat` · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “A certification audit is booked with no written scope.” · frames wt-monitor · on wt-monitor: (lights up) · callout tile: “61% were required to hold a certification to win or renew a contract.” (Secureframe, 2026 Cybersecurity & Compliance Benchmark) · hash `8a43e4c757f3678f`</small>
 - **wt-early-m1** · spoken by the lead · adapted · **needs sign-off**  
   Then you may be early, and 3HUE would rather tell you that than sell you something.  
-  <small>Source: The Ship List §06, discovery script; The Forcing Function §05, who to decline · shown only when trigger-win-trust is “Nobody's asking yet” · on wt-panel-2: No date yet · on wt-panel-3: No date yet · on wt-panel-4: No date yet</small>
+  <small>Source: The Ship List §06, discovery script; The Forcing Function §05, who to decline · shown only when trigger-win-trust is “Nobody's asking yet” · frames wt-panel-2 · on wt-panel-1: No date yet · on wt-panel-2: Nobody asking · on wt-panel-3: (cleared) · on wt-panel-4: (cleared) · on wt-panel-5: (cleared) · on wt-panel-6: (cleared) · hash `1b8ecb2472e05933`</small>
 
 Then: `wt-change`.
 
 #### `wt-change`: dolly to the Win Trust door; the room opens
 
-<small>Ask suggests: `auditor`, `guarantee`, `platform`, `ai`</small>
+<small>Ask suggests: `frameworks`, `hire`, `platform`, `different`</small>
 
 - **wt-ch-1** · spoken by the lead · proposed · **needs sign-off**  
   Today the answers live in a spreadsheet, and in someone's head.  
-  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “AI adoption is creating new customer questions about ownership and control.” · frames wt-panel-2 · on wt-panel-2: In a spreadsheet · on wt-panel-3: In someone's head</small>
+  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “A certification audit is booked with no written scope.” · frames wt-panel-2 · on wt-panel-1: (cleared) · on wt-panel-4: (cleared) · on wt-panel-5: (cleared) · on wt-panel-6: (cleared) · on wt-monitor: (cleared) · on wt-panel-2: In a spreadsheet · on wt-panel-3: In someone's head · hash `87cf89ac13f20557`</small>
 - **wt-ch-2** · spoken by the lead · adapted · **needs sign-off**  
-  After: every answer has an owner, with the evidence attached.  
-  <small>Source: The Message Stack §08, words we use · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “AI adoption is creating new customer questions about ownership and control.” · on wt-panel-2: Owned ✓ [on the word “owner”] · on wt-panel-3: Evidence attached ✓ [on the word “evidence”]</small>
+  Afterwards, every answer has an owner, and the evidence sits with it.  
+  <small>Source: The Message Stack §08, words we use · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “A certification audit is booked with no written scope.” · on wt-panel-2: Owned ✓ [on the word “owner”] · on wt-panel-3: Evidence attached ✓ [on the word “evidence”] · hash `b8eb0b3fd0deff6a`</small>
 - **wt-ch-3** · spoken by the lead · adapted · **needs sign-off**  
   The frameworks are public. What's missing is someone to run them.  
-  <small>Source: The Message Stack §01, core narrative · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “AI adoption is creating new customer questions about ownership and control.”</small>
+  <small>Source: The Message Stack §01, core narrative · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “A certification audit is booked with no written scope.” · frames wt-binders · on wt-binders: (lights up) · hash `348597b6caf8c7d9`</small>
 - **wt-ch-4** · spoken by the lead · verified · manifest field, on the site since 7fa92e4  
   68% of companies have one or fewer full-time security people, while 93% call security a top priority.  
-  <small>Source: Secureframe, 2026 Cybersecurity & Compliance Benchmark · ref `doors.win-trust.statSecondary` · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “AI adoption is creating new customer questions about ownership and control.” · frames wt-monitor · on wt-monitor: (lights up) · callout tile: “68% of companies have one or fewer full-time security people, while 93% call security a top priority.” (Secureframe, 2026 Cybersecurity & Compliance Benchmark)</small>
+  <small>Source: Secureframe, 2026 Cybersecurity & Compliance Benchmark · ref `doors.win-trust.statSecondary` · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “A certification audit is booked with no written scope.” · frames wt-monitor · on wt-monitor: 68% of companies have one or fewer full-time security people, while 93% call security a top priority. (Secureframe, 2026 Cybersecurity & Compliance Benchmark) · callout tile: “68% of companies have one or fewer full-time security people, while 93% call security a top priority.” (Secureframe, 2026 Cybersecurity & Compliance Benchmark) · hash `df5617ba0208960a`</small>
 - **wt-early-c1** · spoken by the lead · adapted · **needs sign-off**  
-  Here the trigger is usually a deal, a renewal or an insurer with a date.  
-  <small>Source: The Forcing Function §05, who to decline · shown only when trigger-win-trust is “Nobody's asking yet”</small>
+  The ask usually arrives as a deal, a renewal, or an insurer with a date.  
+  <small>Source: The Forcing Function §05, who to decline · shown only when trigger-win-trust is “Nobody's asking yet” · frames wt-panel-1 · on wt-panel-1: A deal [on the word “deal”] · on wt-panel-2: A renewal [on the word “renewal”] · on wt-panel-3: An insurer, with a date [on the word “insurer”] · hash `8d2079993ba01be5`</small>
 
 Then: `wt-receive`.
 
@@ -358,73 +453,79 @@ Then: `wt-receive`.
 <small>Ask suggests: `packages`, `auditor`, `timeline`, `pricing`</small>
 
 - **wt-deal-r1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For a blocked deal, the start is one package: SOC 2 Readiness, or ISO 27001 Certification Readiness if your buyer named ISO.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-panel-3 · on wt-monitor: (lights up) · on wt-panel-3: SOC 2 Readiness · on wt-panel-4: ISO 27001 Certification Readiness</small>
+  For a blocked deal the start is one package, chosen by the standard your buyer named.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-monitor · on wt-panel-1: (cleared) · on wt-panel-2: (cleared) · on wt-panel-3: (cleared) · on wt-panel-4: (cleared) · on wt-panel-5: (cleared) · on wt-panel-6: (cleared) · on wt-monitor: (lights up) · hash `c5712e4bf74464d0`</small>
 - **wt-deal-r2** · spoken by the lead · adapted · **needs sign-off**  
-  SOC 2 Readiness covers the risk assessment, the policies, an incident response plan and audit support.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-binders · on wt-binders: (lights up) · on wt-panel-4: Risk register / Policies / Incident response plan / Audit support</small>
+  Most often that's SOC 2 Readiness. One package, and the evidence your buyer asks for comes with it.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-binders · on wt-binders: (lights up) · on wt-panel-3: SOC 2 Readiness · on wt-panel-1: Where you stand / What's written down / What you'd do in an incident · hash `6a3609c4462f4847`</small>
+- **wt-deal-r3** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  Named ISO instead? ISO 27001 Certification Readiness. Privacy? ISO 27701 Privacy Readiness. Card data? PCI-DSS Readiness.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-panel-5 · on wt-panel-5: Instead, if they named: / ISO 27001 Certification Readiness / ISO 27701 Privacy Readiness / PCI-DSS Readiness · hash `c9618dd6a465770d`</small>
+- **wt-deal-r4** · spoken by the lead · derived · **needs sign-off**  
+  Take one, not two. Two of them overlap, and you would pay for the overlap twice.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-panel-2 · on wt-panel-2: One, not two · hash `886d64dfa2785fa2`</small>
 - **wt-ev-r1** · spoken by the lead · adapted · **needs sign-off**  
-  Here the start is the Initial Risk Assessment: where you stand, with a risk register, an executive readout and a prioritized roadmap.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · frames wt-panel-3 · on wt-monitor: (lights up) · on wt-panel-3: Initial Risk Assessment · on wt-binders: (lights up) · on wt-panel-4: Risk register / Executive readout / Prioritized roadmap</small>
+  Here the start is the Initial Risk Assessment: where you stand, what to fix, and in what order.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · frames wt-panel-3 · on wt-panel-1: (cleared) · on wt-panel-2: (cleared) · on wt-panel-3: Initial Risk Assessment · on wt-panel-4: Where you stand / What to fix / In what order · on wt-panel-5: (cleared) · on wt-panel-6: (cleared) · on wt-monitor: (lights up) · on wt-binders: (lights up) · hash `05029996df37fd11`</small>
 - **wt-ev-r2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   And for the questionnaire already in your inbox, there's RFP Response Services: someone who owns the answers.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · frames wt-panel-5 · on wt-panel-5: RFP Response Services</small>
-- **wt-ai-r1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  Here the start is AI Governance & Privacy Advisory, built around those four questions.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “AI adoption is creating new customer questions about ownership and control.” · frames wt-panel-3 · on wt-monitor: (lights up) · on wt-panel-3: AI Governance & Privacy Advisory</small>
-- **wt-ai-r2** · spoken by the lead · adapted · **needs sign-off**  
-  You'd get an acceptable-use policy, an AI risk register, and a named owner for each decision.  
-  <small>Source: 3hue.net, AI governance · shown only when trigger-win-trust is “AI adoption is creating new customer questions about ownership and control.” · frames wt-binders · on wt-binders: (lights up) · on wt-panel-4: Acceptable-use policy / AI risk register / Decision owners</small>
-- **wt-ai-r3** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  No baseline yet? The Initial Risk Assessment comes first.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “AI adoption is creating new customer questions about ownership and control.”</small>
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · frames wt-panel-5 · on wt-panel-5: RFP Response Services · hash `776f52e893a34cae`</small>
+- **wt-scope-r1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  Here the start is ISMS Scope & SoA Development: the boundary written down, with a reason for every control.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “A certification audit is booked with no written scope.” · frames wt-panel-3 · on wt-panel-1: (cleared) · on wt-panel-2: (cleared) · on wt-panel-3: ISMS Scope & SoA Development · on wt-panel-4: What's in scope / What's out, and why / Which controls apply · on wt-panel-5: (cleared) · on wt-panel-6: (cleared) · on wt-monitor: (lights up) · hash `63b1d2c610382f18`</small>
+- **wt-scope-r2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  If the auditor wants the system described, there’s a document for that: System Security & Privacy Plan (SSPP) Development.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “A certification audit is booked with no written scope.” · frames wt-binders · on wt-binders: (lights up) · on wt-panel-5: System Security & Privacy Plan (SSPP) Development · hash `21d342da13cbaa1f`</small>
+- **wt-scope-r3** · spoken by the lead · derived · **needs sign-off**  
+  If the audit is certification itself, take ISO 27001 Certification Readiness instead — it carries the scope work.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “A certification audit is booked with no written scope.” · frames wt-panel-6 · on wt-panel-6: Instead: / ISO 27001 Certification Readiness · hash `b298c8167d3c7821`</small>
 - **wt-r-run** · spoken by the lead · adapted · **needs sign-off**  
-  Then the Managed Information Security & Privacy Management keeps it running: policies, standards and clear owners.  
-  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “AI adoption is creating new customer questions about ownership and control.” · frames wt-niche · on wt-niche: Then: Managed Information Security & Privacy Management</small>
+  Then it has to stay true. That’s what Managed Information Security & Privacy Management is for.  
+  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “A certification audit is booked with no written scope.” · frames wt-niche · on wt-niche: Then: / Managed Information Security & Privacy Management · hash `7d9fcf718bdfcb15`</small>
 - **wt-r-op** · spoken by the lead · adapted · manifest field, on the site since 7fa92e4  
   A managed program with questionnaire ownership and auditor management, so the engineering team goes back to shipping.  
-  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.win-trust.program.operate` · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “AI adoption is creating new customer questions about ownership and control.”</small>
+  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.win-trust.program.operate` · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “A certification audit is booked with no written scope.” · hash `b9891987edbcdc3a`</small>
 - **wt-early-r1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   When the ask comes, the usual first step is the Initial Risk Assessment, so you know where you stand.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “Nobody's asking yet” · frames wt-panel-3 · on wt-monitor: (lights up) · on wt-panel-3: Initial Risk Assessment</small>
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “Nobody's asking yet” · frames wt-panel-3 · on wt-panel-1: (cleared) · on wt-panel-2: (cleared) · on wt-monitor: (lights up) · on wt-panel-3: Initial Risk Assessment · hash `695b30cabb994f0f`</small>
 
 Then: `wt-proof`.
 
 #### `wt-proof`: dolly to the Win Trust door; the room opens
 
-<small>Ask suggests: `proof`, `auditor`, `guarantee`, `theater`</small>
+<small>Ask suggests: `proof`, `theater`, `guarantee`, `big-firm`</small>
 
 - **wt-p1** · spoken by the lead · substantiated · manifest field, on the site since 7fa92e4  
   No formal security program, then SOC 2 Type I with zero findings and multi-entity SOC 2 Type II across a software portfolio.  
-  <small>Source: Transit Technologies engagement, published customer story · ref `doors.win-trust.proof.0` · frames wt-monitor · on wt-monitor: (lights up) · on wt-panel-1: No formal program · on wt-panel-2: SOC 2 Type I · on wt-panel-3: Multi-entity Type II · callout tile: “No formal security program, then SOC 2 Type I with zero findings and multi-entity SOC 2 Type II across a software portfolio.” (Transit Technologies engagement, published customer story)</small>
+  <small>Source: Transit Technologies engagement, published customer story · ref `doors.win-trust.proof.0` · frames wt-monitor · on wt-panel-4: (cleared) · on wt-panel-5: (cleared) · on wt-panel-6: (cleared) · on wt-niche: (cleared) · on wt-panel-1: No formal program · on wt-panel-2: SOC 2 Type I · on wt-panel-3: Multi-entity Type II · on wt-monitor: (lights up) · callout tile: “No formal security program, then SOC 2 Type I with zero findings and multi-entity SOC 2 Type II across a software portfolio.” (Transit Technologies engagement, published customer story) · hash `7cad1e727c9420c5`</small>
 - **wt-p2** · spoken by the lead · adapted · **needs sign-off**  
-  It started where many teams start: a risk and control posture assessment, then readiness for SOC 2.  
-  <small>Source: Transit Technologies, published customer story</small>
+  It started where many teams start: an assessment of where they stood, then SOC 2 Readiness.  
+  <small>Source: Transit Technologies, published customer story · frames wt-binders · on wt-binders: (lights up) · on wt-panel-4: Where they stood / Then SOC 2 Readiness · hash `ceba1109b39ff6c4`</small>
 - **wt-p3** · spoken by the lead · adapted · **needs sign-off**  
   You get the report because your buyer needs it, and a program because you need it.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  <small>Source: The Message Stack §06, objection handling · hash `ab2ebf2f548e2d84`</small>
 
 Then: `wt-next`.
 
 #### `wt-next`: dolly to the Win Trust door; the room opens
 
-<small>Ask suggests: `quote`, `where-to-start`, `pricing`, `ai`</small>
+<small>Ask suggests: `quote`, `where-to-start`, `pricing`, `after`</small>
 
 - **wt-deal-n** · spoken by the lead · adapted · **needs sign-off**  
   Your next step is a conversation about that deal: the date, the scope, and what you don't have to do.  
-  <small>Source: The Forcing Function §01, the fit model; §02, the three segments · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.”</small>
+  <small>Source: The Forcing Function §01, the fit model · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · hash `a678d933cb6e708b`</small>
 - **wt-ev-n** · spoken by the lead · proposed · **needs sign-off**  
   Your next step: bring the questionnaire. The team scopes what it actually needs.  
-  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.”</small>
-- **wt-ai-n** · spoken by the lead · proposed · **needs sign-off**  
-  Your next step: list the AI uses your customers ask about. The team scopes from there.  
-  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “AI adoption is creating new customer questions about ownership and control.”</small>
+  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · hash `53b863f98aebb4d4`</small>
+- **wt-scope-n** · spoken by the lead · proposed · **needs sign-off**  
+  Your next step: bring the audit date, and the scope you think you have.  
+  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “A certification audit is booked with no written scope.” · hash `4400ab59154cee6a`</small>
 - **wt-early-n** · spoken by the lead · adapted · **needs sign-off**  
   Take a summary with you, and come back when someone asks.  
-  <small>Source: The Message Stack §07, battlecards · shown only when trigger-win-trust is “Nobody's asking yet”</small>
+  <small>Source: The Message Stack §07, battlecards · shown only when trigger-win-trust is “Nobody's asking yet” · hash `36815d7142eee024`</small>
 - **wt-decision** · spoken by the lead · no status · manifest field, on the site since 7fa92e4  
   Choose the evidence and operating work that turns readiness into buyer confidence.  
-  <small>ref `doors.win-trust.decision` · frames wt-niche · on wt-niche: Choose the evidence and operating work that turns readiness into buyer confidence.</small>
+  <small>ref `doors.win-trust.decision` · frames wt-niche · on wt-panel-1: (cleared) · on wt-panel-2: (cleared) · on wt-panel-3: (cleared) · on wt-panel-4: (cleared) · on wt-panel-5: (cleared) · on wt-panel-6: (cleared) · on wt-monitor: (cleared) · on wt-binders: (cleared) · on wt-niche: Choose the evidence and operating work that turns readiness into buyer confidence. · hash `59165e8e9cdf938c`</small>
 
 **Choice:** “Where next?” (new copy)
 
@@ -437,17 +538,20 @@ Then: `wt-next`.
 
 #### `all-wt`: dolly to the Win Trust door; the room opens
 
-<small>Ask suggests: `auditor`, `guarantee`, `platform`, `ai`</small>
+<small>Ask suggests: `frameworks`, `packages`, `auditor`, `guarantee`</small>
 
 - **all-1** · spoken by the lead · proposed · **needs sign-off**  
   One stop in each room, then where to start.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: Tour script, linking line · hash `995c9e21424060d9`</small>
 - **all-wt-2** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
   Your buyer isn't asking whether you're secure. They're asking whether you can prove it by Friday.  
-  <small>Source: The Forcing Function §06, approved opening line · ref `doors.win-trust.opening` · frames wt-panel-3 · on wt-panel-1: SOC 2 Type II report? · on wt-panel-2: Customer questionnaire · on wt-panel-3: Who approved the AI?</small>
+  <small>Source: The Forcing Function §06, approved opening line · ref `doors.win-trust.opening` · frames wt-panel-1 · on wt-panel-1: Where you stand · on wt-panel-2: How you run · on wt-panel-3: What your scope covers · on wt-binders: (lights up) · on wt-niche: Prove you are ready. · hash `acf700940bab6c75`</small>
 - **all-wt-3** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  Most teams here start with SOC 2 Readiness or the Initial Risk Assessment.  
-  <small>Source: 3HUE service catalog, September 2026 · frames wt-panel-3 · on wt-monitor: (lights up) · on wt-panel-3: SOC 2 Readiness / Initial Risk Assessment</small>
+  So this room holds the proof: readiness for whichever standard your buyer names.  
+  <small>Source: 3HUE service catalog, September 2026 · frames wt-panel-4 · on wt-monitor: (lights up) · on wt-panel-4: SOC 2 Readiness / ISO 27001 Certification Readiness / ISO 27701 Privacy Readiness / PCI-DSS Readiness · hash `6c0e913d8a33977d`</small>
+- **all-wt-4** · spoken by the lead · derived · **needs sign-off**  
+  You've asked to see everything, so start with the one that finds out where you stand: the Initial Risk Assessment.  
+  <small>Source: 3HUE service catalog, September 2026 · frames wt-panel-3 · on wt-panel-4: (cleared) · on wt-panel-3: Initial Risk Assessment · hash `0dc73e9942cfeb73`</small>
 
 Then: `all-gc`.
 
@@ -457,140 +561,188 @@ Then: `all-gc`.
 
 #### `gc`: dolly to the Gain Control door; the room opens
 
-<small>Ask suggests: `private-equity`, `vciso`, `vendor`, `rmp`</small>
+<small>Room when this step opens: gc-wall: (cleared) · gc-amber-left: (cleared) · gc-amber-right: (cleared) · gc-model: (cleared) · gc-console: (cleared)</small>
 
-- **gc-1** · spoken by the lead · adapted · **needs sign-off**  
-  This room is for sponsors and family offices carrying cyber risk across companies with no common standard.  
-  <small>Source: The Forcing Function §02, the three segments</small>
-- **gc-2** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
-  Your bigger competitors run cyber diligence on 81% of deals. You run it on 29%.  
-  <small>Source: The Forcing Function §06, approved opening line · ref `doors.gain-control.opening` · frames gc-wall · on gc-wall: Sponsors above $25B AUM include cybersecurity in transaction diligence 81% of the time. Below $25B, only 29% do. (Kroll, Private Equity Cybersecurity, February 2026) · callout tile: “Sponsors above $25B AUM include cybersecurity in transaction diligence 81% of the time. Below $25B, only 29% do.” (Kroll, Private Equity Cybersecurity, February 2026)</small>
-- **gc-3** · spoken by the lead · adapted · **needs sign-off**  
-  That gap isn't a philosophy difference. It's a staffing one.  
-  <small>Source: The Forcing Function §06, approved opening lines</small>
-- **gc-4** · spoken by the lead · proposed · **needs sign-off**  
-  Tell me what's pressing, and the room will show you.  
-  <small>Source: Tour script, linking line</small>
+<small>Ask suggests: `vendor`, `ai`, `msp`, `packages`</small>
 
-**Choice:** “What's pressing right now?” (new copy), remembered as `trigger-gain-control`
+- **gc-ack** · spoken by the lead · proposed · **needs sign-off**  
+  They're asking about your data and your vendors. That's this room.  
+  <small>Source: Tour script, routing line · shown only when situation is “They're asking about our data and our vendors” · hash `663a7ee27bb10a4d`</small>
+- **gc-1** · spoken by the lead · derived · **needs sign-off**  
+  Gain Control is about the things you already own: your data, your vendors, and how your systems get built.  
+  <small>Source: 3HUE service catalog, September 2026 · frames gc-wall · on gc-wall: Your data / Your vendors / How it gets built · hash `387ec810d3ceb3ca`</small>
+- **gc-2** · spoken by the lead · adapted · **needs sign-off**  
+  For a while one person holds all of it in their head. Then there is more of it than one person can hold.  
+  <small>Source: The Forcing Function §03 · frames gc-amber-left · on gc-amber-left: One person holds it · hash `28edbf21bb9af3e1`</small>
+- **gc-3** · spoken by the lead · proposed · **needs sign-off**  
+  Tell me which part is loudest, and we'll finish on the one step you would take first.  
+  <small>Source: Tour script, linking line · hash `85c7f07342fe7366`</small>
+
+**Choice:** “Which part is loudest right now?” (new copy), remembered as `trigger-gain-control`
 
 | # | Option | Sub-label | Copy | Goes to | Suggested when | Hidden when |
 |---|---|---|---|---|---|---|
-| 1 | A new platform acquisition or portfolio review needs a common view. |  | manifest | `gc-moment` |  |  |
-| 2 | Board, lender, or investor reporting is inconsistent across holdings. |  | manifest | `gc-moment` |  |  |
-| 3 | The portfolio needs more control without adding a full internal team. |  | manifest | `gc-moment` |  |  |
-| 4 | Nobody's asking yet | No acquisition, exit or lender condition on the table | new | `gc-moment` |  |  |
+| 1 | Privacy rules now reach across the whole business. | Privacy rules, across the whole business | new | `gc-moment` |  |  |
+| 2 | Nobody owns how AI touches your data. | Who approves what AI touches | new | `gc-moment` |  |  |
+| 3 | Other people's systems hold your data. | Other people's systems hold your data | new | `gc-moment` |  |  |
+| 4 | Nobody's asking yet | No rule, customer or vendor question on the table | new | `gc-moment` |  |  |
 
 #### `gc-moment`: dolly to the Gain Control door; the room opens
 
-<small>Ask suggests: `private-equity`, `vciso`, `vendor`, `rmp`</small>
+<small>Room when this step opens: gc-wall: (cleared) · gc-amber-left: (cleared) · gc-amber-right: (cleared)</small>
 
-- **gc-acq-m1** · spoken by the lead · adapted · **needs sign-off**  
-  Then a new company is coming in, and there's no common way to look at it.  
-  <small>Source: The Forcing Function §04, trigger events · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” · frames gc-amber-left · on gc-amber-left: New platform acquisition · on gc-amber-right: Which standard?</small>
-- **gc-rep-m1** · spoken by the lead · proposed · **needs sign-off**  
-  Then every company reports its own way, and the board can't compare them.  
-  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Board, lender, or investor reporting is inconsistent across holdings.” · frames gc-amber-left · on gc-amber-left: Board: no common view · on gc-amber-right: Lender: asking</small>
-- **gc-ctl-m1** · spoken by the lead · adapted · **needs sign-off**  
-  Then you need oversight across companies, without hiring a CISO for each one.  
-  <small>Source: The Forcing Function §03 · shown only when trigger-gain-control is “The portfolio needs more control without adding a full internal team.” · frames gc-amber-left · on gc-amber-left: A CISO per company? · on gc-amber-right: No new headcount</small>
+<small>Ask suggests: `vendor`, `ai`, `early`, `msp`</small>
+
+- **gc-cross-m1** · spoken by the lead · proposed · **needs sign-off**  
+  Then a rule that used to belong to one team is suddenly everybody's problem.  
+  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” · frames gc-amber-left · on gc-amber-left: Whose rule is it? · hash `1ad5678a006c3613`</small>
+- **gc-cross-m2** · spoken by the lead · proposed · **needs sign-off**  
+  And the first honest question is where that data lives. Nobody has one answer.  
+  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” · on gc-wall: Where does it live? / Who answers for it? / Since when? · hash `276623df8e029615`</small>
+- **gc-ai-m1** · spoken by the lead · adapted · **needs sign-off**  
+  Then a tool nobody approved is reading things nobody listed.  
+  <small>Source: 3hue.net, AI governance · shown only when trigger-gain-control is “Nobody owns how AI touches your data.” · frames gc-amber-left · on gc-amber-left: Who approved it? · hash `4becf69dccec5c83`</small>
+- **gc-ai-m2** · spoken by the lead · adapted · **needs sign-off**  
+  Your customer's next question will not be whether you use AI. It will be who checks it.  
+  <small>Source: 3hue.net, AI governance · shown only when trigger-gain-control is “Nobody owns how AI touches your data.” · on gc-wall: Which tools? / What can they touch? / Who checks them? · hash `51e2658277f2283d`</small>
+- **gc-ven-m1** · spoken by the lead · adapted · **needs sign-off**  
+  Then a good part of your risk sits in other people's systems, and you take their word for it.  
+  <small>Source: 3hue.net, ISG managed programs · shown only when trigger-gain-control is “Other people's systems hold your data.” · frames gc-amber-left · on gc-amber-left: Their systems, your name · hash `6071a8962854facf`</small>
+- **gc-ven-m2** · spoken by the lead · proposed · **needs sign-off**  
+  And when your own customer asks who you rely on, that list has to be real and current.  
+  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Other people's systems hold your data.” · on gc-wall: Who do you rely on? / What do they hold? / Who checked? · hash `a40bd7771326e555`</small>
 - **gc-early-m1** · spoken by the lead · adapted · **needs sign-off**  
-  Then you may be early. For a fund, the trigger is usually an acquisition, an exit or a lender's conditions.  
-  <small>Source: The Forcing Function §02, the three segments; §05, who to decline · shown only when trigger-gain-control is “Nobody's asking yet”</small>
+  Then this room can wait. The ask here usually comes from a rule, a customer, or your own auditor.  
+  <small>Source: The Forcing Function §05, who to decline · shown only when trigger-gain-control is “Nobody's asking yet” · frames gc-wall · on gc-wall: A rule / A customer / Your own auditor · hash `cda5add39bc299ae`</small>
 
 Then: `gc-change`.
 
 #### `gc-change`: dolly to the Gain Control door; the room opens
 
-<small>Ask suggests: `private-equity`, `vciso`, `vendor`, `rmp`</small>
+<small>Room when this step opens: gc-wall: (cleared) · gc-amber-right: (cleared)</small>
+
+<small>Ask suggests: `vendor`, `ai`, `different`, `timeline`</small>
 
 - **gc-ch-1** · spoken by the lead · proposed · **needs sign-off**  
-  Today every company is assessed its own way, if at all.  
-  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” or “Board, lender, or investor reporting is inconsistent across holdings.” or “The portfolio needs more control without adding a full internal team.” · frames gc-amber-left · on gc-amber-left: Company by company</small>
-- **gc-ch-2** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
-  One control set applied across every operating company, isolated per entity.  
-  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.gain-control.program.build` · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” or “Board, lender, or investor reporting is inconsistent across holdings.” or “The portfolio needs more control without adding a full internal team.” · frames gc-model · on gc-amber-left: One control set ✓ · on gc-model: (lights up)</small>
-- **gc-ch-3** · spoken by the lead · verified · manifest field, on the site since 7fa92e4  
-  26% of firms have seen a reduced valuation or exit price after a cyber finding.  
-  <small>Source: Kroll, Private Equity Cybersecurity, February 2026 · ref `doors.gain-control.statSecondary` · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” or “Board, lender, or investor reporting is inconsistent across holdings.” or “The portfolio needs more control without adding a full internal team.” · frames gc-wall · on gc-wall: 26% of firms have seen a reduced valuation or exit price after a cyber finding. (Kroll, Private Equity Cybersecurity, February 2026) · callout tile: “26% of firms have seen a reduced valuation or exit price after a cyber finding.” (Kroll, Private Equity Cybersecurity, February 2026)</small>
+  Today the picture is a diagram someone drew once, plus whatever the longest-serving person remembers.  
+  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” or “Nobody owns how AI touches your data.” or “Other people's systems hold your data.” · frames gc-amber-left · on gc-amber-left: Drawn once, remembered since · hash `63d62445793f145b`</small>
+- **gc-ch-2** · spoken by the lead · proposed · manifest field, on the site since 7fa92e4  
+  One control set, applied the same way wherever it lands.  
+  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.gain-control.program.build` · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” or “Nobody owns how AI touches your data.” or “Other people's systems hold your data.” · frames gc-model · on gc-model: (lights up) · on gc-amber-right: One control set, wherever it lands · hash `0258fed8e0b3c299`</small>
+- **gc-ch-3** · spoken by the lead · adapted · **needs sign-off**  
+  And where two things have to be kept apart, they stay apart.  
+  <small>Source: The Forcing Function §02, What 3HUE sells them · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” or “Nobody owns how AI touches your data.” or “Other people's systems hold your data.” · on gc-amber-right: One control set, wherever it lands / Kept apart where it must be · hash `d4ad702dca2727c6`</small>
+- **gc-ch-4** · spoken by the lead · adapted · **needs sign-off**  
+  After: everything you own has a name against it, and a date when someone last looked.  
+  <small>Source: The Message Stack §08, words we use · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” or “Nobody owns how AI touches your data.” or “Other people's systems hold your data.” · frames gc-wall · on gc-wall: Named owner ✓ / Last looked at ✓ · on gc-amber-left: (cleared) · hash `c0db1ba46a01da41`</small>
+- **gc-ch-5** · spoken by the lead · adapted · **needs sign-off**  
+  The hard part was never the standard. It was that nobody was given it to hold.  
+  <small>Source: The Forcing Function §06, approved opening lines · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” or “Nobody owns how AI touches your data.” or “Other people's systems hold your data.” · hash `db2bd471559446ac`</small>
 - **gc-early-c1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  When it comes, the start is the Initial Risk Assessment, one per company.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Nobody's asking yet” · frames gc-wall · on gc-wall: Initial Risk Assessment</small>
+  When it does come, the first move is small: Data Mapping & Data Inventory, so you know what you hold.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Nobody's asking yet” · frames gc-wall · on gc-wall: Data Mapping & Data Inventory · hash `533a1d3895038835`</small>
 
 Then: `gc-receive`.
 
 #### `gc-receive`: dolly to the Gain Control door; the room opens
 
-<small>Ask suggests: `private-equity`, `vciso`, `vendor`, `packages`</small>
+<small>Room when this step opens: gc-wall: (cleared) · gc-amber-left: (cleared) · gc-amber-right: (cleared) · gc-model: (cleared) · gc-console: (cleared)</small>
 
-- **gc-acq-r1** · spoken by the lead · adapted · **needs sign-off**  
-  The start is the Initial Risk Assessment, one per company, on the same framework every time.  
-  <small>Source: 3HUE service catalog, September 2026; The Forcing Function §04, trigger events · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” · frames gc-wall · on gc-wall: Initial Risk Assessment / One per company</small>
-- **gc-acq-r2** · spoken by the lead · adapted · **needs sign-off**  
-  You get a risk register per company, rolled up into one for the fund.  
-  <small>Source: 3hue.net, private equity and family offices · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” · frames gc-amber-left · on gc-amber-left: Risk register per company · on gc-amber-right: One roll-up for the fund</small>
-- **gc-rep-r1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  The start is BOD / Investor Performance Reporting: one format your board and investors can read.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Board, lender, or investor reporting is inconsistent across holdings.” · frames gc-wall · on gc-wall: BOD / Investor Performance Reporting</small>
-- **gc-rep-r2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  And a Risk Committee Posture Update when the risk committee needs its own view.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Board, lender, or investor reporting is inconsistent across holdings.” · frames gc-amber-left · on gc-amber-left: Risk Committee Posture Update · on gc-amber-right: Security Data Analytics & Reporting Development</small>
-- **gc-ctl-r1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  The start is the Managed Risk Management Program, with a virtual CISO alongside if you need one.  
-  <small>Source: 3HUE service catalog, September 2026; 3hue.net, private equity and family offices · shown only when trigger-gain-control is “The portfolio needs more control without adding a full internal team.” · frames gc-console · on gc-console: (lights up) · on gc-wall: Managed Risk Management Program</small>
-- **gc-ctl-r2** · spoken by the lead · adapted · **needs sign-off**  
-  And the Managed Vendor Compliance Program (VCP) keeps third-party risk in the same view.  
-  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “The portfolio needs more control without adding a full internal team.” · frames gc-amber-right · on gc-amber-right: Managed Vendor Compliance Program (VCP)</small>
-- **gc-ctl-r3** · spoken by the lead · adapted · **needs sign-off**  
-  A virtual CISO is executive security leadership that sits with your team and owns the board conversation.  
-  <small>Source: 3hue.net, ISG managed programs · shown only when trigger-gain-control is “The portfolio needs more control without adding a full internal team.” · on gc-amber-left: Virtual CISO</small>
-- **gc-r-run** · spoken by the lead · adapted · **needs sign-off**  
-  Behind it, the Managed Risk Management Program runs continuously: risks identified, prioritized and tracked to closure.  
-  <small>Source: 3hue.net, ISG managed programs · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” or “Board, lender, or investor reporting is inconsistent across holdings.” · frames gc-console · on gc-console: (lights up) · on gc-wall: Then: Managed Risk Management Program</small>
-- **gc-r-op** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
-  Quarterly board- and investment-committee-ready reporting, with the fund seeing one view.  
-  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.gain-control.program.operate` · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” or “Board, lender, or investor reporting is inconsistent across holdings.” or “The portfolio needs more control without adding a full internal team.” · on gc-model: (lights up)</small>
+<small>Ask suggests: `packages`, `vendor`, `ai`, `pricing`</small>
+
+- **gc-cross-r1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  For privacy, the start is one package: Privacy Leadership Launch.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” · frames gc-wall · on gc-wall: Privacy Leadership Launch · hash `f6d77aefa2857ef4`</small>
+- **gc-cross-r2** · spoken by the lead · adapted · **needs sign-off**  
+  It sets the baseline, puts a named privacy lead in the chair, and keeps the program running.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” · on gc-amber-left: A baseline / A named privacy lead / Someone running it · hash `c81974718a8f90b3`</small>
+- **gc-cross-r3** · spoken by the lead · derived · **needs sign-off**  
+  If a customer or an auditor has named a privacy certificate, that track runs through Win Trust.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” · on gc-amber-right: Certificate track: / Win Trust · hash `b62fd3fff4bf5658`</small>
+- **gc-cross-r4** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  Either way, someone has to draw the map: Data Mapping & Data Inventory.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” · on gc-wall: Privacy Leadership Launch / Data Mapping & Data Inventory · hash `18168e9346fc70b6`</small>
+- **gc-cross-r5** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  And when a regulator writes, there's Regulator Liaison & DSAR Escalation Support.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” · on gc-wall: Privacy Leadership Launch / Data Mapping & Data Inventory / Regulator Liaison & DSAR Escalation Support · hash `7a3a73532c14a505`</small>
+- **gc-ai-r1** · spoken by the lead · adapted · **needs sign-off**  
+  For AI, the start is AI Governance & Privacy Advisory: who approves it, what it may touch, who reviews it.  
+  <small>Source: 3hue.net, AI governance; 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Nobody owns how AI touches your data.” · frames gc-wall · on gc-wall: AI Governance & Privacy Advisory · hash `27b7a7e56d954d01`</small>
+- **gc-ai-r2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  Security Architecture Reviews put eyes on the design before it ships.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Nobody owns how AI touches your data.” · on gc-wall: AI Governance & Privacy Advisory / Security Architecture Reviews · hash `37dc53fc5e80ea9a`</small>
+- **gc-ai-r3** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  Secure SDLC Program Development makes that the normal way to build, not a favour.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Nobody owns how AI touches your data.” · on gc-wall: AI Governance & Privacy Advisory / Security Architecture Reviews / Secure SDLC Program Development · hash `ce1ca05b8765ec0e`</small>
+- **gc-ai-r4** · spoken by the lead · adapted · **needs sign-off**  
+  And Vulnerability Management Program Development settles what gets fixed, who fixes it, and what waits.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Nobody owns how AI touches your data.” · on gc-wall: AI Governance & Privacy Advisory / Security Architecture Reviews / Secure SDLC Program Development / Vulnerability Management Program Development · on gc-amber-left: What gets fixed / Who fixes it / What waits · hash `575f6a8f8c2414cf`</small>
+- **gc-ai-r5** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  Then it runs as Security Engineering Services, so the work carries on after the reviews stop.  
+  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Nobody owns how AI touches your data.” · on gc-amber-right: Then: / Security Engineering Services · on gc-console: (lights up) · hash `5034e83679f105b3`</small>
+- **gc-ven-r1** · spoken by the lead · adapted · **needs sign-off**  
+  For vendors, the start is the Managed Vendor Compliance Program (VCP).  
+  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Other people's systems hold your data.” · frames gc-wall · on gc-wall: Managed Vendor Compliance Program (VCP) · hash `508fc3eea8a8b630`</small>
+- **gc-ven-r2** · spoken by the lead · adapted · **needs sign-off**  
+  It keeps one list: who you rely on, what they hold, when each was last checked.  
+  <small>Source: 3hue.net, ISG managed programs · shown only when trigger-gain-control is “Other people's systems hold your data.” · on gc-amber-left: Who you rely on ✓ / What they hold ✓ / Last checked ✓ · hash `502aa6f488be8b3a`</small>
+- **gc-ven-r3** · spoken by the lead · derived · **needs sign-off**  
+  It widens a block of vendors at a time, as your list grows.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Other people's systems hold your data.” · on gc-amber-right: Then: / a block at a time · on gc-console: (lights up) · hash `e831812c13cfab5a`</small>
+- **gc-ven-r4** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  Before any of that, you need the list of what you own: Asset Governance Program Development.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Other people's systems hold your data.” · on gc-wall: Asset Governance Program Development / Managed Vendor Compliance Program (VCP) · hash `f72ec421de5bbdb9`</small>
+- **gc-ven-r5** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  And when their auditor turns up, or yours, you have Audit Support & Liaison Services.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Other people's systems hold your data.” · on gc-wall: Asset Governance Program Development / Managed Vendor Compliance Program (VCP) / Audit Support & Liaison Services · hash `a2a3ae606bc21ce6`</small>
+- **gc-r-op** · spoken by the lead · proposed · manifest field, on the site since 7fa92e4  
+  Quarterly reporting in one format, with one view across everything you own.  
+  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.gain-control.program.operate` · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” or “Nobody owns how AI touches your data.” or “Other people's systems hold your data.” · on gc-amber-right: One format, one view · hash `45069d391d5fbd4f`</small>
 - **gc-early-r1** · spoken by the lead · proposed · **needs sign-off**  
-  The same first step works whichever company comes first.  
-  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Nobody's asking yet”</small>
+  Whichever part gets loud first, the map is the same first step.  
+  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Nobody's asking yet” · frames gc-wall · on gc-wall: Data Mapping & Data Inventory · hash `2c0888f0284b15ae`</small>
 
 Then: `gc-proof`.
 
 #### `gc-proof`: dolly to the Gain Control door; the room opens
 
-<small>Ask suggests: `proof`, `private-equity`, `vendor`, `different`</small>
+<small>Room when this step opens: gc-wall: (cleared) · gc-amber-left: (cleared) · gc-amber-right: (cleared) · gc-console: (cleared)</small>
+
+<small>Ask suggests: `proof`, `different`, `big-firm`, `theater`</small>
 
 - **gc-p1** · spoken by the lead · substantiated · manifest field, on the site since 7fa92e4  
   1,000+ systems certified under one scalable assessment framework.  
-  <small>Source: A large North American bank, published customer story, client unnamed · ref `doors.gain-control.proof.0` · frames gc-wall · on gc-wall: 1,000+ systems certified under one scalable assessment framework. (A large North American bank, published customer story, client unnamed) · on gc-amber-left: A large North American bank · callout tile: “1,000+ systems certified under one scalable assessment framework.” (A large North American bank, published customer story, client unnamed)</small>
-- **gc-p2** · spoken by the lead · substantiated · manifest field, on the site since 7fa92e4  
-  No formal security program, then SOC 2 Type I with zero findings and multi-entity SOC 2 Type II across a software portfolio.  
-  <small>Source: Transit Technologies engagement, published customer story · ref `doors.win-trust.proof.0` · on gc-amber-right: Transit Technologies / Multi-entity Type II · callout tile: “No formal security program, then SOC 2 Type I with zero findings and multi-entity SOC 2 Type II across a software portfolio.” (Transit Technologies engagement, published customer story)</small>
+  <small>Source: A large North American bank, published customer story, client unnamed · ref `doors.gain-control.proof.0` · frames gc-model · on gc-wall: 1,000+ systems certified under one scalable assessment framework. (A large North American bank, published customer story, client unnamed) · on gc-model: (lights up) · callout tile: “1,000+ systems certified under one scalable assessment framework.” (A large North American bank, published customer story, client unnamed) · hash `6962e776dc534408`</small>
+- **gc-p2** · spoken by the lead · derived · **needs sign-off**  
+  One framework, applied the same way every time. That is what makes a count like that possible.  
+  <small>Source: A large North American bank, published customer story · on gc-amber-right: One framework / Every time · hash `874210eabd8871a3`</small>
 - **gc-p3** · spoken by the lead · adapted · **needs sign-off**  
-  The point is repeatability: the same reason not to hire a different consultant for every company.  
-  <small>Source: The Forcing Function §02, the three segments</small>
+  It is the reason not to hire a different consultant for every corner of what you own.  
+  <small>Source: The Message Stack §06, objection handling · hash `b0a8b8d07db039e0`</small>
 
 Then: `gc-next`.
 
 #### `gc-next`: dolly to the Gain Control door; the room opens
 
-<small>Ask suggests: `quote`, `where-to-start`, `pricing`, `private-equity`</small>
+<small>Room when this step opens: gc-wall: (cleared) · gc-amber-left: (cleared) · gc-amber-right: (cleared) · gc-model: (cleared) · gc-console: (cleared)</small>
 
-- **gc-acq-n** · spoken by the lead · proposed · **needs sign-off**  
-  Your next step: bring the next acquisition. The team scopes the first assessment and the standard behind it.  
-  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.”</small>
-- **gc-rep-n** · spoken by the lead · proposed · **needs sign-off**  
-  Your next step: bring last quarter's board pack, and the team scopes one format from it.  
-  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Board, lender, or investor reporting is inconsistent across holdings.”</small>
-- **gc-ctl-n** · spoken by the lead · proposed · **needs sign-off**  
-  Your next step: a conversation about which companies come first, and who leads.  
-  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “The portfolio needs more control without adding a full internal team.”</small>
+<small>Ask suggests: `quote`, `where-to-start`, `pricing`, `vendor`</small>
+
+- **gc-cross-n** · spoken by the lead · proposed · **needs sign-off**  
+  Your next step: bring the list of places personal data lives. Incomplete is normal.  
+  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.” · hash `90e8af697bfab0a5`</small>
+- **gc-ai-n** · spoken by the lead · proposed · **needs sign-off**  
+  Your next step: bring the list of AI tools in use, including the ones nobody approved.  
+  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Nobody owns how AI touches your data.” · hash `854ed373142f1dee`</small>
+- **gc-ven-n** · spoken by the lead · proposed · **needs sign-off**  
+  Your next step: bring your vendor list, and mark the ones that hold your data.  
+  <small>Source: Tour script, linking line · shown only when trigger-gain-control is “Other people's systems hold your data.” · hash `bbaa6b788a6e38bf`</small>
 - **gc-early-n** · spoken by the lead · adapted · **needs sign-off**  
-  Take a summary with you, and come back when the next deal starts.  
-  <small>Source: The Message Stack §07, battlecards · shown only when trigger-gain-control is “Nobody's asking yet”</small>
-- **gc-decision** · spoken by the lead · no status · manifest field, on the site since 7fa92e4  
-  Create a repeatable governance rhythm that gives leaders visibility without slowing operators down.  
-  <small>ref `doors.gain-control.decision` · frames gc-wall · on gc-wall: Create a repeatable governance rhythm that gives leaders visibility without slowing operators down.</small>
+  Take a summary with you, and come back when someone starts asking.  
+  <small>Source: The Message Stack §07, battlecards · shown only when trigger-gain-control is “Nobody's asking yet” · hash `163a3584da442c17`</small>
+- **gc-decision** · spoken by the lead · proposed · manifest field, on the site since 7fa92e4  
+  Make what you already own visible, owned, and looked at on a rhythm.  
+  <small>Source: 3HUE service catalog, September 2026 · ref `doors.gain-control.decision` · frames gc-wall · on gc-wall: Make what you already own visible, owned, and looked at on a rhythm. · hash `2abce2138e007a91`</small>
 
 **Choice:** “Where next?” (new copy)
 
@@ -603,14 +755,19 @@ Then: `gc-next`.
 
 #### `all-gc`: dolly to the Gain Control door; the room opens
 
-<small>Ask suggests: `private-equity`, `vciso`, `vendor`, `rmp`</small>
+<small>Room when this step opens: gc-wall: (cleared) · gc-amber-left: (cleared) · gc-amber-right: (cleared) · gc-model: (cleared) · gc-console: (cleared)</small>
 
-- **all-gc-1** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
-  Your bigger competitors run cyber diligence on 81% of deals. You run it on 29%.  
-  <small>Source: The Forcing Function §06, approved opening line · ref `doors.gain-control.opening` · frames gc-wall · on gc-wall: Sponsors above $25B AUM include cybersecurity in transaction diligence 81% of the time. Below $25B, only 29% do. (Kroll, Private Equity Cybersecurity, February 2026) · callout tile: “Sponsors above $25B AUM include cybersecurity in transaction diligence 81% of the time. Below $25B, only 29% do.” (Kroll, Private Equity Cybersecurity, February 2026)</small>
+<small>Ask suggests: `vendor`, `ai`, `packages`, `msp`</small>
+
+- **all-gc-1** · spoken by the lead · derived · **needs sign-off**  
+  Gain Control holds what you already own: your data, your vendors, and how your systems get built.  
+  <small>Source: 3HUE service catalog, September 2026 · frames gc-wall · on gc-wall: Your data / Your vendors / How it gets built · hash `8949c6c30f4aab43`</small>
 - **all-gc-2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  Here many companies get one standard, starting with the Initial Risk Assessment, one per company.  
-  <small>Source: The Forcing Function §02, the three segments; 3HUE service catalog, September 2026 · frames gc-model · on gc-model: (lights up) · on gc-amber-left: One control set ✓</small>
+  The first step here is small: Data Mapping & Data Inventory. You cannot govern what you have not listed.  
+  <small>Source: 3HUE service catalog, September 2026 · frames gc-amber-left · on gc-amber-left: First step: / Data Mapping & Data Inventory · hash `54bc816db438387c`</small>
+- **all-gc-3** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  After that it forks: Privacy Leadership Launch for privacy, the Managed Vendor Compliance Program (VCP) for vendors.  
+  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026 · on gc-amber-right: Privacy Leadership Launch / Managed Vendor Compliance Program (VCP) · on gc-model: (lights up) · hash `029fcd7cdd601601`</small>
 
 Then: `all-sr`.
 
@@ -620,158 +777,194 @@ Then: `all-sr`.
 
 #### `sr`: dolly to the Stay Ready door; the room opens
 
-<small>Ask suggests: `exam-findings`, `incident`, `live-incident`, `remediation-owner`</small>
+<small>Room when this step opens: sr-monitor-1: (cleared) · sr-monitor-2: (cleared) · sr-monitor-3: (cleared) · sr-panel-1: (cleared) · sr-panel-2: (cleared) · sr-panel-3: (cleared) · sr-rack: (cleared) · sr-clock: (cleared)</small>
 
-- **sr-1** · spoken by the lead · adapted · **needs sign-off**  
-  This room is for banks, credit unions, lenders and operators with governance on paper and an examiner in the building.  
-  <small>Source: The Forcing Function, cover; §02, the three segments</small>
+<small>Ask suggests: `exam-findings`, `incident`, `mdr`, `live-incident`</small>
+
+- **sr-ack** · spoken by the lead · proposed · **needs sign-off**  
+  They want to see it running, not just written down. That's this room.  
+  <small>Source: Tour script, routing line · shown only when situation is “They want to see it running, not just written down” · hash `d71db546703a8855`</small>
 - **sr-2** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
   Your controls passed in December. The question is what they were doing in March.  
-  <small>Source: The Forcing Function §06, approved opening line · ref `doors.stay-ready.opening` · frames sr-monitor-2 · on sr-monitor-1: December ✓ · on sr-monitor-2: March ? · on sr-monitor-3: Today ?</small>
-- **sr-3** · spoken by the lead · adapted · **needs sign-off**  
-  Here we can speak in the examiner's language from the first sentence.  
-  <small>Source: The Message Stack §04, the message by segment</small>
-- **sr-4** · spoken by the lead · proposed · **needs sign-off**  
-  Tell me what's pressing, and the room will show you.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: The Forcing Function §06, approved opening line · ref `doors.stay-ready.opening` · frames sr-monitor-2 · on sr-monitor-1: December ✓ · on sr-monitor-2: March ? · on sr-monitor-3: Today ? · on sr-clock: Since the last check · hash `d7c771030e4090ae`</small>
+- **sr-holds** · spoken by the lead · adapted · **needs sign-off**  
+  This room is what has to hold up when something happens, or when somebody checks.  
+  <small>Source: The Message Stack §01, core narrative · hash `2e6bd8f812f5bd9c`</small>
+- **sr-shelf** · spoken by the lead · derived · **needs sign-off**  
+  Response. Continuity. Detection. And the programs that keep risk and findings current between checks.  
+  <small>Source: 3HUE service catalog, September 2026 · frames sr-rack · on sr-panel-1: Response [on the word “Response”] · on sr-panel-2: Continuity [on the word “Continuity”] · on sr-panel-3: Detection [on the word “Detection”] · on sr-rack: (lights up) · hash `86c18f997aec32a8`</small>
+- **sr-stat** · spoken by the lead · verified · manifest field, on the site since 7fa92e4  
+  72% still rely on periodic assessments; only 28% monitor continuously.  
+  <small>Source: RegScale, 2026 State of Continuous Controls Monitoring · ref `doors.stay-ready.stat` · frames sr-monitor-3 · on sr-monitor-3: 72% still rely on periodic assessments; only 28% monitor continuously. (RegScale, 2026 State of Continuous Controls Monitoring) · callout tile: “72% still rely on periodic assessments; only 28% monitor continuously.” (RegScale, 2026 State of Continuous Controls Monitoring) · hash `957ae3f17a0d3e00`</small>
+- **sr-ask** · spoken by the lead · proposed · **needs sign-off**  
+  Say what's in front of you, and the room will show you the rest.  
+  <small>Source: Tour script, linking line · hash `d1d2abbcee095f9b`</small>
 
-**Choice:** “What's pressing right now?” (new copy), remembered as `trigger-stay-ready`
+**Choice:** “What's in front of you?” (new copy), remembered as `trigger-stay-ready`
 
 | # | Option | Sub-label | Copy | Goes to | Suggested when | Hidden when |
 |---|---|---|---|---|---|---|
-| 1 | An examiner request, audit finding, or remediation deadline is active. |  | manifest | `sr-moment` |  |  |
-| 2 | An incident or continuity concern exposes a readiness gap. |  | manifest | `sr-moment` |  |  |
-| 3 | Regulatory, privacy, or AI adoption pressure is crossing operational boundaries. |  | manifest | `sr-moment` |  |  |
-| 4 | Nobody's asking yet | No finding, deadline or mandate on the calendar | new | `sr-moment` |  |  |
+| 1 | A finding with a date on it | Open, and someone is waiting | new | `sr-moment` |  |  |
+| 2 | An incident, or a near miss | Response, and what has to keep working | new | `sr-moment` |  |  |
+| 3 | Alerts nobody is reading | Detection and response, run for you | new | `sr-moment` |  |  |
+| 4 | Nobody's asking yet | No finding, no date, nobody waiting | new | `sr-moment` |  |  |
 
 #### `sr-moment`: dolly to the Stay Ready door; the room opens
 
-<small>Room when this step opens: sr-monitor-1: December ✓ · sr-monitor-2: March ? · sr-monitor-3: Today ?</small>
+<small>Room when this step opens: sr-monitor-1: December ✓ · sr-monitor-2: March ? · sr-monitor-3: Today ? · sr-clock: Since the last check · sr-panel-1: (cleared) · sr-panel-2: (cleared) · sr-panel-3: (cleared) · sr-rack: (cleared)</small>
 
-<small>Ask suggests: `exam-findings`, `incident`, `live-incident`, `remediation-owner`</small>
+<small>Ask suggests: `incident`, `live-incident`, `mdr`, `exam-findings`</small>
 
 - **sr-exam-m1** · spoken by the lead · adapted · **needs sign-off**  
   Then there's a finding, a letter and a date.  
-  <small>Source: The Forcing Function §02, the three segments · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” · frames sr-panel-2 · on sr-panel-1: Finding open · on sr-panel-2: Remediation due · on sr-panel-3: Examiner's letter</small>
-- **sr-m-stat** · spoken by the lead · verified · manifest field, on the site since 7fa92e4  
-  72% still rely on periodic assessments; only 28% monitor continuously.  
-  <small>Source: RegScale, 2026 State of Continuous Controls Monitoring · ref `doors.stay-ready.stat` · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” · frames sr-monitor-3 · on sr-monitor-3: (lights up) · callout tile: “72% still rely on periodic assessments; only 28% monitor continuously.” (RegScale, 2026 State of Continuous Controls Monitoring)</small>
+  <small>Source: The Forcing Function §04, trigger events · shown only when trigger-stay-ready is “A finding with a date on it” · frames sr-panel-2 · on sr-panel-1: Finding open · on sr-panel-2: Remediation due · on sr-panel-3: Examiner's letter · on sr-clock: Time to the date · hash `80fd0942aac55c44`</small>
+- **sr-exam-m2** · spoken by the lead · adapted · **needs sign-off**  
+  And the finding is about what was running, not about what was written down.  
+  <small>Source: The Message Stack §08, words we use · shown only when trigger-stay-ready is “A finding with a date on it” · frames sr-monitor-3 · on sr-monitor-3: What's running? · hash `afd8cf3112cdf9e5`</small>
 - **sr-inc-m1** · spoken by the lead · adapted · **needs sign-off**  
   Then the question is who does what, in what order, and who gets told.  
-  <small>Source: 3hue.net, Cyber-Incident Response Program · shown only when trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.” · frames sr-panel-2 · on sr-panel-1: Who leads? [on the word “does”] · on sr-panel-2: In what order? [on the word “order”] · on sr-panel-3: Who gets told? [on the word “told”]</small>
-- **sr-cross-m1** · spoken by the lead · proposed · **needs sign-off**  
-  Then a new obligation is landing on teams that don't own it yet.  
-  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “Regulatory, privacy, or AI adoption pressure is crossing operational boundaries.” · frames sr-panel-2 · on sr-panel-1: Privacy obligation · on sr-panel-2: AI in production · on sr-panel-3: Owner?</small>
-- **sr-early-m1** · spoken by the lead · adapted · **needs sign-off**  
-  Then you may be early. Here the trigger is usually an exam finding, a remediation clock or a board mandate.  
-  <small>Source: The Forcing Function §05, who to decline · shown only when trigger-stay-ready is “Nobody's asking yet”</small>
+  <small>Source: 3hue.net, Cyber-Incident Response Program · shown only when trigger-stay-ready is “An incident, or a near miss” · frames sr-panel-2 · on sr-panel-1: Who leads? [on the word “does”] · on sr-panel-2: In what order? [on the word “order”] · on sr-panel-3: Who gets told? [on the word “told”] · on sr-clock: Hour one. · hash `c27441a8607e3b7e`</small>
+- **sr-inc-m2** · spoken by the lead · proposed · **needs sign-off**  
+  And the day after: what has to keep working while you fix it.  
+  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “An incident, or a near miss” · frames sr-rack · on sr-rack: What still has to run [on the word “working”] · hash `e47c62e9046832db`</small>
+- **sr-det-m1** · spoken by the lead · proposed · **needs sign-off**  
+  Then the alerts are already arriving. Nobody's job is to read them.  
+  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “Alerts nobody is reading” · frames sr-panel-2 · on sr-panel-1: Alerts arriving [on the word “alerts”] · on sr-panel-2: Read by whom? [on the word “read”] · on sr-clock: Alert to answer · hash `314a2b676111a28b`</small>
+- **sr-det-m2** · spoken by the lead · adapted · **needs sign-off**  
+  The tools are usually already bought. What's missing is someone to run them.  
+  <small>Source: The Message Stack §01, core narrative · shown only when trigger-stay-ready is “Alerts nobody is reading” · frames sr-rack · on sr-rack: (lights up) · hash `180b4f58234c7dc1`</small>
+- **sr-early-m2** · spoken by the lead · adapted · **needs sign-off**  
+  Then you may be early, and 3HUE would rather say so than sell you something.  
+  <small>Source: The Forcing Function §05, who to decline · shown only when trigger-stay-ready is “Nobody's asking yet” · frames sr-monitor-2 · on sr-monitor-2: No date yet · hash `8941d6480fc70b56`</small>
+- **sr-early-m3** · spoken by the lead · adapted · **needs sign-off**  
+  Most of this room gets bought after a scare, or after a plan has to be used.  
+  <small>Source: The Forcing Function §05, who to decline · shown only when trigger-stay-ready is “Nobody's asking yet” · hash `b3c3ba5affe1be96`</small>
 
 Then: `sr-change`.
 
 #### `sr-change`: dolly to the Stay Ready door; the room opens
 
-<small>Room when this step opens: sr-monitor-1: December ✓ · sr-monitor-2: March ? · sr-monitor-3: Today ?</small>
+<small>Room when this step opens: sr-monitor-1: December ✓ · sr-monitor-2: March ? · sr-monitor-3: Today ? · sr-clock: Since the last check · sr-panel-1: (cleared) · sr-panel-2: (cleared) · sr-panel-3: (cleared) · sr-rack: (cleared)</small>
 
-<small>Ask suggests: `exam-findings`, `incident`, `live-incident`, `remediation-owner`</small>
+<small>Ask suggests: `remediation-owner`, `mdr`, `incident`, `early`</small>
 
 - **sr-ch-1** · spoken by the lead · adapted · **needs sign-off**  
   Deployed is not operating. The gap between the two is where audits and incidents happen.  
-  <small>Source: The Message Stack §01, core narrative; §08, words we use · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” or “An incident or continuity concern exposes a readiness gap.” or “Regulatory, privacy, or AI adoption pressure is crossing operational boundaries.” · frames sr-panel-2 · on sr-panel-2: A plan on paper</small>
-- **sr-ch-2** · spoken by the lead · verified · manifest field, on the site since 7fa92e4  
-  86.8% of small businesses have deployed MFA, but only 51.1% require it across all key accounts.  
-  <small>Source: National Cybersecurity Alliance with CISA, 2026 · ref `doors.stay-ready.statSecondary` · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” or “An incident or continuity concern exposes a readiness gap.” or “Regulatory, privacy, or AI adoption pressure is crossing operational boundaries.” · callout tile: “86.8% of small businesses have deployed MFA, but only 51.1% require it across all key accounts.” (National Cybersecurity Alliance with CISA, 2026)</small>
+  <small>Source: The Message Stack §01, core narrative; §08, words we use · shown only when trigger-stay-ready is “A finding with a date on it” or “An incident, or a near miss” or “Alerts nobody is reading” · frames sr-panel-2 · on sr-panel-1: Deployed ✓ [on the word “Deployed”] · on sr-panel-2: Operating? [on the word “operating”] · hash `39ee5ecb6e750778`</small>
+- **sr-ch-mfa** · spoken by the lead · adapted · **needs sign-off**  
+  Most small businesses have turned MFA on. Only about half require it everywhere.  
+  <small>Source: National Cybersecurity Alliance with CISA, 2026 · shown only when trigger-stay-ready is “A finding with a date on it” or “An incident, or a near miss” or “Alerts nobody is reading” · frames sr-monitor-3 · on sr-monitor-3: 86.8% of small businesses have deployed MFA, but only 51.1% require it across all key accounts. (National Cybersecurity Alliance with CISA, 2026) · callout tile: “86.8% of small businesses have deployed MFA, but only 51.1% require it across all key accounts.” (National Cybersecurity Alliance with CISA, 2026) · hash `c7f125509c2303ca`</small>
 - **sr-ch-3** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
   Remediation that closes findings and keeps them closed, with board-ready risk translation.  
-  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.stay-ready.program.operate` · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” or “An incident or continuity concern exposes a readiness gap.” or “Regulatory, privacy, or AI adoption pressure is crossing operational boundaries.” · frames sr-monitor-2 · on sr-panel-1: Operated ✓ · on sr-panel-2: Monitored ✓ · on sr-panel-3: Closed, and kept closed ✓ · on sr-monitor-2: March ✓</small>
+  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.stay-ready.program.operate` · shown only when trigger-stay-ready is “A finding with a date on it” or “An incident, or a near miss” or “Alerts nobody is reading” · frames sr-panel-2 · on sr-panel-1: Operated ✓ · on sr-panel-2: Monitored ✓ · on sr-monitor-2: March ✓ · on sr-clock: No gap · hash `723ae978aab70501`</small>
+- **sr-exam-c1** · spoken by the lead · adapted · **needs sign-off**  
+  After: the finding closes on its date, and stays closed after it.  
+  <small>Source: 3hue.net, ISG managed programs · shown only when trigger-stay-ready is “A finding with a date on it” · hash `63fe414e61b242c9`</small>
 - **sr-inc-c1** · spoken by the lead · adapted · **needs sign-off**  
   After: the first real incident isn't the first rehearsal.  
-  <small>Source: 3hue.net, Cyber-Incident Response Program · shown only when trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.”</small>
-- **sr-early-c1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  When it comes, the start is a Periodic Controls Gap Assessment, so you know what's actually running.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Nobody's asking yet” · frames sr-monitor-2 · on sr-monitor-2: Periodic Controls Gap Assessment</small>
+  <small>Source: 3hue.net, Cyber-Incident Response Program · shown only when trigger-stay-ready is “An incident, or a near miss” · hash `767af777459c6188`</small>
+- **sr-det-c1** · spoken by the lead · adapted · **needs sign-off**  
+  After: someone outside your team reads what the tools are saying, and answers it.  
+  <small>Source: 3hue.net, continuous risk management · shown only when trigger-stay-ready is “Alerts nobody is reading” · hash `f8ba30563d277823`</small>
+- **sr-early-c2** · spoken by the lead · adapted · **needs sign-off**  
+  Before a date exists, the useful thing is knowing what your controls are actually doing.  
+  <small>Source: The Message Stack §08, words we use · shown only when trigger-stay-ready is “Nobody's asking yet” · frames sr-monitor-3 · on sr-monitor-3: What's running? · hash `89952e6d33c41596`</small>
+- **sr-early-c3** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  Then run the bad day on paper, before you have to run it for real.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Nobody's asking yet” · frames sr-panel-2 · on sr-panel-2: Cyber-IR Tabletop Exercise (TTX) · hash `49e24661514387c6`</small>
 
 Then: `sr-receive`.
 
 #### `sr-receive`: dolly to the Stay Ready door; the room opens
 
-<small>Ask suggests: `exam-findings`, `incident`, `packages`, `frameworks`</small>
+<small>Room when this step opens: sr-monitor-1: (cleared) · sr-monitor-2: (cleared) · sr-monitor-3: (cleared) · sr-panel-1: (cleared) · sr-panel-2: (cleared) · sr-panel-3: (cleared) · sr-rack: (cleared) · sr-clock: (cleared)</small>
 
-- **sr-exam-r1** · spoken by the lead · adapted · **needs sign-off**  
-  The start is a Periodic Controls Gap Assessment: sampling what's actually running, mapped to the frameworks your examiner uses.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” · frames sr-monitor-1 · on sr-monitor-1: Periodic Controls Gap Assessment · on sr-panel-1: NIST CSF · 800-53/171 · on sr-panel-2: ISO 27001 · COBIT · on sr-panel-3: FFIEC · SOC 2</small>
-- **sr-exam-r2** · spoken by the lead · adapted · **needs sign-off**  
-  Then, under Manage Risk Register & POA&M, every finding gets an owner and a date, and stays tracked until it closes.  
-  <small>Source: 3HUE service catalog, September 2026; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” · frames sr-monitor-2 · on sr-monitor-2: Manage Risk Register & POA&M</small>
-- **sr-exam-r3** · spoken by the lead · adapted · **needs sign-off**  
-  Where a fix is technical, 3HUE's engineers close it and record it against the finding.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” · frames sr-monitor-3 · on sr-monitor-3: Security Engineering Services</small>
-- **sr-exam-r4** · spoken by the lead · adapted · **needs sign-off**  
-  The Managed Risk Management Program keeps the register live between exams.  
-  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” · on sr-rack: Then: Managed Risk Management Program</small>
-- **sr-inc-r1** · spoken by the lead · adapted · **needs sign-off**  
-  The start is Incident Response Fast Start: a response plan, playbooks, a tabletop exercise and standing incident command.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.” · frames sr-monitor-2 · on sr-monitor-1: Cyber-Incident Response Plan Development · on sr-monitor-2: IR Playbook Development · on sr-monitor-3: Cyber-IR Tabletop Exercise (TTX) · on sr-panel-1: Incident Response Fast Start</small>
-- **sr-inc-r2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For continuity, Business Continuity Plan Development sits beside it.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.” · on sr-panel-2: Business Continuity Plan Development</small>
+<small>Ask suggests: `packages`, `mdr`, `live-incident`, `pricing`</small>
+
+- **sr-exam-start** · spoken by the lead · adapted · **needs sign-off**  
+  The start is a Periodic Controls Gap Assessment, sampling the controls the finding is about.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “A finding with a date on it” · frames sr-monitor-1 · on sr-monitor-1: Periodic Controls Gap Assessment · hash `ed63944b10fad002`</small>
+- **sr-exam-owner** · spoken by the lead · adapted · **needs sign-off**  
+  After that, every finding gets an owner and a date, tracked under Manage Risk Register & POA&M.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “A finding with a date on it” · frames sr-panel-1 · on sr-panel-1: Manage Risk Register & POA&M · on sr-monitor-2: Owner and date · hash `f6a0a48f1af2dbb3`</small>
+- **sr-exam-managed** · spoken by the lead · adapted · **needs sign-off**  
+  The Managed Risk Management Program keeps the risk work moving between exams.  
+  <small>Source: 3hue.net, ISG managed programs · shown only when trigger-stay-ready is “A finding with a date on it” · frames sr-rack · on sr-rack: Then: Managed Risk Management Program · hash `38c53d6cc5baf4f5`</small>
+- **sr-inc-fast** · spoken by the lead · adapted · **needs sign-off**  
+  The start is Incident Response Fast Start: a plan, playbooks, and a rehearsal before you need one.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An incident, or a near miss” · frames sr-panel-1 · on sr-panel-1: Incident Response Fast Start · on sr-monitor-1: Cyber-Incident Response Plan Development · on sr-monitor-2: IR Playbook Development · on sr-monitor-3: Cyber-IR Tabletop Exercise (TTX) · hash `d651b0f138d2fa69`</small>
+- **sr-inc-bcp** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  And for the day after, Business Continuity Plan Development: what has to keep working while you fix the rest.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An incident, or a near miss” · frames sr-panel-2 · on sr-panel-2: Business Continuity Plan Development · hash `e3fb8f40d3a2c803`</small>
 - **sr-inc-r3** · spoken by the lead · proposed · **needs sign-off**  
   If an incident is live right now, don't wait for a package. Talk to the team today.  
-  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.”</small>
+  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “An incident, or a near miss” · frames sr-clock · on sr-clock: Now [on the word “now”] · hash `f53fc0c251cda53b`</small>
+- **sr-inc-live** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  A live one is a different thing you buy: Incident Command & Emergency Response Leadership.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An incident, or a near miss” · frames sr-panel-3 · on sr-panel-3: Not in the package / Incident Command & Emergency Response Leadership · hash `e835371ce5901349`</small>
 - **sr-inc-r4** · spoken by the lead · adapted · **needs sign-off**  
   The Managed Cyber-Incident Response Program keeps it current: clear roles, escalation paths, and lessons fed back into the risk register.  
-  <small>Source: 3hue.net, Cyber-Incident Response Program; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · shown only when trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.” · on sr-panel-3: Then: Managed Cyber-Incident Response Program</small>
-- **sr-inc-r5** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  And MXDR Complete Protection adds managed detection and response.  
-  <small>Source: 3hue.net, continuous risk management; 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.” · frames sr-rack · on sr-rack: MXDR Complete Protection</small>
-- **sr-cross-r1** · spoken by the lead · adapted · **needs sign-off**  
-  For privacy, the start is Privacy Leadership Launch: a maturity baseline, then fractional privacy leadership and a managed program to run it.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Regulatory, privacy, or AI adoption pressure is crossing operational boundaries.” · frames sr-monitor-2 · on sr-monitor-1: Privacy Program Maturity & Risk Assessment · on sr-monitor-2: CPO-as-a-Service · on sr-monitor-3: Managed Privacy Program</small>
-- **sr-cross-r2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For AI, AI Governance & Privacy Advisory, built around four questions: access, change, approval and proof.  
-  <small>Source: 3HUE service catalog, September 2026; The Forcing Function §04, trigger events · shown only when trigger-stay-ready is “Regulatory, privacy, or AI adoption pressure is crossing operational boundaries.” · on sr-panel-2: AI Governance & Privacy Advisory</small>
-- **sr-early-r1** · spoken by the lead · adapted · **needs sign-off**  
-  A gap check on what is actually running beats a new policy binder.  
-  <small>Source: The Message Stack §08, words we use · shown only when trigger-stay-ready is “Nobody's asking yet”</small>
+  <small>Source: 3hue.net, Cyber-Incident Response Program; 3HUE, Inside 3HUE tour · shown only when trigger-stay-ready is “An incident, or a near miss” · frames sr-rack · on sr-rack: Then: Managed Cyber-Incident Response Program · hash `0c7b76591ff5952b`</small>
+- **sr-inc-mxdr** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  And if nobody is reading the alerts either, MXDR Complete Protection is the other side of this room.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An incident, or a near miss” · frames sr-rack · on sr-rack: Then: Managed Cyber-Incident Response Program / Also: MXDR Complete Protection · hash `74033032b791764e`</small>
+- **sr-det-r1** · spoken by the lead · adapted · **needs sign-off**  
+  The start is MXDR Complete Protection: monitoring, detection and response, run across the systems you already have.  
+  <small>Source: 3hue.net, continuous risk management; 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Alerts nobody is reading” · frames sr-panel-1 · on sr-panel-1: MXDR Complete Protection · on sr-monitor-1: MXDR Starter · on sr-monitor-2: MXDR — SIEM Add-on · on sr-monitor-3: Managed Security Controls Validation for Endpoints · hash `ec893cb8d5f5fe7b`</small>
+- **sr-det-tier** · spoken by the lead · derived · **needs sign-off**  
+  MXDR Starter is the first tier inside it, if that's where you need to begin.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Alerts nobody is reading” · frames sr-monitor-1 · hash `d9969182d6a14eb7`</small>
+- **sr-det-r2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  What it covers is scoped with you. So is who gets called when something fires.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Alerts nobody is reading” · frames sr-panel-2 · on sr-panel-2: Scoped with you · on sr-rack: (lights up) · hash `49cd717f4a7fb75d`</small>
+- **sr-det-r3** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  And if the plan for the bad night isn't written, Incident Response Fast Start is the other side.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Alerts nobody is reading” · frames sr-panel-3 · on sr-panel-3: Incident Response Fast Start · hash `1d3212584337ee8e`</small>
+- **sr-early-r2** · spoken by the lead · adapted · **needs sign-off**  
+  So the start here is a Periodic Controls Gap Assessment: what your controls are actually doing.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Nobody's asking yet” · frames sr-monitor-1 · on sr-monitor-1: Periodic Controls Gap Assessment · hash `280b5e114eb0ae20`</small>
+- **sr-early-ttx** · spoken by the lead · adapted · **needs sign-off**  
+  And a day spent rehearsing what you'd do beats another binder on a shelf.  
+  <small>Source: The Message Stack §08, words we use · shown only when trigger-stay-ready is “Nobody's asking yet” · frames sr-monitor-2 · on sr-monitor-2: Cyber-IR Tabletop Exercise (TTX) · on sr-panel-2: Test it / before you need it · hash `939387a217d9b296`</small>
 
 Then: `sr-proof`.
 
 #### `sr-proof`: dolly to the Stay Ready door; the room opens
 
-<small>Room when this step opens: sr-monitor-1: December ✓ · sr-monitor-2: March ? · sr-monitor-3: Today ?</small>
+<small>Room when this step opens: sr-monitor-1: December ✓ · sr-monitor-2: March ? · sr-monitor-3: Today ? · sr-panel-1: (cleared) · sr-panel-2: (cleared) · sr-panel-3: (cleared) · sr-rack: (cleared) · sr-clock: (cleared)</small>
 
 <small>Ask suggests: `proof`, `exam-findings`, `remediation-owner`, `different`</small>
 
 - **sr-p1** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
   Engagements are scoped and delivered by the same practitioner, whose background includes closing FDA 483 observations and remediating bank Matters Requiring Attention under sustained examination.  
-  <small>Source: 3HUE approved 100-word boilerplate · ref `doors.stay-ready.proof.0` · frames sr-panel-2 · on sr-panel-1: FDA 483 observations closed · on sr-panel-2: Bank MRAs remediated · on sr-panel-3: Under sustained examination · callout tile: “Engagements are scoped and delivered by the same practitioner, whose background includes closing FDA 483 observations and remediating bank Matters Requiring Attention under sustained examination.” (3HUE approved 100-word boilerplate)</small>
-- **sr-p2** · spoken by the lead · adapted · **needs sign-off**  
-  Here the buyer is a peer, so the practitioner's own record matters more than any case study.  
-  <small>Source: The Forcing Function §02, the three segments</small>
-- **sr-p3** · spoken by the lead · substantiated · manifest field, on the site since 7fa92e4  
-  1,000+ systems certified under one scalable assessment framework.  
-  <small>Source: A large North American bank, published customer story, client unnamed · ref `doors.gain-control.proof.0` · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” · frames sr-monitor-2 · on sr-monitor-2: (lights up) · callout tile: “1,000+ systems certified under one scalable assessment framework.” (A large North American bank, published customer story, client unnamed)</small>
+  <small>Source: 3HUE approved 100-word boilerplate · ref `doors.stay-ready.proof.0` · frames sr-panel-1 · on sr-panel-1: FDA 483 observations closed · on sr-panel-2: Bank MRAs remediated · on sr-panel-3: Under sustained examination · callout tile: “Engagements are scoped and delivered by the same practitioner, whose background includes closing FDA 483 observations and remediating bank Matters Requiring Attention under sustained examination.” (3HUE approved 100-word boilerplate) · hash `b25ebc0640630bbf`</small>
+- **sr-p4** · spoken by the lead · adapted · **needs sign-off**  
+  Findings like those don't close because someone advised on them. Someone closed them.  
+  <small>Source: The Message Stack §01, core narrative · hash `074e01b6e944d3e3`</small>
 
 Then: `sr-next`.
 
 #### `sr-next`: dolly to the Stay Ready door; the room opens
 
+<small>Room when this step opens: sr-monitor-1: (cleared) · sr-monitor-2: (cleared) · sr-monitor-3: (cleared) · sr-panel-1: (cleared) · sr-panel-2: (cleared) · sr-panel-3: (cleared) · sr-rack: (cleared) · sr-clock: (cleared)</small>
+
 <small>Ask suggests: `quote`, `where-to-start`, `live-incident`, `pricing`</small>
 
-- **sr-exam-n** · spoken by the lead · adapted · **needs sign-off**  
-  Your next step: bring the finding and its date. The team scopes the remediation in the examiner's language.  
-  <small>Source: The Forcing Function §04, trigger events · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.”</small>
+- **sr-exam-next** · spoken by the lead · adapted · **needs sign-off**  
+  Your next step: bring the finding, its date, and who owns it today.  
+  <small>Source: The Forcing Function §04, trigger events · shown only when trigger-stay-ready is “A finding with a date on it” · hash `00b8952bb5ae85ee`</small>
 - **sr-inc-n** · spoken by the lead · proposed · **needs sign-off**  
   Your next step: walk the team through your last scare. They scope the plan around it.  
-  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.”</small>
-- **sr-cross-n** · spoken by the lead · proposed · **needs sign-off**  
-  Your next step: name the obligation and who it lands on. The team scopes from there.  
-  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “Regulatory, privacy, or AI adoption pressure is crossing operational boundaries.”</small>
-- **sr-early-n** · spoken by the lead · adapted · **needs sign-off**  
-  Take a summary with you, and come back when the next exam is on the calendar.  
-  <small>Source: The Message Stack §07, battlecards · shown only when trigger-stay-ready is “Nobody's asking yet”</small>
+  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “An incident, or a near miss” · hash `74745e01aa72e36e`</small>
+- **sr-det-n** · spoken by the lead · proposed · **needs sign-off**  
+  Your next step: bring the list of tools you already pay for.  
+  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “Alerts nobody is reading” · hash `39c2ce1ef10535aa`</small>
+- **sr-early-next** · spoken by the lead · adapted · **needs sign-off**  
+  Take a summary with you, and come back when something puts a date on it.  
+  <small>Source: The Message Stack §07, battlecards · shown only when trigger-stay-ready is “Nobody's asking yet” · hash `70362496a8fcfadb`</small>
 - **sr-decision** · spoken by the lead · no status · manifest field, on the site since 7fa92e4  
   Establish the accountable programs and managed practices that make readiness continuous.  
-  <small>ref `doors.stay-ready.decision` · frames sr-panel-2 · on sr-panel-2: Establish the accountable programs and managed practices that make readiness continuous.</small>
+  <small>ref `doors.stay-ready.decision` · frames sr-panel-3 · on sr-panel-3: Establish the accountable programs and managed practices that make readiness continuous. · hash `c950b629cf82ee9b`</small>
 
 **Choice:** “Where next?” (new copy)
 
@@ -784,18 +977,31 @@ Then: `sr-next`.
 
 #### `all-sr`: dolly to the Stay Ready door; the room opens
 
-<small>Room when this step opens: sr-monitor-1: December ✓ · sr-monitor-2: March ? · sr-monitor-3: Today ?</small>
+<small>Room when this step opens: sr-monitor-1: December ✓ · sr-monitor-2: March ? · sr-monitor-3: Today ? · sr-clock: Since the last check · sr-panel-1: (cleared) · sr-panel-2: (cleared) · sr-panel-3: (cleared) · sr-rack: (cleared)</small>
 
-<small>Ask suggests: `exam-findings`, `incident`, `live-incident`, `remediation-owner`</small>
+<small>Ask suggests: `incident`, `mdr`, `exam-findings`, `packages`</small>
 
 - **all-sr-1** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
   Your controls passed in December. The question is what they were doing in March.  
-  <small>Source: The Forcing Function §06, approved opening line · ref `doors.stay-ready.opening` · frames sr-monitor-2</small>
-- **all-sr-2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  Here the start is a Periodic Controls Gap Assessment, in the examiner's language.  
-  <small>Source: 3HUE service catalog, September 2026; The Message Stack §04, the message by segment · frames sr-monitor-1 · on sr-monitor-1: Periodic Controls Gap Assessment</small>
+  <small>Source: The Forcing Function §06, approved opening line · ref `doors.stay-ready.opening` · frames sr-monitor-2 · hash `d7c771030e4090ae`</small>
+- **all-sr-3** · spoken by the lead · derived · **needs sign-off**  
+  Behind this door: response, continuity, detection, and the programs that run them.  
+  <small>Source: 3HUE service catalog, September 2026 · frames sr-rack · on sr-panel-1: Response · on sr-panel-2: Continuity · on sr-panel-3: Detection · on sr-rack: (lights up) · hash `9b79462302495625`</small>
+- **all-sr-4** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  The start depends on the date. With nothing forcing it, it's a Periodic Controls Gap Assessment.  
+  <small>Source: 3HUE service catalog, September 2026 · frames sr-monitor-1 · on sr-monitor-1: Periodic Controls Gap Assessment · hash `767e567af2f3ea96`</small>
+- **all-sr-5** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  With a plan missing, Incident Response Fast Start. With alerts nobody reads, MXDR Complete Protection.  
+  <small>Source: 3HUE service catalog, September 2026 · frames sr-monitor-3 · on sr-monitor-2: Incident Response Fast Start · on sr-monitor-3: MXDR Complete Protection · hash `8477bb363dc51455`</small>
 
-Then: `path-all`.
+**Choice:** “Three doors walked. Which one is yours?” (new copy), remembered as `yours`
+
+| # | Option | Sub-label | Copy | Goes to | Suggested when | Hidden when |
+|---|---|---|---|---|---|---|
+| 1 | Win Trust | Prove you are ready. | manifest | `path-all` |  |  |
+| 2 | Gain Control | See and govern what matters. | manifest | `path-all` |  |  |
+| 3 | Stay Ready | Operate defensibly. | manifest | `path-all` |  |  |
+| 4 | Not sure yet | Show me all three first steps | new | `path-all` |  |  |
 
 ### Chapter: The maturity path
 
@@ -806,123 +1012,150 @@ Then: `path-all`.
 <small>Ask suggests: `pricing`, `quote`, `prepare`, `after`</small>
 
 - **path-1** · spoken by the lead · derived · **needs sign-off**  
-  This is the path all three doors share: Assess, Strengthen, Operate and Advance.  
-  <small>Source: Lobby manifest: stages · lights “Assess”</small>
+  This is the tower: Assess, Strengthen, Operate and Advance. Four stages, one route.  
+  <small>Source: Lobby manifest: stages · hash `fd16c05701afefd0`</small>
 - **path-2** · spoken by the lead · proposed · manifest field, on the site since 7fa92e4  
   Each door has its own first step, scoped to the obligation in front of you.  
-  <small>Source: 3HUE service catalog, September 2026; The Forcing Function §02 · ref `path.whereToStart` · callout tile: “Each door has its own first step, scoped to the obligation in front of you.” (3HUE service catalog, September 2026; The Forcing Function §02)</small>
+  <small>Source: 3HUE service catalog, September 2026; The Forcing Function §02 · ref `path.whereToStart` · hash `69459dfbee74f510`</small>
+- **path-arc** · spoken by the lead · derived · **needs sign-off**  
+  Whatever you buy here, the shape is the same: Scope it, Build it, Operate it.  
+  <small>Source: Lobby manifest: the three steps · hash `2a5f736bca48b688`</small>
 - **start-wt-deal** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you, it starts on Assess and carries into Strengthen: SOC 2 Readiness. Then the Managed Information Security & Privacy Management keeps it running.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · lights “Assess”</small>
+  For you, it starts on Assess and carries into Strengthen: SOC 2 Readiness.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · lights “Assess” · hash `a08cfe86b8be97a6`</small>
 - **start-wt-evidence** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   For you, it starts on Assess: the Initial Risk Assessment, with RFP Response Services for the questionnaire in hand.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · lights “Assess”</small>
-- **start-wt-ai** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you, it starts on Strengthen: AI Governance & Privacy Advisory. Then the Managed Information Security & Privacy Management keeps it running.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “AI adoption is creating new customer questions about ownership and control.” · lights “Strengthen”</small>
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · lights “Assess” · hash `44064e6b131d544b`</small>
+- **start-wt-scope** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  For you, it starts on Strengthen: ISMS Scope & SoA Development, so the audit has a written boundary.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “A certification audit is booked with no written scope.” · lights “Strengthen” · hash `425343782bb29ce3`</small>
 - **start-wt-early** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   For you, there's no start yet. When someone asks, it's usually the Initial Risk Assessment.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “Nobody's asking yet”</small>
-- **start-gc-acquisition** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you, it starts on Assess: the Initial Risk Assessment, one per company. Then the Managed Risk Management Program keeps the portfolio in one view.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control, and trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” · lights “Assess”</small>
-- **start-gc-reporting** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you, it starts on Advance: BOD / Investor Performance Reporting, with a Risk Committee Posture Update when the committee needs its own view.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control, and trigger-gain-control is “Board, lender, or investor reporting is inconsistent across holdings.” · lights “Advance”</small>
-- **start-gc-control** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you, it starts on Operate: the Managed Risk Management Program, with the Managed Vendor Compliance Program (VCP) alongside.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control, and trigger-gain-control is “The portfolio needs more control without adding a full internal team.” · lights “Operate”</small>
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “Nobody's asking yet” · hash `7cb1510a2070b53b`</small>
+- **start-gc-crossing** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  For you, it starts on Assess and runs on Operate: Privacy Leadership Launch, built on Data Mapping & Data Inventory.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control, and trigger-gain-control is “Privacy rules now reach across the whole business.” · lights “Assess” · hash `b909621d8335f3a6`</small>
+- **start-gc-ai** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  For you, it starts on Strengthen: AI Governance & Privacy Advisory, with Security Architecture Reviews on what the models touch.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control, and trigger-gain-control is “Nobody owns how AI touches your data.” · lights “Strengthen” · hash `bf2384a443626e62`</small>
+- **start-gc-vendors** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  For you, it starts on Operate: the Managed Vendor Compliance Program (VCP), with Asset Governance Program Development behind it.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control, and trigger-gain-control is “Other people's systems hold your data.” · lights “Operate” · hash `d79d931f0314fe0b`</small>
 - **start-gc-early** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you, there's no start yet. When the next deal comes, it's usually the Initial Risk Assessment, one per company.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control, and trigger-gain-control is “Nobody's asking yet”</small>
+  For you, there's no start yet. When someone asks about your data, it's usually Data Mapping & Data Inventory.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control, and trigger-gain-control is “Nobody's asking yet” · hash `c5c71df30ab4255d`</small>
 - **start-sr-exam** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you, it starts on Operate: a Periodic Controls Gap Assessment on what's running, then, under Manage Risk Register & POA&M, every finding is tracked until it closes.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready, and trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.” · lights “Operate”</small>
+  For you, it starts on Operate: a Periodic Controls Gap Assessment, with Manage Risk Register & POA&M to carry the findings.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready, and trigger-stay-ready is “A finding with a date on it” · lights “Operate” · hash `e90c6fcf106555df`</small>
 - **start-sr-incident** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you, it starts on Strengthen: Incident Response Fast Start, with Business Continuity Plan Development beside it. Then the Managed Cyber-Incident Response Program keeps it current.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready, and trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.” · lights “Strengthen”</small>
-- **start-sr-crossing** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you, it starts on Strengthen: Privacy Leadership Launch, with AI Governance & Privacy Advisory for the AI side.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready, and trigger-stay-ready is “Regulatory, privacy, or AI adoption pressure is crossing operational boundaries.” · lights “Strengthen”</small>
+  For you, it starts on Strengthen: Incident Response Fast Start, with Business Continuity Plan Development beside it.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready, and trigger-stay-ready is “An incident, or a near miss” · lights “Strengthen” · hash `4ea142ce4aa949c7`</small>
+- **start-sr-detect** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  For you, it starts on Operate: MXDR Complete Protection, so somebody is reading what the tools say.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready, and trigger-stay-ready is “Alerts nobody is reading” · lights “Operate” · hash `632768b3b4f31283`</small>
 - **start-sr-early** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   For you, there's no start yet. When the next exam is on the calendar, it's usually a Periodic Controls Gap Assessment.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready, and trigger-stay-ready is “Nobody's asking yet”</small>
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready, and trigger-stay-ready is “Nobody's asking yet” · hash `d2c580d0e13ce1da`</small>
+- **start-open** · spoken by the lead · adapted · **needs sign-off**  
+  No door is picked yet. When one is, it usually opens with the Initial Risk Assessment.  
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026 · shown only when Win Trust, Gain Control and Stay Ready not yet visited · lights “Assess” · hash `1a9cdfcaf3a4eadf`</small>
 - **path-price** · spoken by the lead · adapted · **needs sign-off**  
   There's no list price here. Pricing follows scope and commitment, and the team scopes it with you.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · shown only when The round table not yet visited · hash `eef2821678d15d0a`</small>
 
 **Choice:** “Is a program in place today?” (new copy), remembered as `program`
 
 | # | Option | Sub-label | Copy | Goes to | Suggested when | Hidden when |
 |---|---|---|---|---|---|---|
-| 1 | Nothing formal yet | No program, or no recent end-to-end look | new | `start-baseline` |  |  |
-| 2 | Yes, and it needs a fresh look | Written down, not reviewed lately | new | `start-review` |  |  |
-| 3 | Yes, and it's running | Owned, operated, evidenced | new | `start-running` |  |  |
+| 1 | Nothing formal yet | Nothing written down, or nothing recent | new | `start-baseline` |  |  |
+| 2 | It's due a fresh look | Written down, not looked at lately | new | `start-review` |  |  |
+| 3 | It's running | Owned, operated, evidenced | new | `start-running` |  |  |
 
 #### `start-baseline`: the tower, maturity path, with “Assess” lit
 
-<small>Ask suggests: `prepare`, `after`, `pricing`, `quote`</small>
+<small>Ask suggests: `prepare`, `after`, `timeline`, `pricing`</small>
 
+- **baseline-open** · spoken by the lead · proposed · **needs sign-off**  
+  Then the order matters, and the first thing is a baseline.  
+  <small>Source: Tour script, linking line · hash `6afd3e4fa8ec39ad`</small>
 - **baseline-1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  Then that start already includes your baseline.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.”; or the room is Gain Control, and trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.” or “Nobody's asking yet”; or the room is Win Trust, and trigger-win-trust is “Nobody's asking yet”</small>
+  Then nothing goes in front of it. The baseline is part of that first step.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “Nobody's asking yet”; or the room is Gain Control, and trigger-gain-control is “Privacy rules now reach across the whole business.” or “Nobody's asking yet” · hash `568ef4a4ad208e71`</small>
 - **baseline-2** · spoken by the lead · adapted · **needs sign-off**  
-  Then the Initial Risk Assessment comes first, so there's a baseline to build on.  
-  <small>Source: 3HUE service catalog, September 2026; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · shown only when the room is Win Trust, and trigger-win-trust is “AI adoption is creating new customer questions about ownership and control.”; or the room is Gain Control, and trigger-gain-control is “Board, lender, or investor reporting is inconsistent across holdings.” or “The portfolio needs more control without adding a full internal team.”; or the room is Stay Ready · lights “Assess”</small>
-- **baseline-3** · spoken by the lead · adapted · **needs sign-off**  
-  Then the Initial Risk Assessment comes first, so every door has a baseline to build on.  
-  <small>Source: 3HUE service catalog, September 2026; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · shown only when segment is “Show me everything”</small>
+  The Initial Risk Assessment comes first, so there's a baseline to build on.  
+  <small>Source: 3HUE service catalog, September 2026; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · shown only when the room is Win Trust, and trigger-win-trust is “A certification audit is booked with no written scope.”; or the room is Gain Control, and trigger-gain-control is “Nobody owns how AI touches your data.” or “Other people's systems hold your data.”; or the room is Stay Ready, and trigger-stay-ready has been answered; or Win Trust, Gain Control and Stay Ready not yet visited · hash `8afcd85390cc4df8`</small>
 
 Then: `close`.
 
 #### `start-review`: the tower, maturity path, with “Strengthen” lit
 
-<small>Ask suggests: `after`, `prepare`, `pricing`, `quote`</small>
+<small>Ask suggests: `after`, `prepare`, `remediation-owner`, `pricing`</small>
 
 - **review-1** · spoken by the lead · adapted · **needs sign-off**  
   Then start by reviewing what you have.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `62f6419bf666d94f`</small>
 - **review-wt** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   For you: IS Program CONOPS Review & Update and SoA Review & Update.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust</small>
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Win Trust, and trigger-win-trust has been answered · hash `1f75fea40026c8ce`</small>
 - **review-gc** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  For you: RMP CONOPS Review & Update and the Annual Risk Assessment Update.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control</small>
+  For you: Security Architecture Reviews, and a Data Protection Impact Assessment (DPIA) where the data moves.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Gain Control, and trigger-gain-control has been answered · hash `ea2e6f1961b86b49`</small>
 - **review-sr** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   For you: CIRP Review & Update and BCP Review & Updates.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready</small>
+  <small>Source: 3HUE service catalog, September 2026 · shown only when the room is Stay Ready, and trigger-stay-ready has been answered · hash `8afc5d89a949641f`</small>
+- **review-any** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  For you: the Annual Risk Assessment Update, then whichever review fits the door you pick.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when Win Trust, Gain Control and Stay Ready not yet visited · hash `2ba8cf582ba844fe`</small>
 
 Then: `close`.
 
-#### `start-running`: scene unchanged
+#### `start-running`: the tower, maturity path, with “Operate” lit
 
-<small>Ask suggests: `after`, `pricing`, `quote`, `msp`</small>
+<small>Ask suggests: `after`, `msp`, `platform`, `aivric`</small>
 
 - **running-1** · spoken by the lead · proposed · **needs sign-off**  
-  Then the start stands, and the team scopes it around what you already run.  
-  <small>Source: Tour script, linking line</small>
+  Then the work is scoped around what you already run.  
+  <small>Source: Tour script, linking line · hash `55fac8a9057a9c1d`</small>
+- **running-2** · spoken by the lead · adapted · **needs sign-off**  
+  3HUE joins what's running rather than replacing it.  
+  <small>Source: The Message Stack §06, objection handling; §07, battlecards · hash `afdb290e72a2e78a`</small>
+- **running-3** · spoken by the lead · derived · **needs sign-off**  
+  If you want it operated rather than advised, that's a managed program.  
+  <small>Source: Lobby manifest: pillars · hash `c43d6232b806f60e`</small>
 
 Then: `close`.
 
 #### `path-all`: the tower, maturity path
 
-<small>Ask suggests: `pricing`, `quote`, `prepare`, `after`</small>
+<small>Ask suggests: `where-to-start`, `prepare`, `after`, `pricing`</small>
 
 - **path-all-1** · spoken by the lead · derived · **needs sign-off**  
   Three doors, three first steps, one path: Assess, Strengthen, Operate and Advance.  
-  <small>Source: Lobby manifest: stages · lights “Assess”</small>
+  <small>Source: Lobby manifest: stages · hash `b8b2b7f4a1923591`</small>
 - **path-all-2** · spoken by the lead · proposed · manifest field, on the site since 7fa92e4  
   Each door has its own first step, scoped to the obligation in front of you.  
-  <small>Source: 3HUE service catalog, September 2026; The Forcing Function §02 · ref `path.whereToStart` · callout tile: “Each door has its own first step, scoped to the obligation in front of you.” (3HUE service catalog, September 2026; The Forcing Function §02)</small>
+  <small>Source: 3HUE service catalog, September 2026; The Forcing Function §02 · ref `path.whereToStart` · hash `69459dfbee74f510`</small>
+- **path-all-arc** · spoken by the lead · derived · **needs sign-off**  
+  Whatever you buy here, the shape is the same: Scope it, Build it, Operate it.  
+  <small>Source: Lobby manifest: the three steps · hash `2a5f736bca48b688`</small>
 - **path-all-wt** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  Win Trust usually starts with SOC 2 Readiness or the Initial Risk Assessment.  
-  <small>Source: 3HUE service catalog, September 2026 · lights “Assess”</small>
+  Win Trust usually starts with SOC 2 Readiness, or the Initial Risk Assessment if no framework is named yet.  
+  <small>Source: 3HUE service catalog, September 2026 · lights “Assess” · hash `120908be76359a13`</small>
 - **path-all-gc** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  Gain Control, with the Initial Risk Assessment, one per company.  
-  <small>Source: 3HUE service catalog, September 2026 · lights “Assess”</small>
+  Gain Control starts with Data Mapping & Data Inventory: what you hold, and where it goes.  
+  <small>Source: 3HUE service catalog, September 2026 · hash `00babe60b3bec583`</small>
 - **path-all-sr** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  Stay Ready, with a Periodic Controls Gap Assessment on what is running.  
-  <small>Source: 3HUE service catalog, September 2026 · lights “Operate”</small>
+  Stay Ready starts with a Periodic Controls Gap Assessment on what is already running.  
+  <small>Source: 3HUE service catalog, September 2026 · hash `a58b3c9a2821b1b1`</small>
+- **path-all-yours** · spoken by the lead · proposed · **needs sign-off**  
+  `You named {answer:yours}. That door's first step is the one to take with you.` (filled in the browser from the visitor's answers and the chapters visited)  
+  <small>Source: Tour script, linking line · shown only when yours is “Win Trust” or “Gain Control” or “Stay Ready”</small>
+- **path-all-none** · spoken by the lead · adapted · **needs sign-off**  
+  You didn't name one, and you don't have to. Without a door, the first step is usually the Initial Risk Assessment.  
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026 · shown only when yours is “Not sure yet” · hash `18458d04dde303e9`</small>
+- **path-all-price** · spoken by the lead · adapted · **needs sign-off**  
+  There's no list price here. Pricing follows scope and commitment, and the team scopes it with you.  
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · shown only when The round table not yet visited · hash `eef2821678d15d0a`</small>
 
 Then: `close`.
 
@@ -932,23 +1165,35 @@ Then: `close`.
 
 #### `close`: the lobby at rest
 
-<small>Ask suggests: `quote`, `proof`, `different`, `privacy`</small>
+<small>Ask suggests: `quote`, `hire`, `proof`, `privacy`</small>
 
 - **close-back-huey** · spoken by Huey · proposed · **needs sign-off**  
   Welcome back.  
-  <small>Source: Tour script, linking line · shown only when lead is “Stay with Avi”</small>
+  <small>Source: Tour script, linking line · shown only when lead is “Avi leads” · hash `266dc260940a8a43`</small>
 - **close-back-avi** · spoken by Avi · proposed · **needs sign-off**  
   Welcome back.  
-  <small>Source: Tour script, linking line · shown only when lead is “Yes, Huey leads”</small>
+  <small>Source: Tour script, linking line · shown only when lead is “Huey leads” · hash `266dc260940a8a43`</small>
+- **close-1-all** · spoken by the lead · proposed · **needs sign-off**  
+  You've seen all three, and you named the one that's yours.  
+  <small>Source: Tour script, linking line · shown only when yours is “Win Trust” or “Gain Control” or “Stay Ready” · hash `248fe99db18ca02f`</small>
+- **close-1-none** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  You've seen all three. All three begin in the same place.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when yours is “Not sure yet” · hash `c13cb5ad0a2cf343`</small>
 - **close-1** · spoken by the lead · proposed · **needs sign-off**  
   That's your door, and where you'd start.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: Tour script, linking line · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” or “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” or “A certification audit is booked with no written scope.”; or trigger-gain-control is “Privacy rules now reach across the whole business.” or “Nobody owns how AI touches your data.” or “Other people's systems hold your data.”; or trigger-stay-ready is “A finding with a date on it” or “An incident, or a near miss” or “Alerts nobody is reading” · hash `74e3ab839ec551bb`</small>
 - **close-2** · spoken by the lead · proposed · **needs sign-off**  
   Your summary names that first step, so the conversation with the team starts there.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: Tour script, linking line · hash `9c2e361a8f07f23b`</small>
+- **close-person** · spoken by the lead · proposed · **needs sign-off**  
+  Some of this needs a person, not a program. If that's you, say so when you talk to us.  
+  <small>Source: Tour script, linking line · hash `9ff392c4c05c366b`</small>
 - **close-3** · spoken by the lead · proposed · **needs sign-off**  
   You can talk to the team, take the summary, walk another door, or ask us anything. Nothing leaves this browser unless you send it.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: Tour script, linking line · shown only when Win Trust not yet visited; or Gain Control not yet visited; or Stay Ready not yet visited · hash `b087dfa413c7dfc0`</small>
+- **close-3-all** · spoken by the lead · proposed · **needs sign-off**  
+  You can talk to the team, take the summary, or ask us anything. Nothing leaves this browser unless you send it.  
+  <small>Source: Tour script, linking line · shown only when Win Trust, Gain Control and Stay Ready all visited · hash `4aeb55197f959192`</small>
 
 **Choice:** “What would you like to do?” (new copy)
 
@@ -967,7 +1212,7 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-intro** · spoken by the lead · proposed · **needs sign-off**  
   Ask me about 3HUE. I answer only from 3HUE's approved material, and every answer shows where it comes from.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: Tour script, linking line · hash `6d1df530b2d9baf3`</small>
 
 ### What is 3HUE?
 
@@ -975,7 +1220,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-what-1** · spoken by the lead · approved-copy · verbatim approved boilerplate, new placement  
   3HUE builds and operates security, compliance and AI governance programs for organizations that have to prove their controls work — and have no one inside to run them.  
-  <small>Source: The Message Stack §09, boilerplate</small>
+  <small>Source: The Message Stack §09, boilerplate · hash `121eda83bb7b53e4`</small>
+- **ask-what-3** · spoken by the lead · adapted · **needs sign-off**  
+  People call when someone with leverage asks for proof: a customer, an auditor, a regulator, an investor. Usually with a date.  
+  <small>Source: The Forcing Function §01, the fit model; §04, trigger events · hash `8f111c7c8bd24b9f`</small>
 
 ### Who are Avi and Huey?
 
@@ -983,10 +1231,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-guides-1** · spoken by the lead · proposed · **needs sign-off**  
   We're your two guides for this lobby. One of us leads and the other stays close, and you chose who leads.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: Tour script, linking line · hash `5216ae512d5b41e1`</small>
 - **ask-guides-2** · spoken by the lead · derived · manifest field, new with the tour: **needs sign-off**  
   Avi's and Huey's voices are synthetic: computer-generated speech, not recordings of people.  
-  <small>Source: ElevenLabs, licensed synthetic voices · ref `guide.disclosure`</small>
+  <small>Source: ElevenLabs, licensed synthetic voices · ref `guide.disclosure` · hash `c995fbd6c3fc38d7`</small>
 
 ### How is 3HUE different from a consultant?
 
@@ -994,10 +1242,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-different-1** · spoken by the lead · adapted · **needs sign-off**  
   Two things. 3HUE runs the program instead of handing you a plan, and the same advisor who scopes the work delivers it.  
-  <small>Source: The Message Stack §03, three pillars; §05, claims library</small>
+  <small>Source: The Message Stack §03, three pillars; §05, claims library · hash `e1cde7b196819be5`</small>
 - **ask-different-2** · spoken by the lead · adapted · **needs sign-off**  
   3HUE doesn't sell technology. It sells outcomes: a program someone runs, and can prove.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); The Forcing Function §02, the three segments</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); The Forcing Function §02, the three segments · hash `e6b2bb704d7e3818`</small>
 
 ### Where do we start?
 
@@ -1005,13 +1253,13 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-start-1** · spoken by the lead · proposed · manifest field, on the site since 7fa92e4  
   Each door has its own first step, scoped to the obligation in front of you.  
-  <small>Source: 3HUE service catalog, September 2026; The Forcing Function §02 · ref `path.whereToStart`</small>
+  <small>Source: 3HUE service catalog, September 2026; The Forcing Function §02 · ref `path.whereToStart` · hash `69459dfbee74f510`</small>
 - **ask-start-2** · spoken by the lead · adapted · **needs sign-off**  
   With no program yet, it is usually the Initial Risk Assessment. With one in place, a review of what you have. With an exam coming, a Periodic Controls Gap Assessment.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026 · hash `394c471afb704173`</small>
 - **ask-start-3** · spoken by the lead · adapted · **needs sign-off**  
   It begins with a conversation with the team about the obligation in front of you.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `e62b251930f6836b`</small>
 
 ### What should we prepare for an assessment?
 
@@ -1019,10 +1267,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-prepare-1** · spoken by the lead · adapted · **needs sign-off**  
   Very little up front. A first meeting sets the scope, and the analysts work from your existing policies, controls, system inventories and any prior audit reports.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `05904abaca728b7e`</small>
 - **ask-prepare-2** · spoken by the lead · adapted · **needs sign-off**  
   Having people from IT, security and compliance free for short interviews is what speeds it up most.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `08ea87902111e0db`</small>
 
 ### What happens after the first step?
 
@@ -1030,10 +1278,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-after-1** · spoken by the lead · adapted · **needs sign-off**  
   Then Build and Operate. The findings become a prioritized plan with named owners, and if you want 3HUE to run the program, it does.  
-  <small>Source: The lobby's three steps; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); The Ship List §03, landing page copy</small>
+  <small>Source: The lobby's three steps; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); The Ship List §03, landing page copy · hash `a850bfe48eba16f7`</small>
 - **ask-after-2** · spoken by the lead · adapted · **needs sign-off**  
   If you'd rather take the plan and run it yourself, that works too, and you'll have something an internal hire can inherit rather than start over.  
-  <small>Source: The Ship List §03, landing page copy</small>
+  <small>Source: The Ship List §03, landing page copy · hash `8b01ef9a2d3c4454`</small>
 
 ### Who owns remediation?
 
@@ -1041,18 +1289,21 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-owner-1** · spoken by the lead · adapted · **needs sign-off**  
   Accountability stays with you: each gap gets a named owner in the plan of actions and milestones.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `3d3cd7b286045b0f`</small>
 - **ask-owner-2** · spoken by the lead · adapted · **needs sign-off**  
   3HUE does the heavy lifting. The managed programs track and drive the actions, and 3HUE's engineers can make fixes directly.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `85431c9e5753d514`</small>
 
 ### How is risk prioritized?
 
 <small>`risk-priority` · Learn more: https://3hue.net/services/risk-posture-assessment.html · keywords: prioritized, prioritize, priority, ranked, severity, impact, score, risk appetite</small>
 
 - **ask-priority-1** · spoken by the lead · adapted · **needs sign-off**  
-  By business impact, not only technical severity. The Managed Risk Management Program scores each risk against your risk appetite and your obligations, and records it in the risk register.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  By business impact, not only technical severity.  
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `56bd73c500bc0fe6`</small>
+- **ask-priority-2** · spoken by the lead · adapted · **needs sign-off**  
+  The Managed Risk Management Program scores each risk against your risk appetite and your obligations, and records it in the risk register.  
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `9069a3a2ccc6e9cb`</small>
 
 ### What is the Managed Risk Management Program?
 
@@ -1060,10 +1311,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-rmp-1** · spoken by the lead · adapted · **needs sign-off**  
   It sets up a risk function that identifies, prioritizes and reduces security risk continuously, with a risk register, assessments and remediation tracking.  
-  <small>Source: 3hue.net, ISG managed programs</small>
+  <small>Source: 3hue.net, ISG managed programs · hash `96837ab23d7bbd30`</small>
 - **ask-rmp-2** · spoken by the lead · adapted · **needs sign-off**  
   It keeps you ready for regulatory reviews and partner due diligence. It's quoted as the Managed Risk Management Program.  
-  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026</small>
+  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026 · hash `2c58f3b4ac8c0fa2`</small>
 
 ### How do you manage vendor and third-party risk?
 
@@ -1071,10 +1322,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-vendor-1** · spoken by the lead · adapted · **needs sign-off**  
   The Managed Vendor Compliance Program (VCP) holds vendor practices to your risk tolerance, your contracts and your regulators' expectations.  
-  <small>Source: 3hue.net, ISG managed programs</small>
+  <small>Source: 3hue.net, ISG managed programs · hash `a5890aa834f020ed`</small>
 - **ask-vendor-2** · spoken by the lead · adapted · **needs sign-off**  
   It keeps vendor assurance audit-ready and checks your highest-risk vendors proactively. It's quoted as the Managed Vendor Compliance Program (VCP).  
-  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026</small>
+  <small>Source: 3hue.net, ISG managed programs; 3HUE service catalog, September 2026 · hash `5d9f7fcee3657170`</small>
 
 ### What happens during a security incident?
 
@@ -1082,10 +1333,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-incident-1** · spoken by the lead · adapted · **needs sign-off**  
   The Managed Cyber-Incident Response Program gives you a plan and incident command: clear roles, escalation paths, coordinated containment and recovery.  
-  <small>Source: 3hue.net, Cyber-Incident Response Program</small>
+  <small>Source: 3hue.net, Cyber-Incident Response Program · hash `c76b8b81d724c325`</small>
 - **ask-incident-2** · spoken by the lead · adapted · **needs sign-off**  
   Tabletop exercises mean the first real incident isn't the first rehearsal. To start, there's Incident Response Fast Start.  
-  <small>Source: 3hue.net, Cyber-Incident Response Program; 3HUE service catalog, September 2026</small>
+  <small>Source: 3hue.net, Cyber-Incident Response Program; 3HUE service catalog, September 2026 · hash `fb1b9b8ab6a9df89`</small>
 
 ### We're in an incident right now.
 
@@ -1093,10 +1344,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-live-1** · spoken by the lead · proposed · **needs sign-off**  
   Then don't wait for a tour. Talk to the team now.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: Tour script, linking line · hash `e961542c4bcc243d`</small>
 - **ask-live-2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   For a live incident, 3HUE offers Incident Command & Emergency Response Leadership.  
-  <small>Source: 3HUE service catalog, September 2026</small>
+  <small>Source: 3HUE service catalog, September 2026 · hash `b029862c107fcb75`</small>
 
 ### What does managed detection and response include?
 
@@ -1104,10 +1355,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-mdr-1** · spoken by the lead · adapted · **needs sign-off**  
   Monitoring, detection and response run for you: alerts correlated across your systems, threats hunted, and controls tested.  
-  <small>Source: 3hue.net, continuous risk management</small>
+  <small>Source: 3hue.net, continuous risk management · hash `d07c241423c72c99`</small>
 - **ask-mdr-2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   On the service list it's MXDR Complete Protection.  
-  <small>Source: 3HUE service catalog, September 2026</small>
+  <small>Source: 3HUE service catalog, September 2026 · hash `a6035e30cbb4af35`</small>
 
 ### What does a virtual CISO do?
 
@@ -1115,10 +1366,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-vciso-1** · spoken by the lead · adapted · **needs sign-off**  
   Executive security leadership that works with your team: it shapes strategy, drives decisions, oversees compliance and owns the board conversation.  
-  <small>Source: 3hue.net, ISG managed programs; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3hue.net, ISG managed programs; 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `59074175a262d9d3`</small>
 - **ask-vciso-2** · spoken by the lead · adapted · **needs sign-off**  
   How much you use is your call: none, CISO Support to build your own capability, or a fractional CISO alongside your team.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026 · hash `3ecf4a3e9e758f8e`</small>
 
 ### What if we already have a CISO?
 
@@ -1126,37 +1377,46 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-haveciso-1** · spoken by the lead · adapted · **needs sign-off**  
   That's common. The managed programs run alongside your own leadership, and a virtual CISO can mentor an incumbent or take the overflow.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `80f2e26f2ed05ee6`</small>
 
 ### Why not just hire a CISO?
 
 <small>`hire` · Learn more: https://3hue.net/services/isg-managed-programs.html · keywords: hire, hiring, employee, full-time, in-house, headcount, someone</small>
 
 - **ask-hire-1** · spoken by the lead · adapted · **needs sign-off**  
-  Eventually you should. At your size, a full-time hire would be under-used for the first year.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  Eventually you probably should. The question is whether there is a full-time job there yet, or a program that has to exist now.  
+  <small>Source: The Message Stack §06, objection handling · hash `7a66148255b8f070`</small>
 - **ask-hire-2** · spoken by the lead · adapted · **needs sign-off**  
   3HUE runs the program now and builds it so that hire inherits something rather than starting over.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  <small>Source: The Message Stack §06, objection handling · hash `7ad8c2f9bae02b91`</small>
+- **ask-hire-3** · spoken by the lead · proposed · **needs sign-off**  
+  And if what you want is a person rather than a program, say that to the team.  
+  <small>Source: Tour script, linking line · hash `7fd3a106dbf25742`</small>
 
 ### Which frameworks do you work with?
 
 <small>`frameworks` · Learn more: https://3hue.net/frameworks/framework-library.html · keywords: framework, frameworks, soc 2, iso, 27001, nist, ffiec, cobit, pci, standard</small>
 
 - **ask-frameworks-1** · spoken by the lead · adapted · **needs sign-off**  
-  It depends on who is asking you to prove it. For a bank, a credit union or a lender, 3HUE works in the frameworks the examiner already uses.  
-  <small>Source: The Forcing Function §02, the three segments; The Message Stack §04, the message by segment</small>
+  It depends on who is asking you to prove it. If an examiner is asking, 3HUE works in the frameworks the exam already uses.  
+  <small>Source: 3hue.net, framework library; The Forcing Function §04, trigger events · hash `619f9ad732a3dd9d`</small>
 - **ask-frameworks-2** · spoken by the lead · adapted · **needs sign-off**  
-  For a software company selling into enterprise, the usual ask is SOC 2 or ISO 27001, and there is a package for each: SOC 2 Readiness and ISO 27001 Certification Readiness.  
-  <small>Source: The Forcing Function §02, the three segments; 3HUE service catalog, September 2026</small>
+  If an enterprise buyer is asking, it's usually SOC 2 or ISO 27001.  
+  <small>Source: 3hue.net, framework library; The Forcing Function §04, trigger events · hash `dad1ee0e88435af9`</small>
+- **ask-frameworks-3** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
+  You'd take SOC 2 Readiness or ISO 27001 Certification Readiness, not both — whichever your buyer named.  
+  <small>Source: 3HUE service catalog, September 2026 · hash `4163f5d964e21180`</small>
 
 ### How long does it take?
 
 <small>`timeline` · Learn more: https://3hue.net/contact.html · keywords: how long, long, take, how much time, fast, quickly, timeline, speed, when</small>
 
 - **ask-timeline-1** · spoken by the lead · adapted · **needs sign-off**  
-  It depends on the obligation and the date on it. The first step is scoped to that date, and the plan you get back says how long the rest takes.  
-  <small>Source: The Ship List §03, landing page copy</small>
+  It depends on the obligation and the date on it.  
+  <small>Source: The Ship List §03, landing page copy · hash `34f541e8caf2640d`</small>
+- **ask-timeline-2** · spoken by the lead · adapted · **needs sign-off**  
+  The first step is scoped to that date, and the plan you get back says how long the rest takes.  
+  <small>Source: The Ship List §03, landing page copy · hash `19c99c0f8cdfdb1f`</small>
 
 ### How does pricing work?
 
@@ -1164,10 +1424,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-price-1** · spoken by the lead · adapted · **needs sign-off**  
   3HUE doesn't publish list prices. Pricing follows scope and commitment.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience) · hash `3d4a90257e411fe7`</small>
 - **ask-price-2** · spoken by the lead · adapted · **needs sign-off**  
   Price it against the deal, exam or exit that's waiting on it, not against a tool subscription. For a figure, talk to the team.  
-  <small>Source: The Message Stack §06, objection handling; The Forcing Function §01, the fit model</small>
+  <small>Source: The Message Stack §06, objection handling; The Forcing Function §01, the fit model · hash `66054e0adb119bf3`</small>
 
 ### Can I get a quote here?
 
@@ -1175,18 +1435,24 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-quote-1** · spoken by the lead · proposed · **needs sign-off**  
   Not on this site. The team builds a quote with you, and your summary names your first step, so that conversation starts there.  
-  <small>Source: Tour script, linking line</small>
+  <small>Source: Tour script, linking line · hash `27412d3f637df8d6`</small>
 
 ### What's in a package like SOC 2 Readiness?
 
 <small>`packages` · Learn more: https://3hue.net/services/security-compliance-services.html · keywords: package, packages, bundle, readiness, fast start, launch</small>
 
 - **ask-packages-1** · spoken by the lead · adapted · **needs sign-off**  
-  A package bundles the first steps for one obligation. SOC 2 Readiness covers a risk assessment, policies, an incident response plan and audit support.  
-  <small>Source: 3HUE service catalog, September 2026</small>
+  A package bundles the first steps for one obligation. SOC 2 Readiness runs from the Initial Risk Assessment to the auditor's walkthroughs.  
+  <small>Source: 3HUE service catalog, September 2026 · hash `bf3ee8c97884edae`</small>
 - **ask-packages-2** · spoken by the lead · adapted · **needs sign-off**  
-  For privacy there is Privacy Leadership Launch, and for incidents Incident Response Fast Start.  
-  <small>Source: 3HUE service catalog, September 2026</small>
+  Take SOC 2 Readiness or ISO 27001 Certification Readiness, one or the other, whichever your buyer named. Both sit behind Win Trust.  
+  <small>Source: 3HUE service catalog, September 2026 · hash `edaa075229d430cb`</small>
+- **ask-packages-3** · spoken by the lead · adapted · **needs sign-off**  
+  ISO 27701 Privacy Readiness and PCI-DSS Readiness sit there too.  
+  <small>Source: 3HUE service catalog, September 2026 · hash `c0e45a6b3434148f`</small>
+- **ask-packages-4** · spoken by the lead · adapted · **needs sign-off**  
+  Privacy Leadership Launch is behind Gain Control. Incident Response Fast Start and MXDR Complete Protection are behind Stay Ready.  
+  <small>Source: 3HUE service catalog, September 2026 · hash `47b779f20e49845e`</small>
 
 ### Are you the auditor?
 
@@ -1194,7 +1460,7 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-auditor-1** · spoken by the lead · adapted · **needs sign-off**  
   No. 3HUE prepares you for the auditor and coordinates the walkthroughs. The audit firm issues the report.  
-  <small>Source: 3hue.net, security and compliance services</small>
+  <small>Source: 3hue.net, security and compliance services · hash `00a51949666f6ce8`</small>
 
 ### Our MSP already handles security. Where do you fit?
 
@@ -1202,10 +1468,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-msp-1** · spoken by the lead · adapted · **needs sign-off**  
   Ask them three questions: which framework are we assessed against, who signs off on risk acceptance, and what happens when an auditor challenges a control?  
-  <small>Source: The Message Stack §06, objection handling</small>
+  <small>Source: The Message Stack §06, objection handling · hash `e677c54923a9918a`</small>
 - **ask-msp-2** · spoken by the lead · adapted · **needs sign-off**  
   If the answers are good, you're in fine shape. If they're vague, that's the gap 3HUE fills, alongside your MSP, not instead of it.  
-  <small>Source: The Message Stack §06, objection handling; §07, battlecards</small>
+  <small>Source: The Message Stack §06, objection handling; §07, battlecards · hash `8e49262aceb3472f`</small>
 
 ### We already pay for a compliance platform. Why would we need you?
 
@@ -1213,18 +1479,21 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-platform-1** · spoken by the lead · adapted · **needs sign-off**  
   Keep it. A platform tells you what's wrong. The question is who fixes it, who answers the questionnaire, and who negotiates scope with the auditor.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  <small>Source: The Message Stack §06, objection handling · hash `08193187a3fa207e`</small>
 - **ask-platform-2** · spoken by the lead · adapted · **needs sign-off**  
   That's the job 3HUE does, on top of the tool you already bought.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  <small>Source: The Message Stack §06, objection handling · hash `d73bb5f5586df39c`</small>
 
 ### Where does the GRC system run?
 
 <small>`grc-system` · Learn more: https://3hue.net/services/cloudsignals-riskops.html · keywords: grc, grc system, m365, microsoft, hosted, portal, where does it run</small>
 
 - **ask-grc-1** · spoken by the lead · adapted · **needs sign-off**  
-  On your platform. 3HUE can deploy it in your Microsoft 365 tenant, or configure and maintain the enterprise GRC platform you already have.  
-  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
+  On your platform, not 3HUE's. M365 Modern GRC System Deployment & Maintenance stands it up in the tenant you already have.  
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026 · hash `b2b6c11264b678b5`</small>
+- **ask-grc-3** · spoken by the lead · adapted · **needs sign-off**  
+  If you already run an enterprise GRC platform, 3HUE configures and maintains that instead.  
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience); 3HUE service catalog, September 2026 · hash `0e08e859d980c3df`</small>
 
 ### What is AiVRIC?
 
@@ -1232,10 +1501,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-aivric-1** · spoken by the lead · adapted · **needs sign-off**  
   AiVRIC is the platform 3HUE's managed programs run on, so the evidence stays current between audits instead of being assembled before each one.  
-  <small>Source: The Message Stack §09, boilerplate; §01, core narrative</small>
+  <small>Source: The Message Stack §09, boilerplate; §01, core narrative · hash `3a89f98995f8d3d5`</small>
 - **ask-aivric-2** · spoken by the lead · adapted · **needs sign-off**  
   The module available today is CloudSignals+RiskOps. Everything else is in development.  
-  <small>Source: The Message Stack §05, claims library; 3HUE Brand Sheet §06, naming conventions</small>
+  <small>Source: The Message Stack §05, claims library; 3HUE Brand Sheet §06, naming conventions · hash `0e275183782704a1`</small>
 
 ### Isn't this just compliance theater?
 
@@ -1243,10 +1512,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-theater-1** · spoken by the lead · adapted · **needs sign-off**  
   Mostly, yes. A certificate says controls existed during a window.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  <small>Source: The Message Stack §06, objection handling · hash `d63dbb78945bbfdf`</small>
 - **ask-theater-2** · spoken by the lead · adapted · **needs sign-off**  
   That's why 3HUE sells the operating layer, not the certificate: you get the report because your buyer needs it, and a program because you need it.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  <small>Source: The Message Stack §06, objection handling · hash `6930f28366263780`</small>
 
 ### Can you guarantee we pass?
 
@@ -1254,10 +1523,13 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-guarantee-1** · spoken by the lead · adapted · **needs sign-off**  
   No, and be careful with anyone who says otherwise.  
-  <small>Source: The Ship List §03, landing page copy</small>
+  <small>Source: The Ship List §03, landing page copy · hash `364adba26ec4d76e`</small>
 - **ask-guarantee-2** · spoken by the lead · adapted · **needs sign-off**  
-  What 3HUE can do is tell you before you start whether you'll pass, scope the work to what the standard actually requires, and manage the auditor so there are no surprises.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  What 3HUE can do is tell you before you start whether you'll pass.  
+  <small>Source: The Message Stack §06, objection handling · hash `0af410bb7ddbf25a`</small>
+- **ask-guarantee-3** · spoken by the lead · adapted · **needs sign-off**  
+  Then scope the work to what the standard actually requires, and manage the auditor so there are no surprises.  
+  <small>Source: The Message Stack §06, objection handling · hash `cd89ca70425e747a`</small>
 
 ### How is this different from a big-firm readiness engagement?
 
@@ -1265,10 +1537,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-big-firm-1** · spoken by the lead · adapted · **needs sign-off**  
   Here, the person in the room is the person doing the work, and the scope stays where it was set.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  <small>Source: The Message Stack §06, objection handling · hash `7922c10cf8e98460`</small>
 - **ask-big-firm-2** · spoken by the lead · adapted · **needs sign-off**  
   And when the report is delivered, 3HUE is still running the program. Continuity is usually the difference that matters.  
-  <small>Source: The Message Stack §06, objection handling</small>
+  <small>Source: The Message Stack §06, objection handling · hash `fdad64dada6df059`</small>
 
 ### Our customers are asking how we govern AI. Where do we begin?
 
@@ -1276,10 +1548,10 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-ai-1** · spoken by the lead · adapted · **needs sign-off**  
   With four questions: what can it access, what can it change, who approved it, and what proves it stayed inside.  
-  <small>Source: The Forcing Function §04, trigger events</small>
+  <small>Source: The Forcing Function §04, trigger events · hash `424876192bd22a64`</small>
 - **ask-ai-2** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   Here the start is AI Governance & Privacy Advisory, built around them.  
-  <small>Source: 3HUE service catalog, September 2026</small>
+  <small>Source: 3HUE service catalog, September 2026 · hash `d36649b546066085`</small>
 
 ### Do you work with private equity portfolios?
 
@@ -1287,13 +1559,13 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-pe-1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   Yes. For a fund, the first step is the Initial Risk Assessment, one per company, on the same framework every time.  
-  <small>Source: The Forcing Function §02, the three segments; 3HUE service catalog, September 2026</small>
-- **ask-pe-2** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
-  One control set applied across every operating company, isolated per entity.  
-  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.gain-control.program.build`</small>
-- **ask-pe-3** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
-  Quarterly board- and investment-committee-ready reporting, with the fund seeing one view.  
-  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.gain-control.program.operate`</small>
+  <small>Source: The Forcing Function §02, the three segments; 3HUE service catalog, September 2026 · hash `20614ce6028c50ca`</small>
+- **ask-pe-2** · spoken by the lead · proposed · manifest field, on the site since 7fa92e4  
+  One control set, applied the same way wherever it lands.  
+  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.gain-control.program.build` · hash `0258fed8e0b3c299`</small>
+- **ask-pe-3** · spoken by the lead · proposed · manifest field, on the site since 7fa92e4  
+  Quarterly reporting in one format, with one view across everything you own.  
+  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.gain-control.program.operate` · hash `45069d391d5fbd4f`</small>
 
 ### We have open exam findings. What does the work look like?
 
@@ -1301,13 +1573,13 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-exam-1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   It starts with a Periodic Controls Gap Assessment on what is actually running, then, under Manage Risk Register & POA&M, every finding is tracked until it closes.  
-  <small>Source: 3HUE service catalog, September 2026</small>
+  <small>Source: 3HUE service catalog, September 2026 · hash `497c6a94673eac67`</small>
 - **ask-exam-2** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
   Remediation that closes findings and keeps them closed, with board-ready risk translation.  
-  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.stay-ready.program.operate`</small>
+  <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.stay-ready.program.operate` · hash `723ae978aab70501`</small>
 - **ask-exam-3** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
   Engagements are scoped and delivered by the same practitioner, whose background includes closing FDA 483 observations and remediating bank Matters Requiring Attention under sustained examination.  
-  <small>Source: 3HUE approved 100-word boilerplate · ref `doors.stay-ready.proof.0`</small>
+  <small>Source: 3HUE approved 100-word boilerplate · ref `doors.stay-ready.proof.0` · hash `b25ebc0640630bbf`</small>
 
 ### What proof do you have?
 
@@ -1315,13 +1587,13 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-proof-1** · spoken by the lead · substantiated · manifest field, on the site since 7fa92e4  
   No formal security program, then SOC 2 Type I with zero findings and multi-entity SOC 2 Type II across a software portfolio.  
-  <small>Source: Transit Technologies engagement, published customer story · ref `doors.win-trust.proof.0`</small>
+  <small>Source: Transit Technologies engagement, published customer story · ref `doors.win-trust.proof.0` · hash `7cad1e727c9420c5`</small>
 - **ask-proof-2** · spoken by the lead · substantiated · manifest field, on the site since 7fa92e4  
   1,000+ systems certified under one scalable assessment framework.  
-  <small>Source: A large North American bank, published customer story, client unnamed · ref `doors.gain-control.proof.0`</small>
+  <small>Source: A large North American bank, published customer story, client unnamed · ref `doors.gain-control.proof.0` · hash `6962e776dc534408`</small>
 - **ask-proof-3** · spoken by the lead · approved-copy · manifest field, on the site since 7fa92e4  
   Engagements are scoped and delivered by the same practitioner, whose background includes closing FDA 483 observations and remediating bank Matters Requiring Attention under sustained examination.  
-  <small>Source: 3HUE approved 100-word boilerplate · ref `doors.stay-ready.proof.0`</small>
+  <small>Source: 3HUE approved 100-word boilerplate · ref `doors.stay-ready.proof.0` · hash `b25ebc0640630bbf`</small>
 
 ### What happens to my answers?
 
@@ -1329,13 +1601,13 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-privacy-1** · spoken by the lead · proposed · **needs sign-off**  
   This lobby has no sign-up, no analytics and no sign-in. What you type into Ask is matched in this tab and never sent.  
-  <small>Source: How this lobby is built: static files, nothing collected</small>
+  <small>Source: How this lobby is built: static files, nothing collected · hash `d7ac6d24a0e0c9ae`</small>
 - **ask-privacy-2** · spoken by the lead · proposed · **needs sign-off**  
   Your answers stay in this browser tab, and the summary goes nowhere unless you send it yourself.  
-  <small>Source: How this lobby is built: static files, nothing collected</small>
+  <small>Source: How this lobby is built: static files, nothing collected · hash `f116d7e4cc2f6d60`</small>
 - **ask-privacy-3** · spoken by the lead · proposed · **needs sign-off**  
   If you use the microphone, your browser's own speech service may handle the audio. 3HUE never receives it.  
-  <small>Source: How this lobby is built: the browser handles the microphone</small>
+  <small>Source: How this lobby is built: the browser handles the microphone · hash `da6d2fbd8b9fd07c`</small>
 
 ### Nobody has asked us to prove anything yet. Should we talk?
 
@@ -1343,72 +1615,84 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 
 - **ask-early-1** · spoken by the lead · adapted · **needs sign-off**  
   Maybe not yet. The trigger is usually a customer, an insurer, an investor or a regulator asking for proof, with a date.  
-  <small>Source: The Message Stack §07, battlecards; The Forcing Function §05, who to decline</small>
+  <small>Source: The Message Stack §07, battlecards; The Forcing Function §05, who to decline · hash `390d2418018275c0`</small>
 - **ask-early-2** · spoken by the lead · adapted · **needs sign-off**  
   If nobody has asked, you may be early, and 3HUE would rather tell you that than sell you something.  
-  <small>Source: The Ship List §06, discovery script</small>
+  <small>Source: The Ship List §06, discovery script · hash `03b8e0e88b02845f`</small>
 
 ## The summary ("Send me a summary")
 
-Built in the browser. It opens as an email draft with no recipient filled in, or it can be copied. Subject: “Your tour of the 3HUE lobby”.
+Built in the browser. It opens as an email draft with no recipient filled in, or it can be copied. Subject: “Your 3HUE tour, and where you'd start”.
 
 - **sum-intro** · proposed · **needs sign-off**  
   Your tour of the 3HUE lobby with Avi. This summary was built in your browser.  
   <small>Source: Tour script, linking line</small>
+- **sum-what** · approved-copy · verbatim approved boilerplate, new placement  
+  3HUE builds and operates security, compliance and AI governance programs for organizations that have to prove their controls work — and have no one inside to run them.  
+  <small>Source: The Message Stack §09, boilerplate</small>
+- **sum-situation** · derived · **needs sign-off**  
+  `What you told us at the door: {answer:situation}` (filled in the browser from the visitor's answers and the chapters visited)  
+  <small>Source: The visitor's answer at arrival · shown only when situation has been answered</small>
+- **sum-front** · proposed · **needs sign-off** · service pairing: decision 1  
+  One step is shared. Any of the three can begin in the same place: the Initial Risk Assessment.  
+  <small>Source: 3HUE service catalog, September 2026</small>
 - **sum-wt** · derived · **needs sign-off**  
   Win Trust: Prove you are ready.  
   <small>Source: Lobby manifest: door title and promise · shown only when Win Trust visited</small>
-- **sum-wt-trigger** · derived · **needs sign-off**  
-  `What's pressing: {answer:trigger-win-trust}` (filled in the browser from the visitor's answers and the chapters visited)  
-  <small>Source: The visitor's answer in this room, labelled from the lobby manifest · shown only when trigger-win-trust has been answered, and Win Trust visited</small>
 - **sum-wt-deal** · proposed · **needs sign-off** · service pairing: decision 1  
-  Where you'd start: SOC 2 Readiness (or ISO 27001 Certification Readiness). Then the Managed Information Security & Privacy Management.  
+  Where you'd start: SOC 2 Readiness, or ISO 27001 Certification Readiness if your buyer names ISO. Managed Information Security & Privacy Management keeps it current.  
   <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.”, and Win Trust visited</small>
 - **sum-wt-evidence** · proposed · **needs sign-off** · service pairing: decision 1  
-  Where you'd start: the Initial Risk Assessment, with RFP Response Services. Then the Managed Information Security & Privacy Management.  
+  Where you'd start: the Initial Risk Assessment, with RFP Response Services for the questionnaire already in your inbox. Managed Information Security & Privacy Management keeps it current.  
   <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.”, and Win Trust visited</small>
-- **sum-wt-ai** · proposed · **needs sign-off** · service pairing: decision 1  
-  Where you'd start: AI Governance & Privacy Advisory. Then the Managed Information Security & Privacy Management.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “AI adoption is creating new customer questions about ownership and control.”, and Win Trust visited</small>
-- **sum-wt-early** · proposed · **needs sign-off** · service pairing: decision 1  
-  When someone asks: the Initial Risk Assessment.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “Nobody's asking yet”, and Win Trust visited</small>
+- **sum-wt-scope** · proposed · **needs sign-off** · service pairing: decision 1  
+  Where you'd start: ISMS Scope & SoA Development, so the audit has a written boundary before it begins. Managed Information Security & Privacy Management keeps it current.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-win-trust is “A certification audit is booked with no written scope.”, and Win Trust visited</small>
 - **sum-gc** · derived · **needs sign-off**  
   Gain Control: See and govern what matters.  
   <small>Source: Lobby manifest: door title and promise · shown only when Gain Control visited</small>
-- **sum-gc-trigger** · derived · **needs sign-off**  
-  `What's pressing: {answer:trigger-gain-control}` (filled in the browser from the visitor's answers and the chapters visited)  
-  <small>Source: The visitor's answer in this room, labelled from the lobby manifest · shown only when trigger-gain-control has been answered, and Gain Control visited</small>
-- **sum-gc-acquisition** · proposed · **needs sign-off** · service pairing: decision 1  
-  Where you'd start: the Initial Risk Assessment, one per company. Then the Managed Risk Management Program.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “A new platform acquisition or portfolio review needs a common view.”, and Gain Control visited</small>
-- **sum-gc-reporting** · proposed · **needs sign-off** · service pairing: decision 1  
-  Where you'd start: BOD / Investor Performance Reporting, with a Risk Committee Posture Update.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Board, lender, or investor reporting is inconsistent across holdings.”, and Gain Control visited</small>
-- **sum-gc-control** · proposed · **needs sign-off** · service pairing: decision 1  
-  Where you'd start: the Managed Risk Management Program, with the Managed Vendor Compliance Program (VCP).  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “The portfolio needs more control without adding a full internal team.”, and Gain Control visited</small>
-- **sum-gc-early** · proposed · **needs sign-off** · service pairing: decision 1  
-  When the next deal comes: the Initial Risk Assessment, one per company.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Nobody's asking yet”, and Gain Control visited</small>
+- **sum-gc-crossing** · proposed · **needs sign-off** · service pairing: decision 1  
+  Where you'd start: Privacy Leadership Launch, beginning with Data Mapping & Data Inventory so you know what you hold and where.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Privacy rules now reach across the whole business.”, and Gain Control visited</small>
+- **sum-gc-ai** · proposed · **needs sign-off** · service pairing: decision 1  
+  Where you'd start: AI Governance & Privacy Advisory, with Security Architecture Reviews on the build side. Security Engineering Services carries the engineering work.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Nobody owns how AI touches your data.”, and Gain Control visited</small>
+- **sum-gc-vendors** · proposed · **needs sign-off** · service pairing: decision 1  
+  Where you'd start: Managed Vendor Compliance Program (VCP), after Asset Governance Program Development names what you own. Audit Support & Liaison Services covers the auditor, theirs or yours.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-gain-control is “Other people's systems hold your data.”, and Gain Control visited</small>
 - **sum-sr** · derived · **needs sign-off**  
   Stay Ready: Operate defensibly.  
   <small>Source: Lobby manifest: door title and promise · shown only when Stay Ready visited</small>
-- **sum-sr-trigger** · derived · **needs sign-off**  
-  `What's pressing: {answer:trigger-stay-ready}` (filled in the browser from the visitor's answers and the chapters visited)  
-  <small>Source: The visitor's answer in this room, labelled from the lobby manifest · shown only when trigger-stay-ready has been answered, and Stay Ready visited</small>
 - **sum-sr-exam** · proposed · **needs sign-off** · service pairing: decision 1  
-  Where you'd start: a Periodic Controls Gap Assessment, then Manage Risk Register & POA&M.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An examiner request, audit finding, or remediation deadline is active.”, and Stay Ready visited</small>
+  Where you'd start: a Periodic Controls Gap Assessment, then Manage Risk Register & POA&M until every finding closes. Managed Risk Management Program keeps it that way.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “A finding with a date on it”, and Stay Ready visited</small>
 - **sum-sr-incident** · proposed · **needs sign-off** · service pairing: decision 1  
-  Where you'd start: Incident Response Fast Start, with Business Continuity Plan Development. Then the Managed Cyber-Incident Response Program.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An incident or continuity concern exposes a readiness gap.”, and Stay Ready visited</small>
-- **sum-sr-crossing** · proposed · **needs sign-off** · service pairing: decision 1  
-  Where you'd start: Privacy Leadership Launch, with AI Governance & Privacy Advisory.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Regulatory, privacy, or AI adoption pressure is crossing operational boundaries.”, and Stay Ready visited</small>
-- **sum-sr-early** · proposed · **needs sign-off** · service pairing: decision 1  
-  When the next exam is on the calendar: a Periodic Controls Gap Assessment.  
-  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Nobody's asking yet”, and Stay Ready visited</small>
+  Where you'd start: Incident Response Fast Start, with Business Continuity Plan Development beside it. Managed Cyber-Incident Response Program keeps it rehearsed afterwards.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “An incident, or a near miss”, and Stay Ready visited</small>
+- **sum-sr-detect** · proposed · **needs sign-off** · service pairing: decision 1  
+  Where you'd start: MXDR Complete Protection, or MXDR Starter if you want the smaller footprint first.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when trigger-stay-ready is “Alerts nobody is reading”, and Stay Ready visited</small>
+- **sum-all-wt** · proposed · **needs sign-off** · service pairing: decision 1  
+  You named Win Trust. Inside that door, the first step is the Initial Risk Assessment.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when yours is “Win Trust”</small>
+- **sum-all-gc** · proposed · **needs sign-off** · service pairing: decision 1  
+  You named Gain Control. Inside that door, the first step is Data Mapping & Data Inventory.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when yours is “Gain Control”</small>
+- **sum-all-sr** · proposed · **needs sign-off** · service pairing: decision 1  
+  You named Stay Ready. Inside that door, the first step is a Periodic Controls Gap Assessment.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when yours is “Stay Ready”</small>
+- **sum-all-none** · proposed · **needs sign-off** · service pairing: decision 1  
+  You didn't name a door, and you don't have to. Without one, the first step is usually the Initial Risk Assessment.  
+  <small>Source: 3HUE service catalog, September 2026 · shown only when yours is “Not sure yet”</small>
+- **sum-early** · proposed · **needs sign-off** · service pairing: decision 1  
+  You said nobody is asking yet. The shared first step above is the one to take before they do.  
+  <small>Source: 3HUE service catalog, September 2026; The Forcing Function §05, who to decline · shown only when trigger-win-trust is “Nobody's asking yet”; or trigger-gain-control is “Nobody's asking yet”; or trigger-stay-ready is “Nobody's asking yet”</small>
+- **sum-program** · derived · **needs sign-off**  
+  `Program in place today: {answer:program}` (filled in the browser from the visitor's answers and the chapters visited)  
+  <small>Source: The visitor's answer on the maturity path · shown only when program has been answered</small>
+- **sum-price** · adapted · **needs sign-off**  
+  There's no list price here. Pricing follows scope and commitment, and the team scopes it with you.  
+  <small>Source: 3HUE, Inside 3HUE tour, Ask (3hue.net/experience)</small>
 - **sum-talk** · derived · **needs sign-off**  
   Talk to the team: https://3hue.net/contact.html  
   <small>Source: Lobby manifest: site.bookingUrl (O2)</small>
@@ -1496,4 +1780,4 @@ The tour's buttons, states, announcements and dialogs take their words from `str
 - **CMMC.** The Message Stack marks it TIME-SENSITIVE; no room leads with it and Ask has no CMMC answer.
 - **Pronunciation.** Check 3HUE, AiVRIC ("av-RICK"), Avi, Huey, SOC 2, NIST CSF, 800-53/171, POA&M, BOD, TTX, MXDR, vCISO and CloudSignals+RiskOps in the listening report before the full render.
 - **When Ask finds no match** it shows `strings.tourAskNone` from `content/experience.json` (“I don't have an approved answer for that yet. The team does.”), followed by the Talk to our team link and the suggested questions. It is shown and read by screen readers, not voiced, and it is signed with the interface words above.
-- **Option labels.** “Send me a summary” (`strings.tourSummary`) come from the interface words, so the tour and the engine share one wording. The rest (“Yes, {guide:huey} leads”, “Stay with {guide:avi}”, “Show me everything”, “Nobody's asking yet”, “Show me where I'd start”, “Walk another door” and others) are the script's own new copy, marked "new" in the choice tables.
+- **Option labels.** “Send me a summary” (`strings.tourSummary`) come from the interface words, so the tour and the engine share one wording. The rest (“{guide:avi} leads”, “{guide:huey} leads”, “They want a report or a certificate”, “They're asking about our data and our vendors”, “They want to see it running, not just written down”, “I'd rather see all three” and others) are the script's own new copy, marked "new" in the choice tables.
