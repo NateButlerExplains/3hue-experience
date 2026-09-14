@@ -18,9 +18,9 @@ Every check keeps its ID and its original bullet, quoted verbatim from [levelup/
 
 | Column | Pass | Fail | Not run |
 |---|---|---|---|
-| Candidate (local) | 48 | 0 | 0 |
+| Candidate (local) | 39 | 9 | 0 |
 | Published | 0 | 0 | 48 |
-| Tour, candidate (local) | 30 | 0 | 1 |
+| Tour, candidate (local) | 27 | 3 | 1 |
 | Tour, published | 0 | 0 | 31 |
 
 Dropped checks carry no result. Every earlier phase's rows are re-run at P4-D08 and P6-D06 (rooms and tour rows are outside those roll-ups). The first two count rows cover the 43 and the rooms; the tour rows are counted on their own.
@@ -227,7 +227,7 @@ Source: [2a-baseline-stage-labels.md, line 18](levelup/source/2a-baseline-stage-
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| re-scoped (O7) | Pass (4 runs; chromium, chromium-reduced) | Not run | `tests/boot.spec.mjs` (webkit + chromium, Fast 4G throttle) |
+| re-scoped (O7) | Fail (2 of 4 runs; chromium, chromium-reduced) | Not run | `tests/boot.spec.mjs` (webkit + chromium, Fast 4G throttle) |
 
 **Standalone clause.** WebKit at 1440×900 passes the first two checks; on Fast 4G, cold cache, the placeholder or plate shows within 350 ms of navigation start, the plate downloads once (≤500 KB at 1440 wide), a warm reload skips the placeholder, and CLS stays 0.
 
@@ -247,7 +247,7 @@ Source: [2b-baseline-dialog-panel.md, line 16](levelup/source/2b-baseline-dialog
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| re-scoped (O7) | Pass (18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/focus.spec.mjs` (chromium, webkit) |
+| re-scoped (O7) | Fail (2 of 18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/focus.spec.mjs` (chromium, webkit) |
 
 **Standalone clause.** Keyboard only at 1280×720 and 1440×900: the first Tab lands on "Skip to the doors" and activating it puts the next Tab on the first door; Tab and Shift+Tab never land on body or on an inert or hidden control; Enter on a door opens its panel with focus on its h2; Escape returns focus to that door; a second Escape at rest changes nothing. WebKit matches.
 
@@ -391,7 +391,7 @@ Source: [3-phones-tablets.md, line 23](levelup/source/3-phones-tablets.md#L23)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies | Pass (18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/phone.spec.mjs` (chromium + chromium-reduced) |
+| applies | Fail (1 of 18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/phone.spec.mjs` (chromium + chromium-reduced) |
 
 - Opener on composed layouts is the row (`rowElement`), so Escape returns focus to it.
 
@@ -433,7 +433,7 @@ Source: [4-motion-routes.md, line 15](levelup/source/4-motion-routes.md#L15)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies (O5) | Pass (6 runs; chromium, webkit) | Not run | `tests/motion.spec.mjs` |
+| applies (O5) | Fail (1 of 6 runs; chromium, webkit) | Not run | `tests/motion.spec.mjs` |
 
 - Rooms add transitions on `#room` (opacity, transform) and `#room-img` (transform, the 1.06 → 1 settle): still transform and opacity only. `will-change: transform` lives on `.experience-stage.moving` and is dropped `dolly.ms + 50` after a move.
 
@@ -512,7 +512,7 @@ Source: [4-motion-routes.md, line 21](levelup/source/4-motion-routes.md#L21)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies | Pass (every other row passes) | Not run | every spec listed above, re-run |
+| applies | Fail (P2a-D05, P2b-D01, P3-D06, P4-D02, P5-D02, P5-D04, P6-D03 fail) | Not run | every spec listed above, re-run |
 
 - Recorded as the worst result over every earlier applies and re-scoped row.
 
@@ -540,7 +540,7 @@ Source: [5-kiosk-share.md, line 15](levelup/source/5-kiosk-share.md#L15)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| re-scoped (O7, O9) | Pass (21 runs; chromium, webkit, chromium-reduced) | Not run | `tests/kiosk.spec.mjs` |
+| re-scoped (O7, O9) | Fail (1 of 21 runs; chromium, webkit, chromium-reduced) | Not run | `tests/kiosk.spec.mjs` |
 
 **Standalone clause.** At 1280×720, 1366×657, 1440×900, 1920×1080 and 2560×1440 the kiosk content (the "AiVRIC intelligence layer" header line, the three count lines derived from this manifest and the "Representative data" tag) is hidden or fully on its screen, every line 12 px or more at 4.5:1.
 
@@ -566,7 +566,7 @@ Source: [5-kiosk-share.md, line 17](levelup/source/5-kiosk-share.md#L17)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies | Pass (3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/kiosk.spec.mjs` (chromium, webkit; 8× corner probes) |
+| applies | Fail (1 of 3 runs; chromium, webkit, chromium-reduced) | Not run | `tests/kiosk.spec.mjs` (chromium, webkit; 8× corner probes) |
 
 - The quad is double-measured (`geometry.kiosk.measurements.a/b`, all corners within 2 px; `measured.kiosk: true`). Its right corners sit on the plate's own edge (x 2879), so "within 2 px of the screen's edges" is measured on the left corners and the top/bottom edges; the right edge is the plate edge.
 
@@ -637,7 +637,7 @@ Source: [6-walk-dashboard.md, line 16](levelup/source/6-walk-dashboard.md#L16)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| re-scoped (O7) | Pass (15 runs; chromium, webkit, chromium-reduced) | Not run | `tests/focus.spec.mjs` |
+| re-scoped (O7) | Fail (2 of 15 runs; chromium, webkit, chromium-reduced) | Not run | `tests/focus.spec.mjs` |
 
 **Standalone clause.** Every control shows a focus ring, the first Tab reveals "Skip to the doors", and the door panel, the path panel and the walk close on Escape, returning focus to their opener.
 
@@ -679,7 +679,7 @@ Source: [6-walk-dashboard.md, line 19](levelup/source/6-walk-dashboard.md#L19)
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| applies | Pass (every other row passes) | Not run | `tests/boot.spec.mjs` (CLS) · every spec, re-run · card recapture rule |
+| applies | Fail (P2a-D05, P2b-D01, P3-D06, P4-D02, P5-D02, P5-D04, P6-D03 fail) | Not run | `tests/boot.spec.mjs` (CLS) · every spec, re-run · card recapture rule |
 
 - The cards in `media/share/cards.json` were captured with "Take the walk" already in the header. The recapture rule still stands whenever the rest state changes (P4-D08 / Gate C).
 
@@ -768,7 +768,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O10) | Pass (75 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-manifest.spec.mjs` · `tests/voice-tool.spec.mjs` · `tests/voice-eleven.spec.mjs` · `tests/secrets.spec.mjs` · `npm run lint` |
+| new (O10) | Pass (129 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-manifest.spec.mjs` · `tests/voice-tool.spec.mjs` · `tests/voice-eleven.spec.mjs` · `tests/secrets.spec.mjs` · `npm run lint` |
 
 - The voice pipeline is checked without a key: hashes, SSML escaping, SDK-shaped word events (`tests/fixtures/voice/boundaries.json`, synthetic until the first real `--check`), the dry-run plan and cost, the ffmpeg encode, and a full render through a stand-in synthesiser. See `docs/VOICE.md`.
 
@@ -778,7 +778,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O1, O10) | Pass (18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-manifest.spec.mjs` |
+| new (O1, O10) | Pass (21 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-manifest.spec.mjs` |
 
 #### T-04 — new
 
@@ -802,7 +802,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O2, O10) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour.spec.mjs` |
+| new (O2, O10) | Pass (12 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour.spec.mjs` |
 
 #### T-07 — new
 
@@ -810,7 +810,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O5, O9, O10) | Pass (30 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-scenes.spec.mjs` |
+| new (O5, O9, O10) | Pass (36 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-scenes.spec.mjs` |
 
 - The narrated-pin check runs where every station fits. At 1280×720 the decision stations of Win Trust and Gain Control (82% down their rooms) cannot enter the frame above the card: the room is already at its maximum zoom with its bottom edge on the screen's, so the pin is marked but hidden by the existing out-of-frame rule. They fit from 1440×900. Fixing it means a higher zoom cap in `js/stage.js` or a smaller pin margin in `js/rooms.js` (observation).
 
@@ -838,7 +838,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O3, O10) | Pass (6 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-routes.spec.mjs` |
+| new (O3, O10) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-routes.spec.mjs` |
 
 #### T-11 — new
 
@@ -846,7 +846,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O10) | Pass (18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour.spec.mjs` |
+| new (O10) | Pass (27 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour.spec.mjs` |
 
 #### T-12 — new
 
@@ -862,7 +862,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O2, O10) | Pass (9 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-dialogs.spec.mjs` |
+| new (O2, O10) | Pass (12 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-dialogs.spec.mjs` |
 
 - The one thing the tour ever writes to localStorage is the visitor's own mute choice (`3hue-experience:voice` = `off`, removed when the voice is turned back on); T-13 runs without touching the Voice toggle, and T-15 checks the mute rule.
 
@@ -872,7 +872,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O10) | Pass (18 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-voice.spec.mjs` (voice folders from `tests/voice-fixture.mjs`) |
+| new (O10) | Pass (36 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-voice.spec.mjs` (voice folders from `tests/voice-fixture.mjs`) |
 
 #### T-15 — new
 
@@ -880,7 +880,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O10) | Pass (30 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-voice.spec.mjs` (`tests/fixtures/voice/one-second.mp3`) · `tests/serve.spec.mjs` |
+| new (O10) | Fail (2 of 36 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-voice.spec.mjs` (`tests/fixtures/voice/one-second.mp3`) · `tests/serve.spec.mjs` |
 
 #### T-16 — new
 
@@ -904,7 +904,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O10) | Pass (72 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-axe.spec.mjs` (results in `tests/results/axe-tour-*.json`) |
+| new (O10) | Pass (90 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-axe.spec.mjs` (results in `tests/results/axe-tour-*.json`) |
 
 - P6-D05 proves the default lobby (the walk included); at go-live `?tour=0` is added to its walk entry, and T-18 carries axe over to the tour.
 
@@ -914,7 +914,7 @@ Not part of the 43, and tallied on their own summary lines. Text as agreed for t
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O10) | Pass (15 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-phone.spec.mjs` |
+| new (O10) | Pass (24 runs; chromium, webkit, chromium-reduced) | Not run | `tests/tour-phone.spec.mjs` |
 
 #### T-20 — dropped
 
@@ -984,7 +984,7 @@ Not part of the 43, and tallied with the tour: both sit behind the tour gate. Ea
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O14) | Pass (12 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` (four DOM markers at each surface box's corners against the quad through `window.__lobby.roomFit`) |
+| new (O14) | Fail (4 of 12 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` (four DOM markers at each surface box's corners against the quad through `window.__lobby.roomFit`) |
 
 #### S-02 — new
 
@@ -1018,7 +1018,7 @@ Not part of the 43, and tallied with the tour: both sit behind the tour gate. Ea
 
 | Disposition | Candidate (local) | Published | Proof |
 |---|---|---|---|
-| new (O14) | Pass (6 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` (`elementFromPoint` at each target's centre) |
+| new (O14) | Fail (1 of 6 runs; chromium, webkit, chromium-reduced) | Not run | `tests/surfaces.spec.mjs` (`elementFromPoint` at each target's centre) |
 
 #### S-06 — new
 
@@ -1062,3 +1062,6 @@ Code-reading notes for the spec authors, recorded so the rows above are not read
 - T-22 (default load, gate pending): the eight tour modules (`js/tour.js`, `tourtext`, `dialogue`, `guide`, `tourmap`, `ask`, `ask-match`, `voice`, about 119 KB, 44 KB gzipped) are requested on every visit, through the static import in `js/main.js` and `js/debug.js` and their low-priority modulepreloads; the script, the tour stylesheet and the voice folder are not. Imports stay static so `tools/stamp-version.py` stamps every module; loading the tour lazily would need `import('./tour.js?v=…')` in `js/main.js`, a hook instead of the import in `js/debug.js`, and the stamp tool's pattern extended to dynamic imports. Recorded as an accepted deviation from "zero new requests" until that is decided. `js/surfaces.js` (O14, about 25 KB, 9 KB gzipped) joins them the same way; its data (`content/surfaces.json`) and stylesheet (`css/surfaces.css`) are fetched only once the tour is on.
 
 <!-- Candidate (local) column filled 2026-09-11T09:14:02.911Z from tests/results/candidate-all.json + docs/evidence/manual.json; S-01 … S-07 and T-27 filled 2026-09-11T21:55:53.437Z from the step 6 full run (chromium, webkit, chromium-reduced) -->
+
+
+<!-- Candidate (local) column filled 2026-09-14T21:04:04.564Z from tests/results/candidate-all.json + docs/evidence/manual.json -->

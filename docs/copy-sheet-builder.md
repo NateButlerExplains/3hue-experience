@@ -29,11 +29,12 @@ Old:
 - **ISMS, SSPP, and statement of applicability**: ISMS Scope & SoA Development · System Security & Privacy Plan (SSPP) Development
 
 New:
+<!-- gen:families:win-trust -->
 
 - **Risk Assessment & Risk Management**: Initial Risk Assessment · Periodic Controls Gap Assessment · Cyber-Risk Advisory
 - **Information Security Program & Governance**: Written IS Policies & Standards · RFP Response Services · Security Terms & Conditions Contract Reviews · Management Review Facilitation
 - **ISMS, SSPP & Statement of Applicability**: ISMS Scope & SoA Development · System Security & Privacy Plan (SSPP) Development
-- **Privacy Management & Data Protection**: AI Governance & Privacy Advisory · Privacy Program Maturity & Risk Assessment · ISO 27701 PIMS Readiness & Implementation
+<!-- /gen -->
 
 #### Gain Control
 
@@ -45,11 +46,12 @@ Old:
 - **Board and investor performance reporting**: BOD / Investor Performance Reporting · Risk Committee Posture Update · Security Data Analytics & Reporting Development
 
 New:
+<!-- gen:families:gain-control -->
 
-- **Risk Assessment & Risk Management**: Initial Risk Assessment · Annual Risk Assessment Update · Risk Committee Posture Update · Manage Risk Register & POA&M
-- **Managed GRC Programs**: Managed Risk Management Program · Managed Information Security & Privacy Management
+- **Privacy Management & Data Protection**: Data Mapping & Data Inventory · Data Protection Impact Assessment (DPIA) · AI Governance & Privacy Advisory · Regulator Liaison & DSAR Escalation Support
 - **Vendor & Third-Party Risk Management**: Managed Vendor Compliance Program (VCP) · Asset Governance Program Development · Audit Support & Liaison Services
-- **Information Security Program & Governance**: BOD / Investor Performance Reporting · Security Data Analytics & Reporting Development
+- **Security Engineering & Architecture**: Security Architecture Reviews · Secure SDLC Program Development · Vulnerability Management Program Development
+<!-- /gen -->
 
 #### Stay Ready
 
@@ -61,13 +63,15 @@ Old:
 - **Privacy management and data protection**: Managed Privacy Program · Regulator Liaison & DSAR Escalation Support · Data Protection Impact Assessment (DPIA)
 
 New:
+<!-- gen:families:stay-ready -->
 
 - **Risk Assessment & Risk Management**: Periodic Controls Gap Assessment · Manage Risk Register & POA&M · Operational Risk Analysis & Update · Business Impact Assessment & Analysis
 - **Cyber Incident Response Program**: Cyber-Incident Response Plan Development · IR Playbook Development · Cyber-IR Tabletop Exercise (TTX) · Cyber-IR Operations Command
 - **Business Continuity & Operational Resilience**: Business Continuity Plan Development · BCP Review & Updates · Operational Resilience Program Development
-- **Privacy Management & Data Protection**: Managed Privacy Program · Data Protection Impact Assessment (DPIA) · Regulator Liaison & DSAR Escalation Support · AI Governance & Privacy Advisory
+- **Managed Detection & Response (MDR / MXDR)**: Managed Detection & Response — Complete · MXDR Starter · MXDR — SIEM Add-on · Managed Security Controls Validation for Endpoints
+<!-- /gen -->
 
-The kiosk's derived count of service families changes from 11 to 8 (unique family names across the doors).
+The kiosk's derived count of service families changes from 11 to 9 (unique family names across the doors).
 
 ### Where to start (`path.whereToStart`)
 
@@ -106,83 +110,97 @@ Learn more links open 3hue.net in a new tab; each is named for its page, for exa
 ### Door panels, under "Services on this path"
 
 #### Win Trust
+<!-- gen:panels:win-trust -->
 
 **Ready-made bundles**
 
-- **SOC 2 Readiness**: What a first-time SOC 2 Type II candidate needs: policies, a risk assessment, an incident response plan and audit support. · Learn more on 3hue.net → SOC 2 Type II Readiness
+- **SOC 2 Readiness**: What a first-time SOC 2 Type II candidate needs: policies, a risk assessment, an incident response plan and audit support. · Learn more: https://3hue.net/services/security-compliance-services.html
 - **ISO 27001 Certification Readiness**: ISMS scope and Statement of Applicability, a policy library, a risk assessment and management review facilitation, on the path to certification.
 - **ISO 27701 Privacy Readiness**: A PIMS gap analysis, a privacy program CONOPS, data mapping and a DPIA: the certification-track privacy bundle.
-
-*Source: 3HUE service catalog, September 2026 (adapted)*
-
-**Programs that run it**
-
-- **Managed Information Security & Privacy Management**: IS Program (CONOPS) Development · Written IS Policies & Standards · IS Program CONOPS Review & Update · Learn more on 3hue.net → Audit-Ready Security Program
-- **Managed Risk Management Program**: Initial Risk Assessment · Risk Management Program (CONOPS) Development · Manage Risk Register & POA&M · Annual Risk Assessment Update · RMP CONOPS Review & Update · Learn more on 3hue.net → Audit-Ready Security Program
-
-#### Gain Control
-
-**Ready-made bundles**: none, so the list is hidden.
-
-**Programs that run it**
-
-- **Managed Risk Management Program**: Initial Risk Assessment · Risk Management Program (CONOPS) Development · Manage Risk Register & POA&M · Annual Risk Assessment Update · RMP CONOPS Review & Update · Learn more on 3hue.net → Audit-Ready Security Program
-- **Managed Vendor Compliance Program (VCP)**: VCP — Additional Vendor Monitoring (5-Vendor Block) · Learn more on 3hue.net → Audit-Ready Security Program
-- *(held, not shown: Virtual CISO — Support)*
-
-#### Stay Ready
-
-**Ready-made bundles**
-
-- **Incident Response Fast Start**: Incident response capability in one engagement: a plan, playbooks, a tabletop exercise and standing incident command. · Learn more on 3hue.net → Cyber-Incident Response Program
-- **Privacy Leadership Launch**: A maturity assessment to set the baseline, then CPO-as-a-Service and a managed program to run it.
-- **MXDR Complete Protection**: Full-platform XDR with SIEM retention and annual endpoint controls validation. · Learn more on 3hue.net → Managed Security Operations (OPS)
 - **PCI-DSS Readiness**: A controls gap assessment, a policy library, a vulnerability management program and scanner tuning, for PCI scope.
 
 *Source: 3HUE service catalog, September 2026 (adapted)*
 
 **Programs that run it**
 
-- **Managed Risk Management Program**: Initial Risk Assessment · Risk Management Program (CONOPS) Development · Manage Risk Register & POA&M · Annual Risk Assessment Update · RMP CONOPS Review & Update · Learn more on 3hue.net → Audit-Ready Security Program
-- **Managed Cyber-Incident Response Program**: Cyber-IR Program (CONOPS) Development · Cyber-Incident Response Plan Development · IR Playbook Development · Cyber-IR Tabletop Exercise (TTX) · Cyber-IR Operations Command · CIRP Review & Update · Learn more on 3hue.net → Cyber-Incident Response Program
-- **Managed Detection & Response — Complete**: MXDR Starter · MXDR — SIEM Add-on · Managed Security Controls Validation for Endpoints · Learn more on 3hue.net → Managed Security Operations (OPS)
+- **Managed Information Security & Privacy Management**: IS Program (CONOPS) Development · Written IS Policies & Standards · Managed Information Security & Privacy Management · IS Program CONOPS Review & Update
+- **Managed Risk Management Program**: Initial Risk Assessment · Risk Management Program (CONOPS) Development · Managed Risk Management Program · Manage Risk Register & POA&M · Annual Risk Assessment Update · RMP CONOPS Review & Update
+<!-- /gen -->
+
+#### Gain Control
+<!-- gen:panels:gain-control -->
+
+**Ready-made bundles**
+
+- **Privacy Leadership Launch**: A maturity assessment to set the baseline, then CPO-as-a-Service and a managed program to run it.
+
+*Source: 3HUE service catalog, September 2026 (adapted)*
+
+**Programs that run it**
+
+- **Managed Vendor Compliance Program (VCP)**: Managed Vendor Compliance Program (VCP) · VCP — Additional Vendor Monitoring (5-Vendor Block)
+- **Security Engineering Services**: Security Architecture Reviews · Secure SDLC Program Development · Vulnerability Management Program Development · Security Engineering Services · Vulnerability Scanning Config & Tuning
+<!-- /gen -->
+
+#### Stay Ready
+<!-- gen:panels:stay-ready -->
+
+**Ready-made bundles**
+
+- **Incident Response Fast Start**: Incident response capability in one engagement: a plan, playbooks, a tabletop exercise and standing incident command. · Learn more: https://3hue.net/services/cyber-incident-response-program.html
+- **MXDR Complete Protection**: Full-platform XDR with SIEM retention and annual endpoint controls validation. · Learn more: https://3hue.net/services/continuous-risk-management.html
+
+*Source: 3HUE service catalog, September 2026 (adapted)*
+
+**Programs that run it**
+
+- **Managed Risk Management Program**: Initial Risk Assessment · Risk Management Program (CONOPS) Development · Managed Risk Management Program · Manage Risk Register & POA&M · Annual Risk Assessment Update · RMP CONOPS Review & Update
+- **Managed Cyber-Incident Response Program**: Cyber-IR Program (CONOPS) Development · Cyber-Incident Response Plan Development · IR Playbook Development · Cyber-IR Tabletop Exercise (TTX) · Managed Cyber-Incident Response Program · Cyber-IR Operations Command · CIRP Review & Update
+- **Managed Detection & Response — Complete**: Managed Detection & Response — Complete · MXDR Starter · MXDR — SIEM Add-on · Managed Security Controls Validation for Endpoints
+<!-- /gen -->
 
 ### Path panel, "Where to start": Where you'd start
 
 Each door's first step for each of its approved triggers: the lead, "/" its alternative, "+" what goes with it. Held items are not shown. The tour also carries what it then runs as, the live-incident route, the tower ring, and the first step for a visitor nobody is asking yet (not shown in the lobby, which has no approved label for it).
 
 #### Win Trust
+<!-- gen:starts:win-trust -->
 
 | Trigger | Shown | Then runs as (tour) | Tower ring |
 |---|---|---|---|
-| An enterprise deal or renewal is blocked by assurance requirements. | SOC 2 Readiness / ISO 27001 Certification Readiness | Managed Information Security & Privacy Management | Assess, Strengthen |
+| An enterprise deal or renewal is blocked by assurance requirements. | SOC 2 Readiness / ISO 27001 Certification Readiness | Managed Information Security & Privacy Management | Assess → Strengthen |
 | A customer, insurer, or investor is asking for evidence you cannot assemble quickly. | Initial Risk Assessment + RFP Response Services | Managed Information Security & Privacy Management | Assess |
-| AI adoption is creating new customer questions about ownership and control. | AI Governance & Privacy Advisory + Initial Risk Assessment | Managed Information Security & Privacy Management | Strengthen |
+| A certification audit is booked with no written scope. | ISMS Scope & SoA Development / ISO 27001 Certification Readiness + System Security & Privacy Plan (SSPP) Development | Managed Information Security & Privacy Management | Strengthen |
 | *early: nobody is asking yet (tour only)* | Initial Risk Assessment | — | — |
 
 *Source: 3HUE service catalog, September 2026; The Forcing Function §04, trigger events (proposed); 3HUE service catalog, September 2026; The Forcing Function §05, who to decline (proposed)*
+<!-- /gen -->
 
 #### Gain Control
+<!-- gen:starts:gain-control -->
 
 | Trigger | Shown | Then runs as (tour) | Tower ring |
 |---|---|---|---|
-| A new platform acquisition or portfolio review needs a common view. | Initial Risk Assessment | Managed Risk Management Program | Assess |
-| Board, lender, or investor reporting is inconsistent across holdings. | BOD / Investor Performance Reporting + Risk Committee Posture Update | Managed Risk Management Program | Advance |
-| The portfolio needs more control without adding a full internal team. | Managed Risk Management Program + Managed Vendor Compliance Program (VCP) *(also Virtual CISO — Support, held)* | — | Operate |
-| *early: nobody is asking yet (tour only)* | Initial Risk Assessment | — | — |
+| Privacy rules now reach across the whole business. | Privacy Leadership Launch + Data Mapping & Data Inventory + Regulator Liaison & DSAR Escalation Support | — | Assess → Operate |
+| Nobody owns how AI touches your data. | AI Governance & Privacy Advisory + Security Architecture Reviews + Secure SDLC Program Development + Vulnerability Management Program Development | Security Engineering Services | Strengthen |
+| Other people's systems hold your data. | Managed Vendor Compliance Program (VCP) + Asset Governance Program Development + Audit Support & Liaison Services | VCP — Additional Vendor Monitoring (5-Vendor Block) | Operate |
+| *early: nobody is asking yet (tour only)* | Data Mapping & Data Inventory | — | — |
 
-*Source: 3HUE service catalog, September 2026; The Forcing Function §04, trigger events (proposed); 3HUE service catalog, September 2026; The Forcing Function §05, who to decline (proposed)*
+*Source: 3HUE service catalog, September 2026 (proposed)*
+<!-- /gen -->
 
 #### Stay Ready
+<!-- gen:starts:stay-ready -->
 
 | Trigger | Shown | Then runs as (tour) | Tower ring |
 |---|---|---|---|
 | An examiner request, audit finding, or remediation deadline is active. | Periodic Controls Gap Assessment + Manage Risk Register & POA&M | Managed Risk Management Program | Operate |
-| An incident or continuity concern exposes a readiness gap. | Incident Response Fast Start + Business Continuity Plan Development | Managed Cyber-Incident Response Program; MXDR Complete Protection; live incident: Incident Command & Emergency Response Leadership | Strengthen |
-| Regulatory, privacy, or AI adoption pressure is crossing operational boundaries. | Privacy Leadership Launch + AI Governance & Privacy Advisory | — | Strengthen |
+| An incident or continuity concern exposes a readiness gap. | Incident Response Fast Start + Business Continuity Plan Development | Managed Cyber-Incident Response Program · MXDR Complete Protection | Strengthen |
+| Security tooling is generating alerts that nobody is reading. | MXDR Complete Protection / MXDR Starter | — | Operate |
 | *early: nobody is asking yet (tour only)* | Periodic Controls Gap Assessment | — | — |
 
 *Source: 3HUE service catalog, September 2026; The Forcing Function §04, trigger events (proposed); 3HUE service catalog, September 2026; The Forcing Function §05, who to decline (proposed)*
+<!-- /gen -->
 
 ### Learn more pages (`site.learnMore.pages`)
 
