@@ -88,7 +88,8 @@ test.describe('T-04 starting the tour', () => {
       const reqs = [];
       const onReq = (r) => reqs.push(r.url());
       page.on('request', onReq);
-      await open(page, { query: c.query });
+      // This check is about what the gate itself decides, so it opts out of the helper's default.
+      await open(page, { query: c.query, gateDefault: true });
       await doorsShown(page);
       await page.click('#walk-btn');
       if (c.tour) await page.waitForFunction(() => /^#\/tour\//.test(location.hash) && window.__tour?.touring, null, { polling: 50 });

@@ -6,7 +6,7 @@
 // Chromium's layout-shift entries), and the plate is still one file. With the gate pending (the
 // default) even ?voice=sim fetches nothing of the tour or its voice, and the walk button walks.
 import { test, expect } from '@playwright/test';
-import { open, doorsShown, annotate } from './helpers.mjs';
+import { open, doorsShown, annotate, manifest as m } from './helpers.mjs';
 import { FX, TQ } from './tour-helpers.mjs';
 import { buildVoice } from './voice-fixture.mjs';
 
@@ -54,11 +54,14 @@ test('T-22 before the start nothing of the tour or its voice is fetched and the 
   if (end.cls !== null) expect(end.cls, `layout shifts: ${JSON.stringify(end.shifts)}`).toBe(0);
 });
 
-test('T-22 with the gate pending (the default) even ?voice=sim fetches nothing of the tour or its voice, and the walk button starts the silent walk', async ({ page }, testInfo) => {
+test('T-22 with the tour off (the gate pending, or ?tour=0 once it is open) even ?voice=sim fetches nothing of the tour or its voice, and the walk button starts the silent walk', async ({ page }, testInfo) => {
   const v = await buildVoice(`gate-${testInfo.project.name}-${testInfo.workerIndex}`, { tour: FX });
   const reqs = [];
   page.on('request', (r) => reqs.push(r.url()));
-  await open(page, { query: `debug=1&voice=sim&voice-base=${v.base}` });
+  // Once the gate is approved the walk button starts the tour, so ?tour=0 is what reproduces the off
+  // state this check is about (index.html:33). Before that, the gate alone holds it off.
+  const off = m.tour.gate === 'approved' ? 'tour=0&' : '';
+  await open(page, { query: `debug=1&${off}voice=sim&voice-base=${v.base}` });
   await doorsShown(page);
   await page.click('#walk-btn');
   await page.waitForFunction(() => location.hash === '#/walk/0' && document.activeElement?.id === 'walk-next', null, { polling: 50 });

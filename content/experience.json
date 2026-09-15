@@ -676,7 +676,7 @@
   "tour": {
     "manifest": "content/tour.json",
     "voiceBase": "media/voice/",
-    "gate": "pending"
+    "gate": "approved"
   },
   "guide": {
     "title": "Your 3HUE guide",

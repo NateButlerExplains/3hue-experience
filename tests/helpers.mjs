@@ -46,7 +46,14 @@ export const r1 = (n) => Math.round(n * 10) / 10;
 // ---- Page state ----
 // A full navigation every time: about:blank first so a hash-only change never becomes a
 // same-document navigation that skips boot.
-export async function open(page, { hash = '#/experience', query = 'debug=1', viewport = null, settle = true } = {}) {
+export async function open(page, { hash = '#/experience', query = 'debug=1', viewport = null, settle = true, gateDefault = false } = {}) {
+  // Every spec that calls this was written while tour.gate was "pending", so the lobby's default was
+  // the walk. Once the gate is approved that default becomes the tour, and a test that meant to open
+  // the walk would silently be looking at something else. Keep the written intent: unless the caller
+  // says something about `tour` itself, hold the tour off (index.html:33 reads ?tour=0 ahead of the
+  // gate). A spec that wants the tour passes tour=1 or tour-manifest= and is left alone, and one
+  // that is testing what the gate itself does by default passes gateDefault to opt out entirely.
+  if (!gateDefault && manifest.tour?.gate === 'approved' && !/(^|&)tour(-manifest)?=/.test(query)) query += '&tour=0';
   if (viewport) await page.setViewportSize(viewport);
   await page.goto('about:blank');
   await page.goto(`?${query}${hash}`);
