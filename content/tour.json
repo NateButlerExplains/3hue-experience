@@ -153,7 +153,7 @@
         },
         {
           "id": "arrive-q2",
-          "text": "What changes is what that person wants to see. That's the difference between {door:win-trust.title}, {door:gain-control.title} and {door:stay-ready.title}.",
+          "text": "What changes is what they want to see \u2014 a report, a clearer picture of what you hold, or proof it runs. That's what sorts {door:win-trust.title}, {door:gain-control.title} and {door:stay-ready.title}.",
           "source": "Lobby manifest: door titles",
           "status": "derived"
         },
@@ -253,7 +253,7 @@
         },
         {
           "id": "lobby-3",
-          "text": "{door:gain-control.title} is the owning work: one operating picture, instead of decisions made company by company.",
+          "text": "{door:gain-control.title} is the owning work: knowing what you hold, who touches it, and who answers for it.",
           "source": "Lobby manifest: doors[].tension and doors[].gap",
           "status": "adapted"
         },
@@ -701,7 +701,7 @@
               ]
             }
           },
-          "text": "Then a deal is waiting on a report you don't have, and procurement has put a date on it.",
+          "text": "Then a deal is waiting on a report you don't have yet, and somebody else's timetable is now yours.",
           "source": "The Forcing Function \u00a703",
           "status": "adapted",
           "cue": {
@@ -3107,7 +3107,7 @@
               ]
             }
           },
-          "text": "Then the alerts are already arriving. Nobody's job is to read them.",
+          "text": "Then the alerts are already arriving, and reading them is nobody's actual job.",
           "source": "Tour script, linking line",
           "status": "proposed",
           "cue": {
@@ -3126,7 +3126,7 @@
               "lines": [
                 "Read by whom?"
               ],
-              "at": "read"
+              "at": "reading"
             },
             "sr-clock": {
               "kind": "status",
@@ -6115,7 +6115,7 @@
         "lines": [
           {
             "id": "ask-pe-1",
-            "text": "Yes. For a fund, the first step is the {offer:initial-risk-assessment}, one per company, on the same framework every time.",
+            "text": "Yes. The first step is the same one per company: the {offer:initial-risk-assessment}, on one framework, so the results compare.",
             "source": "The Forcing Function \u00a702, the three segments; 3HUE service catalog, September 2026",
             "status": "proposed"
           },

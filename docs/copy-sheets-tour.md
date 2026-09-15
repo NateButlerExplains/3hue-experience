@@ -180,19 +180,19 @@ Still left out: the claims library does not list it, so the AI trigger's lines c
 ## At a glance
 
 - **Script:** 33 nodes and 206 spoken lines. Ask has 35 questions, answered in 78 spoken lines. The summary has 24 lines, which are not spoken.
-- **Characters:** 33,923 spoken in the tour, and 17,232 spoken in Ask. That makes 51,001 to render as voice, in 555 files. Prompts, labels, titles, questions and the summary add 11,254, for **62,409 characters in all**.
+- **Characters:** 34,043 spoken in the tour, and 17,242 spoken in Ask. That makes 51,131 to render as voice, in 555 files. Prompts, labels, titles, questions and the summary add 11,254, for **62,539 characters in all**.
 - **Line statuses:** adapted 119, approved-copy 12, derived 25, none 2, proposed 143, substantiated 4, verified 3. Every adapted, proposed or derived text line needs sign-off. Ref lines quote manifest fields already on the site; the 2 approved-copy text lines are boilerplate used word for word.
-- **Longest line:** `avi/ask-start-2`, at 30 words. The lint warns above 35.
+- **Longest line:** `avi/arrive-q2`, at 32 words. The lint warns above 35.
 - **Lint:** 0 errors and 1 warning (voice: no media/voice/manifest.json yet, so all 284 spoken lines run captions-only (node tools/voice/lint.mjs has the per-file count) (guide.voice.required is false)).
 
 **How long a visit takes** (spoken lines only; choices and pauses add time):
 
 | Path | Lines | Words | At 150 words a minute | At the voice's pace |
 |---|---|---|---|---|
-| SaaS & AI vendor, a blocked deal, Huey leads | 11 | 184 | 1.2 min | 1.1 min |
-| Portfolio owner, a new acquisition, Avi leads | 11 | 184 | 1.2 min | 1.1 min |
-| Regulated operator, an open exam finding | 11 | 184 | 1.2 min | 1.1 min |
-| Show me everything, nothing formal yet | 11 | 184 | 1.2 min | 1.1 min |
+| SaaS & AI vendor, a blocked deal, Huey leads | 11 | 196 | 1.3 min | 1.2 min |
+| Portfolio owner, a new acquisition, Avi leads | 11 | 196 | 1.3 min | 1.2 min |
+| Regulated operator, an open exam finding | 11 | 196 | 1.3 min | 1.2 min |
+| Show me everything, nothing formal yet | 11 | 196 | 1.3 min | 1.2 min |
 
 ## How to read this sheet
 
@@ -263,8 +263,8 @@ Then: `arrive-question`.
   Almost everyone here has the same thing happening. Someone with leverage has asked them to prove something, with a date on it.  
   <small>Source: The Forcing Function, cover · hash `d1318d196d4a1d0e`</small>
 - **arrive-q2** · spoken by the lead · derived · **needs sign-off**  
-  What changes is what that person wants to see. That's the difference between Win Trust, Gain Control and Stay Ready.  
-  <small>Source: Lobby manifest: door titles · hash `407c65c17e1a308a`</small>
+  What changes is what they want to see — a report, a clearer picture of what you hold, or proof it runs. That's what sorts Win Trust, Gain Control and Stay Ready.  
+  <small>Source: Lobby manifest: door titles · hash `4f76ebedaaa14f06`</small>
 - **arrive-shared** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
   One step is shared. Any of the three can begin in the same place: the Initial Risk Assessment.  
   <small>Source: 3HUE service catalog, September 2026 · hash `ea9132b3cb4b3dcb`</small>
@@ -309,8 +309,8 @@ Then: `arrive-question`.
   Win Trust is the proving work: the evidence exists in pieces, and a buyer wants it assembled.  
   <small>Source: Lobby manifest: doors[].tension and doors[].gap · hash `b38857349e19d85f`</small>
 - **lobby-3** · spoken by the lead · adapted · **needs sign-off**  
-  Gain Control is the owning work: one operating picture, instead of decisions made company by company.  
-  <small>Source: Lobby manifest: doors[].tension and doors[].gap · hash `0396ce78b6e962e7`</small>
+  Gain Control is the owning work: knowing what you hold, who touches it, and who answers for it.  
+  <small>Source: Lobby manifest: doors[].tension and doors[].gap · hash `b0023220444f0057`</small>
 - **lobby-4** · spoken by the lead · adapted · **needs sign-off**  
   Stay Ready is the running work: ownership and evidence that hold on an ordinary day, not just at the audit.  
   <small>Source: Lobby manifest: doors[].tension and doors[].gap · hash `808c0cca67c67f5a`</small>
@@ -406,8 +406,8 @@ Then: `arrive-question`.
 <small>Ask suggests: `frameworks`, `auditor`, `guarantee`, `timeline`</small>
 
 - **wt-deal-m1** · spoken by the lead · adapted · **needs sign-off**  
-  Then a deal is waiting on a report you don't have, and procurement has put a date on it.  
-  <small>Source: The Forcing Function §03 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-panel-3 · on wt-panel-1: SOC 2 Type II report? · on wt-panel-2: ISO 27001 certificate? · on wt-panel-3: Security questionnaire · on wt-panel-4: PCI attestation? · on wt-panel-5: Renewal on hold · on wt-panel-6: Due Friday · hash `6ae74480715c5a6e`</small>
+  Then a deal is waiting on a report you don't have yet, and somebody else's timetable is now yours.  
+  <small>Source: The Forcing Function §03 · shown only when trigger-win-trust is “An enterprise deal or renewal is blocked by assurance requirements.” · frames wt-panel-3 · on wt-panel-1: SOC 2 Type II report? · on wt-panel-2: ISO 27001 certificate? · on wt-panel-3: Security questionnaire · on wt-panel-4: PCI attestation? · on wt-panel-5: Renewal on hold · on wt-panel-6: Due Friday · hash `172be7a1b34d0041`</small>
 - **wt-ev-m1** · spoken by the lead · adapted · **needs sign-off**  
   Then someone with leverage wants evidence, in their format, on their timetable.  
   <small>Source: The Message Stack §01, core narrative · shown only when trigger-win-trust is “A customer, insurer, or investor is asking for evidence you cannot assemble quickly.” · frames wt-panel-3 · on wt-panel-1: Customer questionnaire · on wt-panel-2: Insurer's control form · on wt-panel-3: Investor diligence · on wt-panel-4: Policies? · on wt-panel-5: Risk register? · on wt-panel-6: Who owns this? · hash `32d1c5a1ee344c46`</small>
@@ -828,8 +828,8 @@ Then: `all-sr`.
   And the day after: what has to keep working while you fix it.  
   <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “An incident, or a near miss” · frames sr-rack · on sr-rack: What still has to run [on the word “working”] · hash `e47c62e9046832db`</small>
 - **sr-det-m1** · spoken by the lead · proposed · **needs sign-off**  
-  Then the alerts are already arriving. Nobody's job is to read them.  
-  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “Alerts nobody is reading” · frames sr-panel-2 · on sr-panel-1: Alerts arriving [on the word “alerts”] · on sr-panel-2: Read by whom? [on the word “read”] · on sr-clock: Alert to answer · hash `314a2b676111a28b`</small>
+  Then the alerts are already arriving, and reading them is nobody's actual job.  
+  <small>Source: Tour script, linking line · shown only when trigger-stay-ready is “Alerts nobody is reading” · frames sr-panel-2 · on sr-panel-1: Alerts arriving [on the word “alerts”] · on sr-panel-2: Read by whom? [on the word “reading”] · on sr-clock: Alert to answer · hash `80bdfbe654afc69c`</small>
 - **sr-det-m2** · spoken by the lead · adapted · **needs sign-off**  
   The tools are usually already bought. What's missing is someone to run them.  
   <small>Source: The Message Stack §01, core narrative · shown only when trigger-stay-ready is “Alerts nobody is reading” · frames sr-rack · on sr-rack: (lights up) · hash `180b4f58234c7dc1`</small>
@@ -1558,8 +1558,8 @@ Static answers only: nothing is generated in the browser. Each answer shows its 
 <small>`private-equity` · Take me there: `gc` · Learn more: https://3hue.net/industries/private-equity-family-offices.html · keywords: private equity, pe, fund, sponsor, portfolio, family office, acquisition, diligence</small>
 
 - **ask-pe-1** · spoken by the lead · proposed · **needs sign-off** · service pairing: decision 1  
-  Yes. For a fund, the first step is the Initial Risk Assessment, one per company, on the same framework every time.  
-  <small>Source: The Forcing Function §02, the three segments; 3HUE service catalog, September 2026 · hash `20614ce6028c50ca`</small>
+  Yes. The first step is the same one per company: the Initial Risk Assessment, on one framework, so the results compare.  
+  <small>Source: The Forcing Function §02, the three segments; 3HUE service catalog, September 2026 · hash `30eb798092cc7f6a`</small>
 - **ask-pe-2** · spoken by the lead · proposed · manifest field, on the site since 7fa92e4  
   One control set, applied the same way wherever it lands.  
   <small>Source: The Forcing Function §02, What 3HUE sells them · ref `doors.gain-control.program.build` · hash `0258fed8e0b3c299`</small>
